@@ -3,7 +3,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { root } from "./state";
 
 const initStore = (saga) => {
-  const initialState = { hello: "Redux" };
+  const initialState = {
+    pages: {},
+  };
 
   const persistedState = localStorage.getItem("reduxState")
     ? JSON.parse(localStorage.getItem("reduxState"))
