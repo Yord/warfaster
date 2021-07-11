@@ -1,23 +1,17 @@
-import { unixMillisNow } from "../utils";
 import produce from "immer";
+import { wikiPage } from "./wikiPage";
+import { factions } from "./factions";
 
 const identity = (a) => a;
 
 const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
-const root = immer((action) => {
-  switch (action.type) {
+const root = immer(({ type, payload }) => {
+  switch (type) {
     case "WIKI_PAGE/ADD":
-      return (state) => {
-        state.pages[action.payload.page] = {
-          ...action.payload.data,
-          lastVisit: unixMillisNow(),
-        };
-      };
+      return wikiPage.add(payload.page, payload.data);
     case "FACTIONS/SET":
-      return (state) => {
-        state.factions = action.payload.factions;
-      };
+      return factions.set(payload.factions);
   }
 });
 
