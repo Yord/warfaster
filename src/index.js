@@ -1,33 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { applyMiddleware, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import createSagaMiddleware from "redux-saga";
 import "./index.css";
-import App from "./App";
+import App from "./view/App";
+import { initSaga, runSaga } from "./saga";
+import { initStore } from "./store";
 
-const sagaMiddleware = createSagaMiddleware();
-
-const initialState = { hello: "Redux" };
-
-const persistedState = localStorage.getItem("reduxState")
-  ? JSON.parse(localStorage.getItem("reduxState"))
-  : initialState;
-
-const rootReducer = (state, action) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
-
-const composedEnhancers = composeWithDevTools(applyMiddleware(sagaMiddleware));
-const store = createStore(rootReducer, persistedState, composedEnhancers);
-
-store.subscribe(() => {
-  localStorage.setItem("reduxState", JSON.stringify(store.getState()));
-});
+const saga = initSaga();
+const store = initStore(saga);
 
 ReactDOM.render(
   <React.StrictMode>
@@ -38,6 +18,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-const helloSaga = function* () {};
-
-sagaMiddleware.run(helloSaga);
+runSaga(saga);
