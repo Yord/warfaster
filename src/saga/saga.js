@@ -11,7 +11,7 @@ const fetchWikiPage = function* (page) {
     const wiki = (page) =>
       `https://privateerpress.wiki/api.php?action=parse&page=${page}&formatversion=2&format=json`;
     const data = yield call(jsonp, wiki(page));
-    yield put({ type: "WIKI_PAGE/SET", payload: { page, data: data.parse } });
+    yield put({ type: "WIKI_PAGE/ADD", payload: { page, data: data.parse } });
   }
 
   function jsonp(url) {
@@ -34,7 +34,7 @@ const fetchWikiPage = function* (page) {
 
 const parseWikiPages = function* () {
   while (true) {
-    const action = yield take("WIKI_PAGE/SET");
+    const action = yield take("WIKI_PAGE/ADD");
     switch (action.payload.page) {
       case "Warcaster":
         const factions = parseFactions(action.payload.data.text);
