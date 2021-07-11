@@ -1,7 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
+import { connect } from "react-redux";
 
-function App() {
+function AppPresentation({ hello }) {
   return (
     <div className="App">
       <header className="App-header">
@@ -17,9 +18,12 @@ function App() {
         >
           Learn React
         </a>
+        <p>Hello {hello}!</p>
       </header>
     </div>
   );
 }
+
+const App = connect((state) => ({ hello: state.hello }))(AppPresentation);
 
 export default App;

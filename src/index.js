@@ -1,12 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+const initialState = { hello: "Redux" };
+
+const rootReducer = (state, action) => state;
+
+const composedEnhancers = composeWithDevTools();
+const store = createStore(rootReducer, initialState, composedEnhancers);
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );
