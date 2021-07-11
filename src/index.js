@@ -13,6 +13,10 @@ const sagaMiddleware = createSagaMiddleware();
 
 const initialState = { hello: "Redux" };
 
+const persistedState = localStorage.getItem("reduxState")
+  ? JSON.parse(localStorage.getItem("reduxState"))
+  : initialState;
+
 const rootReducer = (state, action) => {
   switch (action.type) {
     case "HELLO":
@@ -23,7 +27,11 @@ const rootReducer = (state, action) => {
 };
 
 const composedEnhancers = composeWithDevTools(applyMiddleware(sagaMiddleware));
-const store = createStore(rootReducer, initialState, composedEnhancers);
+const store = createStore(rootReducer, persistedState, composedEnhancers);
+
+store.subscribe(() => {
+  localStorage.setItem("reduxState", JSON.stringify(store.getState()));
+});
 
 ReactDOM.render(
   <React.StrictMode>
