@@ -18,11 +18,24 @@ function AppPresentation({ hello }) {
         >
           Learn React
         </a>
-        <p>Hello {hello}!</p>
+        <Button id="hello">Hello {hello}!</Button>
       </header>
     </div>
   );
 }
+
+const ButtonPresentation = ({ children, onClick }) => (
+  <button onClick={onClick}>{children}</button>
+);
+
+const Button = connect(
+  (state) => state,
+  (dispatch, { id }) => ({
+    onClick() {
+      dispatch({ type: "BUTTON_CLICKED", context: { id } });
+    },
+  })
+)(ButtonPresentation);
 
 const App = connect((state) => ({ hello: state.hello }))(AppPresentation);
 
