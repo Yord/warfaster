@@ -1,4 +1,4 @@
-import { unixMillisNow } from "../utils";
+import { unixMillisNow } from "../core/time";
 
 const wikiPage = {
   add: (page, data) => (state) => {

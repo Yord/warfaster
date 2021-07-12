@@ -6,7 +6,8 @@ import {
   select,
   take,
 } from "redux-saga/effects";
-import { unixMillisNow } from "../utils";
+import { unixMillisNow } from "../core/time";
+import { jsonp } from "../core/jsonp";
 import { wikiPage } from "../store/wikiPage";
 
 const fetchWikiPage = function* () {
@@ -30,20 +31,4 @@ export { fetchWikiPage };
 
 function wiki(page) {
   return `https://privateerpress.wiki/api.php?action=parse&page=${page}&formatversion=2&format=json`;
-}
-
-function jsonp(url) {
-  return new Promise(function (resolve, reject) {
-    const callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
-    window[callbackName] = function (data) {
-      delete window[callbackName];
-      document.body.removeChild(script);
-      resolve(data);
-    };
-
-    const script = document.createElement("script");
-    script.src =
-      url + (url.indexOf("?") >= 0 ? "&" : "?") + "callback=" + callbackName;
-    document.body.appendChild(script);
-  });
 }
