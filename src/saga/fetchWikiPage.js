@@ -18,11 +18,12 @@ const fetchWikiPage = function* () {
     const page = payload.page;
     const data = yield select(wikiPage.select(page));
 
-    const oneDay = 24 * 60 * 60 * 1000;
-    if (!data || unixMillisNow() - data.lastVisit > oneDay) {
+    const oneDayInMs = 24 * 60 * 60 * 1000;
+    const twoSecondsInMs = 2 * 1000;
+    if (!data || unixMillisNow() - data.lastVisit > oneDayInMs) {
       const data = yield call(jsonp, wiki(page));
       yield put({ type: "WIKI_PAGE/ADD", payload: { page, data: data.parse } });
-      yield delay(2000);
+      yield delay(twoSecondsInMs);
     }
   }
 };
