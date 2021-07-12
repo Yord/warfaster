@@ -9,6 +9,7 @@ import {
 import { unixMillisNow } from "../core/time";
 import { jsonp } from "../core/jsonp";
 import { wikiPage } from "../store/wikiPage";
+import { AddWikiPage } from "./actions";
 
 const fetchWikiPage = function* () {
   const wikiPageChannel = yield actionChannel("WIKI_PAGE/FETCH");
@@ -22,7 +23,7 @@ const fetchWikiPage = function* () {
     const twoSecondsInMs = 2 * 1000;
     if (!data || unixMillisNow() - data.lastVisit > oneDayInMs) {
       const data = yield call(jsonp, wiki(page));
-      yield put({ type: "WIKI_PAGE/ADD", payload: { page, data: data.parse } });
+      yield put(AddWikiPage({ page, data: data.parse }));
       yield delay(twoSecondsInMs);
     }
   }

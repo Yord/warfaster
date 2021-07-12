@@ -1,5 +1,6 @@
 import { put, take } from "redux-saga/effects";
 import { parseFactions as parse } from "../core/parseFactions";
+import { SetFactions } from "./actions";
 
 const parseFactions = function* () {
   while (true) {
@@ -8,7 +9,7 @@ const parseFactions = function* () {
 
     if (page === "Warcaster") {
       const factions = parse(data.text);
-      yield put({ type: "FACTIONS/SET", payload: { factions } });
+      yield put(SetFactions({ factions }));
     }
   }
 };
