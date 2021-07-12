@@ -16,7 +16,7 @@ const fetchWikiPage = function* () {
   while (true) {
     const { payload } = yield take(wikiPageChannel);
     const page = payload.page;
-    const data = yield select(wikiPage.get(page));
+    const data = yield select(wikiPage.select(page));
 
     const oneDay = 24 * 60 * 60 * 1000;
     if (!data || unixMillisNow() - data.lastVisit > oneDay) {

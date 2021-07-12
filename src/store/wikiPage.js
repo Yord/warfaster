@@ -7,7 +7,7 @@ const wikiPage = {
       lastVisit: unixMillisNow(),
     };
   },
-  get: (page) => (state) => state.pages[page],
+  select: (page) => (state) => state.pages[page],
 };
 
 export { wikiPage };
