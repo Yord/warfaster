@@ -5,6 +5,8 @@ import { root } from "./state";
 const initStore = (saga) => {
   const initialState = {
     pages: {},
+    factions: {},
+    models: {},
   };
 
   const persistedState = localStorage.getItem("reduxState")

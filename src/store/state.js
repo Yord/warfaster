@@ -1,6 +1,7 @@
 import produce from "immer";
 import { wikiPage } from "./wikiPage";
 import { factions } from "./factions";
+import { models } from "./models";
 
 const identity = (a) => a;
 
@@ -12,6 +13,8 @@ const root = immer(({ type, payload }) => {
       return wikiPage.add(payload.page, payload.data);
     case "FACTIONS/SET":
       return factions.set(payload.factions);
+    case "MODELS/SET":
+      return models.set(payload.models);
   }
 });
 
