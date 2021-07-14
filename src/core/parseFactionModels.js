@@ -14,7 +14,7 @@ const parseFactionModels = (text) => {
       const a = td.querySelector("a");
       if (a) {
         const hrefTitle = a.href.split("title=");
-        return { [a.innerText]: hrefTitle[hrefTitle.length - 1] };
+        return { text: a.innerText, page: hrefTitle[hrefTitle.length - 1] };
       }
       return undefined;
     })

@@ -6,6 +6,7 @@ const initStore = (saga) => {
   const initialState = {
     pages: {},
     factions: {},
+    factionModels: {},
     models: {},
   };
 

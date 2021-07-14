@@ -2,7 +2,7 @@ const factions = {
   set: (factions) => (state) => {
     state.factions = factions;
   },
-  select: (state) => state.factions,
+  selectPages: (state) => Object.keys(state.factions),
 };
 
 export { factions };

@@ -1,8 +1,8 @@
 const models = {
-  set: (models) => (state) => {
-    state.models = models;
+  set: (page, model) => (state) => {
+    state.models[page] = model;
   },
-  select: (state) => state.models,
+  selectAll: (state) => state.models,
 };
 
 export { models };
