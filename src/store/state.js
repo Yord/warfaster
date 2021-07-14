@@ -4,6 +4,7 @@ import { factions } from "./factions";
 import { factionModels } from "./factionModels";
 import { models } from "./models";
 import { cypherCodecs } from "./cypherCodecs";
+import { cyphers } from "./cyphers";
 
 const identity = (a) => a;
 
@@ -13,6 +14,8 @@ const root = immer(({ type, payload }) => {
   switch (type) {
     case "CYPHER_CODECS/SET":
       return cypherCodecs.set(payload.cypherCodecs);
+    case "CYPHER/SET":
+      return cyphers.set(payload.page, payload.cypher);
     case "FACTIONS/SET":
       return factions.set(payload.factions);
     case "FACTION_MODELS/SET":

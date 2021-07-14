@@ -9,6 +9,7 @@ const initStore = (saga) => {
     factionModels: {},
     models: {},
     cypherCodecs: [],
+    cyphers: {},
   };
 
   const persistedState = localStorage.getItem("reduxState")
