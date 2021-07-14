@@ -2,6 +2,7 @@ import { unixMillisNow } from "../core/time";
 import { factions } from "./factions";
 import { factionModels } from "./factionModels";
 import { models } from "./models";
+import { cypherCodecs } from "./cypherCodecs";
 
 const wikiPage = {
   add: (page, type, data) => (state) => {
@@ -12,6 +13,7 @@ const wikiPage = {
     };
   },
   removeUnsuccessfullyParsedPages: (state) => {
+    const cypherCodecsList = cypherCodecs.selectAll(state);
     const factionsPages = factions.selectPages(state);
     const factionModelPages = factionModels.selectAll(state);
     const modelPages = models.selectAll(state);
@@ -22,6 +24,7 @@ const wikiPage = {
         (type === "faction" && Object.keys(factionsPages).length === 0) ||
         (type === "factionModels" && !factionModelPages[page]) ||
         (type === "model" && !modelPages[page]) ||
+        (type === "cypherCodecs" && cypherCodecsList.length === 0) ||
         false;
 
       if (unsuccessfullyParsedPage) {

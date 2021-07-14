@@ -4,6 +4,7 @@ import { fetchWikiPage } from "./fetchWikiPage";
 import { parseFactions } from "./parseFactions";
 import { parseFactionModels } from "./parseFactionModels";
 import { parseModel } from "./parseModel";
+import { parseCypherCodecs } from "./parseCypherCodecs";
 import { removeUnsuccessfullyParsedPages } from "./removeUnsuccessfullyParsedPages";
 import { FetchWikiPage } from "./actions";
 
@@ -36,19 +37,25 @@ const runSaga = (saga) => {
     yield put(FetchWikiPage({ page: "Defense_Pylon", type: "model" }));
   };
 
+  const fetchCypherCodecs = function* () {
+    yield put(FetchWikiPage({ page: "Cypher_Codecs", type: "cypherCodecs" }));
+  };
+
   const root = function* () {
     yield all([
       removeUnsuccessfullyParsedPages(),
-      fetchWarcaster(),
-      fetchAeternusContinuum(),
-      fetchVassalRaiders(),
-      fetchAenigma(),
-      fetchScourge(),
-      fetchDefensePylon(),
+      //fetchWarcaster(),
+      //fetchAeternusContinuum(),
+      //fetchVassalRaiders(),
+      //fetchAenigma(),
+      //fetchScourge(),
+      //fetchDefensePylon(),
+      fetchCypherCodecs(),
       fetchWikiPage(),
       parseFactions(),
       parseFactionModels(),
       parseModel(),
+      parseCypherCodecs(),
     ]);
   };
 
