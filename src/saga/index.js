@@ -24,12 +24,27 @@ const runSaga = (saga) => {
     yield put(FetchWikiPage({ page: "Vassal_Raiders", type: "model" }));
   };
 
+  const fetchAenigma = function* () {
+    yield put(FetchWikiPage({ page: "Aenigma", type: "model" }));
+  };
+
+  const fetchScourge = function* () {
+    yield put(FetchWikiPage({ page: "Scourge", type: "model" }));
+  };
+
+  const fetchDefensePylon = function* () {
+    yield put(FetchWikiPage({ page: "Defense_Pylon", type: "model" }));
+  };
+
   const root = function* () {
     yield all([
       removeUnsuccessfullyParsedPages(),
       fetchWarcaster(),
       fetchAeternusContinuum(),
       fetchVassalRaiders(),
+      fetchAenigma(),
+      fetchScourge(),
+      fetchDefensePylon(),
       fetchWikiPage(),
       parseFactions(),
       parseFactionModels(),

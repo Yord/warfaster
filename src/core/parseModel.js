@@ -1,13 +1,16 @@
 const parseModel = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
-  doc.querySelectorAll("h3 > span[id]").forEach((node) => {
-    node.parentNode.id = node.id;
-  });
-  doc.querySelectorAll("h4 > span[id]").forEach((node) => {
-    node.parentNode.id = node.id;
-  });
+  doc
+    .querySelectorAll(
+      "h1 > span[id], h2 > span[id], h3 > span[id], h4 > span[id]"
+    )
+    .forEach((node) => {
+      node.parentNode.id = node.id;
+    });
 
-  const factionAndTypes = extractList(doc, "Unit_Faction_and_Type");
+  const factionAndTypes =
+    extractList(doc, "Unit_Faction_and_Type") ||
+    extractList(doc, "Model_Faction_and_Type");
   const faction = factionAndTypes[0];
   const types = factionAndTypes.slice(1);
   const squadSize = extractText(doc, "Squad_Size");
@@ -28,7 +31,9 @@ const parseModel = (text) => {
   const cortexes = extractCortexes(doc, "Cortexes");
 
   const modelStatsData = [
-    ...doc.querySelector("h3#Unit_Stats ~ table").querySelectorAll("tr > td"),
+    ...doc
+      .querySelector("h3#Unit_Stats ~ table, h3#Model_Stats ~ table")
+      .querySelectorAll("tr > td"),
   ].map((_) => cleanText(_.innerText));
   const modelStatsLength = modelStatsData.length / 2;
   const modelStats = Object.fromEntries(
@@ -41,26 +46,29 @@ const parseModel = (text) => {
   let weaponsData = [...doc.querySelectorAll("h3#Weapons ~ table tr")].map(
     (tr) => [...tr.querySelectorAll("td")]
   );
-  let header = weaponsData[0].map((td) => td.innerText);
-  let weaponsList = weaponsData.slice(1);
-  let weapons = [];
-  for (const tds of weaponsList) {
-    if (tds.length === header.length) {
-      const stats = tds.map((td) => td.innerText);
-      const weapon = Object.fromEntries(
-        header.map((key, i) => [cleanText(key), cleanText(stats[i])])
-      );
-      weapons.push(weapon);
-    }
-    if (tds.length === 1) {
-      const previousWeapons = weapons.slice(0, weapons.length - 1);
-      const lastWeapon = weapons[weapons.length - 1];
+  let weapons = undefined;
+  if (weaponsData.length > 0) {
+    weapons = [];
+    let header = weaponsData[0].map((td) => td.innerText);
+    let weaponsList = weaponsData.slice(1);
+    for (const tds of weaponsList) {
+      if (tds.length === header.length) {
+        const stats = tds.map((td) => td.innerText);
+        const weapon = Object.fromEntries(
+          header.map((key, i) => [cleanText(key), cleanText(stats[i])])
+        );
+        weapons.push(weapon);
+      }
+      if (tds.length === 1) {
+        const previousWeapons = weapons.slice(0, weapons.length - 1);
+        const lastWeapon = weapons[weapons.length - 1];
 
-      const weapon = {
-        ...lastWeapon,
-        specialRules: parseDefinitionText(tds[0]),
-      };
-      weapons = [...previousWeapons, weapon];
+        const weapon = {
+          ...lastWeapon,
+          specialRules: parseDefinitionText(tds[0]),
+        };
+        weapons = [...previousWeapons, weapon];
+      }
     }
   }
 
@@ -78,16 +86,19 @@ const parseModel = (text) => {
       Object.fromEntries(
         tds.map((td, i) => {
           const a = td.querySelector("a");
+          const hrefs = a ? a.href.split("title=") : undefined;
+          const text = cleanText(td.innerText);
           return [
             detailsHeader[i],
-            a
-              ? a.href.replace("file:///index.php?title=", "")
-              : cleanText(td.innerText),
+            a ? { text, page: hrefs[hrefs.length - 1] } : { text },
           ];
         })
       )
     );
   }
+
+  const release = extractText(doc, "Release", { node: "h1" });
+  const lore = extractText(doc, "Lore", { node: "h1" });
 
   const model = {
     faction,
@@ -110,6 +121,8 @@ const parseModel = (text) => {
     cortexes,
     chassisSpecialRules,
     weaponDetails: weaponDetails(),
+    release,
+    lore,
   };
 
   return removeUndefinedValues(model);
@@ -132,8 +145,8 @@ function cleanText(text) {
   return text.replace(/\n/g, "");
 }
 
-function extractText(doc, id) {
-  const p = doc.querySelector(`h3#${id} ~ p`);
+function extractText(doc, id, { node = "h3" } = {}) {
+  const p = doc.querySelector(`${node}#${id} ~ p`);
   if (!p) return undefined;
 
   return cleanText(p.innerText);
@@ -147,7 +160,10 @@ function extractLinkList(doc, id, { node = "h3" } = {}) {
   if (as.length === 0) return undefined;
 
   return Object.fromEntries(
-    as.map((a) => [a.innerText, a.href.replace("file:///index.php?title=", "")])
+    as.map((a) => {
+      const hrefs = a.href.split("title=");
+      return [hrefs[hrefs.length - 1], a.innerText];
+    })
   );
 }
 
@@ -158,7 +174,10 @@ function extractList(doc, id) {
   const as = [...p.querySelectorAll("a")];
   if (as.length === 0) return undefined;
 
-  return as.map((a) => a.innerText);
+  return as.map((a) => {
+    const hrefs = a.href.split("title=");
+    return { text: a.innerText, page: hrefs[hrefs.length - 1] };
+  });
 }
 
 function extractCortexes(doc, id) {
