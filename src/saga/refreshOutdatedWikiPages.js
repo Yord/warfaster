@@ -6,17 +6,26 @@ const refreshOutdatedWikiPages = function* () {
   while (true) {
     const { payload } = yield take("WIKI_PAGE_REVISIONS/FETCHED");
     const { pageRevisions } = payload;
-    const revIdByPageId = Object.fromEntries(
+    const revInfoByPageId = Object.fromEntries(
       pageRevisions.map((revision) => [
         revision.pageid,
-        Math.max(...revision.revisions.map((revision) => revision.revid)),
+        revision.missing
+          ? { missing: revision.missing }
+          : {
+              revid: Math.max(
+                ...revision.revisions.map((revision) => revision.revid)
+              ),
+            },
       ])
     );
     const pageIds = pageRevisions.map((revision) => revision.pageid);
 
     const pages = yield select(wikiPage.selectGivenPageIds(pageIds));
     for (const page of pages) {
-      if (page.revid < revIdByPageId[page.pageid]) {
+      const revInfo = revInfoByPageId[page.pageid];
+      if (revInfo.missing) {
+        yield put(RemoveWikiPage({ page: page.page }));
+      } else if (page.revid < revInfo.revid) {
         yield put(RemoveWikiPage({ page: page.page }));
         yield put(FetchWikiPage({ page: page.page, type: page.type }));
       }
