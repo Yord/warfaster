@@ -7,7 +7,7 @@ import { cypherCodecs } from "./cypherCodecs";
 
 const wikiPage = {
   add: (page, type, data) => (state) => {
-    state.pages[page] = {
+    state.data.pages[page] = {
       ...data,
       type,
       lastVisit: unixMillisNow(),
@@ -20,7 +20,7 @@ const wikiPage = {
     const modelPages = models.selectAll(state);
     const cypherPages = cyphers.selectAll(state);
 
-    const pages = Object.entries(state.pages);
+    const pages = Object.entries(state.data.pages);
     for (const [page, { type }] of pages) {
       const unsuccessfullyParsedPage =
         (type === "faction" && Object.keys(factionsPages).length === 0) ||
@@ -31,11 +31,11 @@ const wikiPage = {
         false;
 
       if (unsuccessfullyParsedPage) {
-        delete state.pages[page];
+        delete state.data.pages[page];
       }
     }
   },
-  select: (page) => (state) => state.pages[page],
+  select: (page) => (state) => state.data.pages[page],
 };
 
 export { wikiPage };

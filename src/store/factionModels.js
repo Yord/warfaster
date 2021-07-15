@@ -1,10 +1,10 @@
 const factionModels = {
   set: (factionModels) => (state) => {
-    state.factionModels = factionModels;
+    state.data.factionModels = factionModels;
   },
-  selectAll: (state) => state.factionModels,
+  selectAll: (state) => state.data.factionModels,
   selectAllModelPages: (state) =>
-    Object.values(state.factionModels)
+    Object.values(state.data.factionModels)
       .flat()
       .map((model) => model.Name.page),
 };

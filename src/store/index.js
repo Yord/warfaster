@@ -4,12 +4,14 @@ import { root } from "./state";
 
 const initStore = (saga) => {
   const initialState = {
-    pages: {},
-    factions: {},
-    factionModels: {},
-    models: {},
-    cypherCodecs: [],
-    cyphers: {},
+    data: {
+      pages: {},
+      factions: {},
+      factionModels: {},
+      models: {},
+      cypherCodecs: [],
+      cyphers: {},
+    },
   };
 
   const persistedState = localStorage.getItem("reduxState")

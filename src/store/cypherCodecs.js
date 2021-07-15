@@ -1,10 +1,10 @@
 const cypherCodecs = {
   set: (cypherCodecs) => (state) => {
-    state.cypherCodecs = cypherCodecs;
+    state.data.cypherCodecs = cypherCodecs;
   },
-  selectAll: (state) => state.cypherCodecs,
+  selectAll: (state) => state.data.cypherCodecs,
   selectAllCypherPages: (state) =>
-    state.cypherCodecs.map((codec) => codec.Cypher.page),
+    state.data.cypherCodecs.map((codec) => codec.Cypher.page),
 };
 
 export { cypherCodecs };

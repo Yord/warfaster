@@ -1,8 +1,8 @@
 const cyphers = {
   set: (page, cypher) => (state) => {
-    state.cyphers[page] = cypher;
+    state.data.cyphers[page] = cypher;
   },
-  selectAll: (state) => state.cyphers,
+  selectAll: (state) => state.data.cyphers,
 };
 
 export { cyphers };
