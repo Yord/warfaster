@@ -18,13 +18,16 @@ const fetchWikiPage = function* () {
     const { payload } = yield take(wikiPageChannel);
     const page = payload.page;
     const type = payload.type;
+    const thisVisit = unixMillisNow();
     const data = yield select(wikiPage.select(page));
 
     const oneDayInMs = 24 * 60 * 60 * 1000;
     const twoSecondsInMs = 2 * 1000;
-    if (!data || unixMillisNow() - data.lastVisit > oneDayInMs) {
+    if (!data || thisVisit - data.lastVisit > oneDayInMs) {
       const data = yield call(jsonp, wiki(page));
-      yield put(FetchedWikiPage({ page, data: data.parse, type }));
+      yield put(
+        FetchedWikiPage({ page, data: data.parse, type, lastVisit: thisVisit })
+      );
       yield delay(twoSecondsInMs);
     }
   }

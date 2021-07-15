@@ -7,8 +7,9 @@ const addWikiPage = function* () {
     const page = payload.page;
     const type = payload.type;
     const data = payload.data;
+    const lastVisit = payload.lastVisit;
 
-    yield put(AddWikiPage({ page, data, type }));
+    yield put(AddWikiPage({ page, data, type, lastVisit }));
   }
 };
 

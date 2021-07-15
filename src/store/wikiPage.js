@@ -1,4 +1,3 @@
-import { unixMillisNow } from "../core/time";
 import { factions } from "./factions";
 import { factionModels } from "./factionModels";
 import { cyphers } from "./cyphers";
@@ -6,11 +5,11 @@ import { models } from "./models";
 import { cypherCodecs } from "./cypherCodecs";
 
 const wikiPage = {
-  add: (page, type, data) => (state) => {
+  add: (page, type, data, lastVisit) => (state) => {
     state.data.pages[page] = {
       ...data,
       type,
-      lastVisit: unixMillisNow(),
+      lastVisit,
     };
   },
   removeUnsuccessfullyParsedPages: (state) => {

@@ -25,7 +25,12 @@ const root = immer(({ type, payload }) => {
     case "UNSUCCESSFULLY_PARSED_PAGES/REMOVE":
       return wikiPage.removeUnsuccessfullyParsedPages;
     case "WIKI_PAGE/ADD":
-      return wikiPage.add(payload.page, payload.type, payload.data);
+      return wikiPage.add(
+        payload.page,
+        payload.type,
+        payload.data,
+        payload.lastVisit
+      );
   }
 });
 
