@@ -5,6 +5,7 @@ import { parseFactions } from "./parseFactions";
 import { parseFactionModels } from "./parseFactionModels";
 import { parseCypher } from "./parseCypher";
 import { parseModel } from "./parseModel";
+import { addWikiPage } from "./addWikiPage";
 import { parseCypherCodecs } from "./parseCypherCodecs";
 import { removeUnsuccessfullyParsedPages } from "./removeUnsuccessfullyParsedPages";
 import { FetchWikiPage } from "./actions";
@@ -75,6 +76,7 @@ const runSaga = (saga) => {
       fetchAnnihilationVector(),
       fetchAtrophicDecomposer(),
       fetchWikiPage(),
+      addWikiPage(),
       parseFactions(),
       parseFactionModels(),
       parseModel(),

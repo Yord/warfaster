@@ -4,7 +4,7 @@ import { SetFactions } from "./actions";
 
 const parseFactions = function* () {
   while (true) {
-    const { payload } = yield take("WIKI_PAGE/ADD");
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
 
     if (page === "Warcaster") {

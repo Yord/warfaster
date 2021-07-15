@@ -2,6 +2,7 @@ const action = (type) => (payload) => ({ type, payload });
 
 const AddWikiPage = action("WIKI_PAGE/ADD");
 const FetchWikiPage = action("WIKI_PAGE/FETCH");
+const FetchedWikiPage = action("WIKI_PAGE/FETCHED");
 const RemoveUnsuccessfullyParsedPages = action(
   "UNSUCCESSFULLY_PARSED_PAGES/REMOVE"
 );
@@ -14,6 +15,7 @@ const SetModel = action("MODEL/SET");
 export {
   AddWikiPage,
   FetchWikiPage,
+  FetchedWikiPage,
   RemoveUnsuccessfullyParsedPages,
   SetCypher,
   SetCypherCodecs,

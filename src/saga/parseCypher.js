@@ -5,7 +5,7 @@ import { cypherCodecs } from "../store/cypherCodecs";
 
 const parseCypher = function* () {
   while (true) {
-    const { payload } = yield take("WIKI_PAGE/ADD");
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
     const pages = Object.values(
       yield select(cypherCodecs.selectAllCypherPages)

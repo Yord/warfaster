@@ -4,7 +4,7 @@ import { SetCypherCodecs } from "./actions";
 
 const parseCypherCodecs = function* () {
   while (true) {
-    const { payload } = yield take("WIKI_PAGE/ADD");
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
 
     if (page === "Cypher_Codecs") {

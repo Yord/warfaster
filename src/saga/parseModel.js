@@ -5,7 +5,7 @@ import { factionModels } from "../store/factionModels";
 
 const parseModel = function* () {
   while (true) {
-    const { payload } = yield take("WIKI_PAGE/ADD");
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
     const pages = Object.values(
       yield select(factionModels.selectAllModelPages)
