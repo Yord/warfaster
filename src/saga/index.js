@@ -1,10 +1,12 @@
 import createSagaMiddleware from "redux-saga";
 import { all, put } from "redux-saga/effects";
-import { cacheWikiPages } from "./wikiPages/cacheWikiPages";
 import { FetchWikiPage, RefreshWikiPages } from "./actions";
+import {
+  cacheWikiPages,
+  removeUnsuccessfullyParsedPages,
+  updateCache,
+} from "./cacheWikiPages";
 import { parseWikiPages } from "./parseWikiPages";
-import { removeUnsuccessfullyParsedPages } from "./wikiPages/removeUnsuccessfullyParsedPages";
-import { updateCache } from "./wikiPages/updateCache";
 
 const initSaga = () => createSagaMiddleware();
 
