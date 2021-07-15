@@ -6,7 +6,6 @@ import {
   select,
   take,
 } from "redux-saga/effects";
-import { unixMillisNow } from "../core/time";
 import { jsonp } from "../core/jsonp";
 import { wikiPage } from "../store/wikiPage";
 import { FetchedWikiPage } from "./actions";
@@ -18,16 +17,13 @@ const fetchWikiPage = function* () {
     const { payload } = yield take(wikiPageChannel);
     const page = payload.page;
     const type = payload.type;
-    const thisVisit = unixMillisNow();
     const data = yield select(wikiPage.select(page));
 
-    const oneDayInMs = 24 * 60 * 60 * 1000;
-    const twoSecondsInMs = 2 * 1000;
-    if (!data || thisVisit - data.lastVisit > oneDayInMs) {
+    if (!data) {
       const data = yield call(jsonp, wiki(page));
-      yield put(
-        FetchedWikiPage({ page, data: data.parse, type, lastVisit: thisVisit })
-      );
+      yield put(FetchedWikiPage({ page, data: data.parse, type }));
+
+      const twoSecondsInMs = 2 * 1000;
       yield delay(twoSecondsInMs);
     }
   }

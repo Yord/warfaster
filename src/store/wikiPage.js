@@ -5,11 +5,10 @@ import { models } from "./models";
 import { cypherCodecs } from "./cypherCodecs";
 
 const wikiPage = {
-  add: (page, type, data, lastVisit) => (state) => {
+  add: (page, type, data) => (state) => {
     state.data.pages[page] = {
       page,
       type,
-      lastVisit,
       ...data,
     };
   },
