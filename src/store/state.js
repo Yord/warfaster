@@ -31,6 +31,8 @@ const root = immer(({ type, payload }) => {
         payload.data,
         payload.lastVisit
       );
+    case "WIKI_PAGE/REMOVE":
+      return wikiPage.remove(payload.page);
   }
 });
 

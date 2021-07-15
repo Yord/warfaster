@@ -1,14 +1,17 @@
 import createSagaMiddleware from "redux-saga";
 import { all, put } from "redux-saga/effects";
+import { fetchWikiPageRevisions } from "./fetchWikiPageRevisions";
 import { fetchWikiPage } from "./fetchWikiPage";
+import { refreshWikiPages } from "./refreshWikiPages";
 import { parseFactions } from "./parseFactions";
 import { parseFactionModels } from "./parseFactionModels";
 import { parseCypher } from "./parseCypher";
 import { parseModel } from "./parseModel";
+import { refreshOutdatedWikiPages } from "./refreshOutdatedWikiPages";
 import { addWikiPage } from "./addWikiPage";
 import { parseCypherCodecs } from "./parseCypherCodecs";
 import { removeUnsuccessfullyParsedPages } from "./removeUnsuccessfullyParsedPages";
-import { FetchWikiPage } from "./actions";
+import { FetchWikiPage, RefreshWikiPages } from "./actions";
 
 const initSaga = () => createSagaMiddleware();
 
@@ -61,12 +64,17 @@ const runSaga = (saga) => {
     yield put(FetchWikiPage({ page: "Atrophic_Decomposer", type: "cypher" }));
   };
 
+  const refresh = function* () {
+    yield put(RefreshWikiPages());
+  };
+
   const root = function* () {
     yield all([
       removeUnsuccessfullyParsedPages(),
       //fetchWarcaster(),
       //fetchAeternusContinuum(),
       //fetchVassalRaiders(),
+      refresh(),
       //fetchAenigma(),
       //fetchScourge(),
       //fetchDefensePylon(),
@@ -75,6 +83,9 @@ const runSaga = (saga) => {
       fetchAggressionTheorem(),
       fetchAnnihilationVector(),
       fetchAtrophicDecomposer(),
+      refreshWikiPages(),
+      fetchWikiPageRevisions(),
+      refreshOutdatedWikiPages(),
       fetchWikiPage(),
       addWikiPage(),
       parseFactions(),

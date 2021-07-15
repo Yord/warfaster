@@ -7,10 +7,14 @@ import { cypherCodecs } from "./cypherCodecs";
 const wikiPage = {
   add: (page, type, data, lastVisit) => (state) => {
     state.data.pages[page] = {
-      ...data,
+      page,
       type,
       lastVisit,
+      ...data,
     };
+  },
+  remove: (page) => (state) => {
+    delete state.data.pages[page];
   },
   removeUnsuccessfullyParsedPages: (state) => {
     const cypherCodecsList = cypherCodecs.selectAll(state);
@@ -35,6 +39,15 @@ const wikiPage = {
     }
   },
   select: (page) => (state) => state.data.pages[page],
+  selectGivenPageIds: (pageIds) => (state) =>
+    Object.values(state.data.pages).filter((page) => {
+      console.log("select pageIds", pageIds);
+      console.log("select pageid", page.pageid);
+
+      return pageIds.includes(page.pageid);
+    }),
+  selectPageIds: (state) =>
+    Object.values(state.data.pages).map((page) => page.pageid),
 };
 
 export { wikiPage };
