@@ -1,10 +1,10 @@
-const parseCypherCodecs = (text) => {
+const parseCypherCodecsText = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
 
   return collectCypherCodecs(doc);
 };
 
-export { parseCypherCodecs };
+export { parseCypherCodecsText };
 
 function collectCypherCodecs(doc) {
   const cypherCodecsTable = doc.querySelector("table.sortable");

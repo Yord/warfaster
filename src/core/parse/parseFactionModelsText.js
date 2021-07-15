@@ -1,4 +1,4 @@
-const parseFactionModels = (text) => {
+const parseFactionModelsText = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
   doc.querySelectorAll("h1 > span[id]").forEach((node) => {
     node.parentNode.id = node.id;
@@ -31,4 +31,4 @@ const parseFactionModels = (text) => {
   return models;
 };
 
-export { parseFactionModels };
+export { parseFactionModelsText };

@@ -1,4 +1,4 @@
-const parseFactions = (text) => {
+const parseFactionsText = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
   doc.querySelectorAll("h2 > span[id]").forEach((node) => {
     node.parentNode.id = node.id;
@@ -8,7 +8,7 @@ const parseFactions = (text) => {
   return Object.fromEntries(collectFactions(p, []));
 };
 
-export { parseFactions };
+export { parseFactionsText };
 
 function collectFactions(node, factions) {
   switch (node.tagName) {

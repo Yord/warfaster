@@ -1,0 +1,93 @@
+import { all, put, take, select } from "redux-saga/effects";
+import {
+  SetCypher,
+  SetCypherCodecs,
+  SetFactions,
+  SetFactionModels,
+  SetModel,
+} from "./actions";
+import {
+  parseCypherText,
+  parseCypherCodecsText,
+  parseFactionModelsText,
+  parseFactionsText,
+  parseModelText,
+} from "../core/parse";
+import { cypherCodecs, factionModels, factions } from "../store/dataAccess";
+
+function* parseWikiPages() {
+  yield all([
+    parseCypher(),
+    parseCypherCodecs(),
+    parseFactions(),
+    parseFactionModels(),
+    parseModel(),
+  ]);
+}
+
+export { parseWikiPages };
+
+function* parseCypher() {
+  while (true) {
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { data, page } = payload;
+    const pages = yield select(cypherCodecs.selectAllCypherPages);
+
+    if (pages.includes(page)) {
+      const cypher = parseCypherText(data.text);
+      yield put(SetCypher({ page, cypher }));
+    }
+  }
+}
+
+function* parseCypherCodecs() {
+  while (true) {
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { data, page } = payload;
+
+    if (page === "Cypher_Codecs") {
+      const cypherCodecs = parseCypherCodecsText(data.text);
+      yield put(SetCypherCodecs({ cypherCodecs }));
+    }
+  }
+}
+
+function* parseFactionModels() {
+  while (true) {
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { data, page } = payload;
+    const pages = yield select(factions.selectPages);
+
+    if (pages.includes(page)) {
+      const factionModels = parseFactionModelsText(data.text);
+      yield put(SetFactionModels({ factionModels: { [page]: factionModels } }));
+    }
+  }
+}
+
+function* parseFactions() {
+  while (true) {
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { data, page } = payload;
+
+    if (page === "Warcaster") {
+      const factions = parseFactionsText(data.text);
+      yield put(SetFactions({ factions }));
+    }
+  }
+}
+
+function* parseModel() {
+  while (true) {
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { data, page } = payload;
+    const pages = Object.values(
+      yield select(factionModels.selectAllModelPages)
+    );
+
+    if (pages.includes(page)) {
+      const model = parseModelText(data.text);
+      yield put(SetModel({ page, model }));
+    }
+  }
+}

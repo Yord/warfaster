@@ -1,68 +1,77 @@
 import createSagaMiddleware from "redux-saga";
 import { all, put } from "redux-saga/effects";
-import { fetchWikiPageRevisions } from "./fetchWikiPageRevisions";
-import { fetchWikiPage } from "./fetchWikiPage";
-import { refreshWikiPages } from "./refreshWikiPages";
-import { parseFactions } from "./parseFactions";
-import { parseFactionModels } from "./parseFactionModels";
-import { parseCypher } from "./parseCypher";
-import { parseModel } from "./parseModel";
-import { refreshOutdatedWikiPages } from "./refreshOutdatedWikiPages";
-import { addWikiPage } from "./addWikiPage";
-import { parseCypherCodecs } from "./parseCypherCodecs";
-import { removeUnsuccessfullyParsedPages } from "./removeUnsuccessfullyParsedPages";
+import { cacheWikiPages } from "./wikiPages/cacheWikiPages";
 import { FetchWikiPage, RefreshWikiPages } from "./actions";
+import { parseWikiPages } from "./parseWikiPages";
+import { removeUnsuccessfullyParsedPages } from "./wikiPages/removeUnsuccessfullyParsedPages";
+import { updateCache } from "./wikiPages/updateCache";
 
 const initSaga = () => createSagaMiddleware();
 
 const runSaga = (saga) => {
-  const fetchWarcaster = function* () {
-    yield put(FetchWikiPage({ page: "Warcaster", type: "faction" }));
-  };
+  function* fetchSampleData() {
+    const fetchWarcaster = function* () {
+      yield put(FetchWikiPage({ page: "Warcaster", type: "faction" }));
+    };
 
-  const fetchAeternusContinuum = function* () {
-    yield put(
-      FetchWikiPage({ page: "Aeternus_Continuum", type: "factionModels" })
-    );
-  };
+    const fetchAeternusContinuum = function* () {
+      yield put(
+        FetchWikiPage({ page: "Aeternus_Continuum", type: "factionModels" })
+      );
+    };
 
-  const fetchVassalRaiders = function* () {
-    yield put(FetchWikiPage({ page: "Vassal_Raiders", type: "model" }));
-  };
+    const fetchVassalRaiders = function* () {
+      yield put(FetchWikiPage({ page: "Vassal_Raiders", type: "model" }));
+    };
 
-  const fetchAenigma = function* () {
-    yield put(FetchWikiPage({ page: "Aenigma", type: "model" }));
-  };
+    const fetchAenigma = function* () {
+      yield put(FetchWikiPage({ page: "Aenigma", type: "model" }));
+    };
 
-  const fetchScourge = function* () {
-    yield put(FetchWikiPage({ page: "Scourge", type: "model" }));
-  };
+    const fetchScourge = function* () {
+      yield put(FetchWikiPage({ page: "Scourge", type: "model" }));
+    };
 
-  const fetchDefensePylon = function* () {
-    yield put(FetchWikiPage({ page: "Defense_Pylon", type: "model" }));
-  };
+    const fetchDefensePylon = function* () {
+      yield put(FetchWikiPage({ page: "Defense_Pylon", type: "model" }));
+    };
 
-  const fetchCypherCodecs = function* () {
-    yield put(FetchWikiPage({ page: "Cypher_Codecs", type: "cypherCodecs" }));
-  };
+    const fetchCypherCodecs = function* () {
+      yield put(FetchWikiPage({ page: "Cypher_Codecs", type: "cypherCodecs" }));
+    };
 
-  const fetchAcheronianVenediction = function* () {
-    yield put(
-      FetchWikiPage({ page: "Acheronian_Venediction", type: "cypher" })
-    );
-  };
+    const fetchAcheronianVenediction = function* () {
+      yield put(
+        FetchWikiPage({ page: "Acheronian_Venediction", type: "cypher" })
+      );
+    };
 
-  const fetchAggressionTheorem = function* () {
-    yield put(FetchWikiPage({ page: "Aggression_Theorem", type: "cypher" }));
-  };
+    const fetchAggressionTheorem = function* () {
+      yield put(FetchWikiPage({ page: "Aggression_Theorem", type: "cypher" }));
+    };
 
-  const fetchAnnihilationVector = function* () {
-    yield put(FetchWikiPage({ page: "Annihilation_Vector", type: "cypher" }));
-  };
+    const fetchAnnihilationVector = function* () {
+      yield put(FetchWikiPage({ page: "Annihilation_Vector", type: "cypher" }));
+    };
 
-  const fetchAtrophicDecomposer = function* () {
-    yield put(FetchWikiPage({ page: "Atrophic_Decomposer", type: "cypher" }));
-  };
+    const fetchAtrophicDecomposer = function* () {
+      yield put(FetchWikiPage({ page: "Atrophic_Decomposer", type: "cypher" }));
+    };
+
+    yield all([
+      fetchWarcaster(),
+      fetchAeternusContinuum(),
+      fetchVassalRaiders(),
+      fetchAenigma(),
+      fetchScourge(),
+      fetchDefensePylon(),
+      fetchCypherCodecs(),
+      fetchAcheronianVenediction(),
+      fetchAggressionTheorem(),
+      fetchAnnihilationVector(),
+      fetchAtrophicDecomposer(),
+    ]);
+  }
 
   const refresh = function* () {
     yield put(RefreshWikiPages());
@@ -71,28 +80,11 @@ const runSaga = (saga) => {
   const root = function* () {
     yield all([
       removeUnsuccessfullyParsedPages(),
-      //fetchWarcaster(),
-      //fetchAeternusContinuum(),
-      //fetchVassalRaiders(),
+      updateCache(),
+      cacheWikiPages(),
+      parseWikiPages(),
+      fetchSampleData(),
       refresh(),
-      //fetchAenigma(),
-      //fetchScourge(),
-      //fetchDefensePylon(),
-      fetchCypherCodecs(),
-      fetchAcheronianVenediction(),
-      fetchAggressionTheorem(),
-      fetchAnnihilationVector(),
-      fetchAtrophicDecomposer(),
-      refreshWikiPages(),
-      fetchWikiPageRevisions(),
-      refreshOutdatedWikiPages(),
-      fetchWikiPage(),
-      addWikiPage(),
-      parseFactions(),
-      parseFactionModels(),
-      parseModel(),
-      parseCypherCodecs(),
-      parseCypher(),
     ]);
   };
 

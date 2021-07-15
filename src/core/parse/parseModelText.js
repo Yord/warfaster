@@ -1,4 +1,4 @@
-const parseModel = (text) => {
+const parseModelText = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
   doc
     .querySelectorAll(
@@ -128,7 +128,7 @@ const parseModel = (text) => {
   return removeUndefinedValues(model);
 };
 
-export { parseModel };
+export { parseModelText };
 
 function removeUndefinedValues(obj) {
   if (Array.isArray(obj)) return obj.map(removeUndefinedValues);

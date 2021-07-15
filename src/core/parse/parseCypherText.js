@@ -1,4 +1,4 @@
-const parseCypher = (text) => {
+const parseCypherText = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
   doc.querySelectorAll("h2 > span[id]").forEach((node) => {
     node.parentNode.id = node.id;
@@ -21,7 +21,7 @@ const parseCypher = (text) => {
   return removeUndefinedValues(cypher);
 };
 
-export { parseCypher };
+export { parseCypherText };
 
 function extractLink(doc, id) {
   const p = doc.querySelector(`h2#${id} ~ p`);
