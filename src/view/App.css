@@ -1,0 +1,13 @@
+@import "~antd/dist/antd.css";
+
+ul#factions li.ant-menu-item {
+  height: 25px;
+  line-height: 25px;
+  padding-left: 24px !important;
+}
+
+span.ant-tag {
+  line-height: 15px;
+  margin-left: 8px;
+  padding: 0 2px;
+}
