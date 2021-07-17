@@ -22,6 +22,12 @@ const runSaga = (saga) => {
       );
     };
 
+    const fetchMarcherWorlds = function* () {
+      yield put(
+        FetchWikiPage({ page: "Marcher_Worlds", type: "factionModels" })
+      );
+    };
+
     const fetchVassalRaiders = function* () {
       yield put(FetchWikiPage({ page: "Vassal_Raiders", type: "model" }));
     };
@@ -63,6 +69,7 @@ const runSaga = (saga) => {
     yield all([
       fetchWarcaster(),
       fetchAeternusContinuum(),
+      fetchMarcherWorlds(),
       fetchVassalRaiders(),
       fetchAenigma(),
       fetchScourge(),

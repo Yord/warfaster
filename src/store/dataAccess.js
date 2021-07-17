@@ -15,8 +15,8 @@ const cyphers = {
 };
 
 const factionModels = {
-  set: (factionModels) => (state) => {
-    state.data.factionModels = factionModels;
+  set: (page, factionModels) => (state) => {
+    state.data.factionModels[page] = factionModels;
   },
   selectAll: (state) => state.data.factionModels,
   selectAllModelPages: (state) =>
