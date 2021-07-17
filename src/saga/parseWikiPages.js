@@ -35,6 +35,7 @@ function* parseCypher() {
 
     if (pages.includes(page)) {
       const cypher = parseCypherText(data.text);
+      cypher.name = { text: data.title, page };
       yield put(SetCypher({ page, cypher }));
     }
   }
@@ -60,7 +61,7 @@ function* parseFactionModels() {
 
     if (pages.includes(page)) {
       const factionModels = parseFactionModelsText(data.text);
-      yield put(SetFactionModels({ factionModels: { [page]: factionModels } }));
+      yield put(SetFactionModels({ page, factionModels }));
     }
   }
 }
@@ -87,6 +88,7 @@ function* parseModel() {
 
     if (pages.includes(page)) {
       const model = parseModelText(data.text);
+      model.name = { text: data.title, page };
       yield put(SetModel({ page, model }));
     }
   }

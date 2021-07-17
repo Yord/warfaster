@@ -23,7 +23,7 @@ const root = immer(({ type, payload }) => {
     case "FACTIONS/SET":
       return factions.set(payload.factions);
     case "FACTION_MODELS/SET":
-      return factionModels.set(payload.factionModels);
+      return factionModels.set(payload.page, payload.factionModels);
     case "MODEL/SET":
       return models.set(payload.page, payload.model);
     case "UNSUCCESSFULLY_PARSED_PAGES/REMOVE":

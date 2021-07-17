@@ -15,7 +15,9 @@ function collectFactions(node, factions) {
     case "P":
       const a = node.querySelector("a");
       const hrefTitle = a.href.split("title=");
-      const faction = [hrefTitle[hrefTitle.length - 1], a.innerText];
+      const page = hrefTitle[hrefTitle.length - 1];
+      const text = a.innerText;
+      const faction = [page, { text, page }];
       return collectFactions(node.nextSibling, [...factions, faction]);
     case "H2":
       return factions;
