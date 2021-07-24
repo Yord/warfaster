@@ -32,6 +32,12 @@ const factions = {
   selectPages: (state) => Object.keys(state.data.factions),
 };
 
+const menu = {
+  toggleCollapsed: (state) => {
+    state.ui.menuCollapsed = !state.ui.menuCollapsed;
+  },
+};
+
 const models = {
   set: (page, model) => (state) => {
     state.data.models[page] = model;
@@ -81,4 +87,12 @@ const wikiPage = {
     Object.values(state.data.pages).map((page) => page.pageid),
 };
 
-export { cypherCodecs, cyphers, factionModels, factions, models, wikiPage };
+export {
+  cypherCodecs,
+  cyphers,
+  factionModels,
+  factions,
+  menu,
+  models,
+  wikiPage,
+};

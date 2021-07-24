@@ -12,6 +12,9 @@ const initStore = (saga) => {
       cypherCodecs: [],
       cyphers: {},
     },
+    ui: {
+      menuCollapsed: false,
+    },
   };
 
   const persistedState = localStorage.getItem("reduxState")

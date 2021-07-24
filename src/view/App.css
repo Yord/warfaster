@@ -1,13 +1,39 @@
 @import "~antd/dist/antd.css";
 
-ul#factions li.ant-menu-item {
-  height: 25px;
-  line-height: 25px;
-  padding-left: 24px !important;
+li.ant-menu-item {
+  height: 25px !important;
+  line-height: 25px !important;
+  padding-left: 0px !important;
+  width: 300px !important;
 }
 
 span.ant-tag {
   line-height: 15px;
   margin-left: 8px;
   padding: 0 2px;
+}
+
+.ant-layout-header {
+  background: white !important;
+  font-size: 2em;
+  padding: 0 !important;
+}
+
+.ant-layout-header .ant-col {
+  text-align: center;
+}
+
+.ant-menu-title-content {
+  padding-left: 14px !important;
+}
+
+.ant-layout-sider-collapsed {
+  flex: 0 0 60px !important;
+  max-width: 60px !important;
+  min-width: 60px !important;
+  width: 60px !important;
+}
+
+.ant-menu-submenu-title {
+  padding: 0 0 0 14px !important;
 }

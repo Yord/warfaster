@@ -4,6 +4,7 @@ import {
   cyphers,
   factionModels,
   factions,
+  menu,
   models,
   wikiPage,
 } from "./dataAccess";
@@ -14,8 +15,10 @@ const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
 const root = immer(({ type, payload }) => {
   switch (type) {
+    // DEV
     case "F":
       return eval(payload.f);
+    // DATA
     case "CYPHER_CODECS/SET":
       return cypherCodecs.set(payload.cypherCodecs);
     case "CYPHER/SET":
@@ -32,6 +35,9 @@ const root = immer(({ type, payload }) => {
       return wikiPage.add(payload.page, payload.type, payload.data);
     case "WIKI_PAGE/REMOVE":
       return wikiPage.remove(payload.page);
+    // UI
+    case "MENU/TOGGLE_COLLAPSE":
+      return menu.toggleCollapsed;
   }
 });
 
