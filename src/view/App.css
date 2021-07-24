@@ -78,6 +78,14 @@ span.card {
   text-align: center;
 }
 
+.ant-layout-sider {
+  border-right: 1px solid rgb(240, 240, 240);
+}
+
+.ant-menu {
+  border: 0 !important;
+}
+
 .ant-menu-title-content {
   margin: 0 !important;
   padding-left: 14px !important;
