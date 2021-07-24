@@ -1,16 +1,17 @@
 import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
-import { Layout, Menu, Tag, Tooltip } from "antd";
+import { Badge, Col, Input, Layout, List, Menu, Row, Tag, Tooltip } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { ToggleMenuCollapse } from "../store/actions";
-import { Row, Col, Image } from "antd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Empyrean from "./Empyrean.png";
 import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
+import Wild_Card from "./Wild_Card.png";
 
 const { Header, Footer, Sider, Content } = Layout;
+const { TextArea } = Input;
 const { SubMenu } = Menu;
 
 function FactionImage({ faction }) {
@@ -27,6 +28,14 @@ function FactionImage({ faction }) {
       return <img src={Marcher_Worlds} height="80%" />;
   }
 }
+
+const data = [
+  { type: "Squad", title: "Vassal Raiders" },
+  { type: "Solo", title: "Grafter" },
+  { type: "Solo", title: "Hierotheos Raxis", subtype: "Hero" },
+  { type: "Vehicle", title: "Aenigma", subtype: "Hero" },
+  { type: "Warjack", title: "Nemesis" },
+];
 
 function AppPresentation({
   factions,
@@ -80,13 +89,15 @@ function AppPresentation({
                   return (
                     <Menu.Item key={`sub${i}_item${j}`}>
                       <Tag color={typeColors[type]}>{type}</Tag>
-                      {shortName.length === name.length ? (
-                        shortName
-                      ) : (
-                        <Tooltip placement="top" title={name}>
-                          {shortName}...
-                        </Tooltip>
-                      )}
+                      <span className="card">
+                        {shortName.length === name.length ? (
+                          shortName
+                        ) : (
+                          <Tooltip placement="top" title={name}>
+                            {shortName}...
+                          </Tooltip>
+                        )}
+                      </span>
                       {subtype ? (
                         <Tag color={subtypeColors[subtype]}>{subtype}</Tag>
                       ) : (
@@ -117,7 +128,70 @@ function AppPresentation({
               <Col span={2}></Col>
             </Row>
           </Header>
-          <Content>Content</Content>
+          <Content>
+            <List
+              size="small"
+              header={
+                <Row>
+                  <Col span={12} className="army-list-title">
+                    <Tooltip
+                      trigger={["focus"]}
+                      title={"Rename your list"}
+                      placement="topLeft"
+                    >
+                      <TextArea
+                        placeholder="Name your list"
+                        value="My fancy model list"
+                        maxLength={20}
+                        autoSize
+                      />
+                    </Tooltip>
+                  </Col>
+                  <Col span={12} className="faction-icons">
+                    <img src={Aeternus_Continuum} />
+                    <img src={Empyrean} />
+                    <img src={Iron_Star_Alliance} />
+                    <img src={Marcher_Worlds} />
+                    <img src={Wild_Card} />
+                  </Col>
+                </Row>
+              }
+              footer={
+                <div>
+                  <Badge size="small" count={5}>
+                    <Tag color={typeColors["Models"]}>Models</Tag>
+                  </Badge>
+                  <Badge size="small" count={1}>
+                    <Tag color={typeColors["Squad"]}>Squad</Tag>
+                  </Badge>
+                  <Badge size="small" count={2}>
+                    <Tag color={typeColors["Solo"]}>Solo</Tag>
+                  </Badge>
+                  <Badge size="small" count={1}>
+                    <Tag color={typeColors["Vehicle"]}>Vehicle</Tag>
+                  </Badge>
+                  <Badge size="small" count={1}>
+                    <Tag color={typeColors["Warjack"]}>Warjack</Tag>
+                  </Badge>
+                </div>
+              }
+              bordered
+              dataSource={data}
+              renderItem={({ type, title, subtype }) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={<Tag color={typeColors[type]}>{type}</Tag>}
+                    title={title}
+                  />
+                  {subtype ? (
+                    <Tag color={subtypeColors[subtype]}>{subtype}</Tag>
+                  ) : (
+                    ""
+                  )}
+                </List.Item>
+              )}
+            />
+          </Content>
           <Footer>Footer</Footer>
         </Layout>
       </Layout>

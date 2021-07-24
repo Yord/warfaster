@@ -9,8 +9,36 @@ li.ant-menu-item {
 
 span.ant-tag {
   line-height: 15px;
-  margin-left: 8px;
-  padding: 0 2px;
+  margin: 0;
+  padding: 1px 3px;
+}
+
+.ant-badge {
+  margin-right: 10px;
+}
+
+.ant-badge-count-sm {
+  font-size: 8px;
+  line-height: 12px;
+  min-width: 12px;
+  height: 12px;
+}
+
+span.card {
+  margin: 0 5px;
+}
+
+.ant-list {
+  margin-bottom: 15px;
+}
+
+.ant-list-item-meta-avatar {
+  margin-right: 5px;
+}
+
+.ant-list-item-meta-title {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: normal;
 }
 
 .ant-layout-header {
@@ -20,11 +48,19 @@ span.ant-tag {
 }
 
 .ant-layout-header .ant-col {
+  padding-left: 15px;
+}
+
+.ant-layout-header .ant-col.logo {
   text-align: center;
 }
 
 .ant-menu-title-content {
   padding-left: 14px !important;
+}
+
+.ant-list-item-meta-title {
+  margin: 0;
 }
 
 .ant-layout-sider-collapsed {
@@ -36,4 +72,37 @@ span.ant-tag {
 
 .ant-menu-submenu-title {
   padding: 0 0 0 14px !important;
+}
+
+.ant-layout-content {
+  background: white !important;
+  padding: 0 15px;
+}
+
+.ant-input {
+  border: 0;
+  padding: 0;
+  margin-top: 4px;
+}
+
+.faction-icons {
+  text-align: right;
+}
+
+.ant-list-header {
+  padding: 0 !important;
+}
+
+.army-list-title {
+  padding: 8px 16px 2px 16px;
+}
+
+.faction-icons img {
+  display: inline-block;
+  height: 38px;
+  margin: 4px;
+}
+
+.ant-layout-footer {
+  background: white !important;
 }
