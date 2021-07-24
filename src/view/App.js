@@ -183,11 +183,24 @@ function AppPresentation({
                     </Tooltip>
                   </Col>
                   <Col span={12} className="faction-icons">
-                    <img src={Aeternus_Continuum} />
-                    <img src={Empyrean} />
-                    <img src={Iron_Star_Alliance} />
-                    <img src={Marcher_Worlds} />
-                    <img src={Wild_Card} />
+                    <Badge size="small" count={5} offset={[0, 23]}>
+                      <img src={Aeternus_Continuum} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Empyrean} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Iron_Star_Alliance} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Marcher_Worlds} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Wild_Card} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Cyphers} />
+                    </Badge>
                   </Col>
                 </Row>
               }
@@ -245,11 +258,24 @@ function AppPresentation({
                     </Tooltip>
                   </Col>
                   <Col span={12} className="faction-icons">
-                    <img src={Aeternus_Continuum} />
-                    <img src={Empyrean} />
-                    <img src={Iron_Star_Alliance} />
-                    <img src={Marcher_Worlds} />
-                    <img src={Wild_Card} />
+                    <Badge size="small" count={2} offset={[0, 23]}>
+                      <img src={Aeternus_Continuum} />
+                    </Badge>
+                    <Badge size="small" count={2} offset={[0, 23]}>
+                      <img src={Empyrean} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Iron_Star_Alliance} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Marcher_Worlds} />
+                    </Badge>
+                    <Badge size="small" count={0} offset={[0, 23]}>
+                      <img src={Wild_Card} />
+                    </Badge>
+                    <Badge size="small" count={8} offset={[0, 23]}>
+                      <img src={Cyphers} />
+                    </Badge>
                   </Col>
                 </Row>
               }
