@@ -7,79 +7,32 @@ import {
   updateCache,
 } from "./cacheWikiPages";
 import { parseWikiPages } from "./parseWikiPages";
+import { updateCards } from "./ui";
 
 const initSaga = () => createSagaMiddleware();
 
 const runSaga = (saga) => {
   function* fetchSampleData() {
-    const fetchWarcaster = function* () {
-      yield put(FetchWikiPage({ page: "Warcaster", type: "faction" }));
-    };
-
-    const fetchAeternusContinuum = function* () {
-      yield put(
-        FetchWikiPage({ page: "Aeternus_Continuum", type: "factionModels" })
-      );
-    };
-
-    const fetchMarcherWorlds = function* () {
-      yield put(
-        FetchWikiPage({ page: "Marcher_Worlds", type: "factionModels" })
-      );
-    };
-
-    const fetchVassalRaiders = function* () {
-      yield put(FetchWikiPage({ page: "Vassal_Raiders", type: "model" }));
-    };
-
-    const fetchAenigma = function* () {
-      yield put(FetchWikiPage({ page: "Aenigma", type: "model" }));
-    };
-
-    const fetchScourge = function* () {
-      yield put(FetchWikiPage({ page: "Scourge", type: "model" }));
-    };
-
-    const fetchDefensePylon = function* () {
-      yield put(FetchWikiPage({ page: "Defense_Pylon", type: "model" }));
-    };
-
-    const fetchCypherCodecs = function* () {
-      yield put(FetchWikiPage({ page: "Cypher_Codecs", type: "cypherCodecs" }));
-    };
-
-    const fetchAcheronianVenediction = function* () {
-      yield put(
-        FetchWikiPage({ page: "Acheronian_Venediction", type: "cypher" })
-      );
-    };
-
-    const fetchAggressionTheorem = function* () {
-      yield put(FetchWikiPage({ page: "Aggression_Theorem", type: "cypher" }));
-    };
-
-    const fetchAnnihilationVector = function* () {
-      yield put(FetchWikiPage({ page: "Annihilation_Vector", type: "cypher" }));
-    };
-
-    const fetchAtrophicDecomposer = function* () {
-      yield put(FetchWikiPage({ page: "Atrophic_Decomposer", type: "cypher" }));
-    };
-
-    yield all([
-      fetchWarcaster(),
-      fetchAeternusContinuum(),
-      fetchMarcherWorlds(),
-      fetchVassalRaiders(),
-      fetchAenigma(),
-      fetchScourge(),
-      fetchDefensePylon(),
-      fetchCypherCodecs(),
-      fetchAcheronianVenediction(),
-      fetchAggressionTheorem(),
-      fetchAnnihilationVector(),
-      fetchAtrophicDecomposer(),
-    ]);
+    yield put(FetchWikiPage({ page: "Warcaster", type: "faction" }));
+    yield put(
+      FetchWikiPage({ page: "Aeternus_Continuum", type: "factionModels" })
+    );
+    yield put(FetchWikiPage({ page: "Empyrean", type: "factionModels" }));
+    yield put(FetchWikiPage({ page: "Marcher_Worlds", type: "factionModels" }));
+    yield put(
+      FetchWikiPage({ page: "Iron_Star_Alliance", type: "factionModels" })
+    );
+    //yield put(FetchWikiPage({ page: "Vassal_Raiders", type: "model" }));
+    //yield put(FetchWikiPage({ page: "Aenigma", type: "model" }));
+    //yield put(FetchWikiPage({ page: "Scourge", type: "model" }));
+    //yield put(FetchWikiPage({ page: "Defense_Pylon", type: "model" }));
+    yield put(FetchWikiPage({ page: "Cypher_Codecs", type: "cypherCodecs" }));
+    //yield put(
+    //  FetchWikiPage({ page: "Acheronian_Venediction", type: "cypher" })
+    //);
+    //yield put(FetchWikiPage({ page: "Aggression_Theorem", type: "cypher" }));
+    //yield put(FetchWikiPage({ page: "Annihilation_Vector", type: "cypher" }));
+    //yield put(FetchWikiPage({ page: "Atrophic_Decomposer", type: "cypher" }));
   }
 
   const refresh = function* () {
@@ -93,6 +46,7 @@ const runSaga = (saga) => {
       cacheWikiPages(),
       parseWikiPages(),
       fetchSampleData(),
+      updateCards(),
       refresh(),
     ]);
   };

@@ -36,8 +36,24 @@ const root = immer(({ type, payload }) => {
     case "WIKI_PAGE/REMOVE":
       return wikiPage.remove(payload.page);
     // UI
+    case "LISTS/UPDATE_CARD":
+      const { destination, source } = payload;
+      return (state) => {
+        const card = state.ui.lists[source.listIndex].cards[source.cardIndex];
+        state.ui.lists[source.listIndex].cards.splice(source.cardIndex, 1);
+        state.ui.lists[destination.listIndex].cards.splice(
+          destination.cardIndex,
+          0,
+          card
+        );
+        //console.log({ dest: [...dest] });
+        //dest.splice(destination.cardIndex, 0, card);
+        //console.log({ dest: [...dest] });
+      };
     case "MENU/TOGGLE_COLLAPSE":
       return menu.toggleCollapsed;
+    default:
+      return (state) => state;
   }
 });
 

@@ -28,42 +28,6 @@ span.card {
   margin: 0 5px;
 }
 
-.ant-list {
-  background: rgb(235, 236, 240);
-  border: 0 !important;
-  border-radius: 2px;
-  margin-bottom: 15px;
-}
-
-.ant-list textarea {
-  background: rgb(235, 236, 240);
-  font-weight: bold;
-}
-
-.ant-list-item:nth-of-type(1) {
-  margin-top: 0;
-}
-
-.ant-list-item:last-of-type {
-  margin-bottom: 0;
-}
-
-.ant-list-item {
-  background: white;
-  border: 0 !important;
-  border-radius: 2px;
-  margin: 6px;
-}
-
-.ant-list-item-meta-avatar {
-  margin-right: 5px;
-}
-
-.ant-list-item-meta-title {
-  color: rgba(0, 0, 0, 0.85);
-  font-weight: normal;
-}
-
 .ant-layout-header {
   background: white !important;
   font-size: 2em;
@@ -89,14 +53,6 @@ span.card {
 .ant-menu-title-content {
   margin: 0 !important;
   padding-left: 14px !important;
-}
-
-.ant-list-item-meta-title {
-  margin: 0;
-}
-
-.ant-list-item img {
-  height: 22px;
 }
 
 .ant-layout-sider-collapsed {
@@ -131,7 +87,7 @@ span.card {
 }
 
 .army-list-title {
-  padding: 8px 16px 2px 16px;
+  padding: 8px 8px 0px 8px;
 }
 
 .faction-icons img {
@@ -146,4 +102,57 @@ span.card {
 
 .ant-layout-footer {
   background: white !important;
+}
+
+.card {
+  border-radius: 2px;
+  margin: 6px !important;
+}
+
+.body:nth-of-type(1) .card {
+  margin-top: 0 !important;
+}
+
+.body:last-of-type .card {
+  margin-bottom: 0 !important;
+}
+
+.cards .header {
+  padding: 0 0 0 16px;
+}
+
+.cards .header textarea {
+  background: rgb(235, 236, 240) !important;
+  font-weight: bold;
+}
+
+.cards .footer {
+  padding: 6px 6px;
+}
+
+.cards .footer .ant-badge {
+  margin: 6px 6px;
+}
+
+.card .ant-card-meta-title {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.card .details {
+  text-align: right;
+}
+
+.card .details img {
+  height: 22px;
+}
+
+.card .ant-card-body {
+  padding: 12px 16px 8px 16px;
+}
+
+.cards {
+  background: rgb(235, 236, 240);
+  border-radius: 2px;
+  margin: 16px 0;
 }
