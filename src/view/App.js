@@ -40,6 +40,7 @@ function AppPresentation({
   factions,
   cypherCodecs,
   cypherColors,
+  dragging,
   typeColors,
   subtypeColors,
   menuCollapsed,
@@ -147,7 +148,14 @@ function AppPresentation({
                   )}
                 </Col>
                 <Col span={20} className="logo">
-                  Warfaster
+                  <Droppable key={"trash"} droppableId={"trash"}>
+                    {(provided, snapshot) => (
+                      <div ref={provided.innerRef} {...provided.droppableProps}>
+                        {dragging ? "TRASH" : "Warfaster"}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
                 </Col>
                 <Col span={2}></Col>
               </Row>
@@ -395,6 +403,7 @@ const App = connect(
         return [];
       }),
     })),
+    dragging: state.ui.dragging,
   }),
   (dispatch) => ({
     toggleMenu: () => dispatch(ToggleMenuCollapse()),

@@ -13,6 +13,7 @@ const initStore = (saga) => {
       cyphers: {},
     },
     ui: {
+      dragging: false,
       menuCollapsed: false,
       lists: [
         {

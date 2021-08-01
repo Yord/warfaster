@@ -5,6 +5,8 @@ const cypherCodecs = {
   selectAll: (state) => state.data.cypherCodecs,
   selectAllCypherPages: (state) =>
     state.data.cypherCodecs.map((codec) => codec.Cypher.page),
+  findCypherCodec: (page) => (state) =>
+    state.data.cypherCodecs.find((codec) => codec.Cypher.page === page),
 };
 
 const cyphers = {
@@ -23,6 +25,10 @@ const factionModels = {
     Object.values(state.data.factionModels)
       .flat()
       .map((model) => model.Name.page),
+  findModelPage: (page) => (state) =>
+    Object.values(state.data.factionModels)
+      .flat()
+      .find((model) => model.Name.page === page),
 };
 
 const factions = {

@@ -7,7 +7,13 @@ import {
   updateCache,
 } from "./cacheWikiPages";
 import { parseWikiPages } from "./parseWikiPages";
-import { addCard, updateCards } from "./ui";
+import {
+  addCard,
+  removeCards,
+  setDraggingFalse,
+  setDraggingTrue,
+  updateCards,
+} from "./ui";
 
 const initSaga = () => createSagaMiddleware();
 
@@ -47,7 +53,10 @@ const runSaga = (saga) => {
       parseWikiPages(),
       fetchSampleData(),
       updateCards(),
+      removeCards(),
       addCard(),
+      setDraggingFalse(),
+      setDraggingTrue(),
       refresh(),
     ]);
   };
