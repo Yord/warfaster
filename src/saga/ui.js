@@ -1,4 +1,5 @@
 import { put, take } from "redux-saga/effects";
+import { AddCard } from "../store/actions";
 
 function* updateCards() {
   while (true) {
@@ -31,4 +32,12 @@ function* updateCards() {
   }
 }
 
-export { updateCards };
+function* addCard() {
+  while (true) {
+    const { payload } = yield take("MENU_ITEM/CLICKED");
+    const { key } = payload;
+    yield put(AddCard({ page: key }));
+  }
+}
+
+export { addCard, updateCards };

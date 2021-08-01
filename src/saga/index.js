@@ -7,7 +7,7 @@ import {
   updateCache,
 } from "./cacheWikiPages";
 import { parseWikiPages } from "./parseWikiPages";
-import { updateCards } from "./ui";
+import { addCard, updateCards } from "./ui";
 
 const initSaga = () => createSagaMiddleware();
 
@@ -47,6 +47,7 @@ const runSaga = (saga) => {
       parseWikiPages(),
       fetchSampleData(),
       updateCards(),
+      addCard(),
       refresh(),
     ]);
   };

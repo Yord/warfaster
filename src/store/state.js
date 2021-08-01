@@ -36,6 +36,10 @@ const root = immer(({ type, payload }) => {
     case "WIKI_PAGE/REMOVE":
       return wikiPage.remove(payload.page);
     // UI
+    case "LIST/ADD_CARD":
+      return (state) => {
+        state.ui.lists[state.ui.lists.length - 1].cards.push(payload.page);
+      };
     case "LISTS/UPDATE_CARD":
       const { destination, source } = payload;
       return (state) => {

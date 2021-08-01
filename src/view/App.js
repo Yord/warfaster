@@ -1,24 +1,3 @@
-/*
-TODO:
-+ Parse all factionModel types instead of only the first.
-+ Parse Wild_Cards.
-+ Drag and Drop Lists.
-+ Multi-Drag and Drop Cards.
-  + Make faction logos and badges into buttons that trigger multi-select.
-+ Add cards to (bottom of first?) list with click on menu item.
-+ Show details of cards.
-+ Make lists renameable.
-+ Find a way to delete cards from lists (e.g. by replacing the Warfaster title with a recicle bin).
-+ Add a button for adding new lists.
-  + find a way to delete lists (e.g. by replacing the Warfaster title with a recicle bin).
-+ Only fetch the Warcaster and Cypher_Codecs pages at the start and build from there.
-  + Fetch all factions found on the Warcaster page after parsing the Warcaster page.
-+ Add text to the footer (copyright notices for Privateer Press, contact infos, etc.).
-+ Make menu items filterable by adding a filter input field to the top of the menu.
-+ Web design.
-+ Disable list selection on click in menu and menu items (no blue overlay).
-*/
-
 import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
@@ -32,7 +11,7 @@ import Empyrean from "./Empyrean.png";
 import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
 import Wild_Card from "./Wild_Card.png";
-import { CardDragEnded, CardDragStarted } from "./events";
+import { CardDragEnded, CardDragStarted, MenuItemClicked } from "./events";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { TextArea } = Input;
@@ -64,6 +43,7 @@ function AppPresentation({
   typeColors,
   subtypeColors,
   menuCollapsed,
+  menuItemClicked,
   toggleMenu,
   dragEnd,
   dragStart,
@@ -98,7 +78,7 @@ function AppPresentation({
         >
           <Menu
             id="factions"
-            //onClick={this.handleClick}
+            onClick={menuItemClicked}
             openKeys={openKeys}
             onOpenChange={onOpenChange}
             //defaultSelectedKeys={["item1"]}
@@ -107,7 +87,7 @@ function AppPresentation({
           >
             {factions.map(([faction, models], i) => (
               <SubMenu
-                key={`sub${i}`}
+                key={faction}
                 title={faction}
                 icon={<FactionImage faction={faction} />}
               >
@@ -115,7 +95,10 @@ function AppPresentation({
                   const shortName = name.slice(0, 20);
 
                   return (
-                    <Menu.Item key={`sub${i}_model${j}`}>
+                    <Menu.Item
+                      key={page}
+                      title={<Tag color={typeColors[type]}>{type}</Tag>}
+                    >
                       <Tag color={typeColors[type]}>{type}</Tag>
                       <span className="card">
                         {shortName.length === name.length ? (
@@ -142,7 +125,7 @@ function AppPresentation({
               icon={<FactionImage faction="Cyphers" />}
             >
               {cypherCodecs.map(({ Cypher, Type, Faction }, j) => (
-                <Menu.Item key={`cypher_codecs_${j}`}>
+                <Menu.Item key={Cypher.page}>
                   <Tag color={cypherColors[Type.text]}>{Type.text}</Tag>
                   <span className="card">{Cypher.text}</span>
                 </Menu.Item>
@@ -417,6 +400,7 @@ const App = connect(
     toggleMenu: () => dispatch(ToggleMenuCollapse()),
     dragStart: (event) => dispatch(CardDragStarted(event)),
     dragEnd: (event) => dispatch(CardDragEnded(event)),
+    menuItemClicked: (event) => dispatch(MenuItemClicked(event)),
   })
 )(AppPresentation);
 
