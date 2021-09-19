@@ -97,7 +97,8 @@ function AppPresentation({
 
                   return (
                     <Menu.Item
-                      key={page}
+                      key={faction + ":" + page}
+                      page={page}
                       title={<Tag color={typeColors[type]}>{type}</Tag>}
                     >
                       <Tag color={typeColors[type]}>{type}</Tag>
@@ -126,7 +127,7 @@ function AppPresentation({
               icon={<FactionImage faction="Cyphers" />}
             >
               {cypherCodecs.map(({ Cypher, Type, Faction }, j) => (
-                <Menu.Item key={Cypher.page}>
+                <Menu.Item key={":" + Cypher.page}>
                   <Tag color={cypherColors[Type.text]}>{Type.text}</Tag>
                   <span className="card">{Cypher.text}</span>
                 </Menu.Item>
@@ -319,10 +320,23 @@ const typeColors = [
 
 const subtypeColors = ["orange", "lime", "geekblue"];
 
+function mergeArrayObjects(obj1, obj2) {
+  const obj = {};
+  for (const [key, list] of Object.entries(obj1)) {
+    obj[key] = list;
+  }
+  for (const [key, list] of Object.entries(obj2)) {
+    obj[key] = obj[key].concat(list);
+  }
+  return obj;
+}
+
 const App = connect(
   (state) => ({
     menuCollapsed: state.ui.menuCollapsed,
-    factions: Object.entries(state.data.factionModels)
+    factions: Object.entries(
+      mergeArrayObjects(state.data.factionModels, state.data.wildCardModels)
+    )
       .sort()
       .map(([faction, models]) => [
         faction,
@@ -371,6 +385,11 @@ const App = connect(
             models.map((model) => ({ ...model, faction }))
           )
           .find(({ Name }) => Name.page === page);
+        const wildCard = Object.entries(state.data.wildCardModels)
+          .flatMap(([faction, models]) =>
+            models.map((model) => ({ ...model, faction }))
+          )
+          .find(({ Name }) => Name.page === page);
         const cypher = state.data.cypherCodecs.find(
           ({ Cypher }) => Cypher.page === page
         );
@@ -383,6 +402,18 @@ const App = connect(
               title: model.Name.text,
               faction: model.faction,
               ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
+            },
+          ];
+        }
+
+        if (wildCard) {
+          return [
+            {
+              card: "model",
+              type: wildCard.Type.text,
+              title: wildCard.Name.text,
+              faction: wildCard.faction,
+              ...(wildCard.Subtype ? { subtype: wildCard.Subtype.text } : {}),
             },
           ];
         }

@@ -1,10 +1,4 @@
-const parseFactionModelsText = (text) => {
-  const doc = new DOMParser().parseFromString(text, "text/html");
-  doc.querySelectorAll("h1 > span[id]").forEach((node) => {
-    node.parentNode.id = node.id;
-  });
-
-  const table = doc.querySelector("h1#Models ~ table");
+function parseFactionModels(table) {
   const header = [...table.querySelectorAll("th")].map((th) =>
     th.innerText.replace(/\n/g, "")
   );
@@ -29,6 +23,16 @@ const parseFactionModelsText = (text) => {
     );
 
   return models;
+}
+
+const parseFactionModelsText = (text) => {
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  doc.querySelectorAll("h1 > span[id]").forEach((node) => {
+    node.parentNode.id = node.id;
+  });
+
+  const table = doc.querySelector("h1#Models ~ table");
+  return parseFactionModels(table);
 };
 
-export { parseFactionModelsText };
+export { parseFactionModels, parseFactionModelsText };

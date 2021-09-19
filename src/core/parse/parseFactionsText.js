@@ -5,7 +5,9 @@ const parseFactionsText = (text) => {
   });
 
   const p = doc.querySelector("h2#Factions ~ p");
-  return Object.fromEntries(collectFactions(p, []));
+  const factions = Object.fromEntries(collectFactions(p, []));
+  delete factions.Wild_Card;
+  return factions;
 };
 
 export { parseFactionsText };

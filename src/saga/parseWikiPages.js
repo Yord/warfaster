@@ -5,6 +5,7 @@ import {
   SetFactions,
   SetFactionModels,
   SetModel,
+  SetWildCards,
 } from "./actions";
 import {
   parseCypherText,
@@ -12,6 +13,7 @@ import {
   parseFactionModelsText,
   parseFactionsText,
   parseModelText,
+  parseWildCardText,
 } from "../core/parse";
 import { cypherCodecs, factionModels, factions } from "../store/dataAccess";
 
@@ -22,6 +24,7 @@ function* parseWikiPages() {
     parseFactions(),
     parseFactionModels(),
     parseModel(),
+    parseWildCard(),
   ]);
 }
 
@@ -90,6 +93,18 @@ function* parseModel() {
       const model = parseModelText(data.text);
       model.name = { text: data.title, page };
       yield put(SetModel({ page, model }));
+    }
+  }
+}
+
+function* parseWildCard() {
+  while (true) {
+    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { data, page } = payload;
+
+    if (page === "Wild_Card") {
+      const wildCards = parseWildCardText(data.text);
+      yield put(SetWildCards({ wildCards }));
     }
   }
 }

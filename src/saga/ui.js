@@ -1,6 +1,10 @@
 import { put, take, select } from "redux-saga/effects";
 import { AddCard, SetDragging } from "../store/actions";
-import { cypherCodecs, factionModels } from "../store/dataAccess";
+import {
+  cypherCodecs,
+  factionModels,
+  wildCardModels,
+} from "../store/dataAccess";
 
 function* updateCards() {
   while (true) {
@@ -56,9 +60,11 @@ function* addCard() {
   while (true) {
     const { payload } = yield take("MENU_ITEM/CLICKED");
     const { key } = payload;
-    const model = yield select(factionModels.findModelPage(key));
-    const cypher = yield select(cypherCodecs.findCypherCodec(key));
-    if (model || cypher) yield put(AddCard({ page: key }));
+    const page = key.split(":")[1];
+    const model = yield select(factionModels.findModelPage(page));
+    const wildCard = yield select(wildCardModels.findModelPage(page));
+    const cypher = yield select(cypherCodecs.findCypherCodec(page));
+    if (model || wildCard || cypher) yield put(AddCard({ page }));
   }
 }
 

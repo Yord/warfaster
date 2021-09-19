@@ -15,6 +15,7 @@ const SetCypherCodecs = action("CYPHER_CODECS/SET");
 const SetFactions = action("FACTIONS/SET");
 const SetFactionModels = action("FACTION_MODELS/SET");
 const SetModel = action("MODEL/SET");
+const SetWildCards = action("WILD_CARDS/SET");
 
 export {
   AddWikiPage,
@@ -30,4 +31,5 @@ export {
   SetFactions,
   SetFactionModels,
   SetModel,
+  SetWildCards,
 };

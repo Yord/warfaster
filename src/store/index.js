@@ -8,6 +8,7 @@ const initStore = (saga) => {
       pages: {},
       factions: {},
       factionModels: {},
+      wildCardModels: {},
       models: {},
       cypherCodecs: [],
       cyphers: {},

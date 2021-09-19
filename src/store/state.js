@@ -7,6 +7,7 @@ import {
   menu,
   models,
   wikiPage,
+  wildCardModels,
 } from "./dataAccess";
 
 const identity = (a) => a;
@@ -33,6 +34,9 @@ const root = immer(({ type, payload }) => {
     }
     case "MODEL/SET": {
       return models.set(payload.page, payload.model);
+    }
+    case "WILD_CARDS/SET": {
+      return wildCardModels.set(payload.wildCards);
     }
     case "UNSUCCESSFULLY_PARSED_PAGES/REMOVE": {
       return wikiPage.removeUnsuccessfullyParsedPages;

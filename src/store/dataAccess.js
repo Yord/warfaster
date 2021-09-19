@@ -18,7 +18,13 @@ const cyphers = {
 
 const factionModels = {
   set: (page, factionModels) => (state) => {
-    state.data.factionModels[page] = factionModels;
+    if (!state.data.factionModels[page]) {
+      state.data.factionModels[page] = [];
+    }
+    state.data.factionModels[page] = [
+      ...state.data.factionModels[page],
+      ...factionModels,
+    ];
   },
   selectAll: (state) => state.data.factionModels,
   selectAllModelPages: (state) =>
@@ -74,6 +80,8 @@ const wikiPage = {
       const unsuccessfullyParsedPage =
         (type === "faction" && Object.keys(factionsPages).length === 0) ||
         (type === "factionModels" && !factionModelPages[page]) ||
+        (type === "wildCardModels" &&
+          Object.keys(state.data.wildCardModels).length === 0) ||
         (type === "model" && !modelPages[page]) ||
         (type === "cypherCodecs" && cypherCodecsList.length === 0) ||
         (type === "cypher" && !cypherPages[page]) ||
@@ -93,6 +101,18 @@ const wikiPage = {
     Object.values(state.data.pages).map((page) => page.pageid),
 };
 
+const wildCardModels = {
+  set: (wildCards) => (state) => {
+    for (const wildCard of wildCards) {
+      state.data.wildCardModels[wildCard.faction] = wildCard.models;
+    }
+  },
+  findModelPage: (page) => (state) =>
+    Object.values(state.data.wildCardModels)
+      .flat()
+      .find((model) => model.Name.page === page),
+};
+
 export {
   cypherCodecs,
   cyphers,
@@ -101,4 +121,5 @@ export {
   menu,
   models,
   wikiPage,
+  wildCardModels,
 };
