@@ -4,14 +4,14 @@ import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { ToggleMenuCollapse } from "../state/actions";
+import { ToggleMenuCollapse } from "../messages";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
 import Empyrean from "./Empyrean.png";
 import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
 import Wild_Card from "./Wild_Card.png";
-import { CardDragEnded, CardDragStarted, MenuItemClicked } from "./events";
+import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { TextArea } = Input;

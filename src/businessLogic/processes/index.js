@@ -1,6 +1,6 @@
 import createSagaMiddleware from "redux-saga";
 import { all, put } from "redux-saga/effects";
-import { FetchWikiPage, RefreshWikiPages } from "./actions";
+import { FetchWikiPage, RefreshWikiPages } from "../../messages";
 import {
   cacheWikiPages,
   removeUnsuccessfullyParsedPages,

@@ -1,6 +1,6 @@
 import { put, take, select } from "redux-saga/effects";
 import { parseCypher as parse } from "../../core/parse/parseCypherText";
-import { SetCypher } from "../actions";
+import { SetCypher } from "../../../messages";
 import { cypherCodecs } from "../../../state/dataAccess/cypherCodecs";
 
 const parseCypher = function* () {

@@ -9,7 +9,7 @@ and removes them from the cache.
 */
 
 import { put } from "redux-saga/effects";
-import { RemoveUnsuccessfullyParsedPages } from "../actions";
+import { RemoveUnsuccessfullyParsedPages } from "../../../messages";
 
 const removeUnsuccessfullyParsedPages = function* () {
   yield put(RemoveUnsuccessfullyParsedPages());

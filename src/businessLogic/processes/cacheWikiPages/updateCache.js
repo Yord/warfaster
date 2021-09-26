@@ -17,7 +17,7 @@ import {
   FetchWikiPageRevisions,
   FetchedWikiPageRevisions,
   RemoveWikiPage,
-} from "../actions";
+} from "../../../messages";
 import {
   actionChannel,
   all,
@@ -27,7 +27,7 @@ import {
   take,
   select,
 } from "redux-saga/effects";
-import { jsonp } from "../../core/jsonp";
+import { jsonp } from "../jsonp";
 
 function* updateCache() {
   yield all([

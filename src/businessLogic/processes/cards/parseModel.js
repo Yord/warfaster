@@ -1,6 +1,6 @@
 import { put, take, select } from "redux-saga/effects";
 import { parseModel as parse } from "../../core/parse/parseModelText";
-import { SetModel } from "../actions";
+import { SetModel } from "../../../messages";
 import { factionModels } from "../../../state/dataAccess/factionModels";
 
 const parseModel = function* () {

@@ -6,7 +6,7 @@ import {
   SetFactionModels,
   SetModel,
   SetWildCards,
-} from "./actions";
+} from "../../messages";
 import {
   parseCypherText,
   parseCypherCodecsText,
