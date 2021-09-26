@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import "./index.css";
-import App from "./view/App";
-import { initSaga, runSaga } from "./saga";
-import { initStore } from "./store";
+import App from "./ui/App";
+import { initSaga, runSaga } from "./businessLogic/processes";
+import { initStore } from "./state";
 
 const saga = initSaga();
 const store = initStore(saga);

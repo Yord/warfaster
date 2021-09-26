@@ -1,10 +1,10 @@
 import { put, take, select } from "redux-saga/effects";
-import { AddCard, SetDragging } from "../store/actions";
+import { AddCard, SetDragging } from "../../state/actions";
 import {
   cypherCodecs,
   factionModels,
   wildCardModels,
-} from "../store/dataAccess";
+} from "../../state/dataAccess";
 
 function* updateCards() {
   while (true) {

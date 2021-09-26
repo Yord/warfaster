@@ -15,7 +15,7 @@ import {
   parseModelText,
   parseWildCardText,
 } from "../core/parse";
-import { cypherCodecs, factionModels, factions } from "../store/dataAccess";
+import { cypherCodecs, factionModels, factions } from "../../state/dataAccess";
 
 function* parseWikiPages() {
   yield all([

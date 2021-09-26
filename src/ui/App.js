@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { ToggleMenuCollapse } from "../store/actions";
+import { ToggleMenuCollapse } from "../state/actions";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
 import Empyrean from "./Empyrean.png";

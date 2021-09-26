@@ -17,7 +17,7 @@ import {
 } from "redux-saga/effects";
 import { AddWikiPage, FetchedWikiPage } from "../actions";
 import { jsonp } from "../../core/jsonp";
-import { wikiPage } from "../../store/dataAccess";
+import { wikiPage } from "../../../state/dataAccess";
 
 function* cacheWikiPages() {
   yield all([addWikiPage(), fetchWikiPage()]);

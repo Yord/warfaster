@@ -11,7 +11,7 @@ cached revision is higher or equal, the page is not refreshed and remains
 cached.
 */
 
-import { wikiPage } from "../../store/dataAccess";
+import { wikiPage } from "../../../state/dataAccess";
 import {
   FetchWikiPage,
   FetchWikiPageRevisions,
