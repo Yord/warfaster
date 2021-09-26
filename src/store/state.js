@@ -16,10 +16,6 @@ const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
 const root = immer(({ type, payload }) => {
   switch (type) {
-    // DEV
-    case "F":
-      return eval(payload.f);
-    // DATA
     case "CYPHER_CODECS/SET": {
       return cypherCodecs.set(payload.cypherCodecs);
     }
