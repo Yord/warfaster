@@ -41,7 +41,6 @@ function* removeCards() {
   while (true) {
     const { payload } = yield take("CARD/DRAG_ENDED");
     const { reason, source, destination } = payload;
-    console.log({ reason, source, destination });
     if (reason === "DROP" && destination.droppableId.startsWith("trash")) {
       const listIndex = parseInt(source.droppableId.replace("cards_", ""), 10);
       const cardIndex = source.index;

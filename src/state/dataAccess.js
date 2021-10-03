@@ -57,50 +57,6 @@ const models = {
   selectAll: (state) => state.data.models,
 };
 
-const wikiPage = {
-  add: (page, type, data) => (state) => {
-    state.data.pages[page] = {
-      page,
-      type,
-      ...data,
-    };
-  },
-  remove: (page) => (state) => {
-    delete state.data.pages[page];
-  },
-  removeUnsuccessfullyParsedPages: (state) => {
-    const cypherCodecsList = cypherCodecs.selectAll(state);
-    const factionsPages = factions.selectPages(state);
-    const factionModelPages = factionModels.selectAll(state);
-    const modelPages = models.selectAll(state);
-    const cypherPages = cyphers.selectAll(state);
-
-    const pages = Object.entries(state.data.pages);
-    for (const [page, { type }] of pages) {
-      const unsuccessfullyParsedPage =
-        (type === "faction" && Object.keys(factionsPages).length === 0) ||
-        (type === "factionModels" && !factionModelPages[page]) ||
-        (type === "wildCardModels" &&
-          Object.keys(state.data.wildCardModels).length === 0) ||
-        (type === "model" && !modelPages[page]) ||
-        (type === "cypherCodecs" && cypherCodecsList.length === 0) ||
-        (type === "cypher" && !cypherPages[page]) ||
-        false;
-
-      if (unsuccessfullyParsedPage) {
-        delete state.data.pages[page];
-      }
-    }
-  },
-  select: (page) => (state) => state.data.pages[page],
-  selectGivenPageIds: (pageIds) => (state) =>
-    Object.values(state.data.pages).filter((page) =>
-      pageIds.includes(page.pageid)
-    ),
-  selectPageIds: (state) =>
-    Object.values(state.data.pages).map((page) => page.pageid),
-};
-
 const wildCardModels = {
   set: (wildCards) => (state) => {
     for (const wildCard of wildCards) {
@@ -120,6 +76,5 @@ export {
   factions,
   menu,
   models,
-  wikiPage,
   wildCardModels,
 };

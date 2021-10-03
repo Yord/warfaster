@@ -9,10 +9,11 @@ and removes them from the cache.
 */
 
 import { put } from "redux-saga/effects";
-import { RemoveUnsuccessfullyParsedPages } from "../../../messages";
+
+import { WikiPages } from "../../../state/objects/WikiPages";
 
 const removeUnsuccessfullyParsedPages = function* () {
-  yield put(RemoveUnsuccessfullyParsedPages());
+  yield put(WikiPages.removeUnsuccessfullyParsedPages());
 };
 
 export { removeUnsuccessfullyParsedPages };

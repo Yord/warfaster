@@ -1,4 +1,3 @@
-import produce from "immer";
 import {
   cypherCodecs,
   cyphers,
@@ -6,15 +5,14 @@ import {
   factions,
   menu,
   models,
-  wikiPage,
   wildCardModels,
-} from "./dataAccess";
+} from "../dataAccess";
+import { WikiPages } from "./WikiPages";
+import { immer, immerPipe } from "./utils";
 
-const identity = (a) => a;
+const init = immerPipe(WikiPages.init);
 
-const immer = (f) => (state, action) => produce(f(action) || identity)(state);
-
-const root = immer(({ type, payload }) => {
+const dispatch = immer(({ type, payload }) => {
   switch (type) {
     case "CYPHER_CODECS/SET": {
       return cypherCodecs.set(payload.cypherCodecs);
@@ -34,14 +32,14 @@ const root = immer(({ type, payload }) => {
     case "WILD_CARDS/SET": {
       return wildCardModels.set(payload.wildCards);
     }
-    case "UNSUCCESSFULLY_PARSED_PAGES/REMOVE": {
-      return wikiPage.removeUnsuccessfullyParsedPages;
+    case "WikiPages.removeUnsuccessfullyParsedPages": {
+      return (state) => redirect(WikiPages.dispatch)(state, { type, payload });
     }
-    case "WIKI_PAGE/ADD": {
-      return wikiPage.add(payload.page, payload.type, payload.data);
+    case "WikiPages.setPage": {
+      return (state) => redirect(WikiPages.dispatch)(state, { type, payload });
     }
-    case "WIKI_PAGE/REMOVE": {
-      return wikiPage.remove(payload.page);
+    case "WikiPages.removePage": {
+      return (state) => redirect(WikiPages.dispatch)(state, { type, payload });
     }
     // UI
     case "DRAGGING/SET": {
@@ -81,4 +79,12 @@ const root = immer(({ type, payload }) => {
   }
 });
 
-export { root };
+export { dispatch, init };
+
+function redirect(functionByMessage) {
+  return (state, action) =>
+    immer(({ type, payload }) => {
+      const f = functionByMessage[type] || ((state) => state);
+      return (state) => f(state, payload);
+    })(state, action);
+}

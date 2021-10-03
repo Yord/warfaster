@@ -11,12 +11,10 @@ cached revision is higher or equal, the page is not refreshed and remains
 cached.
 */
 
-import { wikiPage } from "../../../state/dataAccess";
 import {
   FetchWikiPage,
   FetchWikiPageRevisions,
   FetchedWikiPageRevisions,
-  RemoveWikiPage,
 } from "../../../messages";
 import {
   actionChannel,
@@ -28,6 +26,8 @@ import {
   select,
 } from "redux-saga/effects";
 import { jsonp } from "../jsonp";
+
+import { WikiPages } from "../../../state/objects/WikiPages";
 
 function* updateCache() {
   yield all([
@@ -41,7 +41,7 @@ export { updateCache };
 
 function* refreshWikiPages() {
   yield take("WIKI_PAGES/REFRESH");
-  const pageIds = yield select(wikiPage.selectPageIds);
+  const pageIds = yield select(WikiPages.selectPageIds());
 
   const queryLength = 50;
   const pageidsList = [];
@@ -93,13 +93,13 @@ function* refreshOutdatedWikiPages() {
     );
     const pageIds = pageRevisions.map((revision) => revision.pageid);
 
-    const pages = yield select(wikiPage.selectGivenPageIds(pageIds));
+    const pages = yield select(WikiPages.selectPagesByPageIds(pageIds));
     for (const page of pages) {
       const revInfo = revInfoByPageId[page.pageid];
       if (revInfo.missing) {
-        yield put(RemoveWikiPage({ page: page.page }));
+        yield put(WikiPages.removePage({ page: page.page }));
       } else if (page.revid < revInfo.revid) {
-        yield put(RemoveWikiPage({ page: page.page }));
+        yield put(WikiPages.removePage({ page: page.page }));
         yield put(FetchWikiPage({ page: page.page, type: page.type }));
       }
     }

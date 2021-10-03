@@ -15,9 +15,10 @@ import {
   select,
   take,
 } from "redux-saga/effects";
-import { AddWikiPage, FetchedWikiPage } from "../../../messages";
+import { FetchedWikiPage } from "../../../messages";
 import { jsonp } from "../jsonp";
-import { wikiPage } from "../../../state/dataAccess";
+
+import { WikiPages } from "../../../state/objects/WikiPages";
 
 function* cacheWikiPages() {
   yield all([addWikiPage(), fetchWikiPage()]);
@@ -32,7 +33,7 @@ function* fetchWikiPage() {
     const { payload } = yield take(wikiPageChannel);
     const page = payload.page;
     const type = payload.type;
-    const data = yield select(wikiPage.select(page));
+    const data = yield select(WikiPages.selectPageByPage(page));
 
     if (!data) {
       const data = yield call(jsonp, parsePage(page));
@@ -51,7 +52,7 @@ function* addWikiPage() {
     const type = payload.type;
     const data = payload.data;
 
-    yield put(AddWikiPage({ page, data, type }));
+    yield put(WikiPages.setPage({ page, data, type }));
   }
 }
 
