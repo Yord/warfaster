@@ -1,24 +1,24 @@
 import {
   cypherCodecs,
-  cyphers,
   factionModels,
   menu,
   models,
   wildCardModels,
 } from "../dataAccess";
+import { Cyphers } from "./Cyphers";
 import { WikiPages } from "./WikiPages";
 import { Factions } from "./Factions";
 import { immer, immerPipe } from "./utils";
 
-const init = immerPipe(WikiPages.init);
+const init = immerPipe(WikiPages.init, Factions.init, Cyphers.init);
 
 const dispatch = immer(({ type, payload }) => {
   switch (type) {
     case "CYPHER_CODECS/SET": {
       return cypherCodecs.set(payload.cypherCodecs);
     }
-    case "CYPHER/SET": {
-      return cyphers.set(payload.page, payload.cypher);
+    case "Cyphers.set": {
+      return (state) => redirect(Cyphers.dispatch)(state, { type, payload });
     }
     case "Factions.set": {
       return (state) => redirect(Factions.dispatch)(state, { type, payload });

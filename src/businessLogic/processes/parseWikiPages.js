@@ -1,6 +1,5 @@
 import { all, put, take, select } from "redux-saga/effects";
 import {
-  SetCypher,
   SetCypherCodecs,
   SetFactionModels,
   SetModel,
@@ -16,6 +15,7 @@ import {
 } from "../core/parse";
 import { cypherCodecs, factionModels } from "../../state/dataAccess";
 import { Factions } from "../../state/objects/Factions";
+import { Cyphers } from "../../state/objects/Cyphers";
 
 function* parseWikiPages() {
   yield all([
@@ -39,7 +39,7 @@ function* parseCypher() {
     if (pages.includes(page)) {
       const cypher = parseCypherText(data.text);
       cypher.name = { text: data.title, page };
-      yield put(SetCypher({ page, cypher }));
+      yield put(Cyphers.set({ page, cypher }));
     }
   }
 }

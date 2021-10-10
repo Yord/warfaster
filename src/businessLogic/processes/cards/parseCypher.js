@@ -1,7 +1,7 @@
 import { put, take, select } from "redux-saga/effects";
 import { parseCypher as parse } from "../../core/parse/parseCypherText";
-import { SetCypher } from "../../../messages";
 import { cypherCodecs } from "../../../state/dataAccess/cypherCodecs";
+import { Cyphers } from "../../../state/objects/Cyphers";
 
 const parseCypher = function* () {
   while (true) {
@@ -11,7 +11,7 @@ const parseCypher = function* () {
 
     if (pages.includes(page)) {
       const cypher = parse(data.text);
-      yield put(SetCypher({ page, cypher }));
+      yield put(Cyphers.set({ page, cypher }));
     }
   }
 };

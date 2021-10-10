@@ -15,7 +15,6 @@ const FetchedWikiPage = message("WIKI_PAGE/FETCHED");
 const FetchWikiPageRevisions = message("WIKI_PAGE_REVISIONS/FETCH");
 const FetchedWikiPageRevisions = message("WIKI_PAGE_REVISIONS/FETCHED");
 const RefreshWikiPages = message("WIKI_PAGES/REFRESH");
-const SetCypher = message("CYPHER/SET");
 const SetCypherCodecs = message("CYPHER_CODECS/SET");
 const SetFactionModels = message("FACTION_MODELS/SET");
 const SetModel = message("MODEL/SET");
@@ -32,7 +31,6 @@ export {
   FetchedWikiPage,
   FetchedWikiPageRevisions,
   RefreshWikiPages,
-  SetCypher,
   SetCypherCodecs,
   SetDragging,
   SetFactionModels,

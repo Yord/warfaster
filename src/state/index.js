@@ -2,12 +2,10 @@ import { dispatch, init } from "./objects";
 
 const state = init({
   data: {
-    factions: {},
     factionModels: {},
     wildCardModels: {},
     models: {},
     cypherCodecs: [],
-    cyphers: {},
   },
   ui: {
     dragging: false,

@@ -9,13 +9,6 @@ const cypherCodecs = {
     state.data.cypherCodecs.find((codec) => codec.Cypher.page === page),
 };
 
-const cyphers = {
-  set: (page, cypher) => (state) => {
-    state.data.cyphers[page] = cypher;
-  },
-  selectAll: (state) => state.data.cyphers,
-};
-
 const factionModels = {
   set: (page, factionModels) => (state) => {
     if (!state.data.factionModels[page]) {
@@ -62,4 +55,4 @@ const wildCardModels = {
       .find((model) => model.Name.page === page),
 };
 
-export { cypherCodecs, cyphers, factionModels, menu, models, wildCardModels };
+export { cypherCodecs, factionModels, menu, models, wildCardModels };
