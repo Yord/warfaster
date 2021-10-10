@@ -2,12 +2,12 @@ import {
   cypherCodecs,
   cyphers,
   factionModels,
-  factions,
   menu,
   models,
   wildCardModels,
 } from "../dataAccess";
 import { WikiPages } from "./WikiPages";
+import { Factions } from "./Factions";
 import { immer, immerPipe } from "./utils";
 
 const init = immerPipe(WikiPages.init);
@@ -20,8 +20,8 @@ const dispatch = immer(({ type, payload }) => {
     case "CYPHER/SET": {
       return cyphers.set(payload.page, payload.cypher);
     }
-    case "FACTIONS/SET": {
-      return factions.set(payload.factions);
+    case "Factions.set": {
+      return (state) => redirect(Factions.dispatch)(state, { type, payload });
     }
     case "FACTION_MODELS/SET": {
       return factionModels.set(payload.page, payload.factionModels);

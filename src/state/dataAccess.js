@@ -37,13 +37,6 @@ const factionModels = {
       .find((model) => model.Name.page === page),
 };
 
-const factions = {
-  set: (factions) => (state) => {
-    state.data.factions = factions;
-  },
-  selectPages: (state) => Object.keys(state.data.factions),
-};
-
 const menu = {
   toggleCollapsed: (state) => {
     state.ui.menuCollapsed = !state.ui.menuCollapsed;
@@ -69,12 +62,4 @@ const wildCardModels = {
       .find((model) => model.Name.page === page),
 };
 
-export {
-  cypherCodecs,
-  cyphers,
-  factionModels,
-  factions,
-  menu,
-  models,
-  wildCardModels,
-};
+export { cypherCodecs, cyphers, factionModels, menu, models, wildCardModels };

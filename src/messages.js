@@ -17,7 +17,6 @@ const FetchedWikiPageRevisions = message("WIKI_PAGE_REVISIONS/FETCHED");
 const RefreshWikiPages = message("WIKI_PAGES/REFRESH");
 const SetCypher = message("CYPHER/SET");
 const SetCypherCodecs = message("CYPHER_CODECS/SET");
-const SetFactions = message("FACTIONS/SET");
 const SetFactionModels = message("FACTION_MODELS/SET");
 const SetModel = message("MODEL/SET");
 const SetWildCards = message("WILD_CARDS/SET");
@@ -36,7 +35,6 @@ export {
   SetCypher,
   SetCypherCodecs,
   SetDragging,
-  SetFactions,
   SetFactionModels,
   SetModel,
   SetWildCards,
