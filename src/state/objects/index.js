@@ -1,8 +1,8 @@
-import { menu } from "../dataAccess";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
+import { Menu } from "./Menu";
 import { Models } from "./Models";
 import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
@@ -13,6 +13,7 @@ const init = immerPipe(
   CypherCodecs.init,
   Factions.init,
   FactionModels.init,
+  Menu.init,
   Models.init,
   WikiPages.init,
   WildCardModels.init,
@@ -79,8 +80,8 @@ const dispatch = immer(({ type, payload }) => {
         );
       };
     }
-    case "MENU/TOGGLE_COLLAPSE": {
-      return menu.toggleCollapsed;
+    case "Menu.toggleCollapsed": {
+      return (state) => redirect(Menu.dispatch)(state, { type, payload });
     }
     default: {
       return (state) => state;

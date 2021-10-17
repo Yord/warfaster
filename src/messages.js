@@ -1,7 +1,6 @@
 const message = (type) => (payload = {}) => ({ type, payload });
 
 const AddCard = message("LIST/ADD_CARD");
-const ToggleMenuCollapse = message("MENU/TOGGLE_COLLAPSE");
 const SetDragging = message("DRAGGING/SET");
 
 const CardDragEnded = message("CARD/DRAG_ENDED");
@@ -26,5 +25,4 @@ export {
   message,
   RefreshWikiPages,
   SetDragging,
-  ToggleMenuCollapse,
 };

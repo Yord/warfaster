@@ -3,7 +3,6 @@ import { dispatch, init } from "./objects";
 const state = init({
   ui: {
     dragging: false,
-    menuCollapsed: false,
     lists: [
       {
         title: "My fancy models list",
