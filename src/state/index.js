@@ -4,7 +4,6 @@ const state = init({
   data: {
     factionModels: {},
     wildCardModels: {},
-    cypherCodecs: [],
   },
   ui: {
     dragging: false,

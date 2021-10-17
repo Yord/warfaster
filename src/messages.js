@@ -13,7 +13,6 @@ const FetchedWikiPage = message("WIKI_PAGE/FETCHED");
 const FetchWikiPageRevisions = message("WIKI_PAGE_REVISIONS/FETCH");
 const FetchedWikiPageRevisions = message("WIKI_PAGE_REVISIONS/FETCHED");
 const RefreshWikiPages = message("WIKI_PAGES/REFRESH");
-const SetCypherCodecs = message("CYPHER_CODECS/SET");
 const SetFactionModels = message("FACTION_MODELS/SET");
 const SetWildCards = message("WILD_CARDS/SET");
 
@@ -28,7 +27,6 @@ export {
   MenuItemClicked,
   message,
   RefreshWikiPages,
-  SetCypherCodecs,
   SetDragging,
   SetFactionModels,
   SetWildCards,

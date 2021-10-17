@@ -1,13 +1,13 @@
-import { put, take, select } from "redux-saga/effects";
+import { put, select, take } from "redux-saga/effects";
 import { parseCypher as parse } from "../../core/parse/parseCypherText";
-import { cypherCodecs } from "../../../state/dataAccess/cypherCodecs";
 import { Cyphers } from "../../../state/objects/Cyphers";
+import { CypherCodecs } from "../../../state/objects/CypherCodecs";
 
 const parseCypher = function* () {
   while (true) {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
-    const pages = yield select(cypherCodecs.selectAllCypherPages);
+    const pages = yield select(CypherCodecs.selectAllCypherPages());
 
     if (pages.includes(page)) {
       const cypher = parse(data.text);

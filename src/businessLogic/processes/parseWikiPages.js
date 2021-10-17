@@ -1,9 +1,5 @@
 import { all, put, select, take } from "redux-saga/effects";
-import {
-  SetCypherCodecs,
-  SetFactionModels,
-  SetWildCards,
-} from "../../messages";
+import { SetFactionModels, SetWildCards } from "../../messages";
 import {
   parseCypherCodecsText,
   parseCypherText,
@@ -12,8 +8,9 @@ import {
   parseModelText,
   parseWildCardText,
 } from "../core/parse";
-import { cypherCodecs, factionModels } from "../../state/dataAccess";
+import { factionModels } from "../../state/dataAccess";
 import { Cyphers } from "../../state/objects/Cyphers";
+import { CypherCodecs } from "../../state/objects/CypherCodecs";
 import { Factions } from "../../state/objects/Factions";
 import { Models } from "../../state/objects/Models";
 
@@ -34,7 +31,7 @@ function* parseCypher() {
   while (true) {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
-    const pages = yield select(cypherCodecs.selectAllCypherPages);
+    const pages = yield select(CypherCodecs.selectAllCypherPages());
 
     if (pages.includes(page)) {
       const cypher = parseCypherText(data.text);
@@ -51,7 +48,7 @@ function* parseCypherCodecs() {
 
     if (page === "Cypher_Codecs") {
       const cypherCodecs = parseCypherCodecsText(data.text);
-      yield put(SetCypherCodecs({ cypherCodecs }));
+      yield put(CypherCodecs.set({ cypherCodecs }));
     }
   }
 }

@@ -1,10 +1,7 @@
-import { put, take, select } from "redux-saga/effects";
+import { put, select, take } from "redux-saga/effects";
 import { AddCard, SetDragging } from "../../messages";
-import {
-  cypherCodecs,
-  factionModels,
-  wildCardModels,
-} from "../../state/dataAccess";
+import { factionModels, wildCardModels } from "../../state/dataAccess";
+import { CypherCodecs } from "../../state/objects/CypherCodecs";
 
 function* updateCards() {
   while (true) {
@@ -13,13 +10,13 @@ function* updateCards() {
     if (reason === "DROP" && destination.droppableId.startsWith("cards_")) {
       const sourceListIndex = parseInt(
         source.droppableId.replace("cards_", ""),
-        10
+        10,
       );
       const sourcePosition = source.index;
 
       const destinationListIndex = parseInt(
         destination.droppableId.replace("cards_", ""),
-        10
+        10,
       );
       const destinationPosition = destination.index;
 
@@ -62,7 +59,7 @@ function* addCard() {
     const page = key.split(":")[1];
     const model = yield select(factionModels.findModelPage(page));
     const wildCard = yield select(wildCardModels.findModelPage(page));
-    const cypher = yield select(cypherCodecs.findCypherCodec(page));
+    const cypher = yield select(CypherCodecs.findCypherCodec(page));
     if (model || wildCard || cypher) yield put(AddCard({ page }));
   }
 }
