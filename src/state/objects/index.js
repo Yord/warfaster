@@ -2,16 +2,18 @@ import { factionModels, menu, wildCardModels } from "../dataAccess";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
 import { Factions } from "./Factions";
+import { FactionModels } from "./FactionModels";
 import { Models } from "./Models";
 import { WikiPages } from "./WikiPages";
 import { immer, immerPipe } from "./utils";
 
 const init = immerPipe(
-  WikiPages.init,
-  Factions.init,
   Cyphers.init,
-  Models.init,
   CypherCodecs.init,
+  Factions.init,
+  FactionModels.init,
+  Models.init,
+  WikiPages.init,
 );
 
 const dispatch = immer(({ type, payload }) => {
@@ -26,8 +28,9 @@ const dispatch = immer(({ type, payload }) => {
     case "Factions.set": {
       return (state) => redirect(Factions.dispatch)(state, { type, payload });
     }
-    case "FACTION_MODELS/SET": {
-      return factionModels.set(payload.page, payload.factionModels);
+    case "FactionModels.set": {
+      return (state) =>
+        redirect(FactionModels.dispatch)(state, { type, payload });
     }
     case "Models.set": {
       return (state) => redirect(Models.dispatch)(state, { type, payload });

@@ -1,7 +1,7 @@
-import { put, take, select } from "redux-saga/effects";
+import { put, select, take } from "redux-saga/effects";
 import { parseFactionModels as parse } from "../../core/parse/parseFactionModelsText";
-import { SetFactionModels } from "../../../messages";
 import { Factions } from "../../state/objects/Factions";
+import { FactionModels } from "../../state/objects/FactionModels";
 
 const parseFactionModels = function* () {
   while (true) {
@@ -11,7 +11,9 @@ const parseFactionModels = function* () {
 
     if (pages.includes(page)) {
       const factionModels = parse(data.text);
-      yield put(SetFactionModels({ factionModels: { [page]: factionModels } }));
+      yield put(
+        FactionModels.set({ factionModels: { [page]: factionModels } }),
+      );
     }
   }
 };

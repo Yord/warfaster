@@ -1,26 +1,3 @@
-const factionModels = {
-  set: (page, factionModels) =>
-    (state) => {
-      if (!state.data.factionModels[page]) {
-        state.data.factionModels[page] = [];
-      }
-      state.data.factionModels[page] = [
-        ...state.data.factionModels[page],
-        ...factionModels,
-      ];
-    },
-  selectAll: (state) => state.data.factionModels,
-  selectAllModelPages: (state) =>
-    Object.values(state.data.factionModels)
-      .flat()
-      .map((model) => model.Name.page),
-  findModelPage: (page) =>
-    (state) =>
-      Object.values(state.data.factionModels)
-        .flat()
-        .find((model) => model.Name.page === page),
-};
-
 const menu = {
   toggleCollapsed: (state) => {
     state.ui.menuCollapsed = !state.ui.menuCollapsed;
@@ -41,4 +18,4 @@ const wildCardModels = {
         .find((model) => model.Name.page === page),
 };
 
-export { factionModels, menu, wildCardModels };
+export { menu, wildCardModels };

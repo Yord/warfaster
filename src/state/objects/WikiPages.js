@@ -1,8 +1,8 @@
-import { factionModels } from "../dataAccess";
 import { ReduxGroup } from "./utils";
 import { Cyphers } from "../objects/Cyphers";
 import { CypherCodecs } from "../objects/CypherCodecs";
 import { Factions } from "../../state/objects/Factions";
+import { FactionModels } from "../../state/objects/FactionModels";
 import { Models } from "../objects/Models";
 
 const WikiPages = ReduxGroup(
@@ -45,7 +45,7 @@ function removePage(state, { page }) {
 function removeUnsuccessfullyParsedPages(state, {}) {
   const cypherCodecsList = CypherCodecs.selectAll(state);
   const factionsPages = Factions.selectPages(state);
-  const factionModelPages = factionModels.selectAll(state);
+  const factionModelPages = FactionModels.selectAll(state);
   const modelPages = Models.selectAll(state);
   const cypherPages = Cyphers.selectAll(state);
 

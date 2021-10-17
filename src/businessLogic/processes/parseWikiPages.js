@@ -1,5 +1,5 @@
 import { all, put, select, take } from "redux-saga/effects";
-import { SetFactionModels, SetWildCards } from "../../messages";
+import { SetWildCards } from "../../messages";
 import {
   parseCypherCodecsText,
   parseCypherText,
@@ -8,10 +8,10 @@ import {
   parseModelText,
   parseWildCardText,
 } from "../core/parse";
-import { factionModels } from "../../state/dataAccess";
 import { Cyphers } from "../../state/objects/Cyphers";
 import { CypherCodecs } from "../../state/objects/CypherCodecs";
 import { Factions } from "../../state/objects/Factions";
+import { FactionModels } from "../../state/objects/FactionModels";
 import { Models } from "../../state/objects/Models";
 
 function* parseWikiPages() {
@@ -61,7 +61,7 @@ function* parseFactionModels() {
 
     if (pages.includes(page)) {
       const factionModels = parseFactionModelsText(data.text);
-      yield put(SetFactionModels({ page, factionModels }));
+      yield put(FactionModels.set({ page, factionModels }));
     }
   }
 }
@@ -83,7 +83,7 @@ function* parseModel() {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
     const pages = Object.values(
-      yield select(factionModels.selectAllModelPages),
+      yield select(FactionModels.selectAllModelPages()),
     );
 
     if (pages.includes(page)) {

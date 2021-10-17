@@ -1,6 +1,6 @@
 import { put, select, take } from "redux-saga/effects";
 import { parseModel as parse } from "../../core/parse/parseModelText";
-import { factionModels } from "../../../state/dataAccess/factionModels";
+import { FactionModels } from "../../../state/objects/FactionModels";
 import { Models } from "../../../state/objects/Models";
 
 const parseModel = function* () {
@@ -8,7 +8,7 @@ const parseModel = function* () {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
     const pages = Object.values(
-      yield select(factionModels.selectAllModelPages),
+      yield select(FactionModels.selectAllModelPages()),
     );
 
     if (pages.includes(page)) {
