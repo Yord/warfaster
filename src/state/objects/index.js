@@ -6,11 +6,17 @@ import {
   wildCardModels,
 } from "../dataAccess";
 import { Cyphers } from "./Cyphers";
-import { WikiPages } from "./WikiPages";
 import { Factions } from "./Factions";
+import { Models } from "./Models";
+import { WikiPages } from "./WikiPages";
 import { immer, immerPipe } from "./utils";
 
-const init = immerPipe(WikiPages.init, Factions.init, Cyphers.init);
+const init = immerPipe(
+  WikiPages.init,
+  Factions.init,
+  Cyphers.init,
+  Models.init,
+);
 
 const dispatch = immer(({ type, payload }) => {
   switch (type) {
@@ -26,8 +32,8 @@ const dispatch = immer(({ type, payload }) => {
     case "FACTION_MODELS/SET": {
       return factionModels.set(payload.page, payload.factionModels);
     }
-    case "MODEL/SET": {
-      return models.set(payload.page, payload.model);
+    case "Models.set": {
+      return (state) => redirect(Models.dispatch)(state, { type, payload });
     }
     case "WILD_CARDS/SET": {
       return wildCardModels.set(payload.wildCards);
@@ -66,7 +72,7 @@ const dispatch = immer(({ type, payload }) => {
         state.ui.lists[destination.listIndex].cards.splice(
           destination.cardIndex,
           0,
-          card
+          card,
         );
       };
     }

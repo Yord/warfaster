@@ -1,6 +1,4 @@
-const message =
-  (type) =>
-  (payload = {}) => ({ type, payload });
+const message = (type) => (payload = {}) => ({ type, payload });
 
 const AddCard = message("LIST/ADD_CARD");
 const ToggleMenuCollapse = message("MENU/TOGGLE_COLLAPSE");
@@ -17,24 +15,22 @@ const FetchedWikiPageRevisions = message("WIKI_PAGE_REVISIONS/FETCHED");
 const RefreshWikiPages = message("WIKI_PAGES/REFRESH");
 const SetCypherCodecs = message("CYPHER_CODECS/SET");
 const SetFactionModels = message("FACTION_MODELS/SET");
-const SetModel = message("MODEL/SET");
 const SetWildCards = message("WILD_CARDS/SET");
 
 export {
-  message,
+  AddCard,
   CardDragEnded,
   CardDragStarted,
-  MenuItemClicked,
-  AddCard,
-  FetchWikiPage,
-  FetchWikiPageRevisions,
   FetchedWikiPage,
   FetchedWikiPageRevisions,
+  FetchWikiPage,
+  FetchWikiPageRevisions,
+  MenuItemClicked,
+  message,
   RefreshWikiPages,
   SetCypherCodecs,
   SetDragging,
   SetFactionModels,
-  SetModel,
   SetWildCards,
   ToggleMenuCollapse,
 };

@@ -1,19 +1,19 @@
-import { put, take, select } from "redux-saga/effects";
+import { put, select, take } from "redux-saga/effects";
 import { parseModel as parse } from "../../core/parse/parseModelText";
-import { SetModel } from "../../../messages";
 import { factionModels } from "../../../state/dataAccess/factionModels";
+import { Models } from "../../../state/objects/Models";
 
 const parseModel = function* () {
   while (true) {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
     const pages = Object.values(
-      yield select(factionModels.selectAllModelPages)
+      yield select(factionModels.selectAllModelPages),
     );
 
     if (pages.includes(page)) {
       const model = parse(data.text);
-      yield put(SetModel({ page, model }));
+      yield put(Models.set({ page, model }));
     }
   }
 };
