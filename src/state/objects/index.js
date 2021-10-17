@@ -1,10 +1,11 @@
-import { factionModels, menu, wildCardModels } from "../dataAccess";
+import { menu } from "../dataAccess";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
 import { Models } from "./Models";
 import { WikiPages } from "./WikiPages";
+import { WildCardModels } from "./WildCardModels";
 import { immer, immerPipe } from "./utils";
 
 const init = immerPipe(
@@ -14,6 +15,7 @@ const init = immerPipe(
   FactionModels.init,
   Models.init,
   WikiPages.init,
+  WildCardModels.init,
 );
 
 const dispatch = immer(({ type, payload }) => {
@@ -35,8 +37,9 @@ const dispatch = immer(({ type, payload }) => {
     case "Models.set": {
       return (state) => redirect(Models.dispatch)(state, { type, payload });
     }
-    case "WILD_CARDS/SET": {
-      return wildCardModels.set(payload.wildCards);
+    case "WildCardModels.set": {
+      return (state) =>
+        redirect(WildCardModels.dispatch)(state, { type, payload });
     }
     case "WikiPages.removeUnsuccessfullyParsedPages": {
       return (state) => redirect(WikiPages.dispatch)(state, { type, payload });

@@ -1,5 +1,4 @@
 import { all, put, select, take } from "redux-saga/effects";
-import { SetWildCards } from "../../messages";
 import {
   parseCypherCodecsText,
   parseCypherText,
@@ -13,6 +12,7 @@ import { CypherCodecs } from "../../state/objects/CypherCodecs";
 import { Factions } from "../../state/objects/Factions";
 import { FactionModels } from "../../state/objects/FactionModels";
 import { Models } from "../../state/objects/Models";
+import { WildCardModels } from "../../state/objects/WildCardModels";
 
 function* parseWikiPages() {
   yield all([
@@ -101,7 +101,7 @@ function* parseWildCard() {
 
     if (page === "Wild_Card") {
       const wildCards = parseWildCardText(data.text);
-      yield put(SetWildCards({ wildCards }));
+      yield put(WildCardModels.set({ wildCards }));
     }
   }
 }
