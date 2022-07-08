@@ -6,7 +6,7 @@ import { Menu } from "./Menu";
 import { Models } from "./Models";
 import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
-import { immer, initAll } from "./utils";
+import { identity, immer, initAll } from "./utils";
 
 const init = initAll(
   Cyphers,
@@ -82,7 +82,7 @@ const dispatch = immer(({ type, payload }) => {
       return redirectTo(Menu);
     }
     default: {
-      return (state) => state;
+      return identity;
     }
   }
 });
@@ -92,7 +92,7 @@ export { dispatch, init };
 function redirect(action) {
   return (obj) => (state) =>
     immer(({ type, payload }) => {
-      const f = obj.dispatch[type] || ((state) => state);
+      const f = obj.dispatch[type] || ((state, payload) => state);
       return (state) => f(state, payload);
     })(state, action);
 }
