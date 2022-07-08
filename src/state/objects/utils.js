@@ -16,10 +16,6 @@ const initAll = (...objects) =>
 
 const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
-const object = (messageType) => messageType.split("/")[0];
-
-const method = (messageType) => messageType.split("/")[1];
-
 const ReduxGroup = (namespace, init, actions, selectors) => ({
   init,
   dispatch: Object.fromEntries(
@@ -41,4 +37,4 @@ const ReduxGroup = (namespace, init, actions, selectors) => ({
   ),
 });
 
-export { ReduxGroup, immer, initAll, method, object };
+export { ReduxGroup, immer, initAll };
