@@ -11,7 +11,8 @@ const pipe =
     return a;
   };
 
-const immerPipe = (...fs) => pipe(...fs.map((f) => produce(f)));
+const initAll = (...objects) =>
+  pipe(...objects.map((obj) => produce(obj.init)));
 
 const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
@@ -40,4 +41,4 @@ const ReduxGroup = (namespace, init, actions, selectors) => ({
   ),
 });
 
-export { ReduxGroup, immer, immerPipe, method, object };
+export { ReduxGroup, immer, initAll, method, object };

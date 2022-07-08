@@ -6,50 +6,48 @@ import { Menu } from "./Menu";
 import { Models } from "./Models";
 import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
-import { immer, immerPipe } from "./utils";
+import { immer, initAll } from "./utils";
 
-const init = immerPipe(
-  Cyphers.init,
-  CypherCodecs.init,
-  Factions.init,
-  FactionModels.init,
-  Menu.init,
-  Models.init,
-  WikiPages.init,
-  WildCardModels.init,
+const init = initAll(
+  Cyphers,
+  CypherCodecs,
+  Factions,
+  FactionModels,
+  Menu,
+  Models,
+  WikiPages,
+  WildCardModels
 );
 
 const dispatch = immer(({ type, payload }) => {
+  const redirectTo = redirect({ type, payload });
   switch (type) {
     case "CypherCodecs.set": {
-      return (state) =>
-        redirect(CypherCodecs.dispatch)(state, { type, payload });
+      return redirectTo(CypherCodecs);
     }
     case "Cyphers.set": {
-      return (state) => redirect(Cyphers.dispatch)(state, { type, payload });
+      return redirectTo(Cyphers);
     }
     case "Factions.set": {
-      return (state) => redirect(Factions.dispatch)(state, { type, payload });
+      return redirectTo(Factions);
     }
     case "FactionModels.set": {
-      return (state) =>
-        redirect(FactionModels.dispatch)(state, { type, payload });
+      return redirectTo(FactionModels);
     }
     case "Models.set": {
-      return (state) => redirect(Models.dispatch)(state, { type, payload });
+      return redirectTo(Models);
     }
     case "WildCardModels.set": {
-      return (state) =>
-        redirect(WildCardModels.dispatch)(state, { type, payload });
+      return redirectTo(WildCardModels);
     }
     case "WikiPages.removeUnsuccessfullyParsedPages": {
-      return (state) => redirect(WikiPages.dispatch)(state, { type, payload });
+      return redirectTo(WikiPages);
     }
     case "WikiPages.setPage": {
-      return (state) => redirect(WikiPages.dispatch)(state, { type, payload });
+      return redirectTo(WikiPages);
     }
     case "WikiPages.removePage": {
-      return (state) => redirect(WikiPages.dispatch)(state, { type, payload });
+      return redirectTo(WikiPages);
     }
     // UI
     case "DRAGGING/SET": {
@@ -76,12 +74,12 @@ const dispatch = immer(({ type, payload }) => {
         state.ui.lists[destination.listIndex].cards.splice(
           destination.cardIndex,
           0,
-          card,
+          card
         );
       };
     }
     case "Menu.toggleCollapsed": {
-      return (state) => redirect(Menu.dispatch)(state, { type, payload });
+      return redirectTo(Menu);
     }
     default: {
       return (state) => state;
@@ -91,10 +89,10 @@ const dispatch = immer(({ type, payload }) => {
 
 export { dispatch, init };
 
-function redirect(functionByMessage) {
-  return (state, action) =>
+function redirect(action) {
+  return (obj) => (state) =>
     immer(({ type, payload }) => {
-      const f = functionByMessage[type] || ((state) => state);
+      const f = obj.dispatch[type] || ((state) => state);
       return (state) => f(state, payload);
     })(state, action);
 }
