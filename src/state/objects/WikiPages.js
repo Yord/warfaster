@@ -1,9 +1,9 @@
 import { ReduxGroup } from "./utils";
-import { Cyphers } from "../objects/Cyphers";
-import { CypherCodecs } from "../objects/CypherCodecs";
-import { Factions } from "../../state/objects/Factions";
-import { FactionModels } from "../../state/objects/FactionModels";
-import { Models } from "../objects/Models";
+import { Cyphers } from "./Cyphers";
+import { CypherCodecs } from "./CypherCodecs";
+import { Factions } from "./Factions";
+import { FactionModels } from "./FactionModels";
+import { Models } from "./Models";
 
 const WikiPages = ReduxGroup(
   "WikiPages",
@@ -17,7 +17,7 @@ const WikiPages = ReduxGroup(
     selectPageByPage,
     selectPagesByPageIds,
     selectPageIds,
-  },
+  }
 );
 
 export { WikiPages };

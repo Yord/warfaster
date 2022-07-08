@@ -1,16 +1,5 @@
 import produce from "immer";
 
-const identity = (a) => a;
-
-const pipe =
-  (...fs) =>
-  (a) => {
-    for (const f of fs) {
-      a = f(a);
-    }
-    return a;
-  };
-
 const initAll = (...objects) =>
   pipe(...objects.map((obj) => produce(obj.init)));
 
@@ -38,3 +27,16 @@ const ReduxGroup = (namespace, init, actions, selectors) => ({
 });
 
 export { ReduxGroup, immer, initAll };
+
+function identity(a) {
+  return a;
+}
+
+function pipe(...fs) {
+  return (a) => {
+    for (const f of fs) {
+      a = f(a);
+    }
+    return a;
+  };
+}
