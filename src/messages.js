@@ -1,7 +1,6 @@
 const message = (type) => (payload = {}) => ({ type, payload });
 
 const AddCard = message("LIST/ADD_CARD");
-const SetDragging = message("DRAGGING/SET");
 
 const CardDragEnded = message("CARD/DRAG_ENDED");
 const CardDragStarted = message("CARD/DRAG_STARTED");
@@ -24,5 +23,4 @@ export {
   MenuItemClicked,
   message,
   RefreshWikiPages,
-  SetDragging,
 };

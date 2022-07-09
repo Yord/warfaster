@@ -1,5 +1,6 @@
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
+import { Dragging } from "./Dragging";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
 import { Menu } from "./Menu";
@@ -11,6 +12,7 @@ import { immer, initAll } from "./utils";
 const init = initAll(
   Cyphers,
   CypherCodecs,
+  Dragging,
   Factions,
   FactionModels,
   Menu,
@@ -50,10 +52,11 @@ const dispatch = immer(({ type, payload }) => {
       return redirectTo(WikiPages);
     }
     // UI
-    case "DRAGGING/SET": {
-      return (state) => {
-        state.ui.dragging = payload.dragging;
-      };
+    case "Dragging.activate": {
+      return redirectTo(Dragging);
+    }
+    case "Dragging.deactivate": {
+      return redirectTo(Dragging);
     }
     case "LIST/ADD_CARD": {
       return (state) => {

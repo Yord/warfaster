@@ -1,6 +1,7 @@
 import { put, select, take } from "redux-saga/effects";
 import { AddCard, SetDragging } from "../../messages";
 import { CypherCodecs } from "../../state/objects/CypherCodecs";
+import { Dragging } from "../../state/objects/Dragging";
 import { FactionModels } from "../../state/objects/FactionModels";
 import { WildCardModels } from "../../state/objects/WildCardModels";
 
@@ -67,13 +68,13 @@ function* addCard() {
 
 function* setDraggingTrue() {
   while (yield take("CARD/DRAG_STARTED")) {
-    yield put(SetDragging({ dragging: true }));
+    yield put(Dragging.activate());
   }
 }
 
 function* setDraggingFalse() {
   while (yield take("CARD/DRAG_ENDED")) {
-    yield put(SetDragging({ dragging: false }));
+    yield put(Dragging.deactivate());
   }
 }
 

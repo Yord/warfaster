@@ -11,6 +11,7 @@ import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
 import Wild_Card from "./Wild_Card.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
+import { Dragging } from "../state/objects/Dragging";
 import { Menu as Menu2 } from "../state/objects/Menu";
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -435,7 +436,7 @@ const App = connect(
         return [];
       }),
     })),
-    dragging: state.ui.dragging,
+    dragging: Dragging.select()(state),
   }),
   (dispatch) => ({
     toggleMenu: () => dispatch(Menu2.toggleCollapsed()),
