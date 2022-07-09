@@ -43,11 +43,11 @@ function removePage(state, { page }) {
 }
 
 function removeUnsuccessfullyParsedPages(state, {}) {
-  const cypherCodecsList = CypherCodecs.selectAll(state);
-  const factionsPages = Factions.selectPages(state);
-  const factionModelPages = FactionModels.selectAll(state);
-  const modelPages = Models.selectAll(state);
-  const cypherPages = Cyphers.selectAll(state);
+  const cypherCodecsList = CypherCodecs.selectAll()(state);
+  const factionsPages = Factions.selectPages()(state);
+  const factionModelPages = FactionModels.selectAll()(state);
+  const modelPages = Models.selectAll()(state);
+  const cypherPages = Cyphers.selectAll()(state);
 
   const pages = Object.entries(state.data.pages);
   for (const [page, { type }] of pages) {
