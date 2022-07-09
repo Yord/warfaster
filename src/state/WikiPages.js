@@ -8,16 +8,8 @@ import { Models } from "./Models";
 const WikiPages = ReduxGroup(
   "WikiPages",
   init,
-  {
-    setPage,
-    removePage,
-    removeUnsuccessfullyParsedPages,
-  },
-  {
-    selectPageByPage,
-    selectPagesByPageIds,
-    selectPageIds,
-  }
+  { addPage, removePage, removeUnsuccessfullyParsedPages },
+  { selectPageByPage, selectPagesByPageIds, selectPageIds }
 );
 
 export { WikiPages };
@@ -32,24 +24,28 @@ function init(state) {
 
 // Actions
 
-function setPage(state, { page, type, data }) {
+function addPage(state, { page, type, data }) {
+  const pages = select(state);
   data.page = page;
   data.type = type;
-  state.data.pages[page] = data;
+  pages[page] = data;
 }
 
 function removePage(state, { page }) {
-  delete state.data.pages[page];
+  const pages = select(state);
+  delete pages[page];
 }
 
 function removeUnsuccessfullyParsedPages(state) {
-  const cypherCodecsList = CypherCodecs.selectAll()(state);
-  const factionsPages = Factions.selectPages()(state);
-  const factionModelPages = FactionModels.selectAll()(state);
-  const modelPages = Models.selectAll()(state);
-  const cypherPages = Cyphers.selectAll()(state);
+  const wikiPages = select(state);
 
-  const pages = Object.entries(state.data.pages);
+  const cypherCodecsList = CypherCodecs.select()(state);
+  const factionsPages = Factions.selectPages()(state);
+  const factionModelPages = FactionModels.select()(state);
+  const modelPages = Models.select()(state);
+  const cypherPages = Cyphers.select()(state);
+
+  const pages = Object.entries(wikiPages);
   for (const [page, { type }] of pages) {
     const unsuccessfullyParsedPage =
       (type === "faction" && Object.keys(factionsPages).length === 0) ||
@@ -62,23 +58,28 @@ function removeUnsuccessfullyParsedPages(state) {
       false;
 
     if (unsuccessfullyParsedPage) {
-      delete state.data.pages[page];
+      delete pages[page];
     }
   }
 }
 
 // Selectors
 
+function select(state) {
+  return state.data.pages;
+}
+
 function selectPageByPage(state, page) {
-  return state.data.pages[page];
+  const pages = select(state);
+  return pages[page];
 }
 
 function selectPagesByPageIds(state, pageIds) {
-  return Object.values(state.data.pages).filter((page) =>
-    pageIds.includes(page.pageid)
-  );
+  const pages = select(state);
+  return Object.values(pages).filter((page) => pageIds.includes(page.pageid));
 }
 
 function selectPageIds(state) {
-  return Object.values(state.data.pages).map((page) => page.pageid);
+  const pages = select(state);
+  return Object.values(pages).map((page) => page.pageid);
 }

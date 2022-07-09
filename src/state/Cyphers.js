@@ -1,6 +1,6 @@
 import { ReduxGroup } from "./utils";
 
-const Cyphers = ReduxGroup("Cyphers", init, { set }, { selectAll });
+const Cyphers = ReduxGroup("Cyphers", init, { set }, { select });
 
 export { Cyphers };
 
@@ -15,11 +15,12 @@ function init(state) {
 // Actions
 
 function set(state, { page, cypher }) {
-  state.data.cyphers[page] = cypher;
+  const cyphers = select(state);
+  cyphers[page] = cypher;
 }
 
 // Selectors
 
-function selectAll(state) {
+function select(state) {
   return state.data.cyphers;
 }

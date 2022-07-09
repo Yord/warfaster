@@ -335,7 +335,7 @@ function mergeArrayObjects(obj1, obj2) {
 
 const App = connect(
   (state) => ({
-    menuCollapsed: state.ui.menuCollapsed,
+    menuCollapsed: Menu2.selectCollapsed()(state),
     factions: Object.entries(
       mergeArrayObjects(state.data.factionModels, state.data.wildCardModels)
     )

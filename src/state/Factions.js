@@ -1,15 +1,6 @@
 import { ReduxGroup } from "./utils";
 
-const Factions = ReduxGroup(
-  "Factions",
-  init,
-  {
-    set,
-  },
-  {
-    selectPages,
-  }
-);
+const Factions = ReduxGroup("Factions", init, { set }, { selectPages });
 
 export { Factions };
 
@@ -29,6 +20,11 @@ function set(state, { factions }) {
 
 // Selectors
 
+function select(state) {
+  return state.data.factions;
+}
+
 function selectPages(state) {
-  return Object.keys(state.data.factions);
+  const factions = select(state);
+  return Object.keys(factions);
 }

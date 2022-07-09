@@ -3,14 +3,8 @@ import { ReduxGroup } from "./utils";
 const CypherCodecs = ReduxGroup(
   "CypherCodecs",
   init,
-  {
-    set,
-  },
-  {
-    selectAll,
-    selectAllCypherPages,
-    findCypherCodec,
-  }
+  { set },
+  { select, selectPages, selectByPage }
 );
 
 export { CypherCodecs };
@@ -31,14 +25,16 @@ function set(state, { cypherCodecs }) {
 
 // Selectors
 
-function selectAll(state) {
+function select(state) {
   return state.data.cypherCodecs;
 }
 
-function selectAllCypherPages(state) {
-  return state.data.cypherCodecs.map((codec) => codec.Cypher.page);
+function selectPages(state) {
+  const codecs = select(state);
+  return codecs.map((codec) => codec.Cypher.page);
 }
 
-function findCypherCodec(state, page) {
-  return state.data.cypherCodecs.find((codec) => codec.Cypher.page === page);
+function selectByPage(state, page) {
+  const codecs = select(state);
+  return codecs.find((codec) => codec.Cypher.page === page);
 }

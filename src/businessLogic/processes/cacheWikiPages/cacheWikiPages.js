@@ -52,7 +52,7 @@ function* addWikiPage() {
     const type = payload.type;
     const data = payload.data;
 
-    yield put(WikiPages.setPage({ page, data, type }));
+    yield put(WikiPages.addPage({ page, data, type }));
   }
 }
 

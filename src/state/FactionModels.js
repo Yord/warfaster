@@ -3,14 +3,8 @@ import { ReduxGroup } from "./utils";
 const FactionModels = ReduxGroup(
   "FactionModels",
   init,
-  {
-    set,
-  },
-  {
-    selectAll,
-    selectAllModelPages,
-    findModelPage,
-  }
+  { set },
+  { select, selectModelPages, selectByPage }
 );
 
 export { FactionModels };
@@ -26,29 +20,29 @@ function init(state) {
 // Actions
 
 function set(state, { page, factionModels }) {
-  if (!state.data.factionModels[page]) {
-    state.data.factionModels[page] = [];
+  const models = select(state);
+  if (!models[page]) {
+    models[page] = [];
   }
-  state.data.factionModels[page] = [
-    ...state.data.factionModels[page],
-    ...factionModels,
-  ];
+  models[page] = [...models[page], ...factionModels];
 }
 
 // Selectors
 
-function selectAll(state) {
+function select(state) {
   return state.data.factionModels;
 }
 
-function selectAllModelPages(state) {
-  return Object.values(state.data.factionModels)
+function selectModelPages(state) {
+  const models = select(state);
+  return Object.values(models)
     .flat()
     .map((model) => model.Name.page);
 }
 
-function findModelPage(state, page) {
-  return Object.values(state.data.factionModels)
+function selectByPage(state, page) {
+  const models = select(state);
+  return Object.values(models)
     .flat()
     .find((model) => model.Name.page === page);
 }

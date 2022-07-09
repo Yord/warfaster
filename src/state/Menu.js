@@ -1,13 +1,6 @@
 import { ReduxGroup } from "./utils";
 
-const Menu = ReduxGroup(
-  "Menu",
-  init,
-  {
-    toggleCollapsed,
-  },
-  {}
-);
+const Menu = ReduxGroup("Menu", init, { toggleCollapsed }, { selectCollapsed });
 
 export { Menu };
 
@@ -16,13 +9,23 @@ function init(state) {
     state.ui = {};
   }
 
-  state.data.menuCollapsed = false;
+  state.ui.menu = { collapsed: false };
 }
 
 // Actions
 
 function toggleCollapsed(state) {
-  state.ui.menuCollapsed = !state.ui.menuCollapsed;
+  const menu = select(state);
+  menu.collapsed = !menu.collapsed;
 }
 
 // Selectors
+
+function select(state) {
+  return state.ui.menu;
+}
+
+function selectCollapsed(state) {
+  const menu = select(state);
+  return menu.collapsed;
+}

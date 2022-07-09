@@ -31,7 +31,7 @@ function* parseCypher() {
   while (true) {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
-    const pages = yield select(CypherCodecs.selectAllCypherPages());
+    const pages = yield select(CypherCodecs.selectPages());
 
     if (pages.includes(page)) {
       const cypher = parseCypherText(data.text);
@@ -82,9 +82,7 @@ function* parseModel() {
   while (true) {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
-    const pages = Object.values(
-      yield select(FactionModels.selectAllModelPages())
-    );
+    const pages = Object.values(yield select(FactionModels.selectModelPages()));
 
     if (pages.includes(page)) {
       const model = parseModelText(data.text);

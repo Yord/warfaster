@@ -3,12 +3,8 @@ import { ReduxGroup } from "./utils";
 const WildCardModels = ReduxGroup(
   "WildCardModels",
   init,
-  {
-    set,
-  },
-  {
-    findModelPage,
-  }
+  { set },
+  { selectByPage }
 );
 
 export { WildCardModels };
@@ -24,15 +20,21 @@ function init(state) {
 // Actions
 
 function set(state, { wildCards }) {
+  const models = select(state);
   for (const wildCard of wildCards) {
-    state.data.wildCardModels[wildCard.faction] = wildCard.models;
+    models[wildCard.faction] = wildCard.models;
   }
 }
 
 // Selectors
 
-function findModelPage(state, page) {
-  return Object.values(state.data.wildCardModels)
+function select(state) {
+  return state.data.wildCardModels;
+}
+
+function selectByPage(state, page) {
+  const models = select(state);
+  return Object.values(models)
     .flat()
     .find((model) => model.Name.page === page);
 }

@@ -7,7 +7,7 @@ const parseCypher = function* () {
   while (true) {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
-    const pages = yield select(CypherCodecs.selectAllCypherPages());
+    const pages = yield select(CypherCodecs.selectPages());
 
     if (pages.includes(page)) {
       const cypher = parse(data.text);

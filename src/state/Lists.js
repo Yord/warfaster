@@ -47,21 +47,20 @@ function init(state) {
 // Actions
 
 function addCard(state, { page }) {
-  state.ui.lists[state.ui.lists.length - 1].cards.push(page);
+  const lists = select(state);
+  lists[lists.length - 1].cards.push(page);
 }
 
 function removeCard(state, { source }) {
-  state.ui.lists[source.listIndex].cards.splice(source.cardIndex, 1);
+  const lists = select(state);
+  lists[source.listIndex].cards.splice(source.cardIndex, 1);
 }
 
 function updateCard(state, { destination, source }) {
-  const card = state.ui.lists[source.listIndex].cards[source.cardIndex];
-  state.ui.lists[source.listIndex].cards.splice(source.cardIndex, 1);
-  state.ui.lists[destination.listIndex].cards.splice(
-    destination.cardIndex,
-    0,
-    card
-  );
+  const lists = select(state);
+  const card = lists[source.listIndex].cards[source.cardIndex];
+  lists[source.listIndex].cards.splice(source.cardIndex, 1);
+  lists[destination.listIndex].cards.splice(destination.cardIndex, 0, card);
 }
 
 // Selectors

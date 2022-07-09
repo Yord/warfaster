@@ -1,15 +1,6 @@
 import { ReduxGroup } from "./utils";
 
-const Models = ReduxGroup(
-  "Models",
-  init,
-  {
-    set,
-  },
-  {
-    selectAll,
-  }
-);
+const Models = ReduxGroup("Models", init, { set }, { select });
 
 export { Models };
 
@@ -24,11 +15,12 @@ function init(state) {
 // Actions
 
 function set(state, { page, model }) {
-  state.data.models[page] = model;
+  const models = select(state);
+  models[page] = model;
 }
 
 // Selectors
 
-function selectAll(state) {
+function select(state) {
   return state.data.models;
 }

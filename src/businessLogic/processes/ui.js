@@ -57,9 +57,9 @@ function* addCard() {
     const { payload } = yield take("MENU_ITEM/CLICKED");
     const { key } = payload;
     const page = key.split(":")[1];
-    const model = yield select(FactionModels.findModelPage(page));
-    const wildCard = yield select(WildCardModels.findModelPage(page));
-    const cypher = yield select(CypherCodecs.findCypherCodec(page));
+    const model = yield select(FactionModels.selectByPage(page));
+    const wildCard = yield select(WildCardModels.selectByPage(page));
+    const cypher = yield select(CypherCodecs.selectByPage(page));
     if (model || wildCard || cypher) yield put(Lists.addCard({ page }));
   }
 }
