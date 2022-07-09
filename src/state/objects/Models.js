@@ -24,7 +24,6 @@ function init(state) {
 // Actions
 
 function set(state, { page, model }) {
-  console.log("state, page, model", state, page, model);
   state.data.models[page] = model;
 }
 
