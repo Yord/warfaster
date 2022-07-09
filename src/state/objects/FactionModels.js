@@ -10,7 +10,7 @@ const FactionModels = ReduxGroup(
     selectAll,
     selectAllModelPages,
     findModelPage,
-  },
+  }
 );
 
 export { FactionModels };

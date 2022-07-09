@@ -12,13 +12,13 @@ function* updateCards() {
     if (reason === "DROP" && destination.droppableId.startsWith("cards_")) {
       const sourceListIndex = parseInt(
         source.droppableId.replace("cards_", ""),
-        10,
+        10
       );
       const sourcePosition = source.index;
 
       const destinationListIndex = parseInt(
         destination.droppableId.replace("cards_", ""),
-        10,
+        10
       );
       const destinationPosition = destination.index;
 

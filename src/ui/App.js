@@ -104,23 +104,19 @@ function AppPresentation({
                     >
                       <Tag color={typeColors[type]}>{type}</Tag>
                       <span className="card">
-                        {shortName.length === name.length
-                          ? (
-                            shortName
-                          )
-                          : (
-                            <Tooltip placement="top" title={name}>
-                              {shortName}...
-                            </Tooltip>
-                          )}
-                      </span>
-                      {subtype
-                        ? (
-                          <Tag color={subtypeColors[subtype]}>{subtype}</Tag>
-                        )
-                        : (
-                          ""
+                        {shortName.length === name.length ? (
+                          shortName
+                        ) : (
+                          <Tooltip placement="top" title={name}>
+                            {shortName}...
+                          </Tooltip>
                         )}
+                      </span>
+                      {subtype ? (
+                        <Tag color={subtypeColors[subtype]}>{subtype}</Tag>
+                      ) : (
+                        ""
+                      )}
                     </Menu.Item>
                   );
                 })}
@@ -150,7 +146,7 @@ function AppPresentation({
                     {
                       className: "trigger",
                       onClick: toggleMenu,
-                    },
+                    }
                   )}
                 </Col>
                 <Col span={20} className="logo">
@@ -192,12 +188,13 @@ function AppPresentation({
                               ...acc,
                               ...(card.faction
                                 ? {
-                                  [card.faction]: (acc[card.faction] || 0) + 1,
-                                }
+                                    [card.faction]:
+                                      (acc[card.faction] || 0) + 1,
+                                  }
                                 : {}),
                             }),
-                            {},
-                          ),
+                            {}
+                          )
                         ).map(([faction, count], i) => (
                           <Badge
                             size="small"
@@ -234,42 +231,44 @@ function AppPresentation({
                                 >
                                   <Card hoverable className="card">
                                     <Card.Meta
-                                      title={<Row>
-                                        <Col span={12}>{title}</Col>
-                                        <Col className="details" span={12}>
-                                          {card === "model" && subtype
-                                            ? (
+                                      title={
+                                        <Row>
+                                          <Col span={12}>{title}</Col>
+                                          <Col className="details" span={12}>
+                                            {card === "model" && subtype ? (
                                               <Tag
                                                 color={subtypeColors[subtype]}
                                               >
                                                 {subtype}
                                               </Tag>
-                                            )
-                                            : (
+                                            ) : (
                                               <></>
                                             )}
-                                          {card === "cypher" && faction
-                                            ? (
+                                            {card === "cypher" && faction ? (
                                               <FactionImage faction={faction} />
-                                            )
-                                            : (
+                                            ) : (
                                               <></>
                                             )}
-                                        </Col>
-                                      </Row>}
-                                      avatar={<Tag
-                                        color={(card === "model"
-                                          ? typeColors
-                                          : cypherColors)[type]}
-                                      >
-                                        {type}
-                                      </Tag>}
+                                          </Col>
+                                        </Row>
+                                      }
+                                      avatar={
+                                        <Tag
+                                          color={
+                                            (card === "model"
+                                              ? typeColors
+                                              : cypherColors)[type]
+                                          }
+                                        >
+                                          {type}
+                                        </Tag>
+                                      }
                                     />
                                   </Card>
                                 </div>
                               )}
                             </Draggable>
-                          ),
+                          )
                         )}
                         {provided.placeholder}
                       </div>
@@ -286,8 +285,8 @@ function AppPresentation({
                           ...acc,
                           [card.type]: (acc[card.type] || 0) + 1,
                         }),
-                        {},
-                      ),
+                        {}
+                      )
                     )
                       .sort()
                       .map(([type, count], i) => (
@@ -337,7 +336,7 @@ const App = connect(
   (state) => ({
     menuCollapsed: state.ui.menuCollapsed,
     factions: Object.entries(
-      mergeArrayObjects(state.data.factionModels, state.data.wildCardModels),
+      mergeArrayObjects(state.data.factionModels, state.data.wildCardModels)
     )
       .sort()
       .map(([faction, models]) => [
@@ -361,9 +360,9 @@ const App = connect(
         Object.fromEntries(
           Object.values(state.data.factionModels)
             .flat()
-            .map((model) => [model.Type.text, ""]),
-        ),
-      ).map(([type], index) => [type, typeColors[index % typeColors.length]]),
+            .map((model) => [model.Type.text, ""])
+        )
+      ).map(([type], index) => [type, typeColors[index % typeColors.length]])
     ),
     subtypeColors: Object.fromEntries(
       Object.entries(
@@ -372,12 +371,12 @@ const App = connect(
             .flat()
             .flatMap((model) =>
               model.Subtype ? [[model.Subtype.text, ""]] : []
-            ),
-        ),
+            )
+        )
       ).map(([subtype], index) => [
         subtype,
         subtypeColors[index % subtypeColors.length],
-      ]),
+      ])
     ),
     lists: state.ui.lists.map(({ title, cards }) => ({
       title,
@@ -393,7 +392,7 @@ const App = connect(
           )
           .find(({ Name }) => Name.page === page);
         const cypher = state.data.cypherCodecs.find(
-          ({ Cypher }) => Cypher.page === page,
+          ({ Cypher }) => Cypher.page === page
         );
 
         if (model) {
@@ -443,7 +442,7 @@ const App = connect(
     dragStart: (event) => dispatch(CardDragStarted(event)),
     dragEnd: (event) => dispatch(CardDragEnded(event)),
     menuItemClicked: (event) => dispatch(MenuItemClicked(event)),
-  }),
+  })
 )(AppPresentation);
 
 export default App;

@@ -6,7 +6,7 @@ const Menu = ReduxGroup(
   {
     toggleCollapsed,
   },
-  {},
+  {}
 );
 
 export { Menu };

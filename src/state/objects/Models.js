@@ -8,7 +8,7 @@ const Models = ReduxGroup(
   },
   {
     selectAll,
-  },
+  }
 );
 
 export { Models };

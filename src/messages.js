@@ -1,4 +1,6 @@
-const message = (type) => (payload = {}) => ({ type, payload });
+const message =
+  (type) =>
+  (payload = {}) => ({ type, payload });
 
 const AddCard = message("LIST/ADD_CARD");
 

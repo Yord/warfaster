@@ -83,7 +83,7 @@ function* parseModel() {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const { data, page } = payload;
     const pages = Object.values(
-      yield select(FactionModels.selectAllModelPages()),
+      yield select(FactionModels.selectAllModelPages())
     );
 
     if (pages.includes(page)) {

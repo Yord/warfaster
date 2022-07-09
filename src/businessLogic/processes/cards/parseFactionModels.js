@@ -12,7 +12,7 @@ const parseFactionModels = function* () {
     if (pages.includes(page)) {
       const factionModels = parse(data.text);
       yield put(
-        FactionModels.set({ factionModels: { [page]: factionModels } }),
+        FactionModels.set({ factionModels: { [page]: factionModels } })
       );
     }
   }

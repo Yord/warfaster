@@ -10,7 +10,7 @@ const CypherCodecs = ReduxGroup(
     selectAll,
     selectAllCypherPages,
     findCypherCodec,
-  },
+  }
 );
 
 export { CypherCodecs };

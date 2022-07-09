@@ -8,7 +8,7 @@ const WildCardModels = ReduxGroup(
   },
   {
     findModelPage,
-  },
+  }
 );
 
 export { WildCardModels };
