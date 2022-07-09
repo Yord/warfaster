@@ -6,6 +6,7 @@ const initAll = (...objects) =>
 const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
 const ReduxGroup = (namespace, init, actions, selectors) => ({
+  namespace,
   init,
   dispatch: Object.fromEntries(
     Object.entries(actions).map(([type, f]) => [namespace + "." + type, f])

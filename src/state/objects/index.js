@@ -10,78 +10,38 @@ import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
 import { immer, initAll } from "./utils";
 
-const init = initAll(
-  Cyphers,
+const objects = [
   CypherCodecs,
-  Dragging,
+  Cyphers,
   Factions,
   FactionModels,
+  Models,
+  WildCardModels,
+  WikiPages,
+  // UI
+  Dragging,
   Lists,
   Menu,
-  Models,
-  WikiPages,
-  WildCardModels
-);
+];
+
+const init = initAll(...objects);
 
 const dispatch = immer(({ type, payload }) => {
-  const redirectTo = redirect({ type, payload });
-  switch (type) {
-    case "CypherCodecs.set": {
-      return redirectTo(CypherCodecs);
-    }
-    case "Cyphers.set": {
-      return redirectTo(Cyphers);
-    }
-    case "Factions.set": {
-      return redirectTo(Factions);
-    }
-    case "FactionModels.set": {
-      return redirectTo(FactionModels);
-    }
-    case "Models.set": {
-      return redirectTo(Models);
-    }
-    case "WildCardModels.set": {
-      return redirectTo(WildCardModels);
-    }
-    case "WikiPages.removeUnsuccessfullyParsedPages": {
-      return redirectTo(WikiPages);
-    }
-    case "WikiPages.setPage": {
-      return redirectTo(WikiPages);
-    }
-    case "WikiPages.removePage": {
-      return redirectTo(WikiPages);
-    }
-    // UI
-    case "Dragging.activate": {
-      return redirectTo(Dragging);
-    }
-    case "Dragging.deactivate": {
-      return redirectTo(Dragging);
-    }
-    case "Lists.addCard": {
-      return redirectTo(Lists);
-    }
-    case "Lists.removeCard": {
-      return redirectTo(Lists);
-    }
-    case "Lists.updateCard": {
-      return redirectTo(Lists);
-    }
-    case "Menu.toggleCollapsed": {
-      return redirectTo(Menu);
-    }
-    default: {
-      return (state) => state;
-    }
+  const namespaces = Object.fromEntries(
+    objects.map((group) => [group.namespace, group])
+  );
+
+  const namespace = type.substring(0, type.indexOf("."));
+  if (namespace && namespaces[namespace]) {
+    return redirect({ type, payload }, namespaces[namespace]);
   }
+  return (state) => state;
 });
 
 export { dispatch, init };
 
-function redirect(action) {
-  return (obj) => (state) =>
+function redirect(action, obj) {
+  return (state) =>
     immer(({ type, payload }) => {
       const f = obj.dispatch[type] || ((state, payload) => state);
       return (state) => f(state, payload);
