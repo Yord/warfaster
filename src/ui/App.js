@@ -11,9 +11,9 @@ import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
 import Wild_Card from "./Wild_Card.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
-import { Dragging } from "../state/objects/Dragging";
-import { Lists } from "../state/objects/Lists";
-import { Menu as Menu2 } from "../state/objects/Menu";
+import { Dragging } from "../state/Dragging";
+import { Lists } from "../state/Lists";
+import { Menu as Menu2 } from "../state/Menu";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { TextArea } = Input;

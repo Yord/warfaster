@@ -10,7 +10,7 @@ and removes them from the cache.
 
 import { put } from "redux-saga/effects";
 
-import { WikiPages } from "../../../state/objects/WikiPages";
+import { WikiPages } from "../../../state/WikiPages";
 
 const removeUnsuccessfullyParsedPages = function* () {
   yield put(WikiPages.removeUnsuccessfullyParsedPages());

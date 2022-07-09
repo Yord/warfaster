@@ -27,7 +27,7 @@ import {
 } from "redux-saga/effects";
 import { jsonp } from "../jsonp";
 
-import { WikiPages } from "../../../state/objects/WikiPages";
+import { WikiPages } from "../../../state/WikiPages";
 
 function* updateCache() {
   yield all([

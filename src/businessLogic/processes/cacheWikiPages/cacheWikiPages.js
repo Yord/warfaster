@@ -18,7 +18,7 @@ import {
 import { FetchedWikiPage } from "../../../messages";
 import { jsonp } from "../jsonp";
 
-import { WikiPages } from "../../../state/objects/WikiPages";
+import { WikiPages } from "../../../state/WikiPages";
 
 function* cacheWikiPages() {
   yield all([addWikiPage(), fetchWikiPage()]);

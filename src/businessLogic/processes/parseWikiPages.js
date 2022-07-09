@@ -7,12 +7,12 @@ import {
   parseModelText,
   parseWildCardText,
 } from "../core/parse";
-import { Cyphers } from "../../state/objects/Cyphers";
-import { CypherCodecs } from "../../state/objects/CypherCodecs";
-import { Factions } from "../../state/objects/Factions";
-import { FactionModels } from "../../state/objects/FactionModels";
-import { Models } from "../../state/objects/Models";
-import { WildCardModels } from "../../state/objects/WildCardModels";
+import { Cyphers } from "../../state/Cyphers";
+import { CypherCodecs } from "../../state/CypherCodecs";
+import { Factions } from "../../state/Factions";
+import { FactionModels } from "../../state/FactionModels";
+import { Models } from "../../state/Models";
+import { WildCardModels } from "../../state/WildCardModels";
 
 function* parseWikiPages() {
   yield all([
