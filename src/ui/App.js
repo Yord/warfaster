@@ -12,6 +12,7 @@ import Marcher_Worlds from "./Marcher_Worlds.png";
 import Wild_Card from "./Wild_Card.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
 import { Dragging } from "../state/objects/Dragging";
+import { Lists } from "../state/objects/Lists";
 import { Menu as Menu2 } from "../state/objects/Menu";
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -378,7 +379,7 @@ const App = connect(
         subtypeColors[index % subtypeColors.length],
       ])
     ),
-    lists: state.ui.lists.map(({ title, cards }) => ({
+    lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
       cards: cards.flatMap((page) => {
         const model = Object.entries(state.data.factionModels)

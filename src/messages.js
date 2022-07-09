@@ -2,8 +2,6 @@ const message =
   (type) =>
   (payload = {}) => ({ type, payload });
 
-const AddCard = message("LIST/ADD_CARD");
-
 const CardDragEnded = message("CARD/DRAG_ENDED");
 const CardDragStarted = message("CARD/DRAG_STARTED");
 const MenuItemClicked = message("MENU_ITEM/CLICKED");
@@ -15,7 +13,6 @@ const FetchedWikiPageRevisions = message("WIKI_PAGE_REVISIONS/FETCHED");
 const RefreshWikiPages = message("WIKI_PAGES/REFRESH");
 
 export {
-  AddCard,
   CardDragEnded,
   CardDragStarted,
   FetchedWikiPage,

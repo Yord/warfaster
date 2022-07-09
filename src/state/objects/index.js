@@ -3,6 +3,7 @@ import { CypherCodecs } from "./CypherCodecs";
 import { Dragging } from "./Dragging";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
+import { Lists } from "./Lists";
 import { Menu } from "./Menu";
 import { Models } from "./Models";
 import { WikiPages } from "./WikiPages";
@@ -15,6 +16,7 @@ const init = initAll(
   Dragging,
   Factions,
   FactionModels,
+  Lists,
   Menu,
   Models,
   WikiPages,
@@ -58,28 +60,14 @@ const dispatch = immer(({ type, payload }) => {
     case "Dragging.deactivate": {
       return redirectTo(Dragging);
     }
-    case "LIST/ADD_CARD": {
-      return (state) => {
-        state.ui.lists[state.ui.lists.length - 1].cards.push(payload.page);
-      };
+    case "Lists.addCard": {
+      return redirectTo(Lists);
     }
-    case "LISTS/REMOVE_CARD": {
-      const { source } = payload;
-      return (state) => {
-        state.ui.lists[source.listIndex].cards.splice(source.cardIndex, 1);
-      };
+    case "Lists.removeCard": {
+      return redirectTo(Lists);
     }
-    case "LISTS/UPDATE_CARD": {
-      const { destination, source } = payload;
-      return (state) => {
-        const card = state.ui.lists[source.listIndex].cards[source.cardIndex];
-        state.ui.lists[source.listIndex].cards.splice(source.cardIndex, 1);
-        state.ui.lists[destination.listIndex].cards.splice(
-          destination.cardIndex,
-          0,
-          card
-        );
-      };
+    case "Lists.updateCard": {
+      return redirectTo(Lists);
     }
     case "Menu.toggleCollapsed": {
       return redirectTo(Menu);

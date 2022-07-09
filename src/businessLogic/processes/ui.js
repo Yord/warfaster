@@ -1,8 +1,8 @@
 import { put, select, take } from "redux-saga/effects";
-import { AddCard } from "../../messages";
 import { CypherCodecs } from "../../state/objects/CypherCodecs";
 import { Dragging } from "../../state/objects/Dragging";
 import { FactionModels } from "../../state/objects/FactionModels";
+import { Lists } from "../../state/objects/Lists";
 import { WildCardModels } from "../../state/objects/WildCardModels";
 
 function* updateCards() {
@@ -22,16 +22,15 @@ function* updateCards() {
       );
       const destinationPosition = destination.index;
 
-      yield put({
-        type: "LISTS/UPDATE_CARD",
-        payload: {
+      yield put(
+        Lists.updateCard({
           source: { listIndex: sourceListIndex, cardIndex: sourcePosition },
           destination: {
             listIndex: destinationListIndex,
             cardIndex: destinationPosition,
           },
-        },
-      });
+        })
+      );
     }
   }
 }
@@ -44,12 +43,11 @@ function* removeCards() {
       const listIndex = parseInt(source.droppableId.replace("cards_", ""), 10);
       const cardIndex = source.index;
 
-      yield put({
-        type: "LISTS/REMOVE_CARD",
-        payload: {
+      yield put(
+        Lists.removeCard({
           source: { listIndex, cardIndex },
-        },
-      });
+        })
+      );
     }
   }
 }
@@ -62,7 +60,7 @@ function* addCard() {
     const model = yield select(FactionModels.findModelPage(page));
     const wildCard = yield select(WildCardModels.findModelPage(page));
     const cypher = yield select(CypherCodecs.findCypherCodec(page));
-    if (model || wildCard || cypher) yield put(AddCard({ page }));
+    if (model || wildCard || cypher) yield put(Lists.addCard({ page }));
   }
 }
 

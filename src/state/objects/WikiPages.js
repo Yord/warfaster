@@ -42,7 +42,7 @@ function removePage(state, { page }) {
   delete state.data.pages[page];
 }
 
-function removeUnsuccessfullyParsedPages(state, {}) {
+function removeUnsuccessfullyParsedPages(state) {
   const cypherCodecsList = CypherCodecs.selectAll()(state);
   const factionsPages = Factions.selectPages()(state);
   const factionModelPages = FactionModels.selectAll()(state);
