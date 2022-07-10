@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const Lists = ReduxGroup(
+const Lists = StateShard(
   "Lists",
   init,
   { addCard, removeCard, updateCard },

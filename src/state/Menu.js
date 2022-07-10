@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const Menu = ReduxGroup("Menu", init, { toggleCollapsed }, { selectCollapsed });
+const Menu = StateShard("Menu", init, { toggleCollapsed }, { selectCollapsed });
 
 export { Menu };
 

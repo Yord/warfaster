@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const Dragging = ReduxGroup(
+const Dragging = StateShard(
   "Dragging",
   init,
   { activate, deactivate },

@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const Cyphers = ReduxGroup("Cyphers", init, { set }, { select });
+const Cyphers = StateShard("Cyphers", init, { set }, { select });
 
 export { Cyphers };
 

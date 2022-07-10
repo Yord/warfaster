@@ -5,7 +5,7 @@ const initAll = (...objects) =>
 
 const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
-const ReduxGroup = (namespace, init, actions, selectors) => ({
+const StateShard = (namespace, init, actions, selectors) => ({
   namespace,
   init,
   dispatch: Object.fromEntries(
@@ -27,7 +27,7 @@ const ReduxGroup = (namespace, init, actions, selectors) => ({
   ),
 });
 
-export { ReduxGroup, immer, initAll };
+export { StateShard, immer, initAll };
 
 function identity(a) {
   return a;

@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const Models = ReduxGroup("Models", init, { set }, { select });
+const Models = StateShard("Models", init, { set }, { select });
 
 export { Models };
 

@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const CypherCodecs = ReduxGroup(
+const CypherCodecs = StateShard(
   "CypherCodecs",
   init,
   { set },

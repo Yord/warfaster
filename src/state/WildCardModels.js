@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const WildCardModels = ReduxGroup(
+const WildCardModels = StateShard(
   "WildCardModels",
   init,
   { set },

@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const FactionModels = ReduxGroup(
+const FactionModels = StateShard(
   "FactionModels",
   init,
   { set },

@@ -1,11 +1,11 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
 import { Models } from "./Models";
 
-const WikiPages = ReduxGroup(
+const WikiPages = StateShard(
   "WikiPages",
   init,
   { addPage, removePage, removeUnsuccessfullyParsedPages },

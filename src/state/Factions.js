@@ -1,6 +1,6 @@
-import { ReduxGroup } from "./utils";
+import { StateShard } from "./utils";
 
-const Factions = ReduxGroup("Factions", init, { set }, { selectPages });
+const Factions = StateShard("Factions", init, { set }, { selectPages });
 
 export { Factions };
 
