@@ -12,9 +12,10 @@ import {
 } from "./ui";
 
 function* fetchInitialData() {
-  yield put(FetchWikiPage({ page: "Warcaster" }));
-  yield put(FetchWikiPage({ page: "Wild_Card" }));
-  yield put(FetchWikiPage({ page: "Cypher_Codecs" }));
+  const pages = ["Warcaster", "Wild_Card", "Cypher_Codecs"];
+  for (const page of pages) {
+    yield put(FetchWikiPage({ page }));
+  }
 }
 
 const refresh = function* () {
