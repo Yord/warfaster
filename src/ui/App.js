@@ -51,6 +51,7 @@ function AppPresentation({
   dragEnd,
   dragStart,
   lists,
+  toggleCard,
 }) {
   const rootSubmenuKeys = [
     ...factions.map((_, i) => `sub${i}`),
@@ -164,8 +165,8 @@ function AppPresentation({
               </Row>
             </Header>
             <Content>
-              {lists.map(({ title, cards }, index) => (
-                <div className="cards" key={`cards${index}`}>
+              {lists.map(({ title, cards }, listIndex) => (
+                <div className="cards" key={`cards${listIndex}`}>
                   <div className="header">
                     <Row>
                       <Col span={12} className="army-list-title">
@@ -211,20 +212,28 @@ function AppPresentation({
                   </div>
 
                   <Droppable
-                    key={`cards_${index}`}
-                    droppableId={`cards_${index}`}
+                    key={`cards_${listIndex}`}
+                    droppableId={`cards_${listIndex}`}
                   >
                     {(provided, snapshot) => (
                       <div ref={provided.innerRef} {...provided.droppableProps}>
                         {cards.map(
                           (
-                            { card, type, title, page, subtype, faction },
-                            j
+                            {
+                              card,
+                              hidden,
+                              type,
+                              title,
+                              page,
+                              subtype,
+                              faction,
+                            },
+                            cardIndex
                           ) => (
                             <Draggable
-                              key={`${page}_${index}_${j}`}
-                              draggableId={`${page}_${index}_${j}`}
-                              index={j}
+                              key={`${page}_${listIndex}_${cardIndex}`}
+                              draggableId={`${page}_${listIndex}_${cardIndex}`}
+                              index={cardIndex}
                             >
                               {(provided, snapshot) => (
                                 <div
@@ -233,7 +242,16 @@ function AppPresentation({
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
-                                  <Card hoverable className="card">
+                                  <Card
+                                    hoverable
+                                    className="card"
+                                    onClick={toggleCard(
+                                      listIndex,
+                                      cardIndex,
+                                      page,
+                                      card
+                                    )}
+                                  >
                                     <Card.Meta
                                       title={
                                         <Row>
@@ -268,6 +286,7 @@ function AppPresentation({
                                         </Tag>
                                       }
                                     />
+                                    {hidden ? <></> : <p>Foo</p>}
                                   </Card>
                                 </div>
                               )}
@@ -384,7 +403,7 @@ const App = connect(
     ),
     lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
-      cards: cards.flatMap((page) => {
+      cards: cards.flatMap(({ page, hidden }) => {
         const model = Object.entries(state.data.factionModels)
           .flatMap(([faction, models]) =>
             models.map((model) => ({ ...model, faction }))
@@ -403,6 +422,7 @@ const App = connect(
           return [
             {
               card: "model",
+              hidden,
               type: model.Type.text,
               title: model.Name.text,
               page: model.Name.page,
@@ -416,6 +436,7 @@ const App = connect(
           return [
             {
               card: "model",
+              hidden,
               type: wildCard.Type.text,
               title: wildCard.Name.text,
               page: wildCard.Name.page,
@@ -429,6 +450,7 @@ const App = connect(
           return [
             {
               card: "cypher",
+              hidden,
               type: cypher.Type.text,
               title: cypher.Cypher.text,
               page: cypher.Cypher.page,
@@ -445,6 +467,10 @@ const App = connect(
     dragging: Dragging.select()(state),
   }),
   (dispatch) => ({
+    toggleCard: (listIndex, cardIndex, page, card) => {
+      return () =>
+        dispatch(Lists.toggleCard({ listIndex, cardIndex, page, card }));
+    },
     toggleMenu: () => dispatch(Menu2.toggleCollapsed()),
     dragStart: (event) => dispatch(CardDragStarted(event)),
     dragEnd: (event) => dispatch(CardDragEnded(event)),
