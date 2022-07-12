@@ -1,7 +1,8 @@
 import { all, put } from "redux-saga/effects";
 import { FetchWikiPage, RefreshWikiPages } from "../../messages";
-import { cacheWikiPages, updateCache } from "./cacheWikiPages";
+import { cacheWikiPages } from "./cacheWikiPages";
 import { parseWikiPages } from "./parseWikiPages";
+import { triggerFetchWikiPages } from "./triggerFetchWikiPages";
 import {
   addCard,
   removeCards,
@@ -10,12 +11,8 @@ import {
   updateCards,
 } from "./ui";
 
-function* fetchSampleData() {
+function* fetchInitialData() {
   yield put(FetchWikiPage({ page: "Warcaster" }));
-  yield put(FetchWikiPage({ page: "Aeternus_Continuum" }));
-  yield put(FetchWikiPage({ page: "Empyrean" }));
-  yield put(FetchWikiPage({ page: "Marcher_Worlds" }));
-  yield put(FetchWikiPage({ page: "Iron_Star_Alliance" }));
   yield put(FetchWikiPage({ page: "Wild_Card" }));
   yield put(FetchWikiPage({ page: "Cypher_Codecs" }));
 }
@@ -26,10 +23,10 @@ const refresh = function* () {
 
 const processes = function* () {
   yield all([
-    updateCache(),
     cacheWikiPages(),
     parseWikiPages(),
-    fetchSampleData(),
+    triggerFetchWikiPages(),
+    fetchInitialData(),
     updateCards(),
     removeCards(),
     addCard(),
