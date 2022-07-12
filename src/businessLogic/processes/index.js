@@ -11,17 +11,13 @@ import {
 } from "./ui";
 
 function* fetchSampleData() {
-  yield put(FetchWikiPage({ page: "Warcaster", type: "faction" }));
-  yield put(
-    FetchWikiPage({ page: "Aeternus_Continuum", type: "factionModels" })
-  );
-  yield put(FetchWikiPage({ page: "Empyrean", type: "factionModels" }));
-  yield put(FetchWikiPage({ page: "Marcher_Worlds", type: "factionModels" }));
-  yield put(
-    FetchWikiPage({ page: "Iron_Star_Alliance", type: "factionModels" })
-  );
-  yield put(FetchWikiPage({ page: "Wild_Card", type: "wildCardModels" }));
-  yield put(FetchWikiPage({ page: "Cypher_Codecs", type: "cypherCodecs" }));
+  yield put(FetchWikiPage({ page: "Warcaster" }));
+  yield put(FetchWikiPage({ page: "Aeternus_Continuum" }));
+  yield put(FetchWikiPage({ page: "Empyrean" }));
+  yield put(FetchWikiPage({ page: "Marcher_Worlds" }));
+  yield put(FetchWikiPage({ page: "Iron_Star_Alliance" }));
+  yield put(FetchWikiPage({ page: "Wild_Card" }));
+  yield put(FetchWikiPage({ page: "Cypher_Codecs" }));
 }
 
 const refresh = function* () {

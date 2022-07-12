@@ -32,12 +32,11 @@ function* fetchWikiPage() {
   while (true) {
     const { payload } = yield take(wikiPageChannel);
     const page = payload.page;
-    const type = payload.type;
     const data = yield select(WikiPages.selectPageByPage(page));
 
     if (!data) {
       const data = yield call(jsonp, parsePage(page));
-      yield put(FetchedWikiPage({ page, data: data.parse, type }));
+      yield put(FetchedWikiPage({ page, data: data.parse }));
 
       const twoSecondsInMs = 2 * 1000;
       yield delay(twoSecondsInMs);
@@ -49,10 +48,9 @@ function* addWikiPage() {
   while (true) {
     const { payload } = yield take("WIKI_PAGE/FETCHED");
     const page = payload.page;
-    const type = payload.type;
     const data = payload.data;
 
-    yield put(WikiPages.addPage({ page, data, type }));
+    yield put(WikiPages.addPage({ page, data }));
   }
 }
 
