@@ -1,4 +1,4 @@
-import { all, put, select, take } from "redux-saga/effects";
+import { put, select, take } from "redux-saga/effects";
 import {
   parseCypherCodecsText,
   parseCypherText,
