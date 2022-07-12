@@ -3,13 +3,20 @@ import { FetchWikiPage, RefreshWikiPages } from "../../messages";
 import { cacheWikiPages } from "./cacheWikiPages";
 import { parseWikiPages } from "./parseWikiPages";
 import { triggerFetchWikiPages } from "./triggerFetchWikiPages";
-import {
-  addCard,
-  removeCards,
-  setDraggingFalse,
-  setDraggingTrue,
-  updateCards,
-} from "./ui";
+import { ui } from "./ui";
+
+function* processes() {
+  yield all([
+    cacheWikiPages(),
+    parseWikiPages(),
+    triggerFetchWikiPages(),
+    ui(),
+    fetchInitialData(),
+    refresh(),
+  ]);
+}
+
+export { processes };
 
 function* fetchInitialData() {
   const pages = ["Warcaster", "Wild_Card", "Cypher_Codecs"];
@@ -18,23 +25,6 @@ function* fetchInitialData() {
   }
 }
 
-const refresh = function* () {
+function* refresh() {
   yield put(RefreshWikiPages());
-};
-
-const processes = function* () {
-  yield all([
-    cacheWikiPages(),
-    parseWikiPages(),
-    triggerFetchWikiPages(),
-    fetchInitialData(),
-    updateCards(),
-    removeCards(),
-    addCard(),
-    setDraggingFalse(),
-    setDraggingTrue(),
-    refresh(),
-  ]);
-};
-
-export { processes };
+}
