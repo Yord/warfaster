@@ -217,10 +217,13 @@ function AppPresentation({
                     {(provided, snapshot) => (
                       <div ref={provided.innerRef} {...provided.droppableProps}>
                         {cards.map(
-                          ({ card, type, title, subtype, faction }, j) => (
+                          (
+                            { card, type, title, page, subtype, faction },
+                            j
+                          ) => (
                             <Draggable
-                              key={`${title}_${index}_${j}`}
-                              draggableId={`${title}_${index}_${j}`}
+                              key={`${page}_${index}_${j}`}
+                              draggableId={`${page}_${index}_${j}`}
                               index={j}
                             >
                               {(provided, snapshot) => (
@@ -402,6 +405,7 @@ const App = connect(
               card: "model",
               type: model.Type.text,
               title: model.Name.text,
+              page: model.Name.page,
               faction: model.faction,
               ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
             },
@@ -414,6 +418,7 @@ const App = connect(
               card: "model",
               type: wildCard.Type.text,
               title: wildCard.Name.text,
+              page: wildCard.Name.page,
               faction: wildCard.faction,
               ...(wildCard.Subtype ? { subtype: wildCard.Subtype.text } : {}),
             },
@@ -426,6 +431,7 @@ const App = connect(
               card: "cypher",
               type: cypher.Type.text,
               title: cypher.Cypher.text,
+              page: cypher.Cypher.page,
               ...(cypher.Faction.text === "Universal"
                 ? {}
                 : { faction: cypher.Faction.page }),
