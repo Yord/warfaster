@@ -1,10 +1,6 @@
 import { all, put } from "redux-saga/effects";
 import { FetchWikiPage, RefreshWikiPages } from "../../messages";
-import {
-  cacheWikiPages,
-  removeUnsuccessfullyParsedPages,
-  updateCache,
-} from "./cacheWikiPages";
+import { cacheWikiPages, updateCache } from "./cacheWikiPages";
 import { parseWikiPages } from "./parseWikiPages";
 import {
   addCard,
@@ -34,7 +30,6 @@ const refresh = function* () {
 
 const processes = function* () {
   yield all([
-    removeUnsuccessfullyParsedPages(),
     updateCache(),
     cacheWikiPages(),
     parseWikiPages(),
