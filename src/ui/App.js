@@ -328,7 +328,7 @@ function mergeArrayObjects(obj1, obj2) {
     obj[key] = list;
   }
   for (const [key, list] of Object.entries(obj2)) {
-    obj[key] = obj[key].concat(list);
+    obj[key] = obj[key] ? obj[key].concat(list) : list;
   }
   return obj;
 }
