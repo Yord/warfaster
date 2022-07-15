@@ -48,7 +48,8 @@ function init(state) {
 
 function addCard(state, { page }) {
   const lists = select(state);
-  lists[lists.length - 1].cards.push(page);
+  const card = { page, hidden: true };
+  lists[lists.length - 1].cards.push(card);
 }
 
 function removeCard(state, { source }) {
