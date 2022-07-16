@@ -3,7 +3,7 @@ import { StateShard } from "./utils";
 const Lists = StateShard(
   "Lists",
   init,
-  { addCard, removeCard, toggleCard, updateCard },
+  { addCard, removeCard, setListTitle, toggleCard, updateCard },
   { select }
 );
 
@@ -45,6 +45,11 @@ function init(state) {
 }
 
 // Actions
+
+function setListTitle(state, { listIndex, title }) {
+  const lists = select(state);
+  lists[listIndex].title = title;
+}
 
 function addCard(state, { page }) {
   const lists = select(state);

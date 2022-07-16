@@ -57,6 +57,7 @@ function AppPresentation({
   lists,
   toggleCard,
   removeCard,
+  setListTitle,
 }) {
   const rootSubmenuKeys = [
     ...factions.map((_, i) => `sub${i}`),
@@ -185,6 +186,7 @@ function AppPresentation({
                             value={title}
                             maxLength={30}
                             autoSize
+                            onChange={setListTitle(listIndex)}
                           />
                         </Tooltip>
                       </Col>
@@ -504,6 +506,8 @@ const App = connect(
           source: { listIndex, cardIndex },
         })
       ),
+    setListTitle: (listIndex) => (event) =>
+      dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
   })
 )(AppPresentation);
 
