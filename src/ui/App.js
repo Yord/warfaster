@@ -2,7 +2,11 @@ import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
@@ -52,6 +56,7 @@ function AppPresentation({
   dragStart,
   lists,
   toggleCard,
+  removeCard,
 }) {
   const rootSubmenuKeys = [
     ...factions.map((_, i) => `sub${i}`),
@@ -242,52 +247,70 @@ function AppPresentation({
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
-                                  <Card
-                                    hoverable
-                                    className="card"
-                                    onClick={toggleCard(
-                                      listIndex,
-                                      cardIndex,
-                                      page,
-                                      card
-                                    )}
+                                  <Tooltip
+                                    placement="right"
+                                    color="crimson"
+                                    title={
+                                      <div
+                                        onClick={removeCard(
+                                          listIndex,
+                                          cardIndex
+                                        )}
+                                        style={{ cursor: "pointer" }}
+                                      >
+                                        <DeleteOutlined />
+                                      </div>
+                                    }
                                   >
-                                    <Card.Meta
-                                      title={
-                                        <Row>
-                                          <Col span={12}>{title}</Col>
-                                          <Col className="details" span={12}>
-                                            {card === "model" && subtype ? (
-                                              <Tag
-                                                color={subtypeColors[subtype]}
-                                              >
-                                                {subtype}
-                                              </Tag>
-                                            ) : (
-                                              <></>
-                                            )}
-                                            {card === "cypher" && faction ? (
-                                              <FactionImage faction={faction} />
-                                            ) : (
-                                              <></>
-                                            )}
-                                          </Col>
-                                        </Row>
-                                      }
-                                      avatar={
-                                        <Tag
-                                          color={
-                                            (card === "model"
-                                              ? typeColors
-                                              : cypherColors)[type]
-                                          }
-                                        >
-                                          {type}
-                                        </Tag>
-                                      }
-                                    />
-                                    {hidden ? <></> : <p>Foo</p>}
-                                  </Card>
+                                    <Card
+                                      hoverable
+                                      className="card"
+                                      onClick={toggleCard(
+                                        listIndex,
+                                        cardIndex,
+                                        page,
+                                        card
+                                      )}
+                                    >
+                                      <Card.Meta
+                                        title={
+                                          <Row>
+                                            <Col span={12}>{title}</Col>
+                                            <Col className="details" span={12}>
+                                              {card === "model" && subtype ? (
+                                                <Tag
+                                                  color={subtypeColors[subtype]}
+                                                >
+                                                  {subtype}
+                                                </Tag>
+                                              ) : (
+                                                <></>
+                                              )}
+                                              {card === "cypher" && faction ? (
+                                                <FactionImage
+                                                  faction={faction}
+                                                />
+                                              ) : (
+                                                <></>
+                                              )}
+                                            </Col>
+                                          </Row>
+                                        }
+                                        avatar={
+                                          <Tag
+                                            color={
+                                              (card === "model"
+                                                ? typeColors
+                                                : cypherColors)[type]
+                                            }
+                                          >
+                                            {type}
+                                          </Tag>
+                                        }
+                                      />
+                                      {hidden ? <></> : <p>Foo</p>}
+                                    </Card>
+                                  </Tooltip>
                                 </div>
                               )}
                             </Draggable>
@@ -475,6 +498,12 @@ const App = connect(
     dragStart: (event) => dispatch(CardDragStarted(event)),
     dragEnd: (event) => dispatch(CardDragEnded(event)),
     menuItemClicked: (event) => dispatch(MenuItemClicked(event)),
+    removeCard: (listIndex, cardIndex) => () =>
+      dispatch(
+        Lists.removeCard({
+          source: { listIndex, cardIndex },
+        })
+      ),
   })
 )(AppPresentation);
 
