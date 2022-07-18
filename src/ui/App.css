@@ -1,7 +1,16 @@
 @import "~antd/dist/antd.css";
+@import "https://fonts.googleapis.com/css?family=Paytone+One";
 
 .ant-layout-header {
+  background: white !important;
+  font-family: "Paytone One";
+  font-size: 3em !important;
+  padding: 0.5em 0 2em 0 !important;
   text-align: center;
+}
+
+.swap svg {
+  transform: scale(-1, 1);
 }
 
 span.ant-tag {
@@ -23,12 +32,6 @@ span.ant-tag {
 
 span.card {
   margin: 0 5px;
-}
-
-.ant-layout-header {
-  background: white !important;
-  font-size: 2em;
-  padding: 0 !important;
 }
 
 .ant-layout-header .ant-col {

@@ -2,7 +2,7 @@ import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, TagsFilled } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
@@ -83,7 +83,15 @@ function AppPresentation({
               <Droppable key={"trash"} droppableId={"trash"}>
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {dragging ? "TRASH" : "Warfaster"}
+                    {dragging ? (
+                      "TRASH"
+                    ) : (
+                      <>
+                        <TagsFilled className="swap" />
+                        <>WARFASTER</>
+                        <TagsFilled />
+                      </>
+                    )}
                     {provided.placeholder}
                   </div>
                 )}
