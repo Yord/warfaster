@@ -281,8 +281,10 @@ function AppPresentation({
                                   {...provided.dragHandleProps}
                                 >
                                   <Tooltip
-                                    placement="right"
+                                    placement="top"
                                     color="crimson"
+                                    trigger="click"
+                                    align={{ offset: [0, 4] }}
                                     title={
                                       <div
                                         onClick={removeCard(

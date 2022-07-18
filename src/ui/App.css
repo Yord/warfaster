@@ -25,10 +25,6 @@ span.card {
   margin: 0 5px;
 }
 
-.ant-tooltip-placement-left .ant-tooltip-arrow {
-  display: none;
-}
-
 .ant-layout-header {
   background: white !important;
   font-size: 2em;
