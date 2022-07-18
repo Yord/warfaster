@@ -4,7 +4,7 @@ const WildCardModels = StateShard(
   "WildCardModels",
   init,
   { set },
-  { selectByPage }
+  { select, selectByPage }
 );
 
 export { WildCardModels };

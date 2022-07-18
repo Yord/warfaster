@@ -2,11 +2,7 @@ import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
-import {
-  DeleteOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
@@ -17,41 +13,42 @@ import Wild_Card from "./Wild_Card.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
 import { Dragging } from "../state/Dragging";
 import { Lists } from "../state/Lists";
-import { Menu as Menu2 } from "../state/Menu";
+import { FactionModels } from "../state/FactionModels";
+import { WildCardModels } from "../state/WildCardModels";
+import { Factions } from "../state/Factions";
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
 const { SubMenu } = Menu;
 
 function FactionImage({ faction }) {
   switch (faction) {
     case "Aeternus_Continuum":
-      return <img src={Aeternus_Continuum} alt={faction} height="80%" />;
+      return <img src={Aeternus_Continuum} alt={faction} height="35px" />;
     case "Empyrean":
-      return <img src={Empyrean} alt={faction} height="80%" />;
+      return <img src={Empyrean} alt={faction} height="35px" />;
     case "Iron_Star_Alliance":
-      return <img src={Iron_Star_Alliance} alt={faction} height="80%" />;
+      return <img src={Iron_Star_Alliance} alt={faction} height="35px" />;
     case "Marcher_Worlds":
-      return <img src={Marcher_Worlds} alt={faction} height="80%" />;
+      return <img src={Marcher_Worlds} alt={faction} height="35px" />;
     case "Wild_Card":
-      return <img src={Wild_Card} alt={faction} height="80%" />;
+      return <img src={Wild_Card} alt={faction} height="35px" />;
     case "Universal":
-      return <img src={Cyphers} alt={faction} height="80%" />;
+      return <img src={Cyphers} alt={faction} height="35px" />;
     default:
-      return <img src={Cyphers} alt={faction} height="80%" />;
+      return <img src={Cyphers} alt={faction} height="35px" />;
   }
 }
 
 function AppPresentation({
-  factions,
+  factionModels,
+  wildCardModels,
   cypherCodecs,
   cypherColors,
   dragging,
   typeColors,
   subtypeColors,
-  menuCollapsed,
   menuItemClicked,
-  toggleMenu,
   dragEnd,
   dragStart,
   lists,
@@ -60,7 +57,9 @@ function AppPresentation({
   setListTitle,
 }) {
   const rootSubmenuKeys = [
-    ...factions.map((_, i) => `sub${i}`),
+    ...[...factionModels, ...Object.entries(wildCardModels)].map(
+      (_, i) => `sub${i}`
+    ),
     "cypher_codecs",
   ];
 
@@ -78,98 +77,130 @@ function AppPresentation({
   return (
     <div className="App">
       <Layout>
-        <Sider
-          width={300}
-          trigger={null}
-          collapsible={true}
-          collapsed={menuCollapsed}
-          theme="light"
-          breakpoint="md"
-        >
-          <Menu
-            id="factions"
-            onClick={menuItemClicked}
-            openKeys={openKeys}
-            onOpenChange={onOpenChange}
-            //defaultSelectedKeys={["item1"]}
-            //defaultOpenKeys={["sub0"]}
-            mode="inline"
-          >
-            {factions.map(([faction, models], i) => (
-              <SubMenu
-                key={faction}
-                title={faction}
-                icon={<FactionImage faction={faction} />}
-              >
-                {models.map(({ name, page, type, subtype }, j) => {
-                  const shortName = name.slice(0, 20);
-
-                  return (
-                    <Menu.Item
-                      key={faction + ":" + page}
-                      page={page}
-                      title={<Tag color={typeColors[type]}>{type}</Tag>}
-                    >
-                      <Tag color={typeColors[type]}>{type}</Tag>
-                      <span className="card">
-                        {shortName.length === name.length ? (
-                          shortName
-                        ) : (
-                          <Tooltip placement="top" title={name}>
-                            {shortName}...
-                          </Tooltip>
-                        )}
-                      </span>
-                      {subtype ? (
-                        <Tag color={subtypeColors[subtype]}>{subtype}</Tag>
-                      ) : (
-                        ""
-                      )}
-                    </Menu.Item>
-                  );
-                })}
-              </SubMenu>
-            ))}
-            <SubMenu
-              key="cypher_codecs"
-              title="Cyphers"
-              icon={<FactionImage faction="Cyphers" />}
-            >
-              {cypherCodecs.map(({ Cypher, Type, Faction }, j) => (
-                <Menu.Item key={":" + Cypher.page}>
-                  <Tag color={cypherColors[Type.text]}>{Type.text}</Tag>
-                  <span className="card">{Cypher.text}</span>
-                </Menu.Item>
-              ))}
-            </SubMenu>
-          </Menu>
-        </Sider>
         <Layout>
           <DragDropContext onDragStart={dragStart} onDragEnd={dragEnd}>
             <Header>
-              <Row>
-                <Col span={2}>
-                  {React.createElement(
-                    menuCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-                    {
-                      className: "trigger",
-                      onClick: toggleMenu,
-                    }
-                  )}
-                </Col>
-                <Col span={20} className="logo">
-                  <Droppable key={"trash"} droppableId={"trash"}>
-                    {(provided, snapshot) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {dragging ? "TRASH" : "Warfaster"}
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </Col>
-                <Col span={2}></Col>
-              </Row>
+              <Droppable key={"trash"} droppableId={"trash"}>
+                {(provided, snapshot) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {dragging ? "TRASH" : "Warfaster"}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
             </Header>
+            <Content>
+              <Menu
+                id="factions"
+                onClick={menuItemClicked}
+                openKeys={openKeys}
+                onOpenChange={onOpenChange}
+                mode="horizontal"
+                triggerSubMenuAction="click"
+              >
+                {factionModels.map(([factionName, faction, models], i) => (
+                  <SubMenu
+                    key={faction}
+                    icon={<FactionImage faction={faction} />}
+                  >
+                    <Menu.ItemGroup title={factionName}>
+                      {models.map(({ name, page, type, subtype }, j) => {
+                        const shortName = name.slice(0, 40);
+
+                        return (
+                          <Menu.Item
+                            key={faction + ":" + page}
+                            page={page}
+                            title={<Tag color={typeColors[type]}>{type}</Tag>}
+                          >
+                            <Tag color={typeColors[type]}>{type}</Tag>
+                            <span className="card">
+                              {shortName.length === name.length ? (
+                                shortName
+                              ) : (
+                                <Tooltip placement="top" title={name}>
+                                  {shortName}...
+                                </Tooltip>
+                              )}
+                            </span>
+                            {subtype ? (
+                              <Tag color={subtypeColors[subtype]}>
+                                {subtype}
+                              </Tag>
+                            ) : (
+                              ""
+                            )}
+                          </Menu.Item>
+                        );
+                      })}
+                    </Menu.ItemGroup>
+                    <Menu.ItemGroup title="Wild Cards">
+                      {(wildCardModels[faction] || []).map(
+                        ({ name, page, type, subtype }, j) => {
+                          const shortName = name.slice(0, 40);
+
+                          return (
+                            <Menu.Item
+                              key={faction + ":" + page}
+                              page={page}
+                              title={<Tag color={typeColors[type]}>{type}</Tag>}
+                            >
+                              <Tag color={typeColors[type]}>{type}</Tag>
+                              <span className="card">
+                                {shortName.length === name.length ? (
+                                  shortName
+                                ) : (
+                                  <Tooltip placement="top" title={name}>
+                                    {shortName}...
+                                  </Tooltip>
+                                )}
+                              </span>
+                              {subtype ? (
+                                <Tag color={subtypeColors[subtype]}>
+                                  {subtype}
+                                </Tag>
+                              ) : (
+                                ""
+                              )}
+                            </Menu.Item>
+                          );
+                        }
+                      )}
+                    </Menu.ItemGroup>
+                  </SubMenu>
+                ))}
+                <SubMenu
+                  key="cypher_codecs"
+                  icon={<FactionImage faction="Cyphers" />}
+                >
+                  {Object.entries(
+                    cypherCodecs.reduce(
+                      (acc, cypher) => ({
+                        ...acc,
+                        [cypher.Faction.text]: [
+                          ...(acc[cypher.Faction.text] || []),
+                          cypher,
+                        ],
+                      }),
+                      {}
+                    )
+                  )
+                    .sort()
+                    .map(([faction, cyphers], j) => (
+                      <Menu.ItemGroup title={faction} key={faction}>
+                        {cyphers.map(({ Cypher, Type }) => (
+                          <Menu.Item key={":" + Cypher.page}>
+                            <Tag color={cypherColors[Type.text]}>
+                              {Type.text}
+                            </Tag>
+                            <span className="card">{Cypher.text}</span>
+                          </Menu.Item>
+                        ))}
+                      </Menu.ItemGroup>
+                    ))}
+                </SubMenu>
+              </Menu>
+            </Content>
             <Content>
               {lists.map(({ title, cards }, listIndex) => (
                 <div className="cards" key={`cards${listIndex}`}>
@@ -369,25 +400,12 @@ const typeColors = [
 
 const subtypeColors = ["orange", "lime", "geekblue"];
 
-function mergeArrayObjects(obj1, obj2) {
-  const obj = {};
-  for (const [key, list] of Object.entries(obj1)) {
-    obj[key] = list;
-  }
-  for (const [key, list] of Object.entries(obj2)) {
-    obj[key] = obj[key] ? obj[key].concat(list) : list;
-  }
-  return obj;
-}
-
 const App = connect(
   (state) => ({
-    menuCollapsed: Menu2.selectCollapsed()(state),
-    factions: Object.entries(
-      mergeArrayObjects(state.data.factionModels, state.data.wildCardModels)
-    )
+    factionModels: Object.entries(FactionModels.select()(state))
       .sort()
       .map(([faction, models]) => [
+        Factions.select()(state)[faction].text,
         faction,
         models.map((model) => ({
           name: model.Name.text,
@@ -396,6 +414,19 @@ const App = connect(
           ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
         })),
       ]),
+    wildCardModels: Object.fromEntries(
+      Object.entries(WildCardModels.select()(state))
+        .sort()
+        .map(([faction, models]) => [
+          faction,
+          models.map((model) => ({
+            name: model.Name.text,
+            page: model.Name.page,
+            type: model.Type.text,
+            ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
+          })),
+        ])
+    ),
     cypherCodecs: state.data.cypherCodecs,
     cypherColors: {
       Harmonic: "purple",
@@ -496,7 +527,6 @@ const App = connect(
       return () =>
         dispatch(Lists.toggleCard({ listIndex, cardIndex, page, card }));
     },
-    toggleMenu: () => dispatch(Menu2.toggleCollapsed()),
     dragStart: (event) => dispatch(CardDragStarted(event)),
     dragEnd: (event) => dispatch(CardDragEnded(event)),
     menuItemClicked: (event) => dispatch(MenuItemClicked(event)),

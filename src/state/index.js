@@ -4,7 +4,6 @@ import { Dragging } from "./Dragging";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
 import { Lists } from "./Lists";
-import { Menu } from "./Menu";
 import { Models } from "./Models";
 import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
@@ -21,7 +20,6 @@ const objects = [
   // UI
   Dragging,
   Lists,
-  Menu,
 ];
 
 const state = initAll(...objects)({});

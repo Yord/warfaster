@@ -1,10 +1,7 @@
 @import "~antd/dist/antd.css";
 
-li.ant-menu-item {
-  height: 25px !important;
-  line-height: 25px !important;
-  padding-left: 0px !important;
-  width: 300px !important;
+.ant-layout-header {
+  text-align: center;
 }
 
 span.ant-tag {
@@ -52,11 +49,33 @@ span.card {
 
 .ant-menu {
   border: 0 !important;
+  margin: 0 auto !important;
+}
+
+ul.ant-menu-sub {
+  padding: 8px 0 !important;
+  max-height: 300px !important;
+  min-height: 0px !important;
+}
+
+li.ant-menu-submenu {
+  padding: 0 !important;
+}
+
+li.ant-menu-submenu::after {
+  transition: none !important;
+  border-bottom: 0 !important;
+}
+
+li.ant-menu-item {
+  height: 25px !important;
+  line-height: 25px !important;
+  padding: 0 15px !important;
 }
 
 .ant-menu-title-content {
   margin: 0 !important;
-  padding-left: 14px !important;
+  padding: 0 !important;
 }
 
 .ant-layout-sider-collapsed {
@@ -66,8 +85,8 @@ span.card {
   width: 60px !important;
 }
 
-.ant-menu-submenu-title {
-  padding: 0 0 0 14px !important;
+.ant-menu-submenu-title img {
+  padding: 0 5px !important;
 }
 
 .ant-layout-content {

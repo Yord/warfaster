@@ -1,6 +1,6 @@
 import { StateShard } from "./utils";
 
-const Factions = StateShard("Factions", init, { set }, { selectPages });
+const Factions = StateShard("Factions", init, { set }, { select, selectPages });
 
 export { Factions };
 
