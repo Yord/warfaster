@@ -143,8 +143,9 @@ function AppPresentation({
                       })}
                     </Menu.ItemGroup>
                     <Menu.ItemGroup title="Wild Cards">
-                      {(wildCardModels[faction] || []).map(
-                        ({ name, page, type, subtype }, j) => {
+                      {(wildCardModels[faction] || [])
+                        .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
+                        .map(({ name, page, type, subtype }, j) => {
                           const shortName = name.slice(0, 40);
 
                           return (
@@ -172,8 +173,7 @@ function AppPresentation({
                               )}
                             </Menu.Item>
                           );
-                        }
-                      )}
+                        })}
                     </Menu.ItemGroup>
                   </SubMenu>
                 ))}
@@ -196,14 +196,18 @@ function AppPresentation({
                     .sort()
                     .map(([faction, cyphers], j) => (
                       <Menu.ItemGroup title={faction} key={faction}>
-                        {cyphers.map(({ Cypher, Type }) => (
-                          <Menu.Item key={":" + Cypher.page}>
-                            <Tag color={cypherColors[Type.text]}>
-                              {Type.text}
-                            </Tag>
-                            <span className="card">{Cypher.text}</span>
-                          </Menu.Item>
-                        ))}
+                        {cyphers
+                          .sort((c1, c2) =>
+                            c1.Type.text < c2.Type.text ? -1 : 1
+                          )
+                          .map(({ Cypher, Type }) => (
+                            <Menu.Item key={":" + Cypher.page}>
+                              <Tag color={cypherColors[Type.text]}>
+                                {Type.text}
+                              </Tag>
+                              <span className="card">{Cypher.text}</span>
+                            </Menu.Item>
+                          ))}
                       </Menu.ItemGroup>
                     ))}
                 </SubMenu>
