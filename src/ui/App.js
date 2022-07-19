@@ -91,7 +91,19 @@ function AppPresentation({
               <Droppable key={"trash"} droppableId={"trash"}>
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {dragging ? "TRASH" : "WARFASTER"}
+                    {dragging ? (
+                      <div
+                        style={{
+                          backgroundColor: "rgb(235, 236, 240)",
+                          animation:
+                            "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
+                        }}
+                      >
+                        <DeleteOutlined />
+                      </div>
+                    ) : (
+                      "WARFASTER"
+                    )}
                     {provided.placeholder}
                   </div>
                 )}
