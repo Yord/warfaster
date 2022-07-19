@@ -2,7 +2,7 @@ import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
-import { DeleteOutlined, TagsFilled } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
@@ -54,6 +54,7 @@ function AppPresentation({
   lists,
   toggleCard,
   removeCard,
+  removeList,
   setListTitle,
 }) {
   const rootSubmenuKeys = [
@@ -208,52 +209,67 @@ function AppPresentation({
             <Content>
               {lists.map(({ title, cards }, listIndex) => (
                 <div className="cards" key={`cards${listIndex}`}>
-                  <div className="header">
-                    <Row>
-                      <Col span={12} className="army-list-title">
-                        <Tooltip
-                          trigger={["focus"]}
-                          title={"Rename your list"}
-                          placement="topLeft"
-                        >
-                          <TextArea
-                            placeholder="Name your list"
-                            value={title}
-                            maxLength={30}
-                            autoSize
-                            onChange={setListTitle(listIndex)}
-                          />
-                        </Tooltip>
-                      </Col>
-                      <Col span={12} className="faction-icons">
-                        {Object.entries(
-                          cards.reduce(
-                            (acc, card) => ({
-                              ...acc,
-                              ...(card.faction
-                                ? {
-                                    [card.faction]:
-                                      (acc[card.faction] || 0) + 1,
-                                  }
-                                : {}),
-                            }),
-                            {}
+                  <Tooltip
+                    placement="top"
+                    color="crimson"
+                    trigger="click"
+                    align={{ offset: [0, 4] }}
+                    title={
+                      <div
+                        onClick={removeList(listIndex)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <DeleteOutlined />
+                      </div>
+                    }
+                  >
+                    <div style={{ cursor: "pointer" }} className="header">
+                      <Row>
+                        <Col span={12} className="army-list-title">
+                          <Tooltip
+                            trigger={["focus"]}
+                            title={"Rename your list"}
+                            placement="topLeft"
+                          >
+                            <TextArea
+                              placeholder="Name your list"
+                              value={title}
+                              maxLength={30}
+                              autoSize
+                              onChange={setListTitle(listIndex)}
+                            />
+                          </Tooltip>
+                        </Col>
+                        <Col span={12} className="faction-icons">
+                          {Object.entries(
+                            cards.reduce(
+                              (acc, card) => ({
+                                ...acc,
+                                ...(card.faction
+                                  ? {
+                                      [card.faction]:
+                                        (acc[card.faction] || 0) + 1,
+                                    }
+                                  : {}),
+                              }),
+                              {}
+                            )
                           )
-                        )
-                          .sort()
-                          .map(([faction, count], i) => (
-                            <Badge
-                              size="small"
-                              key={`badge${i}`}
-                              count={count}
-                              offset={[0, 23]}
-                            >
-                              <FactionImage faction={faction} />
-                            </Badge>
-                          ))}
-                      </Col>
-                    </Row>
-                  </div>
+                            .sort()
+                            .map(([faction, count], i) => (
+                              <Badge
+                                size="small"
+                                key={`badge${i}`}
+                                count={count}
+                                offset={[0, 23]}
+                              >
+                                <FactionImage faction={faction} />
+                              </Badge>
+                            ))}
+                        </Col>
+                      </Row>
+                    </div>
+                  </Tooltip>
 
                   <Droppable
                     key={`cards_${listIndex}`}
@@ -544,6 +560,7 @@ const App = connect(
           source: { listIndex, cardIndex },
         })
       ),
+    removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
     setListTitle: (listIndex) => (event) =>
       dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
   })

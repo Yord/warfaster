@@ -3,7 +3,7 @@ import { StateShard } from "./utils";
 const Lists = StateShard(
   "Lists",
   init,
-  { addCard, removeCard, setListTitle, toggleCard, updateCard },
+  { addCard, removeCard, removeList, setListTitle, toggleCard, updateCard },
   { select }
 );
 
@@ -60,6 +60,11 @@ function addCard(state, { page }) {
 function removeCard(state, { source }) {
   const lists = select(state);
   lists[source.listIndex].cards.splice(source.cardIndex, 1);
+}
+
+function removeList(state, { listIndex }) {
+  const lists = select(state);
+  lists.splice(listIndex, 1);
 }
 
 function updateCard(state, { destination, source }) {
