@@ -239,16 +239,18 @@ function AppPresentation({
                             }),
                             {}
                           )
-                        ).map(([faction, count], i) => (
-                          <Badge
-                            size="small"
-                            key={`badge${i}`}
-                            count={count}
-                            offset={[0, 23]}
-                          >
-                            <FactionImage faction={faction} />
-                          </Badge>
-                        ))}
+                        )
+                          .sort()
+                          .map(([faction, count], i) => (
+                            <Badge
+                              size="small"
+                              key={`badge${i}`}
+                              count={count}
+                              offset={[0, 23]}
+                            >
+                              <FactionImage faction={faction} />
+                            </Badge>
+                          ))}
                       </Col>
                     </Row>
                   </div>
