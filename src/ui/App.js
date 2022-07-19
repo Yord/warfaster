@@ -83,15 +83,7 @@ function AppPresentation({
               <Droppable key={"trash"} droppableId={"trash"}>
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {dragging ? (
-                      "TRASH"
-                    ) : (
-                      <>
-                        <TagsFilled className="swap" />
-                        <>WARFASTER</>
-                        <TagsFilled />
-                      </>
-                    )}
+                    {dragging ? "TRASH" : "WARFASTER"}
                     {provided.placeholder}
                   </div>
                 )}

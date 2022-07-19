@@ -1,9 +1,9 @@
 @import "~antd/dist/antd.css";
-@import "https://fonts.googleapis.com/css?family=Paytone+One";
+@import "https://fonts.googleapis.com/css?family=Orbitron";
 
 .ant-layout-header {
   background: white !important;
-  font-family: "Paytone One";
+  font-family: "Orbitron";
   font-size: 3em !important;
   padding: 0.5em 0 2em 0 !important;
   text-align: center;
