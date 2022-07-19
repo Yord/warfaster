@@ -3,7 +3,15 @@ import { StateShard } from "./utils";
 const Lists = StateShard(
   "Lists",
   init,
-  { addCard, removeCard, removeList, setListTitle, toggleCard, updateCard },
+  {
+    addCard,
+    addEmptyList,
+    removeCard,
+    removeList,
+    setListTitle,
+    toggleCard,
+    updateCard,
+  },
   { select }
 );
 
@@ -57,6 +65,15 @@ function addCard(state, { page }) {
   lists[lists.length - 1].cards.push(card);
 }
 
+function addEmptyList(state, { listIndex }) {
+  const lists = select(state);
+  const emptyList = {
+    title: "Empty list",
+    cards: [],
+  };
+  lists.splice(listIndex, 0, emptyList);
+}
+
 function removeCard(state, { source }) {
   const lists = select(state);
   lists[source.listIndex].cards.splice(source.cardIndex, 1);
@@ -65,6 +82,9 @@ function removeCard(state, { source }) {
 function removeList(state, { listIndex }) {
   const lists = select(state);
   lists.splice(listIndex, 1);
+  if (lists.length === 0) {
+    addEmptyList(state, { listIndex: 0 });
+  }
 }
 
 function updateCard(state, { destination, source }) {

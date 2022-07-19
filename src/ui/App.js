@@ -2,7 +2,7 @@ import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusSquareOutlined } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
@@ -55,6 +55,7 @@ function AppPresentation({
   toggleCard,
   removeCard,
   removeList,
+  addEmptyList,
   setListTitle,
 }) {
   const rootSubmenuKeys = [
@@ -215,12 +216,30 @@ function AppPresentation({
                     trigger="click"
                     align={{ offset: [0, 4] }}
                     title={
-                      <div
-                        onClick={removeList(listIndex)}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <DeleteOutlined />
-                      </div>
+                      <>
+                        <div
+                          onClick={removeList(listIndex)}
+                          style={{
+                            cursor: "pointer",
+                            display: "inline-block",
+                            paddingRight: "4px",
+                            fontSize: "1.5em",
+                          }}
+                        >
+                          <DeleteOutlined />
+                        </div>
+                        <div
+                          onClick={addEmptyList(listIndex)}
+                          style={{
+                            cursor: "pointer",
+                            display: "inline-block",
+                            paddingLeft: "4px",
+                            fontSize: "1.5em",
+                          }}
+                        >
+                          <PlusSquareOutlined />
+                        </div>
+                      </>
                     }
                   >
                     <div style={{ cursor: "pointer" }} className="header">
@@ -313,7 +332,10 @@ function AppPresentation({
                                           listIndex,
                                           cardIndex
                                         )}
-                                        style={{ cursor: "pointer" }}
+                                        style={{
+                                          cursor: "pointer",
+                                          fontSize: "1.5em",
+                                        }}
                                       >
                                         <DeleteOutlined />
                                       </div>
@@ -561,6 +583,8 @@ const App = connect(
         })
       ),
     removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
+    addEmptyList: (listIndex) => () =>
+      dispatch(Lists.addEmptyList({ listIndex })),
     setListTitle: (listIndex) => (event) =>
       dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
   })
