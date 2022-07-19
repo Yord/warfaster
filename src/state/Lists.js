@@ -108,7 +108,6 @@ function updateCard(state, { destination, source }) {
 }
 
 function toggleCard(state, { listIndex, cardIndex, page }) {
-  console.log(listIndex, cardIndex, page);
   const lists = select(state);
   const card = lists[listIndex].cards[cardIndex];
   if (card.page === page) {

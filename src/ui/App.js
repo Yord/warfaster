@@ -112,7 +112,6 @@ function AppPresentation({
             <Content>
               <Menu
                 id="factions"
-                onClick={menuItemClicked}
                 openKeys={openKeys}
                 onOpenChange={onOpenChange}
                 mode="horizontal"
@@ -134,7 +133,10 @@ function AppPresentation({
                             title={<Tag color={typeColors[type]}>{type}</Tag>}
                           >
                             <Tag color={typeColors[type]}>{type}</Tag>
-                            <span className="card">
+                            <span
+                              className="card"
+                              onClick={menuItemClicked(page)}
+                            >
                               {shortName.length === name.length ? (
                                 shortName
                               ) : (
@@ -167,7 +169,10 @@ function AppPresentation({
                               title={<Tag color={typeColors[type]}>{type}</Tag>}
                             >
                               <Tag color={typeColors[type]}>{type}</Tag>
-                              <span className="card">
+                              <span
+                                className="card"
+                                onClick={menuItemClicked(page)}
+                              >
                                 {shortName.length === name.length ? (
                                   shortName
                                 ) : (
@@ -217,7 +222,12 @@ function AppPresentation({
                               <Tag color={cypherColors[Type.text]}>
                                 {Type.text}
                               </Tag>
-                              <span className="card">{Cypher.text}</span>
+                              <span
+                                className="card"
+                                onClick={menuItemClicked(Cypher.page)}
+                              >
+                                {Cypher.text}
+                              </span>
                             </Menu.Item>
                           ))}
                       </Menu.ItemGroup>
@@ -615,7 +625,10 @@ const App = connect(
     },
     dragStart: (event) => dispatch(CardDragStarted(event)),
     dragEnd: (event) => dispatch(CardDragEnded(event)),
-    menuItemClicked: (event) => dispatch(MenuItemClicked(event)),
+    menuItemClicked: (page) => (event) => {
+      dispatch(MenuItemClicked({ page }));
+      event.stopPropagation();
+    },
     removeCard: (listIndex, cardIndex) => () =>
       dispatch(
         Lists.removeCard({

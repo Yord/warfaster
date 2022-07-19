@@ -67,8 +67,7 @@ function* removeCards() {
 function* addCard() {
   while (true) {
     const { payload } = yield take("MENU_ITEM/CLICKED");
-    const { key } = payload;
-    const page = key.split(":")[1];
+    const { page } = payload;
     const model = yield select(FactionModels.selectByPage(page));
     const wildCard = yield select(WildCardModels.selectByPage(page));
     const cypher = yield select(CypherCodecs.selectByPage(page));
