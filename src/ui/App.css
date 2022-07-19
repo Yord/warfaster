@@ -179,6 +179,11 @@ li.ant-menu-item {
   margin: 16px 0;
 }
 
+.trash-footer {
+  font-size: 3em;
+  text-align: center;
+}
+
 @keyframes shake {
   10%,
   90% {

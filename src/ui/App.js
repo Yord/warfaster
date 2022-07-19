@@ -88,7 +88,7 @@ function AppPresentation({
         <Layout>
           <DragDropContext onDragStart={dragStart} onDragEnd={dragEnd}>
             <Header>
-              <Droppable key={"trash"} droppableId={"trash"}>
+              <Droppable key={"trash_header"} droppableId={"trash_header"}>
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {dragging ? (
@@ -475,7 +475,31 @@ function AppPresentation({
                 </div>
               ))}
             </Content>
-            <Footer>Footer</Footer>
+
+            <Droppable key={"trash_footer"} droppableId={"trash_footer"}>
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {dragging ? (
+                    <div className="trash-footer">
+                      <div
+                        style={{
+                          backgroundColor: "rgb(235, 236, 240)",
+                          animation:
+                            "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
+                        }}
+                      >
+                        <DeleteOutlined />
+                        <div style={{ display: "none" }}>
+                          {provided.placeholder}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <Footer>Footer</Footer>
+                  )}
+                </div>
+              )}
+            </Droppable>
           </DragDropContext>
         </Layout>
       </Layout>
