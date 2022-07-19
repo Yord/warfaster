@@ -2,7 +2,12 @@ import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
-import { DeleteOutlined, PlusSquareOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  DownSquareOutlined,
+  PlusSquareOutlined,
+  UpSquareOutlined,
+} from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.jpeg";
@@ -56,6 +61,7 @@ function AppPresentation({
   removeCard,
   removeList,
   addEmptyList,
+  moveListBy,
   setListTitle,
 }) {
   const rootSubmenuKeys = [
@@ -233,11 +239,33 @@ function AppPresentation({
                           style={{
                             cursor: "pointer",
                             display: "inline-block",
-                            paddingLeft: "4px",
+                            padding: "0 4px",
                             fontSize: "1.5em",
                           }}
                         >
                           <PlusSquareOutlined />
+                        </div>
+                        <div
+                          onClick={moveListBy(listIndex, -1)}
+                          style={{
+                            cursor: "pointer",
+                            display: "inline-block",
+                            padding: "0 4px",
+                            fontSize: "1.5em",
+                          }}
+                        >
+                          <UpSquareOutlined />
+                        </div>
+                        <div
+                          onClick={moveListBy(listIndex, 1)}
+                          style={{
+                            cursor: "pointer",
+                            display: "inline-block",
+                            paddingLeft: "4px",
+                            fontSize: "1.5em",
+                          }}
+                        >
+                          <DownSquareOutlined />
                         </div>
                       </>
                     }
@@ -585,6 +613,8 @@ const App = connect(
     removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
     addEmptyList: (listIndex) => () =>
       dispatch(Lists.addEmptyList({ listIndex })),
+    moveListBy: (listIndex, by) => () =>
+      dispatch(Lists.moveListBy({ listIndex, by })),
     setListTitle: (listIndex) => (event) =>
       dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
   })

@@ -6,6 +6,7 @@ const Lists = StateShard(
   {
     addCard,
     addEmptyList,
+    moveListBy,
     removeCard,
     removeList,
     setListTitle,
@@ -84,6 +85,18 @@ function removeList(state, { listIndex }) {
   lists.splice(listIndex, 1);
   if (lists.length === 0) {
     addEmptyList(state, { listIndex: 0 });
+  }
+}
+
+function moveListBy(state, { listIndex, by }) {
+  const lists = select(state);
+  if (
+    (by > 0 && listIndex + by < lists.length) ||
+    (by < 0 && listIndex + by >= 0)
+  ) {
+    const list = lists[listIndex];
+    lists.splice(listIndex, 1);
+    lists.splice(listIndex + by, 0, list);
   }
 }
 
