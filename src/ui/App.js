@@ -237,245 +237,275 @@ function AppPresentation({
               </Menu>
             </Content>
             <Content>
-              {lists.map(({ title, cards }, listIndex) => (
-                <div className="cards" key={`cards${listIndex}`}>
-                  <Tooltip
-                    placement="top"
-                    color="crimson"
-                    trigger="click"
-                    align={{ offset: [0, 4] }}
-                    title={
-                      <>
-                        <div
-                          onClick={removeList(listIndex)}
-                          style={{
-                            cursor: "pointer",
-                            display: "inline-block",
-                            paddingRight: "4px",
-                            fontSize: "1.5em",
-                          }}
+              <Layout>
+                <Row gutter={16}>
+                  {lists.map(({ title, cards }, listIndex) => (
+                    <Col
+                      key={`lists_col_${listIndex}`}
+                      xs={24}
+                      sm={12}
+                      md={12}
+                      lg={8}
+                      xl={6}
+                      xxl={6}
+                    >
+                      <div className="cards" key={`cards${listIndex}`}>
+                        <Tooltip
+                          placement="top"
+                          color="crimson"
+                          trigger="click"
+                          align={{ offset: [0, 4] }}
+                          title={
+                            <>
+                              <div
+                                onClick={removeList(listIndex)}
+                                style={{
+                                  cursor: "pointer",
+                                  display: "inline-block",
+                                  paddingRight: "4px",
+                                  fontSize: "1.5em",
+                                }}
+                              >
+                                <DeleteOutlined />
+                              </div>
+                              <div
+                                onClick={addEmptyList(listIndex)}
+                                style={{
+                                  cursor: "pointer",
+                                  display: "inline-block",
+                                  padding: "0 4px",
+                                  fontSize: "1.5em",
+                                }}
+                              >
+                                <PlusSquareOutlined />
+                              </div>
+                              <div
+                                onClick={moveListBy(listIndex, -1)}
+                                style={{
+                                  cursor: "pointer",
+                                  display: "inline-block",
+                                  padding: "0 4px",
+                                  fontSize: "1.5em",
+                                }}
+                              >
+                                <UpSquareOutlined />
+                              </div>
+                              <div
+                                onClick={moveListBy(listIndex, 1)}
+                                style={{
+                                  cursor: "pointer",
+                                  display: "inline-block",
+                                  paddingLeft: "4px",
+                                  fontSize: "1.5em",
+                                }}
+                              >
+                                <DownSquareOutlined />
+                              </div>
+                            </>
+                          }
                         >
-                          <DeleteOutlined />
-                        </div>
-                        <div
-                          onClick={addEmptyList(listIndex)}
-                          style={{
-                            cursor: "pointer",
-                            display: "inline-block",
-                            padding: "0 4px",
-                            fontSize: "1.5em",
-                          }}
+                          <div style={{ cursor: "pointer" }} className="header">
+                            <Row>
+                              <Col span={12} className="army-list-title">
+                                <Tooltip
+                                  trigger={["focus"]}
+                                  title={"Rename your list"}
+                                  placement="topLeft"
+                                >
+                                  <TextArea
+                                    placeholder="Name your list"
+                                    value={title}
+                                    maxLength={30}
+                                    autoSize
+                                    onChange={setListTitle(listIndex)}
+                                  />
+                                </Tooltip>
+                              </Col>
+                              <Col span={12} className="faction-icons">
+                                {Object.entries(
+                                  cards.reduce(
+                                    (acc, card) => ({
+                                      ...acc,
+                                      ...(card.faction
+                                        ? {
+                                            [card.faction]:
+                                              (acc[card.faction] || 0) + 1,
+                                          }
+                                        : {}),
+                                    }),
+                                    {}
+                                  )
+                                )
+                                  .sort()
+                                  .map(([faction, count], i) => (
+                                    <Badge
+                                      size="small"
+                                      key={`badge${i}`}
+                                      count={count}
+                                      offset={[0, 23]}
+                                    >
+                                      <FactionImage faction={faction} />
+                                    </Badge>
+                                  ))}
+                              </Col>
+                            </Row>
+                          </div>
+                        </Tooltip>
+
+                        <Droppable
+                          key={`cards_${listIndex}`}
+                          droppableId={`cards_${listIndex}`}
                         >
-                          <PlusSquareOutlined />
-                        </div>
-                        <div
-                          onClick={moveListBy(listIndex, -1)}
-                          style={{
-                            cursor: "pointer",
-                            display: "inline-block",
-                            padding: "0 4px",
-                            fontSize: "1.5em",
-                          }}
-                        >
-                          <UpSquareOutlined />
-                        </div>
-                        <div
-                          onClick={moveListBy(listIndex, 1)}
-                          style={{
-                            cursor: "pointer",
-                            display: "inline-block",
-                            paddingLeft: "4px",
-                            fontSize: "1.5em",
-                          }}
-                        >
-                          <DownSquareOutlined />
-                        </div>
-                      </>
-                    }
-                  >
-                    <div style={{ cursor: "pointer" }} className="header">
-                      <Row>
-                        <Col span={12} className="army-list-title">
-                          <Tooltip
-                            trigger={["focus"]}
-                            title={"Rename your list"}
-                            placement="topLeft"
-                          >
-                            <TextArea
-                              placeholder="Name your list"
-                              value={title}
-                              maxLength={30}
-                              autoSize
-                              onChange={setListTitle(listIndex)}
-                            />
-                          </Tooltip>
-                        </Col>
-                        <Col span={12} className="faction-icons">
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                            >
+                              {cards.map(
+                                (
+                                  {
+                                    card,
+                                    hidden,
+                                    type,
+                                    title,
+                                    page,
+                                    pageId,
+                                    subtype,
+                                    faction,
+                                  },
+                                  cardIndex
+                                ) => (
+                                  <Draggable
+                                    key={`${page}_${listIndex}_${cardIndex}`}
+                                    draggableId={`${page}_${listIndex}_${cardIndex}`}
+                                    index={cardIndex}
+                                  >
+                                    {(provided, snapshot) => (
+                                      <div
+                                        className="body"
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                      >
+                                        <Tooltip
+                                          placement="top"
+                                          color="crimson"
+                                          trigger="click"
+                                          align={{ offset: [0, 4] }}
+                                          title={
+                                            <div
+                                              onClick={removeCard(
+                                                listIndex,
+                                                cardIndex
+                                              )}
+                                              style={{
+                                                cursor: "pointer",
+                                                fontSize: "1.5em",
+                                              }}
+                                            >
+                                              <DeleteOutlined />
+                                            </div>
+                                          }
+                                        >
+                                          <Card
+                                            hoverable
+                                            className="card"
+                                            onClick={toggleCard(
+                                              listIndex,
+                                              cardIndex,
+                                              pageId,
+                                              card
+                                            )}
+                                          >
+                                            <Card.Meta
+                                              title={
+                                                <Row>
+                                                  <Col span={12}>{title}</Col>
+                                                  <Col
+                                                    className="details"
+                                                    span={12}
+                                                  >
+                                                    {card === "model" &&
+                                                    subtype ? (
+                                                      <Tag
+                                                        color={
+                                                          subtypeColors[subtype]
+                                                        }
+                                                      >
+                                                        {subtype}
+                                                      </Tag>
+                                                    ) : (
+                                                      <></>
+                                                    )}
+                                                    {card === "cypher" &&
+                                                    faction ? (
+                                                      <FactionImage
+                                                        faction={faction}
+                                                      />
+                                                    ) : (
+                                                      <></>
+                                                    )}
+                                                  </Col>
+                                                </Row>
+                                              }
+                                              avatar={
+                                                <Tag
+                                                  color={
+                                                    (card === "model"
+                                                      ? typeColors
+                                                      : cypherColors)[type]
+                                                  }
+                                                >
+                                                  {type}
+                                                </Tag>
+                                              }
+                                            />
+                                            {hidden ? <></> : <p>Foo</p>}
+                                          </Card>
+                                        </Tooltip>
+                                      </div>
+                                    )}
+                                  </Draggable>
+                                )
+                              )}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+
+                        <div className="footer">
+                          <Badge size="small" key="_badge" count={cards.length}>
+                            <Tag color="default">Cards</Tag>
+                          </Badge>
                           {Object.entries(
                             cards.reduce(
                               (acc, card) => ({
                                 ...acc,
-                                ...(card.faction
-                                  ? {
-                                      [card.faction]:
-                                        (acc[card.faction] || 0) + 1,
-                                    }
-                                  : {}),
+                                [card.type]: (acc[card.type] || 0) + 1,
                               }),
                               {}
                             )
                           )
                             .sort()
-                            .map(([faction, count], i) => (
+                            .map(([type, count], i) => (
                               <Badge
                                 size="small"
                                 key={`badge${i}`}
                                 count={count}
-                                offset={[0, 23]}
                               >
-                                <FactionImage faction={faction} />
+                                <Tag
+                                  color={typeColors[type] || cypherColors[type]}
+                                >
+                                  {type}
+                                </Tag>
                               </Badge>
                             ))}
-                        </Col>
-                      </Row>
-                    </div>
-                  </Tooltip>
-
-                  <Droppable
-                    key={`cards_${listIndex}`}
-                    droppableId={`cards_${listIndex}`}
-                  >
-                    {(provided, snapshot) => (
-                      <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {cards.map(
-                          (
-                            {
-                              card,
-                              hidden,
-                              type,
-                              title,
-                              page,
-                              pageId,
-                              subtype,
-                              faction,
-                            },
-                            cardIndex
-                          ) => (
-                            <Draggable
-                              key={`${page}_${listIndex}_${cardIndex}`}
-                              draggableId={`${page}_${listIndex}_${cardIndex}`}
-                              index={cardIndex}
-                            >
-                              {(provided, snapshot) => (
-                                <div
-                                  className="body"
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  <Tooltip
-                                    placement="top"
-                                    color="crimson"
-                                    trigger="click"
-                                    align={{ offset: [0, 4] }}
-                                    title={
-                                      <div
-                                        onClick={removeCard(
-                                          listIndex,
-                                          cardIndex
-                                        )}
-                                        style={{
-                                          cursor: "pointer",
-                                          fontSize: "1.5em",
-                                        }}
-                                      >
-                                        <DeleteOutlined />
-                                      </div>
-                                    }
-                                  >
-                                    <Card
-                                      hoverable
-                                      className="card"
-                                      onClick={toggleCard(
-                                        listIndex,
-                                        cardIndex,
-                                        pageId,
-                                        card
-                                      )}
-                                    >
-                                      <Card.Meta
-                                        title={
-                                          <Row>
-                                            <Col span={12}>{title}</Col>
-                                            <Col className="details" span={12}>
-                                              {card === "model" && subtype ? (
-                                                <Tag
-                                                  color={subtypeColors[subtype]}
-                                                >
-                                                  {subtype}
-                                                </Tag>
-                                              ) : (
-                                                <></>
-                                              )}
-                                              {card === "cypher" && faction ? (
-                                                <FactionImage
-                                                  faction={faction}
-                                                />
-                                              ) : (
-                                                <></>
-                                              )}
-                                            </Col>
-                                          </Row>
-                                        }
-                                        avatar={
-                                          <Tag
-                                            color={
-                                              (card === "model"
-                                                ? typeColors
-                                                : cypherColors)[type]
-                                            }
-                                          >
-                                            {type}
-                                          </Tag>
-                                        }
-                                      />
-                                      {hidden ? <></> : <p>Foo</p>}
-                                    </Card>
-                                  </Tooltip>
-                                </div>
-                              )}
-                            </Draggable>
-                          )
-                        )}
-                        {provided.placeholder}
+                        </div>
                       </div>
-                    )}
-                  </Droppable>
-
-                  <div className="footer">
-                    <Badge size="small" key="_badge" count={cards.length}>
-                      <Tag color="default">Cards</Tag>
-                    </Badge>
-                    {Object.entries(
-                      cards.reduce(
-                        (acc, card) => ({
-                          ...acc,
-                          [card.type]: (acc[card.type] || 0) + 1,
-                        }),
-                        {}
-                      )
-                    )
-                      .sort()
-                      .map(([type, count], i) => (
-                        <Badge size="small" key={`badge${i}`} count={count}>
-                          <Tag color={typeColors[type] || cypherColors[type]}>
-                            {type}
-                          </Tag>
-                        </Badge>
-                      ))}
-                  </div>
-                </div>
-              ))}
+                    </Col>
+                  ))}
+                </Row>
+              </Layout>
             </Content>
 
             <Droppable key={"trash_footer"} droppableId={"trash_footer"}>

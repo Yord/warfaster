@@ -34,6 +34,14 @@ span.card {
   margin: 0 5px;
 }
 
+section.ant-layout {
+  background: none !important;
+}
+
+.ant-row {
+  justify-content: center;
+}
+
 .ant-layout-header .ant-col {
   padding-left: 15px;
 }
@@ -48,6 +56,7 @@ span.card {
 
 .ant-menu {
   border: 0 !important;
+  justify-content: center;
   margin: 0 auto !important;
 }
 
