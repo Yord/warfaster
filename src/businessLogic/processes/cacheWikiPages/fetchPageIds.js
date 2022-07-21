@@ -51,14 +51,19 @@ function* fetchPageIds2() {
 
     const wildCardPages = Object.values(yield select(WildCardModels.select()))
       .flat()
-      .map((_) => _.Name);
+      .map((_) => _.Name)
+      .sort(({ text, page }) => [text, page])
+      .filter(
+        ({ text, page }, index, cards) =>
+          !index || (text !== cards[index].text && page !== cards[index].page)
+      );
 
     const cypherPages = (yield select(CypherCodecs.select())).map(
       (_) => _.Cypher
     );
 
     const pages = [...factionModelPages, ...wildCardPages, ...cypherPages].sort(
-      (_) => _.text
+      (_) => _.page
     );
     const pageSlices = partitionBy(50, pages);
 
