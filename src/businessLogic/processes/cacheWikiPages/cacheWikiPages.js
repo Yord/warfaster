@@ -50,7 +50,9 @@ function* addWikiPage() {
     const page = payload.page;
     const data = payload.data;
 
-    yield put(WikiPages.addPage({ page, data }));
+    if (data) {
+      yield put(WikiPages.addPage({ page, data }));
+    }
   }
 }
 
