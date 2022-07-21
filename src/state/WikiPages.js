@@ -4,7 +4,11 @@ const WikiPages = StateShard(
   "WikiPages",
   init,
   { addPage, removePage },
-  { selectPageByPage, selectPagesByPageIds, selectPageIds }
+  {
+    selectPageByPage,
+    selectPagesByPageIds,
+    selectPageIds,
+  }
 );
 
 export { WikiPages };

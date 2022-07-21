@@ -9,6 +9,7 @@ const Lists = StateShard(
     moveListBy,
     removeCard,
     removeList,
+    set,
     setListTitle,
     toggleCard,
     updateCard,
@@ -18,61 +19,41 @@ const Lists = StateShard(
 
 export { Lists };
 
+const oneEmptyList = [
+  {
+    title: "Empty",
+    cards: [],
+  },
+];
+
 function init(state) {
   if (!state.ui) {
     state.ui = {};
   }
 
-  state.ui.lists = [
-    {
-      title: "My fancy models list",
-      cards: [
-        { page: "Vassal_Raiders", hidden: true },
-        { page: "Grafter", hidden: true },
-        { page: "Hierotheos_Raxis", hidden: true },
-        { page: "Aenigma", hidden: true },
-        { page: "Nemesis", hidden: true },
-        { page: "Cacophonic_Declination", hidden: true },
-        { page: "Relikon", hidden: true },
-        { page: "Defense_Pylon", hidden: true },
-      ],
-    },
-    {
-      title: "My fancy cyphers list",
-      cards: [
-        { page: "Acheronian_Venediction", hidden: true },
-        { page: "Aggression_Theorem", hidden: true },
-        { page: "Annihilation_Vector", hidden: true },
-        { page: "Arcane_Synthesis", hidden: true },
-        { page: "Arcanesscent_Regenerator", hidden: true },
-        { page: "Ascension_Catalyst", hidden: true },
-        { page: "Atrophic_Decomposer", hidden: true },
-        { page: "Cacophonic_Declination", hidden: true },
-      ],
-    },
-  ];
+  state.ui.lists = oneEmptyList;
 }
 
 // Actions
+
+function set(state, { lists }) {
+  state.ui.lists = lists.length > 0 ? lists : oneEmptyList;
+}
 
 function setListTitle(state, { listIndex, title }) {
   const lists = select(state);
   lists[listIndex].title = title;
 }
 
-function addCard(state, { page }) {
+function addCard(state, { pageId }) {
   const lists = select(state);
-  const card = { page, hidden: true };
+  const card = { pageId, hidden: true };
   lists[0].cards.push(card);
 }
 
 function addEmptyList(state, { listIndex }) {
   const lists = select(state);
-  const emptyList = {
-    title: "Empty list",
-    cards: [],
-  };
-  lists.splice(listIndex, 0, emptyList);
+  lists.splice(listIndex, 0, oneEmptyList[0]);
 }
 
 function removeCard(state, { source }) {
@@ -107,10 +88,10 @@ function updateCard(state, { destination, source }) {
   lists[destination.listIndex].cards.splice(destination.cardIndex, 0, card);
 }
 
-function toggleCard(state, { listIndex, cardIndex, page }) {
+function toggleCard(state, { listIndex, cardIndex, pageId }) {
   const lists = select(state);
   const card = lists[listIndex].cards[cardIndex];
-  if (card.page === page) {
+  if (card.pageId === pageId) {
     card.hidden = !card.hidden;
   }
 }

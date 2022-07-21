@@ -21,6 +21,7 @@ import { Lists } from "../state/Lists";
 import { FactionModels } from "../state/FactionModels";
 import { WildCardModels } from "../state/WildCardModels";
 import { Factions } from "../state/Factions";
+import { PageIds } from "../state/PageIds";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -354,6 +355,7 @@ function AppPresentation({
                               type,
                               title,
                               page,
+                              pageId,
                               subtype,
                               faction,
                             },
@@ -397,7 +399,7 @@ function AppPresentation({
                                       onClick={toggleCard(
                                         listIndex,
                                         cardIndex,
-                                        page,
+                                        pageId,
                                         card
                                       )}
                                     >
@@ -579,7 +581,14 @@ const App = connect(
     ),
     lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
-      cards: cards.flatMap(({ page, hidden }) => {
+      cards: cards.flatMap(({ pageId, hidden }) => {
+        const pageIdByPage = PageIds.select()(state);
+
+        const page =
+          Object.entries(pageIdByPage)
+            .filter(([_, id]) => id === pageId)
+            .map(([page, _]) => page)[0] || "";
+
         const model = Object.entries(state.data.factionModels)
           .flatMap(([faction, models]) =>
             models.map((model) => ({ ...model, faction }))
@@ -602,6 +611,7 @@ const App = connect(
               type: model.Type.text,
               title: model.Name.text,
               page: model.Name.page,
+              pageId,
               faction: model.faction,
               ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
             },
@@ -616,6 +626,7 @@ const App = connect(
               type: wildCard.Type.text,
               title: wildCard.Name.text,
               page: wildCard.Name.page,
+              pageId,
               faction: wildCard.faction,
               ...(wildCard.Subtype ? { subtype: wildCard.Subtype.text } : {}),
             },
@@ -630,6 +641,7 @@ const App = connect(
               type: cypher.Type.text,
               title: cypher.Cypher.text,
               page: cypher.Cypher.page,
+              pageId,
               ...(cypher.Faction.text === "Universal"
                 ? {}
                 : { faction: cypher.Faction.page }),
@@ -643,9 +655,9 @@ const App = connect(
     dragging: Dragging.select()(state),
   }),
   (dispatch) => ({
-    toggleCard: (listIndex, cardIndex, page, card) => {
+    toggleCard: (listIndex, cardIndex, pageId, card) => {
       return () =>
-        dispatch(Lists.toggleCard({ listIndex, cardIndex, page, card }));
+        dispatch(Lists.toggleCard({ listIndex, cardIndex, pageId, card }));
     },
     dragStart: (event) => dispatch(CardDragStarted(event)),
     dragEnd: (event) => dispatch(CardDragEnded(event)),
