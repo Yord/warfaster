@@ -162,6 +162,8 @@ function* parseListsFromQuery() {
       }));
 
       yield put(Lists.set({ lists }));
+    } else {
+      yield put(Lists.set({ lists: [] }));
     }
   }
 }
