@@ -7,8 +7,12 @@ function parseFactionModels(table) {
     [...tr.querySelectorAll("td")].map((td) => {
       const a = td.querySelector("a");
       if (a) {
+        const titleColon = a.title.split(":");
         const hrefTitle = a.href.split("title=");
-        return { text: a.innerText, page: hrefTitle[hrefTitle.length - 1] };
+        return {
+          text: titleColon[titleColon.length - 1],
+          page: hrefTitle[hrefTitle.length - 1],
+        };
       }
       return undefined;
     })
