@@ -55,7 +55,8 @@ function* fetchPageIds2() {
       .sort(({ text, page }) => [text, page])
       .filter(
         ({ text, page }, index, cards) =>
-          !index || (text !== cards[index].text && page !== cards[index].page)
+          !index ||
+          (text !== cards[index - 1].text && page !== cards[index - 1].page)
       );
 
     const cypherPages = (yield select(CypherCodecs.select())).map(
