@@ -143,8 +143,6 @@ function* parseListsFromQuery() {
   while (true) {
     const event = yield take(loadChannel);
 
-    yield put(Url.set({ url: event.target.location.href }));
-
     const urlParams = new URLSearchParams(event.target.location.search);
     const params = Object.fromEntries(urlParams);
 
