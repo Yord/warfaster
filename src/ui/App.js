@@ -557,7 +557,7 @@ function AppPresentation({
                               xl={12}
                               xxl={12}
                             >
-                              <input value={url} readOnly />
+                              <input value={url} readOnly onClick={bookmark} />
                             </Col>
                             <Col xs={3} sm={2} md={2} lg={2} xl={2} xxl={2}>
                               <BookTwoTone
