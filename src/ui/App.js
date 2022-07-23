@@ -666,84 +666,79 @@ const App = connect(
         subtypeColors[index % subtypeColors.length],
       ])
     ),
-    lists:
-      Url.select()(state) !== document.location.href
-        ? [{ title: "Empty", cards: [] }]
-        : Lists.select()(state).map(({ title, cards }) => ({
-            title,
-            cards: cards.flatMap(({ pageId, hidden }) => {
-              const pageIdByPage = PageIds.select()(state);
+    lists: Lists.select()(state).map(({ title, cards }) => ({
+      title,
+      cards: cards.flatMap(({ pageId, hidden }) => {
+        const pageIdByPage = PageIds.select()(state);
 
-              const page =
-                Object.entries(pageIdByPage)
-                  .filter(([_, id]) => id === pageId)
-                  .map(([page, _]) => page)[0] || "";
+        const page =
+          Object.entries(pageIdByPage)
+            .filter(([_, id]) => id === pageId)
+            .map(([page, _]) => page)[0] || "";
 
-              const model = Object.entries(state.data.factionModels)
-                .flatMap(([faction, models]) =>
-                  models.map((model) => ({ ...model, faction }))
-                )
-                .find(({ Name }) => Name.page === page);
-              const wildCard = Object.entries(state.data.wildCardModels)
-                .flatMap(([faction, models]) =>
-                  models.map((model) => ({ ...model, faction }))
-                )
-                .find(({ Name }) => Name.page === page);
-              const cypher = state.data.cypherCodecs.find(
-                ({ Cypher }) => Cypher.page === page
-              );
+        const model = Object.entries(state.data.factionModels)
+          .flatMap(([faction, models]) =>
+            models.map((model) => ({ ...model, faction }))
+          )
+          .find(({ Name }) => Name.page === page);
+        const wildCard = Object.entries(state.data.wildCardModels)
+          .flatMap(([faction, models]) =>
+            models.map((model) => ({ ...model, faction }))
+          )
+          .find(({ Name }) => Name.page === page);
+        const cypher = state.data.cypherCodecs.find(
+          ({ Cypher }) => Cypher.page === page
+        );
 
-              if (model) {
-                return [
-                  {
-                    card: "model",
-                    hidden,
-                    type: model.Type.text,
-                    title: model.Name.text,
-                    page: model.Name.page,
-                    pageId,
-                    faction: model.faction,
-                    ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
-                  },
-                ];
-              }
+        if (model) {
+          return [
+            {
+              card: "model",
+              hidden,
+              type: model.Type.text,
+              title: model.Name.text,
+              page: model.Name.page,
+              pageId,
+              faction: model.faction,
+              ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
+            },
+          ];
+        }
 
-              if (wildCard) {
-                return [
-                  {
-                    card: "model",
-                    hidden,
-                    type: wildCard.Type.text,
-                    title: wildCard.Name.text,
-                    page: wildCard.Name.page,
-                    pageId,
-                    faction: wildCard.faction,
-                    ...(wildCard.Subtype
-                      ? { subtype: wildCard.Subtype.text }
-                      : {}),
-                  },
-                ];
-              }
+        if (wildCard) {
+          return [
+            {
+              card: "model",
+              hidden,
+              type: wildCard.Type.text,
+              title: wildCard.Name.text,
+              page: wildCard.Name.page,
+              pageId,
+              faction: wildCard.faction,
+              ...(wildCard.Subtype ? { subtype: wildCard.Subtype.text } : {}),
+            },
+          ];
+        }
 
-              if (cypher) {
-                return [
-                  {
-                    card: "cypher",
-                    hidden,
-                    type: cypher.Type.text,
-                    title: cypher.Cypher.text,
-                    page: cypher.Cypher.page,
-                    pageId,
-                    ...(cypher.Faction.text === "Universal"
-                      ? {}
-                      : { faction: cypher.Faction.page }),
-                  },
-                ];
-              }
+        if (cypher) {
+          return [
+            {
+              card: "cypher",
+              hidden,
+              type: cypher.Type.text,
+              title: cypher.Cypher.text,
+              page: cypher.Cypher.page,
+              pageId,
+              ...(cypher.Faction.text === "Universal"
+                ? {}
+                : { faction: cypher.Faction.page }),
+            },
+          ];
+        }
 
-              return [];
-            }),
-          })),
+        return [];
+      }),
+    })),
     dragging: Dragging.select()(state),
     url: Url.select()(state),
   }),
