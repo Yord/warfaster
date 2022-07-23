@@ -1,6 +1,23 @@
 @import "~antd/dist/antd.css";
 @import "https://fonts.googleapis.com/css?family=Orbitron";
 
+.spin {
+  text-align: center;
+}
+
+.anticon-sync {
+  font-size: 5em;
+}
+
+.explain-spin {
+  margin: 2em auto 0 auto;
+  max-width: 400px;
+}
+
+.spin ul {
+  list-style: none;
+}
+
 .ant-layout-header {
   background: white !important;
   font-family: "Orbitron";

@@ -1,3 +1,4 @@
+import { AppSync } from "./AppSync";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
 import { Dragging } from "./Dragging";
@@ -12,6 +13,7 @@ import { WildCardModels } from "./WildCardModels";
 import { immer, initAll } from "./utils";
 
 const objects = [
+  AppSync,
   CypherCodecs,
   Cyphers,
   Factions,

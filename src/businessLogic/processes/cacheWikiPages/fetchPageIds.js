@@ -9,6 +9,7 @@ import {
 } from "redux-saga/effects";
 import { jsonp } from "../jsonp";
 
+import { AppSync } from "../../../state/AppSync";
 import { CypherCodecs } from "../../../state/CypherCodecs";
 import { FactionModels } from "../../../state/FactionModels";
 import { Factions } from "../../../state/Factions";
@@ -25,6 +26,16 @@ function* fetchPageIds2() {
   const cachedPageIds = yield select(PageIds.select());
 
   if (Object.keys(cachedPageIds).length === 0) {
+    yield put(
+      AppSync.addReasons({
+        reasons: [
+          "Loading factions",
+          "Loading cyphers",
+          "Loading wildcard models",
+        ],
+      })
+    );
+
     const [factionsSet] = yield all([
       take(Factions.set().type),
       take(CypherCodecs.set().type),
@@ -32,6 +43,14 @@ function* fetchPageIds2() {
     ]);
 
     const factions = Object.keys(factionsSet.payload.factions);
+
+    yield put(
+      AppSync.addReasons({
+        reasons: factions.map(
+          (faction) => `Loading ${faction.replace(/_/g, " ")}`
+        ),
+      })
+    );
 
     yield all(
       factions.map((faction) =>
@@ -68,8 +87,19 @@ function* fetchPageIds2() {
     );
     const pageSlices = partitionBy(50, pages);
 
+    yield put(
+      AppSync.addReasons({
+        reasons: pageSlices.map(
+          (_, index) => `Loading page ids ${index + 1} of ${pageSlices.length}`
+        ),
+      })
+    );
+
     for (const pages of pageSlices) {
-      yield put({ type: "PAGE_IDS_SLICE/FETCH", payload: { pages } });
+      yield put({
+        type: "PAGE_IDS_SLICE/FETCH",
+        payload: { pages, count: pageSlices.length },
+      });
     }
   }
 }
@@ -77,9 +107,12 @@ function* fetchPageIds2() {
 function* fetchPageIdsSlice() {
   const pageIdsSliceChannel = yield actionChannel("PAGE_IDS_SLICE/FETCH");
 
+  let processedCount = 0;
+
   while (true) {
     const { payload } = yield take(pageIdsSliceChannel);
     const pages = payload.pages;
+    const count = payload.count;
 
     const data = yield call(jsonp, pageInfo(pages.map((_) => _.text)));
     const titleToPageId = Object.fromEntries(
@@ -91,6 +124,12 @@ function* fetchPageIdsSlice() {
     );
 
     yield put(PageIds.addPages({ pageIdByTitle }));
+
+    processedCount += 1;
+
+    if (count === processedCount) {
+      yield put(AppSync.done());
+    }
 
     const twoSecondsInMs = 2 * 1000;
     yield delay(twoSecondsInMs);

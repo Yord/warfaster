@@ -7,6 +7,7 @@ import {
   DeleteOutlined,
   DownSquareOutlined,
   PlusSquareOutlined,
+  SyncOutlined,
   UpSquareOutlined,
 } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -24,6 +25,7 @@ import { WildCardModels } from "../state/WildCardModels";
 import { Factions } from "../state/Factions";
 import { PageIds } from "../state/PageIds";
 import { Url } from "../state/Url";
+import { AppSync } from "../state/AppSync";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -49,6 +51,8 @@ function FactionImage({ faction }) {
 }
 
 function AppPresentation({
+  initialized,
+  syncReasons,
   factionModels,
   wildCardModels,
   cypherCodecs,
@@ -114,399 +118,441 @@ function AppPresentation({
                 )}
               </Droppable>
             </Header>
-            <Content>
-              <Menu
-                id="factions"
-                openKeys={openKeys}
-                onOpenChange={onOpenChange}
-                mode="horizontal"
-                triggerSubMenuAction="click"
-              >
-                {factionModels.map(([factionName, faction, models], i) => (
-                  <SubMenu
-                    key={faction}
-                    icon={<FactionImage faction={faction} />}
+            {!initialized ? (
+              <div className="App">
+                <div className="spin">
+                  <SyncOutlined spin style={{ color: "#52c41a" }} />
+                  <div className="explain-spin">
+                    <p>Preparing the application by syncing data.</p>
+                    <p>
+                      This may take up to 30 seconds because the download speed
+                      is being reduced on purpose to avoid overloading the
+                      servers.
+                    </p>
+                    <p>
+                      Syncing data is necessary only once at the first startup.
+                    </p>
+                    <ul>
+                      {syncReasons.map((reason, index) => (
+                        <li key={`reason${index}`}>{reason}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <>
+                <Content>
+                  <Menu
+                    id="factions"
+                    openKeys={openKeys}
+                    onOpenChange={onOpenChange}
+                    mode="horizontal"
+                    triggerSubMenuAction="click"
                   >
-                    <Menu.ItemGroup title={factionName}>
-                      {models.map(({ name, page, type, subtype }, j) => {
-                        const shortName = name.slice(0, 40);
+                    {factionModels.map(([factionName, faction, models], i) => (
+                      <SubMenu
+                        key={faction}
+                        icon={<FactionImage faction={faction} />}
+                      >
+                        <Menu.ItemGroup title={factionName}>
+                          {models.map(({ name, page, type, subtype }, j) => {
+                            const shortName = name.slice(0, 40);
 
-                        return (
-                          <Menu.Item
-                            key={faction + ":" + page}
-                            page={page}
-                            title={<Tag color={typeColors[type]}>{type}</Tag>}
-                          >
-                            <span onClick={menuItemClicked(page)}>
-                              <Tag color={typeColors[type]}>{type}</Tag>
-                              <span className="card">
-                                {shortName.length === name.length ? (
-                                  shortName
-                                ) : (
-                                  <Tooltip placement="top" title={name}>
-                                    {shortName}...
-                                  </Tooltip>
-                                )}
-                              </span>
-                              {subtype ? (
-                                <Tag color={subtypeColors[subtype]}>
-                                  {subtype}
-                                </Tag>
-                              ) : (
-                                ""
-                              )}
-                            </span>
-                          </Menu.Item>
-                        );
-                      })}
-                    </Menu.ItemGroup>
-                    <Menu.ItemGroup title="Wild Cards">
-                      {(wildCardModels[faction] || [])
-                        .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
-                        .map(({ name, page, type, subtype }, j) => {
-                          const shortName = name.slice(0, 40);
-
-                          return (
-                            <Menu.Item
-                              key={faction + ":" + page}
-                              page={page}
-                              title={<Tag color={typeColors[type]}>{type}</Tag>}
-                            >
-                              <span onClick={menuItemClicked(page)}>
-                                <Tag color={typeColors[type]}>{type}</Tag>
-                                <span className="card">
-                                  {shortName.length === name.length ? (
-                                    shortName
+                            return (
+                              <Menu.Item
+                                key={faction + ":" + page}
+                                page={page}
+                                title={
+                                  <Tag color={typeColors[type]}>{type}</Tag>
+                                }
+                              >
+                                <span onClick={menuItemClicked(page)}>
+                                  <Tag color={typeColors[type]}>{type}</Tag>
+                                  <span className="card">
+                                    {shortName.length === name.length ? (
+                                      shortName
+                                    ) : (
+                                      <Tooltip placement="top" title={name}>
+                                        {shortName}...
+                                      </Tooltip>
+                                    )}
+                                  </span>
+                                  {subtype ? (
+                                    <Tag color={subtypeColors[subtype]}>
+                                      {subtype}
+                                    </Tag>
                                   ) : (
-                                    <Tooltip placement="top" title={name}>
-                                      {shortName}...
-                                    </Tooltip>
+                                    ""
                                   )}
                                 </span>
-                                {subtype ? (
-                                  <Tag color={subtypeColors[subtype]}>
-                                    {subtype}
-                                  </Tag>
-                                ) : (
-                                  ""
-                                )}
-                              </span>
-                            </Menu.Item>
-                          );
-                        })}
-                    </Menu.ItemGroup>
-                  </SubMenu>
-                ))}
-                <SubMenu
-                  key="cypher_codecs"
-                  icon={<FactionImage faction="Cyphers" />}
-                >
-                  {Object.entries(
-                    cypherCodecs.reduce(
-                      (acc, cypher) => ({
-                        ...acc,
-                        [cypher.Faction.text]: [
-                          ...(acc[cypher.Faction.text] || []),
-                          cypher,
-                        ],
-                      }),
-                      {}
-                    )
-                  )
-                    .sort()
-                    .map(([faction, cyphers], j) => (
-                      <Menu.ItemGroup title={faction} key={faction}>
-                        {cyphers
-                          .sort((c1, c2) =>
-                            c1.Type.text < c2.Type.text ? -1 : 1
-                          )
-                          .map(({ Cypher, Type }) => (
-                            <Menu.Item key={":" + Cypher.page}>
-                              <span onClick={menuItemClicked(Cypher.page)}>
-                                <Tag color={cypherColors[Type.text]}>
-                                  {Type.text}
-                                </Tag>
-                                <span className="card">{Cypher.text}</span>
-                              </span>
-                            </Menu.Item>
-                          ))}
-                      </Menu.ItemGroup>
-                    ))}
-                </SubMenu>
-              </Menu>
-            </Content>
-            <Content>
-              <Layout>
-                <Row gutter={16}>
-                  {lists.map(({ title, cards }, listIndex) => (
-                    <Col
-                      key={`lists_col_${listIndex}`}
-                      xs={24}
-                      sm={12}
-                      md={12}
-                      lg={8}
-                      xl={6}
-                      xxl={6}
-                    >
-                      <div className="cards" key={`cards${listIndex}`}>
-                        <Tooltip
-                          placement="top"
-                          color="crimson"
-                          trigger="click"
-                          align={{ offset: [0, 4] }}
-                          title={
-                            <>
-                              <div
-                                onClick={removeList(listIndex)}
-                                style={{
-                                  cursor: "pointer",
-                                  display: "inline-block",
-                                  paddingRight: "4px",
-                                  fontSize: "1.5em",
-                                }}
-                              >
-                                <DeleteOutlined />
-                              </div>
-                              <div
-                                onClick={addEmptyList(listIndex)}
-                                style={{
-                                  cursor: "pointer",
-                                  display: "inline-block",
-                                  padding: "0 4px",
-                                  fontSize: "1.5em",
-                                }}
-                              >
-                                <PlusSquareOutlined />
-                              </div>
-                              <div
-                                onClick={moveListBy(listIndex, -1)}
-                                style={{
-                                  cursor: "pointer",
-                                  display: "inline-block",
-                                  padding: "0 4px",
-                                  fontSize: "1.5em",
-                                }}
-                              >
-                                <UpSquareOutlined />
-                              </div>
-                              <div
-                                onClick={moveListBy(listIndex, 1)}
-                                style={{
-                                  cursor: "pointer",
-                                  display: "inline-block",
-                                  paddingLeft: "4px",
-                                  fontSize: "1.5em",
-                                }}
-                              >
-                                <DownSquareOutlined />
-                              </div>
-                            </>
-                          }
-                        >
-                          <div style={{ cursor: "pointer" }} className="header">
-                            <Row>
-                              <Col span={12} className="army-list-title">
-                                <Tooltip
-                                  trigger={["focus"]}
-                                  title={"Rename your list"}
-                                  placement="topLeft"
+                              </Menu.Item>
+                            );
+                          })}
+                        </Menu.ItemGroup>
+                        <Menu.ItemGroup title="Wild Cards">
+                          {(wildCardModels[faction] || [])
+                            .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
+                            .map(({ name, page, type, subtype }, j) => {
+                              const shortName = name.slice(0, 40);
+
+                              return (
+                                <Menu.Item
+                                  key={faction + ":" + page}
+                                  page={page}
+                                  title={
+                                    <Tag color={typeColors[type]}>{type}</Tag>
+                                  }
                                 >
-                                  <TextArea
-                                    placeholder="Name your list"
-                                    value={title}
-                                    maxLength={30}
-                                    autoSize
-                                    onChange={setListTitle(listIndex)}
-                                  />
-                                </Tooltip>
-                              </Col>
-                              <Col span={12} className="faction-icons">
-                                {Object.entries(
-                                  cards.reduce(
-                                    (acc, card) => ({
-                                      ...acc,
-                                      ...(card.faction
-                                        ? {
-                                            [card.faction]:
-                                              (acc[card.faction] || 0) + 1,
-                                          }
-                                        : {}),
-                                    }),
-                                    {}
-                                  )
-                                )
-                                  .sort()
-                                  .map(([faction, count], i) => (
-                                    <Badge
-                                      size="small"
-                                      key={`badge${i}`}
-                                      count={count}
-                                      offset={[0, 23]}
-                                    >
-                                      <FactionImage faction={faction} />
-                                    </Badge>
-                                  ))}
-                              </Col>
-                            </Row>
-                          </div>
-                        </Tooltip>
-
-                        <Droppable
-                          key={`cards_${listIndex}`}
-                          droppableId={`cards_${listIndex}`}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                            >
-                              {cards.map(
-                                (
-                                  {
-                                    card,
-                                    hidden,
-                                    type,
-                                    title,
-                                    page,
-                                    pageId,
-                                    subtype,
-                                    faction,
-                                  },
-                                  cardIndex
-                                ) => (
-                                  <Draggable
-                                    key={`${page}_${listIndex}_${cardIndex}`}
-                                    draggableId={`${page}_${listIndex}_${cardIndex}`}
-                                    index={cardIndex}
-                                  >
-                                    {(provided, snapshot) => (
-                                      <div
-                                        className="body"
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                      >
-                                        <Tooltip
-                                          placement="top"
-                                          color="crimson"
-                                          trigger="click"
-                                          align={{ offset: [0, 4] }}
-                                          title={
-                                            <div
-                                              onClick={removeCard(
-                                                listIndex,
-                                                cardIndex
-                                              )}
-                                              style={{
-                                                cursor: "pointer",
-                                                fontSize: "1.5em",
-                                              }}
-                                            >
-                                              <DeleteOutlined />
-                                            </div>
-                                          }
-                                        >
-                                          <Card
-                                            hoverable
-                                            className="card"
-                                            onClick={toggleCard(
-                                              listIndex,
-                                              cardIndex,
-                                              pageId,
-                                              card
-                                            )}
-                                          >
-                                            <Card.Meta
-                                              title={
-                                                <Row>
-                                                  <Col span={12}>{title}</Col>
-                                                  <Col
-                                                    className="details"
-                                                    span={12}
-                                                  >
-                                                    {card === "model" &&
-                                                    subtype ? (
-                                                      <Tag
-                                                        color={
-                                                          subtypeColors[subtype]
-                                                        }
-                                                      >
-                                                        {subtype}
-                                                      </Tag>
-                                                    ) : (
-                                                      <></>
-                                                    )}
-                                                    {card === "cypher" &&
-                                                    faction ? (
-                                                      <FactionImage
-                                                        faction={faction}
-                                                      />
-                                                    ) : (
-                                                      <></>
-                                                    )}
-                                                  </Col>
-                                                </Row>
-                                              }
-                                              avatar={
-                                                <Tag
-                                                  color={
-                                                    (card === "model"
-                                                      ? typeColors
-                                                      : cypherColors)[type]
-                                                  }
-                                                >
-                                                  {type}
-                                                </Tag>
-                                              }
-                                            />
-                                            {hidden ? <></> : <p>Foo</p>}
-                                          </Card>
+                                  <span onClick={menuItemClicked(page)}>
+                                    <Tag color={typeColors[type]}>{type}</Tag>
+                                    <span className="card">
+                                      {shortName.length === name.length ? (
+                                        shortName
+                                      ) : (
+                                        <Tooltip placement="top" title={name}>
+                                          {shortName}...
                                         </Tooltip>
-                                      </div>
+                                      )}
+                                    </span>
+                                    {subtype ? (
+                                      <Tag color={subtypeColors[subtype]}>
+                                        {subtype}
+                                      </Tag>
+                                    ) : (
+                                      ""
                                     )}
-                                  </Draggable>
-                                )
-                              )}
-                              {provided.placeholder}
-                            </div>
-                          )}
-                        </Droppable>
+                                  </span>
+                                </Menu.Item>
+                              );
+                            })}
+                        </Menu.ItemGroup>
+                      </SubMenu>
+                    ))}
+                    <SubMenu
+                      key="cypher_codecs"
+                      icon={<FactionImage faction="Cyphers" />}
+                    >
+                      {Object.entries(
+                        cypherCodecs.reduce(
+                          (acc, cypher) => ({
+                            ...acc,
+                            [cypher.Faction.text]: [
+                              ...(acc[cypher.Faction.text] || []),
+                              cypher,
+                            ],
+                          }),
+                          {}
+                        )
+                      )
+                        .sort()
+                        .map(([faction, cyphers], j) => (
+                          <Menu.ItemGroup title={faction} key={faction}>
+                            {cyphers
+                              .sort((c1, c2) =>
+                                c1.Type.text < c2.Type.text ? -1 : 1
+                              )
+                              .map(({ Cypher, Type }) => (
+                                <Menu.Item key={":" + Cypher.page}>
+                                  <span onClick={menuItemClicked(Cypher.page)}>
+                                    <Tag color={cypherColors[Type.text]}>
+                                      {Type.text}
+                                    </Tag>
+                                    <span className="card">{Cypher.text}</span>
+                                  </span>
+                                </Menu.Item>
+                              ))}
+                          </Menu.ItemGroup>
+                        ))}
+                    </SubMenu>
+                  </Menu>
+                </Content>
+                <Content>
+                  <Layout>
+                    <Row gutter={16}>
+                      {lists.map(({ title, cards }, listIndex) => (
+                        <Col
+                          key={`lists_col_${listIndex}`}
+                          xs={24}
+                          sm={12}
+                          md={12}
+                          lg={8}
+                          xl={6}
+                          xxl={6}
+                        >
+                          <div className="cards" key={`cards${listIndex}`}>
+                            <Tooltip
+                              placement="top"
+                              color="crimson"
+                              trigger="click"
+                              align={{ offset: [0, 4] }}
+                              title={
+                                <>
+                                  <div
+                                    onClick={removeList(listIndex)}
+                                    style={{
+                                      cursor: "pointer",
+                                      display: "inline-block",
+                                      paddingRight: "4px",
+                                      fontSize: "1.5em",
+                                    }}
+                                  >
+                                    <DeleteOutlined />
+                                  </div>
+                                  <div
+                                    onClick={addEmptyList(listIndex)}
+                                    style={{
+                                      cursor: "pointer",
+                                      display: "inline-block",
+                                      padding: "0 4px",
+                                      fontSize: "1.5em",
+                                    }}
+                                  >
+                                    <PlusSquareOutlined />
+                                  </div>
+                                  <div
+                                    onClick={moveListBy(listIndex, -1)}
+                                    style={{
+                                      cursor: "pointer",
+                                      display: "inline-block",
+                                      padding: "0 4px",
+                                      fontSize: "1.5em",
+                                    }}
+                                  >
+                                    <UpSquareOutlined />
+                                  </div>
+                                  <div
+                                    onClick={moveListBy(listIndex, 1)}
+                                    style={{
+                                      cursor: "pointer",
+                                      display: "inline-block",
+                                      paddingLeft: "4px",
+                                      fontSize: "1.5em",
+                                    }}
+                                  >
+                                    <DownSquareOutlined />
+                                  </div>
+                                </>
+                              }
+                            >
+                              <div
+                                style={{ cursor: "pointer" }}
+                                className="header"
+                              >
+                                <Row>
+                                  <Col span={12} className="army-list-title">
+                                    <Tooltip
+                                      trigger={["focus"]}
+                                      title={"Rename your list"}
+                                      placement="topLeft"
+                                    >
+                                      <TextArea
+                                        placeholder="Name your list"
+                                        value={title}
+                                        maxLength={30}
+                                        autoSize
+                                        onChange={setListTitle(listIndex)}
+                                      />
+                                    </Tooltip>
+                                  </Col>
+                                  <Col span={12} className="faction-icons">
+                                    {Object.entries(
+                                      cards.reduce(
+                                        (acc, card) => ({
+                                          ...acc,
+                                          ...(card.faction
+                                            ? {
+                                                [card.faction]:
+                                                  (acc[card.faction] || 0) + 1,
+                                              }
+                                            : {}),
+                                        }),
+                                        {}
+                                      )
+                                    )
+                                      .sort()
+                                      .map(([faction, count], i) => (
+                                        <Badge
+                                          size="small"
+                                          key={`badge${i}`}
+                                          count={count}
+                                          offset={[0, 23]}
+                                        >
+                                          <FactionImage faction={faction} />
+                                        </Badge>
+                                      ))}
+                                  </Col>
+                                </Row>
+                              </div>
+                            </Tooltip>
 
-                        <div className="footer">
-                          <Badge size="small" key="_badge" count={cards.length}>
-                            <Tag color="default">Cards</Tag>
-                          </Badge>
-                          {Object.entries(
-                            cards.reduce(
-                              (acc, card) => ({
-                                ...acc,
-                                [card.type]: (acc[card.type] || 0) + 1,
-                              }),
-                              {}
-                            )
-                          )
-                            .sort()
-                            .map(([type, count], i) => (
+                            <Droppable
+                              key={`cards_${listIndex}`}
+                              droppableId={`cards_${listIndex}`}
+                            >
+                              {(provided, snapshot) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.droppableProps}
+                                >
+                                  {cards.map(
+                                    (
+                                      {
+                                        card,
+                                        hidden,
+                                        type,
+                                        title,
+                                        page,
+                                        pageId,
+                                        subtype,
+                                        faction,
+                                      },
+                                      cardIndex
+                                    ) => (
+                                      <Draggable
+                                        key={`${page}_${listIndex}_${cardIndex}`}
+                                        draggableId={`${page}_${listIndex}_${cardIndex}`}
+                                        index={cardIndex}
+                                      >
+                                        {(provided, snapshot) => (
+                                          <div
+                                            className="body"
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                          >
+                                            <Tooltip
+                                              placement="top"
+                                              color="crimson"
+                                              trigger="click"
+                                              align={{ offset: [0, 4] }}
+                                              title={
+                                                <div
+                                                  onClick={removeCard(
+                                                    listIndex,
+                                                    cardIndex
+                                                  )}
+                                                  style={{
+                                                    cursor: "pointer",
+                                                    fontSize: "1.5em",
+                                                  }}
+                                                >
+                                                  <DeleteOutlined />
+                                                </div>
+                                              }
+                                            >
+                                              <Card
+                                                hoverable
+                                                className="card"
+                                                onClick={toggleCard(
+                                                  listIndex,
+                                                  cardIndex,
+                                                  pageId,
+                                                  card
+                                                )}
+                                              >
+                                                <Card.Meta
+                                                  title={
+                                                    <Row>
+                                                      <Col span={12}>
+                                                        {title}
+                                                      </Col>
+                                                      <Col
+                                                        className="details"
+                                                        span={12}
+                                                      >
+                                                        {card === "model" &&
+                                                        subtype ? (
+                                                          <Tag
+                                                            color={
+                                                              subtypeColors[
+                                                                subtype
+                                                              ]
+                                                            }
+                                                          >
+                                                            {subtype}
+                                                          </Tag>
+                                                        ) : (
+                                                          <></>
+                                                        )}
+                                                        {card === "cypher" &&
+                                                        faction ? (
+                                                          <FactionImage
+                                                            faction={faction}
+                                                          />
+                                                        ) : (
+                                                          <></>
+                                                        )}
+                                                      </Col>
+                                                    </Row>
+                                                  }
+                                                  avatar={
+                                                    <Tag
+                                                      color={
+                                                        (card === "model"
+                                                          ? typeColors
+                                                          : cypherColors)[type]
+                                                      }
+                                                    >
+                                                      {type}
+                                                    </Tag>
+                                                  }
+                                                />
+                                                {hidden ? <></> : <p>Foo</p>}
+                                              </Card>
+                                            </Tooltip>
+                                          </div>
+                                        )}
+                                      </Draggable>
+                                    )
+                                  )}
+                                  {provided.placeholder}
+                                </div>
+                              )}
+                            </Droppable>
+
+                            <div className="footer">
                               <Badge
                                 size="small"
-                                key={`badge${i}`}
-                                count={count}
+                                key="_badge"
+                                count={cards.length}
                               >
-                                <Tag
-                                  color={typeColors[type] || cypherColors[type]}
-                                >
-                                  {type}
-                                </Tag>
+                                <Tag color="default">Cards</Tag>
                               </Badge>
-                            ))}
-                        </div>
-                      </div>
-                    </Col>
-                  ))}
-                </Row>
-              </Layout>
-            </Content>
-
+                              {Object.entries(
+                                cards.reduce(
+                                  (acc, card) => ({
+                                    ...acc,
+                                    [card.type]: (acc[card.type] || 0) + 1,
+                                  }),
+                                  {}
+                                )
+                              )
+                                .sort()
+                                .map(([type, count], i) => (
+                                  <Badge
+                                    size="small"
+                                    key={`badge${i}`}
+                                    count={count}
+                                  >
+                                    <Tag
+                                      color={
+                                        typeColors[type] || cypherColors[type]
+                                      }
+                                    >
+                                      {type}
+                                    </Tag>
+                                  </Badge>
+                                ))}
+                            </div>
+                          </div>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Layout>
+                </Content>
+              </>
+            )}
             <Droppable key={"trash_footer"} droppableId={"trash_footer"}>
               {(provided, snapshot) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -608,6 +654,8 @@ const subtypeColors = ["orange", "lime", "geekblue"];
 
 const App = connect(
   (state) => ({
+    initialized: AppSync.selectDone()(state),
+    syncReasons: AppSync.selectReasons()(state),
     factionModels: Object.entries(FactionModels.select()(state))
       .sort()
       .map(([faction, models]) => [
