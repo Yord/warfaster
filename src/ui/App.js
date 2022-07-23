@@ -769,10 +769,25 @@ const App = connect(
     bookmark: () => {
       const bookmark = document.querySelector(".bookmark input");
       if (bookmark) {
-        bookmark.select();
-        try {
-          navigator.clipboard.writeText(bookmark.value);
-        } catch (e) {}
+        if (navigator.userAgent.match(/ipad|iphone/i)) {
+          const range = document.createRange();
+          range.selectNodeContents(bookmark);
+
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          bookmark.setSelectionRange(0, 999999);
+        } else {
+          bookmark.select();
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            navigator.clipboard.writeText(bookmark.value);
+          } catch (e) {}
+        } else {
+          document.execCommand("copy");
+        }
       }
     },
   })
