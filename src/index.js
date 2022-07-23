@@ -26,8 +26,13 @@ function initStore(saga) {
     ? JSON.parse(localStorage.getItem("reduxState"))
     : state;
 
+  const latestState =
+    new Date(persistedState.version) >= new Date(state.version)
+      ? persistedState
+      : state;
+
   const composedEnhancers = composeWithDevTools(applyMiddleware(saga));
-  const store = createStore(dispatch, persistedState, composedEnhancers);
+  const store = createStore(dispatch, latestState, composedEnhancers);
 
   store.subscribe(() => {
     localStorage.setItem("reduxState", JSON.stringify(store.getState()));

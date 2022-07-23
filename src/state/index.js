@@ -8,6 +8,7 @@ import { Lists } from "./Lists";
 import { Models } from "./Models";
 import { PageIds } from "./PageIds";
 import { Url } from "./Url";
+import { Version } from "./Version";
 import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
 import { immer, initAll } from "./utils";
@@ -26,6 +27,8 @@ const objects = [
   // UI
   Dragging,
   Lists,
+  // General
+  Version,
 ];
 
 const state = initAll(...objects)({});
