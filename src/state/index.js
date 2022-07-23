@@ -6,6 +6,7 @@ import { FactionModels } from "./FactionModels";
 import { Lists } from "./Lists";
 import { Models } from "./Models";
 import { PageIds } from "./PageIds";
+import { Url } from "./Url";
 import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
 import { immer, initAll } from "./utils";
@@ -17,6 +18,7 @@ const objects = [
   FactionModels,
   Models,
   PageIds,
+  Url,
   WildCardModels,
   WikiPages,
   // UI

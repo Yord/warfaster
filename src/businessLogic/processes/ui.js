@@ -5,6 +5,7 @@ import { Dragging } from "../../state/Dragging";
 import { FactionModels } from "../../state/FactionModels";
 import { Lists } from "../../state/Lists";
 import { PageIds } from "../../state/PageIds";
+import { Url } from "../../state/Url";
 import { WildCardModels } from "../../state/WildCardModels";
 import { toBase62, fromBase62 } from "./base62";
 
@@ -122,6 +123,9 @@ function* updateUrl() {
         .join("&");
       const url =
         window.location.origin + window.location.pathname + "?" + query;
+
+      yield put(Url.set({ url }));
+
       window.history.replaceState(query, "", url);
     }
   }
@@ -138,6 +142,9 @@ function* parseListsFromQuery() {
 
   while (true) {
     const event = yield take(loadChannel);
+
+    yield put(Url.set({ url: event.target.location.href }));
+
     const urlParams = new URLSearchParams(event.target.location.search);
     const params = Object.fromEntries(urlParams);
 

@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
 import {
+  BookTwoTone,
   DeleteOutlined,
   DownSquareOutlined,
   PlusSquareOutlined,
@@ -22,6 +23,7 @@ import { FactionModels } from "../state/FactionModels";
 import { WildCardModels } from "../state/WildCardModels";
 import { Factions } from "../state/Factions";
 import { PageIds } from "../state/PageIds";
+import { Url } from "../state/Url";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -64,6 +66,8 @@ function AppPresentation({
   addEmptyList,
   moveListBy,
   setListTitle,
+  url,
+  bookmark,
 }) {
   const rootSubmenuKeys = [
     ...[...factionModels, ...Object.entries(wildCardModels)].map(
@@ -527,7 +531,60 @@ function AppPresentation({
                       </div>
                     </div>
                   ) : (
-                    <Footer>Footer</Footer>
+                    <Footer>
+                      <div className="bookmark">
+                        <Layout>
+                          <Row>
+                            <Col
+                              xs={0}
+                              sm={0}
+                              md={4}
+                              lg={4}
+                              xl={4}
+                              xxl={4}
+                            ></Col>
+                            <Col xs={3} sm={2} md={2} lg={2} xl={2} xxl={2}>
+                              <BookTwoTone
+                                twoToneColor="#ff4d4f"
+                                onClick={bookmark}
+                              />
+                            </Col>
+                            <Col
+                              xs={18}
+                              sm={20}
+                              md={12}
+                              lg={12}
+                              xl={12}
+                              xxl={12}
+                            >
+                              <input value={url} readOnly />
+                            </Col>
+                            <Col xs={3} sm={2} md={2} lg={2} xl={2} xxl={2}>
+                              <BookTwoTone
+                                twoToneColor="#ff4d4f"
+                                onClick={bookmark}
+                              />
+                            </Col>
+                            <Col
+                              xs={0}
+                              sm={0}
+                              md={4}
+                              lg={4}
+                              xl={4}
+                              xxl={4}
+                            ></Col>
+                          </Row>
+                        </Layout>
+                      </div>
+                      <div className="copyright-notice">
+                        Images originating from the Privateer Press website are
+                        © 2001—2019 Privateer Press, Inc. All Rights Reserved.
+                        Privateer Press, warcaster and their logos are
+                        trademarks of Privateer Press, Inc. Images and
+                        trademarks used without permission. This website is
+                        unofficial and is not endorsed by Privateer Press.
+                      </div>
+                    </Footer>
                   )}
                 </div>
               )}
@@ -683,6 +740,7 @@ const App = connect(
       }),
     })),
     dragging: Dragging.select()(state),
+    url: Url.select()(state),
   }),
   (dispatch) => ({
     toggleCard: (listIndex, cardIndex, pageId, card) => {
@@ -708,6 +766,15 @@ const App = connect(
       dispatch(Lists.moveListBy({ listIndex, by })),
     setListTitle: (listIndex) => (event) =>
       dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
+    bookmark: () => {
+      const bookmark = document.querySelector(".bookmark input");
+      if (bookmark) {
+        bookmark.select();
+        try {
+          navigator.clipboard.writeText(bookmark.value);
+        } catch (e) {}
+      }
+    },
   })
 )(AppPresentation);
 

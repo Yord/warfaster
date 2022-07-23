@@ -188,6 +188,39 @@ li.ant-menu-item {
   margin: 16px 0;
 }
 
+.bookmark {
+  font-size: 2em;
+}
+
+.bookmark span.anticon {
+  vertical-align: middle;
+}
+
+.bookmark .ant-col:nth-of-type(2) {
+  text-align: right;
+}
+
+.bookmark .ant-col:nth-of-type(3) {
+  padding: 0 0.4em;
+}
+
+.bookmark .ant-col:nth-of-type(4) {
+  text-align: left;
+}
+
+.bookmark input {
+  display: inline-block;
+  font-size: 0.55em;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.copyright-notice {
+  font-size: 0.8em;
+  margin-top: 3em;
+  text-align: center;
+}
+
 .trash-footer {
   font-size: 3em;
   text-align: center;
