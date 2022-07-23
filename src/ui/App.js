@@ -581,8 +581,8 @@ function AppPresentation({
                               sm={0}
                               md={4}
                               lg={4}
-                              xl={4}
-                              xxl={4}
+                              xl={5}
+                              xxl={5}
                             ></Col>
                             <Col xs={3} sm={2} md={2} lg={2} xl={2} xxl={2}>
                               <BookTwoTone
@@ -595,8 +595,8 @@ function AppPresentation({
                               sm={20}
                               md={12}
                               lg={12}
-                              xl={12}
-                              xxl={12}
+                              xl={10}
+                              xxl={10}
                             >
                               <input value={url} readOnly onClick={bookmark} />
                             </Col>
@@ -611,8 +611,8 @@ function AppPresentation({
                               sm={0}
                               md={4}
                               lg={4}
-                              xl={4}
-                              xxl={4}
+                              xl={5}
+                              xxl={5}
                             ></Col>
                           </Row>
                         </Layout>
