@@ -154,8 +154,8 @@ function* parseListsFromQuery() {
     if (version === "1" && exponent) {
       const titleIndexes = Object.keys(params)
         .filter((key) => key.match(/^l[\d]+$/))
-        .map((key) => key.substring(1))
-        .sort();
+        .map((key) => parseInt(key.substring(1), 10))
+        .sort((a, b) => a - b);
 
       const lists = titleIndexes.map((index) => ({
         title: params["l" + index],
