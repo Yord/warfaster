@@ -76,9 +76,23 @@ li.ant-menu-submenu::after {
 }
 
 li.ant-menu-item {
-  height: 25px !important;
-  line-height: 25px !important;
-  padding: 0 15px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.ant-menu-title-content > span {
+  display: inline-block;
+  line-height: 30px !important;
+  padding: 0 15px 0 15px !important;
+  width: 100%;
+}
+
+.ant-menu-title-content > span .ant-tag,
+.ant-menu-title-content > span .card {
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
 }
 
 .ant-menu-title-content {

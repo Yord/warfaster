@@ -137,26 +137,25 @@ function AppPresentation({
                             page={page}
                             title={<Tag color={typeColors[type]}>{type}</Tag>}
                           >
-                            <Tag color={typeColors[type]}>{type}</Tag>
-                            <span
-                              className="card"
-                              onClick={menuItemClicked(page)}
-                            >
-                              {shortName.length === name.length ? (
-                                shortName
+                            <span onClick={menuItemClicked(page)}>
+                              <Tag color={typeColors[type]}>{type}</Tag>
+                              <span className="card">
+                                {shortName.length === name.length ? (
+                                  shortName
+                                ) : (
+                                  <Tooltip placement="top" title={name}>
+                                    {shortName}...
+                                  </Tooltip>
+                                )}
+                              </span>
+                              {subtype ? (
+                                <Tag color={subtypeColors[subtype]}>
+                                  {subtype}
+                                </Tag>
                               ) : (
-                                <Tooltip placement="top" title={name}>
-                                  {shortName}...
-                                </Tooltip>
+                                ""
                               )}
                             </span>
-                            {subtype ? (
-                              <Tag color={subtypeColors[subtype]}>
-                                {subtype}
-                              </Tag>
-                            ) : (
-                              ""
-                            )}
                           </Menu.Item>
                         );
                       })}
@@ -173,26 +172,25 @@ function AppPresentation({
                               page={page}
                               title={<Tag color={typeColors[type]}>{type}</Tag>}
                             >
-                              <Tag color={typeColors[type]}>{type}</Tag>
-                              <span
-                                className="card"
-                                onClick={menuItemClicked(page)}
-                              >
-                                {shortName.length === name.length ? (
-                                  shortName
+                              <span onClick={menuItemClicked(page)}>
+                                <Tag color={typeColors[type]}>{type}</Tag>
+                                <span className="card">
+                                  {shortName.length === name.length ? (
+                                    shortName
+                                  ) : (
+                                    <Tooltip placement="top" title={name}>
+                                      {shortName}...
+                                    </Tooltip>
+                                  )}
+                                </span>
+                                {subtype ? (
+                                  <Tag color={subtypeColors[subtype]}>
+                                    {subtype}
+                                  </Tag>
                                 ) : (
-                                  <Tooltip placement="top" title={name}>
-                                    {shortName}...
-                                  </Tooltip>
+                                  ""
                                 )}
                               </span>
-                              {subtype ? (
-                                <Tag color={subtypeColors[subtype]}>
-                                  {subtype}
-                                </Tag>
-                              ) : (
-                                ""
-                              )}
                             </Menu.Item>
                           );
                         })}
@@ -224,14 +222,11 @@ function AppPresentation({
                           )
                           .map(({ Cypher, Type }) => (
                             <Menu.Item key={":" + Cypher.page}>
-                              <Tag color={cypherColors[Type.text]}>
-                                {Type.text}
-                              </Tag>
-                              <span
-                                className="card"
-                                onClick={menuItemClicked(Cypher.page)}
-                              >
-                                {Cypher.text}
+                              <span onClick={menuItemClicked(Cypher.page)}>
+                                <Tag color={cypherColors[Type.text]}>
+                                  {Type.text}
+                                </Tag>
+                                <span className="card">{Cypher.text}</span>
                               </span>
                             </Menu.Item>
                           ))}
