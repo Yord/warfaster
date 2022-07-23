@@ -9,7 +9,7 @@ function init(state) {
     state.ui = {};
   }
 
-  state.ui.url = {};
+  state.ui.url = "";
 }
 
 // Actions
