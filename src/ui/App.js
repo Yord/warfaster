@@ -573,7 +573,7 @@ function AppPresentation({
                       </div>
                       <div className="copyright-notice">
                         Images originating from the Privateer Press website are
-                        © 2001—2019 Privateer Press, Inc. All Rights Reserved.
+                        © 2001—2022 Privateer Press, Inc. All Rights Reserved.
                         Privateer Press, warcaster and their logos are
                         trademarks of Privateer Press, Inc. Images and
                         trademarks used without permission. This website is
