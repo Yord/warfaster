@@ -120,25 +120,32 @@ function AppPresentation({
             </Header>
             {!initialized ? (
               <div className="App">
-                <div className="spin">
-                  <SyncOutlined spin style={{ color: "#52c41a" }} />
-                  <div className="explain-spin">
-                    <p>Preparing the application by syncing data.</p>
-                    <p>
-                      This may take up to 30 seconds because the download speed
-                      is being reduced on purpose to avoid overloading the
-                      servers.
-                    </p>
-                    <p>
-                      Syncing data is necessary only once at the first startup.
-                    </p>
-                    <ul>
-                      {syncReasons.map((reason, index) => (
-                        <li key={`reason${index}`}>{reason}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                <Layout>
+                  <Row>
+                    <Col xs={20} sm={20} md={12} lg={12} xl={6} xxl={6}>
+                      <div className="spin">
+                        <SyncOutlined spin style={{ color: "#52c41a" }} />
+                        <div className="explain-spin">
+                          <p>Preparing the application by syncing data.</p>
+                          <p>
+                            This may take up to 30 seconds because the download
+                            speed is being reduced on purpose to avoid
+                            overloading the servers.
+                          </p>
+                          <p>
+                            Syncing data is necessary only once at the first
+                            startup.
+                          </p>
+                          <ul>
+                            {syncReasons.map((reason, index) => (
+                              <li key={`reason${index}`}>{reason}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </Layout>
               </div>
             ) : (
               <>
