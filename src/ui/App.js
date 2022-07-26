@@ -6,6 +6,7 @@ import {
   BookTwoTone,
   DeleteOutlined,
   DownSquareOutlined,
+  PlayCircleTwoTone,
   PlusSquareOutlined,
   SyncOutlined,
   UpSquareOutlined,
@@ -70,8 +71,10 @@ function AppPresentation({
   addEmptyList,
   moveListBy,
   setListTitle,
+  setUrl,
   url,
   bookmark,
+  open,
 }) {
   const rootSubmenuKeys = [
     ...[...factionModels, ...Object.entries(wildCardModels)].map(
@@ -605,12 +608,12 @@ function AppPresentation({
                               xl={10}
                               xxl={10}
                             >
-                              <input value={url} readOnly onClick={bookmark} />
+                              <input value={url} onChange={setUrl} />
                             </Col>
                             <Col xs={3} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                              <BookTwoTone
-                                twoToneColor="#ff4d4f"
-                                onClick={bookmark}
+                              <PlayCircleTwoTone
+                                twoToneColor="#52c41a"
+                                onClick={open}
                               />
                             </Col>
                             <Col
@@ -818,6 +821,7 @@ const App = connect(
       dispatch(Lists.moveListBy({ listIndex, by })),
     setListTitle: (listIndex) => (event) =>
       dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
+    setUrl: (event) => dispatch(Url.set({ url: event.target.value })),
     bookmark: () => {
       const bookmark = document.querySelector(".bookmark input");
       if (bookmark) {
@@ -841,6 +845,10 @@ const App = connect(
           document.execCommand("copy");
         }
       }
+    },
+    open: () => {
+      const url = document.querySelector(".bookmark input").value;
+      if (url) window.open(url, "_self");
     },
   })
 )(AppPresentation);
