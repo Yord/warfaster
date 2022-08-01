@@ -13,7 +13,7 @@ import {
 } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
-import Cyphers from "./Cyphers.jpeg";
+import Cyphers from "./Cyphers.png";
 import Empyrean from "./Empyrean.png";
 import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
@@ -106,9 +106,9 @@ function AppPresentation({
                     {dragging ? (
                       <div
                         style={{
-                          backgroundColor: "rgb(235, 236, 240)",
                           animation:
                             "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
+                          color: "white",
                         }}
                       >
                         <DeleteOutlined />
@@ -375,7 +375,10 @@ function AppPresentation({
                                                 [card.faction]:
                                                   (acc[card.faction] || 0) + 1,
                                               }
-                                            : {}),
+                                            : {
+                                                Universal:
+                                                  (acc.Universal || 0) + 1,
+                                              }),
                                         }),
                                         {}
                                       )
@@ -386,7 +389,7 @@ function AppPresentation({
                                           size="small"
                                           key={`badge${i}`}
                                           count={count}
-                                          offset={[0, 23]}
+                                          offset={[0, 10]}
                                         >
                                           <FactionImage faction={faction} />
                                         </Badge>
@@ -453,7 +456,7 @@ function AppPresentation({
                                             >
                                               <Card
                                                 hoverable
-                                                className="card"
+                                                className={["card", faction]}
                                                 onClick={toggleCard(
                                                   listIndex,
                                                   cardIndex,
@@ -462,50 +465,32 @@ function AppPresentation({
                                                 )}
                                               >
                                                 <Card.Meta
-                                                  title={
-                                                    <Row>
-                                                      <Col span={12}>
-                                                        {title}
-                                                      </Col>
-                                                      <Col
-                                                        className="details"
-                                                        span={12}
-                                                      >
-                                                        {card === "model" &&
-                                                        subtype ? (
-                                                          <Tag
-                                                            color={
-                                                              subtypeColors[
-                                                                subtype
-                                                              ]
-                                                            }
-                                                          >
-                                                            {subtype}
-                                                          </Tag>
-                                                        ) : (
-                                                          <></>
-                                                        )}
-                                                        {card === "cypher" &&
-                                                        faction ? (
-                                                          <FactionImage
-                                                            faction={faction}
-                                                          />
-                                                        ) : (
-                                                          <></>
-                                                        )}
-                                                      </Col>
-                                                    </Row>
-                                                  }
                                                   avatar={
-                                                    <Tag
-                                                      color={
-                                                        (card === "model"
-                                                          ? typeColors
-                                                          : cypherColors)[type]
-                                                      }
-                                                    >
-                                                      {type}
-                                                    </Tag>
+                                                    faction ? (
+                                                      <FactionImage
+                                                        faction={faction}
+                                                        height="25px"
+                                                      />
+                                                    ) : (
+                                                      <FactionImage
+                                                        faction="Universal"
+                                                        height="25px"
+                                                      />
+                                                    )
+                                                  }
+                                                  title={
+                                                    <>
+                                                      <div>{title}</div>
+                                                      <div className="card-type">
+                                                        {(
+                                                          faction || ""
+                                                        ).replace(/_/g, " ")}
+                                                        {subtype
+                                                          ? " " + subtype
+                                                          : ""}
+                                                        {type ? " " + type : ""}
+                                                      </div>
+                                                    </>
                                                   }
                                                 />
                                                 {hidden ? <></> : <p>Foo</p>}
@@ -526,8 +511,9 @@ function AppPresentation({
                                 size="small"
                                 key="_badge"
                                 count={cards.length}
+                                offset={[10, 5]}
                               >
-                                <Tag color="default">Cards</Tag>
+                                Cards:
                               </Badge>
                               {Object.entries(
                                 cards.reduce(
@@ -544,14 +530,9 @@ function AppPresentation({
                                     size="small"
                                     key={`badge${i}`}
                                     count={count}
+                                    offset={[10, 5]}
                                   >
-                                    <Tag
-                                      color={
-                                        typeColors[type] || cypherColors[type]
-                                      }
-                                    >
-                                      {type}
-                                    </Tag>
+                                    {type}:
                                   </Badge>
                                 ))}
                             </div>
@@ -570,9 +551,9 @@ function AppPresentation({
                     <div className="trash-footer">
                       <div
                         style={{
-                          backgroundColor: "rgb(235, 236, 240)",
                           animation:
                             "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
+                          color: "white",
                         }}
                       >
                         <DeleteOutlined />
@@ -769,7 +750,7 @@ const App = connect(
               title: wildCard.Name.text,
               page: wildCard.Name.page,
               pageId,
-              faction: wildCard.faction,
+              faction: "Wild_Card",
               ...(wildCard.Subtype ? { subtype: wildCard.Subtype.text } : {}),
             },
           ];
@@ -785,7 +766,7 @@ const App = connect(
               page: cypher.Cypher.page,
               pageId,
               ...(cypher.Faction.text === "Universal"
-                ? {}
+                ? { faction: "Universal" }
                 : { faction: cypher.Faction.page }),
             },
           ];

@@ -1,6 +1,28 @@
 @import "~antd/dist/antd.css";
 @import "https://fonts.googleapis.com/css?family=Orbitron";
 
+html {
+  background-color: rgb(36, 39, 40);
+  background-size: 5px 5px;
+  background-image: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  display: block;
+}
+
+body {
+  background-color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0) 100%
+  ) !important;
+}
+
 .spin {
   text-align: center;
 }
@@ -18,7 +40,8 @@
 }
 
 .ant-layout-header {
-  background: white !important;
+  background: inherit !important;
+  color: white;
   font-family: "Orbitron";
   font-size: 3em !important;
   padding: 0.5em 0 2em 0 !important;
@@ -50,6 +73,10 @@ span.card {
   margin: 0 5px;
 }
 
+.ant-card-meta-description .ant-tag {
+  margin-right: 0.4em;
+}
+
 section.ant-layout {
   background: none !important;
 }
@@ -71,6 +98,7 @@ section.ant-layout {
 }
 
 .ant-menu {
+  background: inherit !important;
   border: 0 !important;
   justify-content: center;
   margin: 0 auto !important;
@@ -83,7 +111,12 @@ ul.ant-menu-sub {
 }
 
 li.ant-menu-submenu {
+  background-color: inherit !important;
   padding: 0 !important;
+}
+
+.ant-menu-submenu-popup {
+  background-color: white !important;
 }
 
 li.ant-menu-submenu::after {
@@ -128,7 +161,7 @@ li.ant-menu-item {
 }
 
 .ant-layout-content {
-  background: white !important;
+  background: inherit !important;
   padding: 0 15px;
 }
 
@@ -139,6 +172,7 @@ li.ant-menu-item {
 }
 
 .faction-icons {
+  margin-top: 8px;
   text-align: right;
 }
 
@@ -153,7 +187,7 @@ li.ant-menu-item {
 
 .faction-icons img {
   display: inline-block;
-  height: 38px;
+  height: 25px;
   margin: 4px 0;
 }
 
@@ -162,7 +196,7 @@ li.ant-menu-item {
 }
 
 .ant-layout-footer {
-  background: white !important;
+  background: inherit !important;
 }
 
 .card {
@@ -178,21 +212,103 @@ li.ant-menu-item {
   margin-bottom: 0 !important;
 }
 
+.cards {
+  background-color: hsl(200, 10%, 12%) !important;
+  background-size: 4px 4px !important;
+  background-image: linear-gradient(
+      0deg,
+      hsla(0, 0%, 0%, 0) 75%,
+      hsla(0, 0%, 0%, 0.4) 75%
+    ),
+    linear-gradient(90deg, hsla(0, 0%, 0%, 0) 75%, hsla(0, 0%, 0%, 0.4) 75%) !important;
+  box-shadow: inset 0 0 0 4px hsl(0deg 0% 0%),
+    inset 0 0 20px 5px hsl(0deg 0% 0% / 50%),
+    0 0px 0px 1px hsl(0deg 0% 0% / 40%), 0 1px 0 hsl(0deg 0% 100% / 25%) !important;
+}
+
 .cards .header {
   padding: 0 0 0 16px;
 }
 
 .cards .header textarea {
-  background: rgb(235, 236, 240) !important;
+  background: none !important;
+  color: white;
   font-weight: bold;
 }
 
+.cards .body .card {
+  background: linear-gradient(
+    0deg,
+    rgb(114 101 90 / 70%),
+    rgb(114 101 90 / 90%)
+  );
+  border-color: rgb(114 101 90 / 100%);
+  border-radius: 0 5px 5px 0;
+  border-right-color: #d2ccca;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: #cfc9c7 5px 0 10px, inset #cfc9c7 -2px 0 15px;
+  clip-path: polygon(0% 0%, 115% 0%, 115% 100%, 0% 100%);
+  color: #d1c5b1;
+}
+
+.cards .body .card .ant-card-meta-title {
+  color: inherit;
+  font-weight: bold;
+}
+
+.cards .body .card .ant-card-meta-title img {
+  height: 25px;
+  margin-right: 0.2em;
+}
+
+.cards .body .card .ant-card-meta-title .card-type {
+  color: white;
+  font-size: 0.8em;
+}
+
+.cards .body .card.Aeternus_Continuum {
+  background: linear-gradient(0deg, rgb(120 13 51 / 70%), rgb(120 13 51 / 90%));
+  border-color: rgb(120 13 51 / 100%);
+  border-right-color: #f25373;
+  box-shadow: #ff335a 5px 0 10px, inset #ff335a -2px 0 15px;
+  color: #f5276a;
+}
+
+.cards .body .card.Empyrean {
+  background: linear-gradient(0deg, rgb(63 43 119 / 70%), rgb(63 43 119 / 90%));
+  border-color: rgb(63 43 119 / 100%);
+  border-right-color: #ba8eca;
+  box-shadow: #a282b8 5px 0 10px, inset #a282b8 -2px 0 15px;
+  color: #be58a2;
+}
+
+.cards .body .card.Iron_Star_Alliance {
+  background: linear-gradient(0deg, rgb(109 50 23 / 70%), rgb(109 50 23 / 90%));
+  border-color: rgb(109 50 23 / 100%);
+  border-right-color: #da8a46;
+  box-shadow: #da8a46 5px 0 10px, inset #da8a46 -2px 0 15px;
+  color: #f48324;
+}
+
+.cards .body .card.Marcher_Worlds {
+  background: linear-gradient(0deg, rgb(8 65 95 / 70%), rgb(8 65 95 / 90%));
+  border-color: rgb(8 65 95);
+  border-right-color: #2fa9c9;
+  box-shadow: #63adc9 5px 0 10px, inset #63adc9 -2px 0 15px;
+  color: #2dc3e7;
+}
+
 .cards .footer {
+  color: white !important;
+  font-size: 0.8em;
   padding: 6px 6px;
 }
 
 .cards .footer .ant-badge {
-  margin: 6px 6px;
+  color: inherit;
+  font-size: inherit;
+  margin: 6px 12px;
 }
 
 .card .ant-card-meta-title {
@@ -246,6 +362,7 @@ li.ant-menu-item {
 }
 
 .copyright-notice {
+  color: white;
   font-size: 0.8em;
   margin-top: 3em;
   text-align: center;
