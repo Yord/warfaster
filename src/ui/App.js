@@ -353,7 +353,7 @@ function AppPresentation({
                                 className="header"
                               >
                                 <Row>
-                                  <Col span={12} className="army-list-title">
+                                  <Col span={16} className="army-list-title">
                                     <Tooltip
                                       trigger={["focus"]}
                                       title={"Rename your list"}
@@ -368,7 +368,7 @@ function AppPresentation({
                                       />
                                     </Tooltip>
                                   </Col>
-                                  <Col span={12} className="faction-icons">
+                                  <Col span={8} className="faction-icons">
                                     {Object.entries(
                                       cards.reduce(
                                         (acc, card) => ({
