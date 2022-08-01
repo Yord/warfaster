@@ -593,43 +593,20 @@ function AppPresentation({
                         <Layout>
                           <Row>
                             <Col
-                              xs={0}
-                              sm={0}
-                              md={4}
-                              lg={4}
-                              xl={5}
-                              xxl={5}
-                            ></Col>
-                            <Col xs={3} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                              <BookTwoTone
-                                twoToneColor="#ff4d4f"
+                              xs={24}
+                              sm={24}
+                              md={18}
+                              lg={18}
+                              xl={16}
+                              xxl={16}
+                            >
+                              <input
+                                value={url}
+                                onChange={setUrl}
+                                onKeyDown={open}
                                 onClick={bookmark}
                               />
                             </Col>
-                            <Col
-                              xs={18}
-                              sm={20}
-                              md={12}
-                              lg={12}
-                              xl={10}
-                              xxl={10}
-                            >
-                              <input value={url} onChange={setUrl} />
-                            </Col>
-                            <Col xs={3} sm={2} md={2} lg={2} xl={2} xxl={2}>
-                              <PlayCircleTwoTone
-                                twoToneColor="#52c41a"
-                                onClick={open}
-                              />
-                            </Col>
-                            <Col
-                              xs={0}
-                              sm={0}
-                              md={4}
-                              lg={4}
-                              xl={5}
-                              xxl={5}
-                            ></Col>
                           </Row>
                         </Layout>
                       </div>
@@ -842,19 +819,13 @@ const App = connect(
         } else {
           bookmark.select();
         }
-
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          try {
-            navigator.clipboard.writeText(bookmark.value);
-          } catch (e) {}
-        } else {
-          document.execCommand("copy");
-        }
       }
     },
-    open: () => {
-      const url = document.querySelector(".bookmark input").value;
-      if (url) window.open(url, "_self");
+    open: (event) => {
+      if (event.key === "Enter") {
+        const url = document.querySelector(".bookmark input").value;
+        if (url) window.open(url, "_self");
+      }
     },
   })
 )(AppPresentation);
