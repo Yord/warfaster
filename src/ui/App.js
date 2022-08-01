@@ -117,7 +117,9 @@ function AppPresentation({
                         <DeleteOutlined />
                       </div>
                     ) : (
-                      "WARFASTER"
+                      <a className="logo" href="/">
+                        WARFASTER
+                      </a>
                     )}
                     {provided.placeholder}
                   </div>

@@ -31,6 +31,11 @@ body {
   ) !important;
 }
 
+a.logo,
+a.logo:hover {
+  color: white !important;
+}
+
 .spin {
   text-align: center;
 }
