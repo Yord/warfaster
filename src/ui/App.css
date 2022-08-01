@@ -268,7 +268,8 @@ li.ant-menu-item {
   font-size: 0.8em;
 }
 
-.cards .body .card.Aeternus_Continuum {
+.cards .body .Aeternus_Continuum,
+.cards .body .card.Fury {
   background: linear-gradient(0deg, rgb(120 13 51 / 70%), rgb(120 13 51 / 90%));
   border-color: rgb(120 13 51 / 100%);
   border-right-color: #f25373;
@@ -276,7 +277,8 @@ li.ant-menu-item {
   color: #f5276a;
 }
 
-.cards .body .card.Empyrean {
+.cards .body .Empyrean,
+.cards .body .card.Harmonic {
   background: linear-gradient(0deg, rgb(63 43 119 / 70%), rgb(63 43 119 / 90%));
   border-color: rgb(63 43 119 / 100%);
   border-right-color: #ba8eca;
@@ -284,7 +286,8 @@ li.ant-menu-item {
   color: #be58a2;
 }
 
-.cards .body .card.Iron_Star_Alliance {
+.cards .body .Iron_Star_Alliance,
+.cards .body .card.Geometric {
   background: linear-gradient(0deg, rgb(109 50 23 / 70%), rgb(109 50 23 / 90%));
   border-color: rgb(109 50 23 / 100%);
   border-right-color: #da8a46;
@@ -292,7 +295,8 @@ li.ant-menu-item {
   color: #f48324;
 }
 
-.cards .body .card.Marcher_Worlds {
+.cards .body .Marcher_Worlds,
+.cards .body .card.Overdrive {
   background: linear-gradient(0deg, rgb(8 65 95 / 70%), rgb(8 65 95 / 90%));
   border-color: rgb(8 65 95);
   border-right-color: #2fa9c9;

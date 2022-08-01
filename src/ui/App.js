@@ -459,7 +459,11 @@ function AppPresentation({
                                             >
                                               <Card
                                                 hoverable
-                                                className={["card", faction]}
+                                                className={[
+                                                  "card",
+                                                  faction,
+                                                  type,
+                                                ]}
                                                 onClick={toggleCard(
                                                   listIndex,
                                                   cardIndex,
@@ -470,15 +474,19 @@ function AppPresentation({
                                                 <Card.Meta
                                                   avatar={
                                                     faction ? (
-                                                      <FactionImage
-                                                        faction={faction}
-                                                        height="25px"
-                                                      />
+                                                      <div
+                                                        style={{
+                                                          height: "25px",
+                                                          width: "35px",
+                                                          textAlign: "center",
+                                                        }}
+                                                      >
+                                                        <FactionImage
+                                                          faction={faction}
+                                                        />
+                                                      </div>
                                                     ) : (
-                                                      <FactionImage
-                                                        faction="Universal"
-                                                        height="25px"
-                                                      />
+                                                      <FactionImage faction="Universal" />
                                                     )
                                                   }
                                                   title={
