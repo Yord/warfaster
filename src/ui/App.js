@@ -16,6 +16,7 @@ import Aeternus_Continuum from "./Aeternus_Continuum.png";
 import Cyphers from "./Cyphers.png";
 import Empyrean from "./Empyrean.png";
 import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
+import Lost_Legion from "./Lost_Legion.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
 import Wild_Card from "./Wild_Card.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
@@ -40,6 +41,8 @@ function FactionImage({ faction }) {
       return <img src={Empyrean} alt={faction} height="35px" />;
     case "Iron_Star_Alliance":
       return <img src={Iron_Star_Alliance} alt={faction} height="35px" />;
+    case "Lost_Legion":
+      return <img src={Lost_Legion} alt={faction} height="35px" />;
     case "Marcher_Worlds":
       return <img src={Marcher_Worlds} alt={faction} height="35px" />;
     case "Wild_Card":
@@ -513,7 +516,7 @@ function AppPresentation({
                                 count={cards.length}
                                 offset={[10, 5]}
                               >
-                                Cards:
+                                Card:
                               </Badge>
                               {Object.entries(
                                 cards.reduce(
