@@ -548,20 +548,34 @@ function AppPresentation({
               {(provided, snapshot) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   {dragging ? (
-                    <div className="trash-footer">
-                      <div
-                        style={{
-                          animation:
-                            "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
-                          color: "white",
-                        }}
-                      >
-                        <DeleteOutlined />
-                        <div style={{ display: "none" }}>
-                          {provided.placeholder}
+                    <>
+                      <div className="trash-footer">
+                        <div
+                          style={{
+                            animation:
+                              "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
+                            color: "white",
+                          }}
+                        >
+                          <DeleteOutlined />
+                          <div style={{ display: "none" }}>
+                            {provided.placeholder}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                      <Footer>
+                        <div className="copyright-notice">
+                          Images originating from the Privateer Press website
+                          are © 2001—
+                          <>{new Date().getFullYear()}</> Privateer Press, Inc.
+                          All Rights Reserved. Privateer Press, warcaster and
+                          their logos are trademarks of Privateer Press, Inc.
+                          Images and trademarks used without permission. This
+                          website is unofficial and is not endorsed by Privateer
+                          Press.
+                        </div>
+                      </Footer>
+                    </>
                   ) : (
                     <Footer>
                       <div className="bookmark">

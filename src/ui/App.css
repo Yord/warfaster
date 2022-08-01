@@ -14,6 +14,12 @@ html {
 }
 
 body {
+  background: transparent;
+}
+
+.ant-layout-header,
+.ant-layout-content,
+.ant-layout-footer {
   background-color: transparent;
   background-image: linear-gradient(
     90deg,
@@ -40,7 +46,6 @@ body {
 }
 
 .ant-layout-header {
-  background: inherit !important;
   color: white;
   font-family: "Orbitron";
   font-size: 3em !important;
@@ -98,7 +103,7 @@ section.ant-layout {
 }
 
 .ant-menu {
-  background: inherit !important;
+  background: transparent !important;
   border: 0 !important;
   justify-content: center;
   margin: 0 auto !important;
@@ -161,7 +166,6 @@ li.ant-menu-item {
 }
 
 .ant-layout-content {
-  background: inherit !important;
   padding: 0 15px;
 }
 
@@ -193,10 +197,6 @@ li.ant-menu-item {
 
 .ant-badge-multiple-words {
   padding: 0 4px;
-}
-
-.ant-layout-footer {
-  background: inherit !important;
 }
 
 .card {
@@ -370,6 +370,7 @@ li.ant-menu-item {
 
 .trash-footer {
   font-size: 3em;
+  margin-bottom: 0;
   text-align: center;
 }
 
