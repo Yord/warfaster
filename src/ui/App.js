@@ -354,19 +354,13 @@ function AppPresentation({
                               >
                                 <Row>
                                   <Col span={16} className="army-list-title">
-                                    <Tooltip
-                                      trigger={["focus"]}
-                                      title={"Rename your list"}
-                                      placement="topLeft"
-                                    >
-                                      <TextArea
-                                        placeholder="Name your list"
-                                        value={title}
-                                        maxLength={30}
-                                        autoSize
-                                        onChange={setListTitle(listIndex)}
-                                      />
-                                    </Tooltip>
+                                    <TextArea
+                                      placeholder="Name your list"
+                                      value={title}
+                                      maxLength={30}
+                                      autoSize
+                                      onChange={setListTitle(listIndex)}
+                                    />
                                   </Col>
                                   <Col span={8} className="faction-icons">
                                     {Object.entries(
