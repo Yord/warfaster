@@ -511,36 +511,40 @@ function AppPresentation({
                               )}
                             </Droppable>
 
-                            <div className="footer">
-                              <Badge
-                                size="small"
-                                key="_badge"
-                                count={cards.length}
-                                offset={[10, 5]}
-                              >
-                                Card:
-                              </Badge>
-                              {Object.entries(
-                                cards.reduce(
-                                  (acc, card) => ({
-                                    ...acc,
-                                    [card.type]: (acc[card.type] || 0) + 1,
-                                  }),
-                                  {}
+                            {cards.length > 0 ? (
+                              <div className="footer">
+                                <Badge
+                                  size="small"
+                                  key="_badge"
+                                  count={cards.length}
+                                  offset={[10, 5]}
+                                >
+                                  Card:
+                                </Badge>
+                                {Object.entries(
+                                  cards.reduce(
+                                    (acc, card) => ({
+                                      ...acc,
+                                      [card.type]: (acc[card.type] || 0) + 1,
+                                    }),
+                                    {}
+                                  )
                                 )
-                              )
-                                .sort()
-                                .map(([type, count], i) => (
-                                  <Badge
-                                    size="small"
-                                    key={`badge${i}`}
-                                    count={count}
-                                    offset={[10, 5]}
-                                  >
-                                    {type}:
-                                  </Badge>
-                                ))}
-                            </div>
+                                  .sort()
+                                  .map(([type, count], i) => (
+                                    <Badge
+                                      size="small"
+                                      key={`badge${i}`}
+                                      count={count}
+                                      offset={[10, 5]}
+                                    >
+                                      {type}:
+                                    </Badge>
+                                  ))}
+                              </div>
+                            ) : (
+                              <></>
+                            )}
                           </div>
                         </Col>
                       ))}
