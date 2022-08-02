@@ -3,10 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
 import {
-  BookTwoTone,
   DeleteOutlined,
   DownSquareOutlined,
-  PlayCircleTwoTone,
   PlusSquareOutlined,
   SyncOutlined,
   UpSquareOutlined,
