@@ -346,7 +346,7 @@ function AppPresentation({
                               trigger="click"
                               align={{ offset: [0, 17] }}
                               title={
-                                <div class="ant-tooltip-inner-box">
+                                <div className="ant-tooltip-inner-box">
                                   <div
                                     onClick={removeList(listIndex)}
                                     style={{
