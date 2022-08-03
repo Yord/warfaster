@@ -29,9 +29,18 @@ function* fetchPageIds2() {
     yield put(
       AppSync.addReasons({
         reasons: [
-          "Loading factions",
-          "Loading cyphers",
-          "Loading wildcard models",
+          {
+            reason: "Loading factions",
+            description: "Load available Warcaster factions",
+          },
+          {
+            reason: "Loading cyphers",
+            description: "Load available Cypher Codecs",
+          },
+          {
+            reason: "Loading wildcard models",
+            description: "Load available Wild Cards",
+          },
         ],
       })
     );
@@ -46,9 +55,10 @@ function* fetchPageIds2() {
 
     yield put(
       AppSync.addReasons({
-        reasons: factions.map(
-          (faction) => `Loading ${faction.replace(/_/g, " ")}`
-        ),
+        reasons: factions.map((faction) => ({
+          reason: `Loading ${faction.replace(/_/g, " ")}`,
+          description: `Used to build ${faction.replace(/_/g, " ")} menu`,
+        })),
       })
     );
 
@@ -89,9 +99,11 @@ function* fetchPageIds2() {
 
     yield put(
       AppSync.addReasons({
-        reasons: pageSlices.map(
-          (_, index) => `Loading page ids ${index + 1} of ${pageSlices.length}`
-        ),
+        reasons: pageSlices.map((_, index) => ({
+          reason: `Loading page ids ${index + 1} of ${pageSlices.length}`,
+          description:
+            "Card lists are encoded in the URL using unique wiki page ids",
+        })),
       })
     );
 

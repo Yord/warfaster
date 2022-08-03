@@ -125,34 +125,83 @@ function AppPresentation({
               </Droppable>
             </Header>
             {!initialized ? (
-              <div className="App">
+              <Content>
                 <Layout>
                   <Row>
                     <Col xs={20} sm={20} md={12} lg={12} xl={6} xxl={6}>
-                      <div className="spin">
-                        <SyncOutlined spin style={{ color: "#52c41a" }} />
-                        <div className="explain-spin">
-                          <p>Preparing the application by syncing data.</p>
-                          <p>
-                            This may take up to 30 seconds because the download
-                            speed is being reduced on purpose to avoid
-                            overloading the servers.
-                          </p>
-                          <p>
-                            Syncing data is necessary only once at the first
-                            startup.
-                          </p>
-                          <ul>
-                            {syncReasons.map((reason, index) => (
-                              <li key={`reason${index}`}>{reason}</li>
-                            ))}
-                          </ul>
+                      <div className="cards" key="cards0">
+                        <div style={{ cursor: "pointer" }} className="header">
+                          <Row>
+                            <Col span={16} className="army-list-title">
+                              <TextArea
+                                value={"Setting up Warfaster"}
+                                maxLength={30}
+                                autoSize
+                              />
+                            </Col>
+                            <Col span={8} className="faction-icons">
+                              <SyncOutlined
+                                spin
+                                style={{
+                                  color: "#d1c5b1",
+                                  fontSize: "23px",
+                                  margin: "3px 10px 0 0",
+                                }}
+                              />
+                            </Col>
+                          </Row>
+                        </div>
+
+                        <div>
+                          {syncReasons.map(({ reason, description }, index) => (
+                            <div className="body" key={`reason${index}`}>
+                              <Card hoverable className="card">
+                                <Card.Meta
+                                  avatar={
+                                    <div
+                                      style={{
+                                        height: "25px",
+                                        width: "35px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      <SyncOutlined
+                                        spin
+                                        style={{
+                                          color: "#d1c5b1",
+                                          fontSize: "35px",
+                                        }}
+                                      />
+                                    </div>
+                                  }
+                                  title={
+                                    <>
+                                      <div>{reason}</div>
+                                      <div className="card-type">
+                                        {description}
+                                      </div>
+                                    </>
+                                  }
+                                />
+                              </Card>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="footer">
+                          <Badge
+                            size="small"
+                            key="_badge"
+                            count={syncReasons.length}
+                            offset={[10, 5]}
+                          >
+                            Loading:
+                          </Badge>
                         </div>
                       </div>
                     </Col>
                   </Row>
                 </Layout>
-              </div>
+              </Content>
             ) : (
               <>
                 <Content>
