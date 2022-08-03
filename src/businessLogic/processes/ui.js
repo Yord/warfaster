@@ -108,8 +108,8 @@ function* updateUrl() {
       const state = lists.reduce(
         (state, list, index) => ({
           ...state,
-          [`l${index}`]: list.title,
-          [`c${index}`]: list.cards.reduce(
+          [`t${index}`]: list.title,
+          [`l${index}`]: list.cards.reduce(
             (acc, card) =>
               acc + toBase62(card.pageId).padStart(codeLength, "0"),
             ""
@@ -151,13 +151,13 @@ function* parseListsFromQuery() {
 
     if (version === "1" && exponent) {
       const titleIndexes = Object.keys(params)
-        .filter((key) => key.match(/^l[\d]+$/))
+        .filter((key) => key.match(/^t[\d]+$/))
         .map((key) => parseInt(key.substring(1), 10))
         .sort((a, b) => a - b);
 
       const lists = titleIndexes.map((index) => ({
-        title: params["l" + index],
-        cards: partitionBy(exponent, params["c" + index] || "")
+        title: params["t" + index],
+        cards: partitionBy(exponent, params["l" + index] || "")
           .map((pageId) => pageId.replace(/^0+/, "") || "0")
           .map(fromBase62)
           .map((pageId) => ({
