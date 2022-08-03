@@ -342,11 +342,11 @@ function AppPresentation({
                           <div className="cards" key={`cards${listIndex}`}>
                             <Tooltip
                               placement="top"
-                              color="crimson"
+                              color="transparent"
                               trigger="click"
-                              align={{ offset: [0, 4] }}
+                              align={{ offset: [0, 17] }}
                               title={
-                                <>
+                                <div class="ant-tooltip-inner-box">
                                   <div
                                     onClick={removeList(listIndex)}
                                     style={{
@@ -391,7 +391,7 @@ function AppPresentation({
                                   >
                                     <DownSquareOutlined />
                                   </div>
-                                </>
+                                </div>
                               }
                             >
                               <div
@@ -477,76 +477,56 @@ function AppPresentation({
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
                                           >
-                                            <Tooltip
-                                              placement="top"
-                                              color="crimson"
-                                              trigger="click"
-                                              align={{ offset: [0, 4] }}
-                                              title={
-                                                <div
-                                                  onClick={removeCard(
-                                                    listIndex,
-                                                    cardIndex
-                                                  )}
-                                                  style={{
-                                                    cursor: "pointer",
-                                                    fontSize: "1.5em",
-                                                  }}
-                                                >
-                                                  <DeleteOutlined />
-                                                </div>
-                                              }
+                                            <Card
+                                              hoverable
+                                              className={[
+                                                "card",
+                                                faction,
+                                                type,
+                                              ]}
+                                              onClick={toggleCard(
+                                                listIndex,
+                                                cardIndex,
+                                                pageId,
+                                                card
+                                              )}
                                             >
-                                              <Card
-                                                hoverable
-                                                className={[
-                                                  "card",
-                                                  faction,
-                                                  type,
-                                                ]}
-                                                onClick={toggleCard(
-                                                  listIndex,
-                                                  cardIndex,
-                                                  pageId,
-                                                  card
-                                                )}
-                                              >
-                                                <Card.Meta
-                                                  avatar={
-                                                    faction ? (
-                                                      <div
-                                                        style={{
-                                                          height: "25px",
-                                                          width: "35px",
-                                                          textAlign: "center",
-                                                        }}
-                                                      >
-                                                        <FactionImage
-                                                          faction={faction}
-                                                        />
-                                                      </div>
-                                                    ) : (
-                                                      <FactionImage faction="Universal" />
-                                                    )
-                                                  }
-                                                  title={
-                                                    <>
-                                                      <div>{title}</div>
-                                                      <div className="card-type">
-                                                        {(
-                                                          faction || ""
-                                                        ).replace(/_/g, " ")}
-                                                        {subtype
-                                                          ? " " + subtype
-                                                          : ""}
-                                                        {type ? " " + type : ""}
-                                                      </div>
-                                                    </>
-                                                  }
-                                                />
-                                                {hidden ? <></> : <p>Foo</p>}
-                                              </Card>
-                                            </Tooltip>
+                                              <Card.Meta
+                                                avatar={
+                                                  faction ? (
+                                                    <div
+                                                      style={{
+                                                        height: "25px",
+                                                        width: "35px",
+                                                        textAlign: "center",
+                                                      }}
+                                                    >
+                                                      <FactionImage
+                                                        faction={faction}
+                                                      />
+                                                    </div>
+                                                  ) : (
+                                                    <FactionImage faction="Universal" />
+                                                  )
+                                                }
+                                                title={
+                                                  <>
+                                                    <div>{title}</div>
+                                                    <div className="card-type">
+                                                      {(faction || "").replace(
+                                                        /_/g,
+                                                        " "
+                                                      )}
+                                                      {subtype
+                                                        ? " " + subtype
+                                                        : ""}
+                                                      {type ? " " + type : ""}
+                                                    </div>
+                                                  </>
+                                                }
+                                              />
+                                              {hidden ? <></> : <p>Foo</p>}
+                                            </Card>
                                           </div>
                                         )}
                                       </Draggable>

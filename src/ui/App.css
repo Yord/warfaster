@@ -215,8 +215,23 @@ li.ant-menu-item {
   margin-bottom: 0 !important;
 }
 
+.ant-tooltip-inner {
+  padding: 0 !important;
+}
+
+.ant-tooltip-inner div.ant-tooltip-inner-box {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 40px, 0% 40px) !important;
+  padding: 6px 8px;
+}
+
+.ant-tooltip-inner .ant-tooltip-inner-box-card {
+  background: crimson;
+  padding: 6px 8px;
+}
+
 .cards,
-.ant-menu-submenu-popup {
+.ant-menu-submenu-popup,
+.ant-tooltip-inner div.ant-tooltip-inner-box {
   background-color: hsl(200, 10%, 12%) !important;
   background-size: 4px 4px !important;
   background-image: linear-gradient(
