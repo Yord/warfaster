@@ -228,9 +228,9 @@ function AppPresentation({
                                 title={
                                   <Tag color={typeColors[type]}>{type}</Tag>
                                 }
+                                className={faction}
                               >
                                 <span onClick={menuItemClicked(page)}>
-                                  <Tag color={typeColors[type]}>{type}</Tag>
                                   <span className="card">
                                     {shortName.length === name.length ? (
                                       shortName
@@ -240,19 +240,16 @@ function AppPresentation({
                                       </Tooltip>
                                     )}
                                   </span>
-                                  {subtype ? (
-                                    <Tag color={subtypeColors[subtype]}>
-                                      {subtype}
-                                    </Tag>
-                                  ) : (
-                                    ""
-                                  )}
+                                  <span className="types">
+                                    {subtype ? subtype : ""}
+                                    {type ? (subtype ? " " : "") + type : ""}
+                                  </span>
                                 </span>
                               </Menu.Item>
                             );
                           })}
                         </Menu.ItemGroup>
-                        <Menu.ItemGroup title="Wild Cards">
+                        <Menu.ItemGroup title={`${factionName} Wild Cards`}>
                           {(wildCardModels[faction] || [])
                             .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
                             .map(({ name, page, type, subtype }, j) => {
@@ -267,7 +264,6 @@ function AppPresentation({
                                   }
                                 >
                                   <span onClick={menuItemClicked(page)}>
-                                    <Tag color={typeColors[type]}>{type}</Tag>
                                     <span className="card">
                                       {shortName.length === name.length ? (
                                         shortName
@@ -277,13 +273,10 @@ function AppPresentation({
                                         </Tooltip>
                                       )}
                                     </span>
-                                    {subtype ? (
-                                      <Tag color={subtypeColors[subtype]}>
-                                        {subtype}
-                                      </Tag>
-                                    ) : (
-                                      ""
-                                    )}
+                                    <span className="types">
+                                      {subtype ? subtype : ""}
+                                      {type ? (subtype ? " " : "") + type : ""}
+                                    </span>
                                   </span>
                                 </Menu.Item>
                               );
@@ -309,18 +302,22 @@ function AppPresentation({
                       )
                         .sort()
                         .map(([faction, cyphers], j) => (
-                          <Menu.ItemGroup title={faction} key={faction}>
+                          <Menu.ItemGroup
+                            title={`${faction} Cyphers`}
+                            key={faction}
+                          >
                             {cyphers
                               .sort((c1, c2) =>
                                 c1.Type.text < c2.Type.text ? -1 : 1
                               )
                               .map(({ Cypher, Type }) => (
-                                <Menu.Item key={":" + Cypher.page}>
+                                <Menu.Item
+                                  key={":" + Cypher.page}
+                                  className={Type.text}
+                                >
                                   <span onClick={menuItemClicked(Cypher.page)}>
-                                    <Tag color={cypherColors[Type.text]}>
-                                      {Type.text}
-                                    </Tag>
                                     <span className="card">{Cypher.text}</span>
+                                    <span className="types">{Type.text}</span>
                                   </span>
                                 </Menu.Item>
                               ))}

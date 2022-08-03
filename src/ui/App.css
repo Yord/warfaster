@@ -127,10 +127,6 @@ li.ant-menu-submenu {
   padding: 0 !important;
 }
 
-.ant-menu-submenu-popup {
-  background-color: white !important;
-}
-
 li.ant-menu-submenu::after {
   transition: none !important;
   border-bottom: 0 !important;
@@ -138,15 +134,15 @@ li.ant-menu-submenu::after {
 
 li.ant-menu-item {
   height: 30px !important;
-  line-height: 30px !important;
+  line-height: 25px !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
 .ant-menu-title-content > span {
   display: inline-block;
-  line-height: 30px !important;
-  padding: 0 15px 0 15px !important;
+  line-height: 20px !important;
+  padding: 0 5px 5px 5px !important;
   width: 100%;
 }
 
@@ -219,7 +215,8 @@ li.ant-menu-item {
   margin-bottom: 0 !important;
 }
 
-.cards {
+.cards,
+.ant-menu-submenu-popup {
   background-color: hsl(200, 10%, 12%) !important;
   background-size: 4px 4px !important;
   background-image: linear-gradient(
@@ -233,6 +230,11 @@ li.ant-menu-item {
     0 0px 0px 1px hsl(0deg 0% 0% / 40%), 0 1px 0 hsl(0deg 0% 100% / 25%) !important;
 }
 
+.ant-menu-item-group-title {
+  color: white;
+  font-weight: bold;
+}
+
 .cards .header {
   padding: 0 0 0 16px;
 }
@@ -243,6 +245,13 @@ li.ant-menu-item {
   font-weight: bold;
 }
 
+.ant-menu-item-group-list > li {
+  clip-path: polygon(0% 0%, 105% 0%, 105% 100%, 0% 100%) !important;
+  border-radius: 0 !important;
+  margin: 3px 10px 3px 6px !important;
+}
+
+.ant-menu-item-group-list > li,
 .cards .body .card {
   background: linear-gradient(
     0deg,
@@ -256,7 +265,18 @@ li.ant-menu-item {
   border-width: 2px;
   box-shadow: #cfc9c7 5px 0 10px, inset #cfc9c7 -2px 0 15px;
   clip-path: polygon(0% 0%, 115% 0%, 115% 100%, 0% 100%);
-  color: #d1c5b1;
+  color: #d1c5b1 !important;
+}
+
+.ant-menu-item-group-list .types {
+  color: white;
+  font-family: Orbitron;
+  font-size: 0.7em;
+}
+
+.ant-menu-title-content .card {
+  font-family: Orbitron;
+  font-size: 0.8em;
 }
 
 .cards .body .card .ant-card-meta-title {
@@ -274,40 +294,48 @@ li.ant-menu-item {
   font-size: 0.8em;
 }
 
-.cards .body .Aeternus_Continuum,
-.cards .body .card.Fury {
+.cards .body div.Aeternus_Continuum,
+li.Aeternus_Continuum,
+.cards .body .card.Fury,
+li.Fury {
   background: linear-gradient(0deg, rgb(120 13 51 / 70%), rgb(120 13 51 / 90%));
   border-color: rgb(120 13 51 / 100%);
   border-right-color: #f25373;
   box-shadow: #ff335a 5px 0 10px, inset #ff335a -2px 0 15px;
-  color: #f5276a;
+  color: #f5276a !important;
 }
 
-.cards .body .Empyrean,
-.cards .body .card.Harmonic {
+.cards .body div.Empyrean,
+li.Empyrean,
+.cards .body .card.Harmonic,
+li.Harmonic {
   background: linear-gradient(0deg, rgb(63 43 119 / 70%), rgb(63 43 119 / 90%));
   border-color: rgb(63 43 119 / 100%);
   border-right-color: #ba8eca;
   box-shadow: #a282b8 5px 0 10px, inset #a282b8 -2px 0 15px;
-  color: #be58a2;
+  color: #be58a2 !important;
 }
 
-.cards .body .Iron_Star_Alliance,
-.cards .body .card.Geometric {
+.cards .body div.Iron_Star_Alliance,
+li.Iron_Star_Alliance,
+.cards .body .card.Geometric,
+li.Geometric {
   background: linear-gradient(0deg, rgb(109 50 23 / 70%), rgb(109 50 23 / 90%));
   border-color: rgb(109 50 23 / 100%);
   border-right-color: #da8a46;
   box-shadow: #da8a46 5px 0 10px, inset #da8a46 -2px 0 15px;
-  color: #f48324;
+  color: #f48324 !important;
 }
 
-.cards .body .Marcher_Worlds,
-.cards .body .card.Overdrive {
+.cards .body div.Marcher_Worlds,
+li.Marcher_Worlds,
+.cards .body .card.Overdrive,
+li.Overdrive {
   background: linear-gradient(0deg, rgb(8 65 95 / 70%), rgb(8 65 95 / 90%));
   border-color: rgb(8 65 95);
   border-right-color: #2fa9c9;
   box-shadow: #63adc9 5px 0 10px, inset #63adc9 -2px 0 15px;
-  color: #2dc3e7;
+  color: #2dc3e7 !important;
 }
 
 .cards .footer {
