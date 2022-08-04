@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
-import { Badge, Card, Col, Input, Layout, Menu, Row, Tag, Tooltip } from "antd";
+import { Badge, Card, Col, Input, Layout, Menu, Row, Tooltip } from "antd";
 import {
   DeleteOutlined,
   DownSquareOutlined,
@@ -18,14 +18,15 @@ import Lost_Legion from "./Lost_Legion.png";
 import Marcher_Worlds from "./Marcher_Worlds.png";
 import Wild_Card from "./Wild_Card.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
+import { AppSync } from "../state/AppSync";
+import { CypherCodecs } from "../state/CypherCodecs";
 import { Dragging } from "../state/Dragging";
-import { Lists } from "../state/Lists";
 import { FactionModels } from "../state/FactionModels";
-import { WildCardModels } from "../state/WildCardModels";
 import { Factions } from "../state/Factions";
+import { Lists } from "../state/Lists";
 import { PageIds } from "../state/PageIds";
 import { Url } from "../state/Url";
-import { AppSync } from "../state/AppSync";
+import { WildCardModels } from "../state/WildCardModels";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -98,7 +99,7 @@ function AppPresentation({
           <DragDropContext onDragStart={dragStart} onDragEnd={dragEnd}>
             <Header>
               <Droppable key={"trash_header"} droppableId={"trash_header"}>
-                {(provided, snapshot) => (
+                {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {dragging ? (
                       <div
@@ -208,13 +209,13 @@ function AppPresentation({
                     mode="horizontal"
                     triggerSubMenuAction="click"
                   >
-                    {factionModels.map(([factionName, faction, models], i) => (
+                    {factionModels.map(([factionName, faction, models]) => (
                       <SubMenu
                         key={faction}
                         icon={<FactionImage faction={faction} />}
                       >
                         <Menu.ItemGroup title={factionName}>
-                          {models.map(({ name, page, type, subtype }, j) => {
+                          {models.map(({ name, page, type, subtype }) => {
                             const shortName = name.slice(0, 40);
 
                             return (
@@ -287,7 +288,7 @@ function AppPresentation({
                         )
                       )
                         .sort()
-                        .map(([faction, cyphers], j) => (
+                        .map(([faction, cyphers]) => (
                           <Menu.ItemGroup
                             title={`${faction} Cyphers`}
                             key={faction}
@@ -432,7 +433,7 @@ function AppPresentation({
                               key={`cards_${listIndex}`}
                               droppableId={`cards_${listIndex}`}
                             >
-                              {(provided, snapshot) => (
+                              {(provided) => (
                                 <div
                                   ref={provided.innerRef}
                                   {...provided.droppableProps}
@@ -456,7 +457,7 @@ function AppPresentation({
                                         draggableId={`${page}_${listIndex}_${cardIndex}`}
                                         index={cardIndex}
                                       >
-                                        {(provided, snapshot) => (
+                                        {(provided) => (
                                           <div
                                             className="body"
                                             ref={provided.innerRef}
@@ -566,7 +567,7 @@ function AppPresentation({
               </>
             )}
             <Droppable key={"trash_footer"} droppableId={"trash_footer"}>
-              {(provided, snapshot) => (
+              {(provided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   {dragging ? (
                     <>
@@ -671,7 +672,7 @@ const App = connect(
           })),
         ])
     ),
-    cypherCodecs: state.data.cypherCodecs,
+    cypherCodecs: CypherCodecs.select()(state),
     lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
       cards: cards.flatMap(({ pageId, hidden }) => {
