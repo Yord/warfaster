@@ -58,16 +58,12 @@ function AppPresentation({
   factionModels,
   wildCardModels,
   cypherCodecs,
-  cypherColors,
   dragging,
-  typeColors,
-  subtypeColors,
   menuItemClicked,
   dragEnd,
   dragStart,
   lists,
   toggleCard,
-  removeCard,
   removeList,
   addEmptyList,
   moveListBy,
@@ -224,10 +220,6 @@ function AppPresentation({
                             return (
                               <Menu.Item
                                 key={faction + ":" + page}
-                                page={page}
-                                title={
-                                  <Tag color={typeColors[type]}>{type}</Tag>
-                                }
                                 className={faction}
                               >
                                 <span onClick={menuItemClicked(page)}>
@@ -256,13 +248,7 @@ function AppPresentation({
                               const shortName = name.slice(0, 40);
 
                               return (
-                                <Menu.Item
-                                  key={faction + ":" + page}
-                                  page={page}
-                                  title={
-                                    <Tag color={typeColors[type]}>{type}</Tag>
-                                  }
-                                >
+                                <Menu.Item key={faction + ":" + page}>
                                   <span onClick={menuItemClicked(page)}>
                                     <span className="card">
                                       {shortName.length === name.length ? (
@@ -656,19 +642,6 @@ function AppPresentation({
   );
 }
 
-const typeColors = [
-  "volcano",
-  "gold",
-  "green",
-  "cyan",
-  "blue",
-  "purple",
-  "magenta",
-  "red",
-];
-
-const subtypeColors = ["orange", "lime", "geekblue"];
-
 const App = connect(
   (state) => ({
     initialized: AppSync.selectDone()(state),
@@ -699,35 +672,6 @@ const App = connect(
         ])
     ),
     cypherCodecs: state.data.cypherCodecs,
-    cypherColors: {
-      Harmonic: "purple",
-      Fury: "red",
-      Geometric: "orange",
-      Overdrive: "blue",
-    },
-    typeColors: Object.fromEntries(
-      Object.entries(
-        Object.fromEntries(
-          Object.values(state.data.factionModels)
-            .flat()
-            .map((model) => [model.Type.text, ""])
-        )
-      ).map(([type], index) => [type, typeColors[index % typeColors.length]])
-    ),
-    subtypeColors: Object.fromEntries(
-      Object.entries(
-        Object.fromEntries(
-          Object.values(state.data.factionModels)
-            .flat()
-            .flatMap((model) =>
-              model.Subtype ? [[model.Subtype.text, ""]] : []
-            )
-        )
-      ).map(([subtype], index) => [
-        subtype,
-        subtypeColors[index % subtypeColors.length],
-      ])
-    ),
     lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
       cards: cards.flatMap(({ pageId, hidden }) => {
@@ -815,12 +759,6 @@ const App = connect(
       dispatch(MenuItemClicked({ page }));
       event.stopPropagation();
     },
-    removeCard: (listIndex, cardIndex) => () =>
-      dispatch(
-        Lists.removeCard({
-          source: { listIndex, cardIndex },
-        })
-      ),
     removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
     addEmptyList: (listIndex) => () =>
       dispatch(Lists.addEmptyList({ listIndex })),
