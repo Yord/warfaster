@@ -1,7 +1,3 @@
-const message =
-  (type) =>
-  (payload = {}) => ({ type, payload });
-
 const CardDragEnded = message("CARD/DRAG_ENDED");
 const CardDragStarted = message("CARD/DRAG_STARTED");
 const MenuItemClicked = message("MENU_ITEM/CLICKED");
@@ -22,6 +18,9 @@ export {
   FetchWikiPage,
   FetchWikiPageRevisions,
   MenuItemClicked,
-  message,
   RefreshWikiPages,
 };
+
+function message(type) {
+  return (payload = {}) => ({ type, payload });
+}
