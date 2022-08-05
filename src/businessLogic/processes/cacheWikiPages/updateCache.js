@@ -1,7 +1,7 @@
 /*
 These sagas make sure, cached wiki pages stay up-to-date.
 
-Each app reload triggers a "WIKI_PAGES/REFRESH" action, that starts the cache
+Each app reload triggers a RefreshWikiPages action, that starts the cache
 update process. The refreshWikiPages saga bulk loads revision data for all
 cached pages from the wiki API. If a page cannot be found (probably because it
 was deleted from the wiki), it is removed from the cache. If revision
@@ -15,6 +15,7 @@ import {
   FetchWikiPage,
   FetchWikiPageRevisions,
   FetchedWikiPageRevisions,
+  RefreshWikiPages,
 } from "../../../messages";
 import {
   actionChannel,
@@ -40,7 +41,7 @@ function* updateCache() {
 export { updateCache };
 
 function* refreshWikiPages() {
-  yield take("WIKI_PAGES/REFRESH");
+  yield take(RefreshWikiPages().type);
   const pageIds = yield select(WikiPages.selectPageIds());
 
   const queryLength = 50;
@@ -57,7 +58,7 @@ function* refreshWikiPages() {
 }
 
 function* fetchWikiPageRevisions() {
-  const revisionsChannel = yield actionChannel("WIKI_PAGE_REVISIONS/FETCH");
+  const revisionsChannel = yield actionChannel(FetchWikiPageRevisions().type);
 
   while (true) {
     const { payload } = yield take(revisionsChannel);
@@ -77,7 +78,7 @@ function* fetchWikiPageRevisions() {
 
 function* refreshOutdatedWikiPages() {
   while (true) {
-    const { payload } = yield take("WIKI_PAGE_REVISIONS/FETCHED");
+    const { payload } = yield take(FetchedWikiPageRevisions().type);
     const { pageRevisions } = payload;
     const revInfoByPageId = Object.fromEntries(
       pageRevisions.map((revision) => [

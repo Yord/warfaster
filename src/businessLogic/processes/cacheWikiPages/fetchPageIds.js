@@ -15,6 +15,7 @@ import { FactionModels } from "../../../state/FactionModels";
 import { Factions } from "../../../state/Factions";
 import { PageIds } from "../../../state/PageIds";
 import { WildCardModels } from "../../../state/WildCardModels";
+import { FetchPageIdsSlice } from "../../../messages";
 
 function* fetchPageIds() {
   yield all([fetchPageIds2(), fetchPageIdsSlice()]);
@@ -108,16 +109,13 @@ function* fetchPageIds2() {
     );
 
     for (const pages of pageSlices) {
-      yield put({
-        type: "PAGE_IDS_SLICE/FETCH",
-        payload: { pages, count: pageSlices.length },
-      });
+      yield put(FetchPageIdsSlice({ pages, count: pageSlices.length }));
     }
   }
 }
 
 function* fetchPageIdsSlice() {
-  const pageIdsSliceChannel = yield actionChannel("PAGE_IDS_SLICE/FETCH");
+  const pageIdsSliceChannel = yield actionChannel(FetchPageIdsSlice().type);
 
   let processedCount = 0;
 

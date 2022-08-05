@@ -15,7 +15,7 @@ import {
   select,
   take,
 } from "redux-saga/effects";
-import { FetchedWikiPage } from "../../../messages";
+import { FetchedWikiPage, FetchWikiPage } from "../../../messages";
 import { jsonp } from "../jsonp";
 
 import { WikiPages } from "../../../state/WikiPages";
@@ -27,7 +27,7 @@ function* cacheWikiPages() {
 export { cacheWikiPages };
 
 function* fetchWikiPage() {
-  const wikiPageChannel = yield actionChannel("WIKI_PAGE/FETCH");
+  const wikiPageChannel = yield actionChannel(FetchWikiPage().type);
 
   while (true) {
     const { payload } = yield take(wikiPageChannel);
@@ -46,7 +46,7 @@ function* fetchWikiPage() {
 
 function* addWikiPage() {
   while (true) {
-    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { payload } = yield take(FetchedWikiPage().type);
     const page = payload.page;
     const data = payload.data;
 

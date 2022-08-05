@@ -1,5 +1,10 @@
 import { eventChannel } from "redux-saga";
 import { all, put, select, take } from "redux-saga/effects";
+import {
+  CardDragEnded,
+  CardDragStarted,
+  MenuItemClicked,
+} from "../../messages";
 import { CypherCodecs } from "../../state/CypherCodecs";
 import { Dragging } from "../../state/Dragging";
 import { FactionModels } from "../../state/FactionModels";
@@ -25,7 +30,7 @@ export { ui };
 
 function* updateCards() {
   while (true) {
-    const { payload } = yield take("CARD/DRAG_ENDED");
+    const { payload } = yield take(CardDragEnded().type);
     const { reason, source, destination } = payload;
     if (reason === "DROP" && destination.droppableId.startsWith("cards_")) {
       const sourceListIndex = parseInt(
@@ -55,7 +60,7 @@ function* updateCards() {
 
 function* removeCards() {
   while (true) {
-    const { payload } = yield take("CARD/DRAG_ENDED");
+    const { payload } = yield take(CardDragEnded().type);
     const { reason, source, destination } = payload;
     if (reason === "DROP" && destination.droppableId.startsWith("trash")) {
       const listIndex = parseInt(source.droppableId.replace("cards_", ""), 10);
@@ -72,7 +77,7 @@ function* removeCards() {
 
 function* addCard() {
   while (true) {
-    const { payload } = yield take("MENU_ITEM/CLICKED");
+    const { payload } = yield take(MenuItemClicked().type);
     const { page } = payload;
     const model = yield select(FactionModels.selectByPage(page));
     const wildCard = yield select(WildCardModels.selectByPage(page));
@@ -85,13 +90,13 @@ function* addCard() {
 }
 
 function* setDraggingTrue() {
-  while (yield take("CARD/DRAG_STARTED")) {
+  while (yield take(CardDragStarted().type)) {
     yield put(Dragging.activate());
   }
 }
 
 function* setDraggingFalse() {
-  while (yield take("CARD/DRAG_ENDED")) {
+  while (yield take(CardDragEnded().type)) {
     yield put(Dragging.deactivate());
   }
 }

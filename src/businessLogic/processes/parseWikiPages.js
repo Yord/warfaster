@@ -13,10 +13,11 @@ import { Factions } from "../../state/Factions";
 import { FactionModels } from "../../state/FactionModels";
 import { Models } from "../../state/Models";
 import { WildCardModels } from "../../state/WildCardModels";
+import { FetchedWikiPage } from "../../messages";
 
 function* parseWikiPages() {
   while (true) {
-    const { payload } = yield take("WIKI_PAGE/FETCHED");
+    const { payload } = yield take(FetchedWikiPage().type);
     const { data, page } = payload;
 
     const cypherCodecs = yield select(CypherCodecs.selectPages());
