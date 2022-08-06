@@ -1,4 +1,4 @@
-import { prepareDOM } from "./parsers";
+import { prepareDOM } from "./utils";
 
 const parseModelText = (text) => {
   const doc = prepareDOM(text);

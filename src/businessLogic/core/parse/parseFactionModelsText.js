@@ -1,4 +1,5 @@
-import { parseAnchorTable, prepareDOM } from "./parsers";
+import { parseAnchorTable } from "./parsers";
+import { prepareDOM } from "./utils";
 
 const parseFactionModelsText = (text) => {
   const doc = prepareDOM(text);

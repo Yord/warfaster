@@ -1,4 +1,4 @@
-import { prepareDOM } from "./parsers";
+import { prepareDOM } from "./utils";
 
 const parseCypherCodecsText = (text) => {
   const doc = prepareDOM(text);
