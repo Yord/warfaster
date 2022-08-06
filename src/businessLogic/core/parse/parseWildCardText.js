@@ -1,4 +1,4 @@
-import { parseAnchorTable } from "./parseFactionModelsText";
+import { parseAnchorTable } from "./parsers";
 
 const parseWildCardText = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
