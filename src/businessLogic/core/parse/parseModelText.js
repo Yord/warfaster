@@ -1,4 +1,4 @@
-import { prepareDOM } from "./utils";
+import { cleanText, prepareDOM } from "./utils";
 
 const parseModelText = (text) => {
   const doc = prepareDOM(text);
@@ -134,10 +134,6 @@ function removeUndefinedValues(obj) {
       .filter(([key, value]) => typeof value !== "undefined")
       .map(([key, value]) => [key, removeUndefinedValues(value)])
   );
-}
-
-function cleanText(text) {
-  return text.replace(/\n/g, "");
 }
 
 function extractText(doc, id, { node = "h3" } = {}) {

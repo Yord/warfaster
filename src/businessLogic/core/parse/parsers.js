@@ -1,6 +1,8 @@
+import { cleanText } from "./utils";
+
 function parseAnchorTable(table) {
   const header = [...table.querySelectorAll("th")].map((th) =>
-    th.innerText.replace(/\n/g, "")
+    cleanText(th.innerText)
   );
 
   const body = [...table.querySelectorAll("tr")].map((tr) =>

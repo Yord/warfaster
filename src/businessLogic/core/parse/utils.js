@@ -1,3 +1,7 @@
+function cleanText(text) {
+  return text.replace(/\n/g, "");
+}
+
 function prepareDOM(text) {
   const doc = new DOMParser().parseFromString(text, "text/html");
   doc
@@ -11,4 +15,4 @@ function prepareDOM(text) {
   return doc;
 }
 
-export { prepareDOM };
+export { cleanText, prepareDOM };

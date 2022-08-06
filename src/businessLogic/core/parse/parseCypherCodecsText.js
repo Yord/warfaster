@@ -1,4 +1,4 @@
-import { prepareDOM } from "./utils";
+import { cleanText, prepareDOM } from "./utils";
 
 const parseCypherCodecsText = (text) => {
   const doc = prepareDOM(text);
@@ -31,8 +31,4 @@ function collectCypherCodecs(doc) {
       })
     )
   );
-}
-
-function cleanText(text) {
-  return text.replace(/\n/g, "");
 }
