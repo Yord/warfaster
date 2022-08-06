@@ -1,10 +1,7 @@
-import { parseAnchorTable } from "./parsers";
+import { parseAnchorTable, prepareDOM } from "./parsers";
 
 const parseWildCardText = (text) => {
-  const doc = new DOMParser().parseFromString(text, "text/html");
-  doc.querySelectorAll("h1 > span[id]").forEach((node) => {
-    node.parentNode.id = node.id;
-  });
+  const doc = prepareDOM(text);
 
   const h1OrTable = doc.querySelectorAll("h1, table.sortable");
   const factionAndModels = [];

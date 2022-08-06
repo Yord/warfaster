@@ -1,8 +1,7 @@
+import { prepareDOM } from "./parsers";
+
 const parseFactionsText = (text) => {
-  const doc = new DOMParser().parseFromString(text, "text/html");
-  doc.querySelectorAll("h2 > span[id]").forEach((node) => {
-    node.parentNode.id = node.id;
-  });
+  const doc = prepareDOM(text);
 
   const p = doc.querySelector("h2#Factions ~ p");
   const factions = Object.fromEntries(collectFactions(p, []));

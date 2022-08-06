@@ -1,5 +1,7 @@
+import { prepareDOM } from "./parsers";
+
 const parseCypherCodecsText = (text) => {
-  const doc = new DOMParser().parseFromString(text, "text/html");
+  const doc = prepareDOM(text);
 
   return collectCypherCodecs(doc);
 };

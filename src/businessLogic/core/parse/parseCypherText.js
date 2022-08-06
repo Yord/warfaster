@@ -1,8 +1,7 @@
+import { prepareDOM } from "./parsers";
+
 const parseCypherText = (text) => {
-  const doc = new DOMParser().parseFromString(text, "text/html");
-  doc.querySelectorAll("h2 > span[id]").forEach((node) => {
-    node.parentNode.id = node.id;
-  });
+  const doc = prepareDOM(text);
 
   const type = extractLink(doc, "Type");
   const pow = extractLink(doc, "Pow");

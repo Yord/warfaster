@@ -1,10 +1,7 @@
-import { parseAnchorTable } from "./parsers";
+import { parseAnchorTable, prepareDOM } from "./parsers";
 
 const parseFactionModelsText = (text) => {
-  const doc = new DOMParser().parseFromString(text, "text/html");
-  doc.querySelectorAll("h1 > span[id]").forEach((node) => {
-    node.parentNode.id = node.id;
-  });
+  const doc = prepareDOM(text);
 
   const table = doc.querySelector("h1#Models ~ table");
   const models = parseAnchorTable(table);
