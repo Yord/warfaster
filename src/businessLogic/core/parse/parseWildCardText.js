@@ -1,4 +1,4 @@
-import { parseFactionModels } from "./parseFactionModelsText";
+import { parseAnchorTable } from "./parseFactionModelsText";
 
 const parseWildCardText = (text) => {
   const doc = new DOMParser().parseFromString(text, "text/html");
@@ -16,8 +16,12 @@ const parseWildCardText = (text) => {
     } else {
       const table = h1OrTable[i];
       const last = factionAndModels[factionAndModels.length - 1];
-      const models = parseFactionModels(table);
-      last.models = models;
+      const models = parseAnchorTable(table);
+      last.models = models.map((model) =>
+        Object.fromEntries(
+          Object.entries(model).map(([key, values]) => [key, values[0]])
+        )
+      );
     }
   }
 
