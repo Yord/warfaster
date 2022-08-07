@@ -28,8 +28,6 @@ function parseAnchorTable(table) {
     );
 }
 
-export { parseAnchorTable };
-
 function parseAnchor(a) {
   const titleColon = a.title.split(":");
   const hrefTitle = a.href.split("title=");
@@ -38,6 +36,8 @@ function parseAnchor(a) {
     page: hrefTitle[hrefTitle.length - 1],
   };
 }
+
+export { parseAnchor, parseAnchorTable };
 
 function parseText(node) {
   return cleanText(node.innerText);
