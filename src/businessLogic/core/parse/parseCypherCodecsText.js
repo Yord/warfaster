@@ -1,4 +1,5 @@
-import { cleanText, prepareDOM } from "./utils";
+import { parseAnchorTable } from "./parsers";
+import { prepareDOM } from "./utils";
 
 const parseCypherCodecsText = (text) => {
   const doc = prepareDOM(text);
@@ -12,23 +13,10 @@ function collectCypherCodecs(doc) {
   const cypherCodecsTable = doc.querySelector("table.sortable");
   if (!cypherCodecsTable) return undefined;
 
-  const cypherCodecsData = [...cypherCodecsTable.querySelectorAll("tr")]
-    .map((tr) => [...tr.querySelectorAll("td, th")])
-    .filter((_) => _.length === 4);
-  if (cypherCodecsData.length === 0) return undefined;
-
-  const detailsHeader = cypherCodecsData[0].map((_) => cleanText(_.innerText));
-  return cypherCodecsData.slice(1).map((tds) =>
+  const cypherCodecs = parseAnchorTable(cypherCodecsTable);
+  return cypherCodecs.map((cypherCodec) =>
     Object.fromEntries(
-      tds.map((td, i) => {
-        const a = td.querySelector("a");
-        const hrefs = a ? a.href.split("title=") : undefined;
-        const text = cleanText(td.innerText);
-        return [
-          detailsHeader[i],
-          a ? { text, page: hrefs[hrefs.length - 1] } : { text },
-        ];
-      })
+      Object.entries(cypherCodec).map(([key, values]) => [key, values[0]])
     )
   );
 }
