@@ -6,9 +6,17 @@ function parseAnchorTable(table) {
   );
 
   const body = [...table.querySelectorAll("tr")].map((tr) =>
-    [...tr.querySelectorAll("td")].map((td) =>
-      [...td.querySelectorAll("a")].map(parseAnchor)
-    )
+    [...tr.querySelectorAll("td")].map((td) => {
+      const anchors = [...td.querySelectorAll("a")].map(parseAnchor);
+      if (anchors.length > 0) {
+        return anchors;
+      }
+      const text = parseText(td);
+      if (text) {
+        return [{ text }];
+      }
+      return [];
+    })
   );
 
   return body
@@ -29,4 +37,8 @@ function parseAnchor(a) {
     text: titleColon[titleColon.length - 1],
     page: hrefTitle[hrefTitle.length - 1],
   };
+}
+
+function parseText(node) {
+  return cleanText(node.innerText);
 }
