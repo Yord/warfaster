@@ -656,7 +656,9 @@ const App = connect(
           name: model.Name.text,
           page: model.Name.page,
           type: model.Type.text,
-          ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
+          ...(model.Subtype
+            ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+            : {}),
         })),
       ]),
     wildCardModels: Object.fromEntries(
@@ -668,7 +670,9 @@ const App = connect(
             name: model.Name.text,
             page: model.Name.page,
             type: model.Type.text,
-            ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
+            ...(model.Subtype
+              ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+              : {}),
           })),
         ])
     ),
@@ -707,7 +711,9 @@ const App = connect(
               page: model.Name.page,
               pageId,
               faction: model.faction,
-              ...(model.Subtype ? { subtype: model.Subtype.text } : {}),
+              ...(model.Subtype
+                ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+                : {}),
             },
           ];
         }
@@ -722,7 +728,9 @@ const App = connect(
               page: wildCard.Name.page,
               pageId,
               faction: "Wild_Card",
-              ...(wildCard.Subtype ? { subtype: wildCard.Subtype.text } : {}),
+              ...(wildCard.Subtype
+                ? { subtype: wildCard.Subtype.map((_) => _.text).join(" ") }
+                : {}),
             },
           ];
         }

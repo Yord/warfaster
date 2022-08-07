@@ -29,7 +29,13 @@ const parseWildCardText = (text) => {
       const models = parseAnchorTable(table);
       last.models = models.map((model) =>
         Object.fromEntries(
-          Object.entries(model).map(([key, values]) => [key, values[0]])
+          Object.entries(model).flatMap(([key, values]) =>
+            key === "Subtype"
+              ? values.length > 0
+                ? [[key, values]]
+                : []
+              : [[key, values[0]]]
+          )
         )
       );
     }
