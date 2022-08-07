@@ -10,9 +10,21 @@ const parseWildCardText = (text) => {
   for (let i = 0; i < h1OrTable.length; i++) {
     if (i % 2 === 0) {
       const h1 = h1OrTable[i];
+      if (h1.tagName !== "H1") {
+        console.error(
+          `parseWildCardText: expected H1, but got ${h1.tagName}!`,
+          h1
+        );
+      }
       factionAndModels.push({ faction: h1.id });
     } else {
       const table = h1OrTable[i];
+      if (table.tagName !== "TABLE") {
+        console.error(
+          `parseWildCardText: expected TABLE, but got ${table.tagName}!`,
+          table
+        );
+      }
       const last = factionAndModels[factionAndModels.length - 1];
       const models = parseAnchorTable(table);
       last.models = models.map((model) =>

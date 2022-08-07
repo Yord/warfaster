@@ -4,14 +4,11 @@ import { prepareDOM } from "./utils";
 const parseCypherCodecsText = (text) => {
   const doc = prepareDOM(text);
 
-  return collectCypherCodecs(doc);
-};
-
-export { parseCypherCodecsText };
-
-function collectCypherCodecs(doc) {
   const cypherCodecsTable = doc.querySelector("table.sortable");
-  if (!cypherCodecsTable) return undefined;
+  if (!cypherCodecsTable) {
+    console.error("parseCypherCodecsText: cypherCodecsTable not found!");
+    return undefined;
+  }
 
   const cypherCodecs = parseAnchorTable(cypherCodecsTable);
   return cypherCodecs.map((cypherCodec) =>
@@ -19,4 +16,6 @@ function collectCypherCodecs(doc) {
       Object.entries(cypherCodec).map(([key, values]) => [key, values[0]])
     )
   );
-}
+};
+
+export { parseCypherCodecsText };
