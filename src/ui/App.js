@@ -1206,6 +1206,7 @@ const App = connect(
         }
 
         if (wildCard) {
+          const details = Models.selectByPage(page)(state);
           return [
             {
               card: "model",
@@ -1218,6 +1219,27 @@ const App = connect(
               ...(wildCard.Subtype
                 ? { subtype: wildCard.Subtype.map((_) => _.text).join(" ") }
                 : {}),
+              ...(!details
+                ? {}
+                : {
+                    squadSize: details.squadSize,
+                    deploymentCost: details.deploymentCost,
+                    baseSize: details.baseSize,
+                    health: details.health,
+                    hardpoints: details.hardpoints,
+                    weaponPoints: details.weaponPoints,
+                    modelStats: details.modelStats,
+                    specialRules: details.specialRules,
+                    weapons: details.weapons,
+                    advantages: details.advantages,
+                    maneuvers: details.maneuvers,
+                    weaponSelection: details.weaponSelection,
+                    cortexes: details.cortexes,
+                    chassisSpecialRules: details.chassisSpecialRules,
+                    weaponDetails: details.weaponDetails,
+                    release: details.release,
+                    lore: details.lore,
+                  }),
             },
           ];
         }

@@ -28,13 +28,17 @@ function* parseWikiPages() {
       yield select(FactionModels.selectModelPages())
     );
 
+    const wildCardModels = Object.values(
+      yield select(WildCardModels.selectModelPages())
+    );
+
     if (page === "Warcaster") {
       const factions = parseFactionsText(data.text);
       yield put(Factions.set({ factions }));
     } else if (page === "Wild_Card") {
       const wildCards = parseWildCardText(data.text);
       yield put(WildCardModels.set({ wildCards }));
-    } else if (factionModels.includes(page)) {
+    } else if (factionModels.includes(page) || wildCardModels.includes(page)) {
       const model = parseModelText(data.text);
       model.name = { text: data.title, page };
       yield put(Models.set({ page, model }));
