@@ -454,6 +454,7 @@ function AppPresentation({
                                         deploymentCost,
                                         baseSize,
                                         health,
+                                        wildCardFactions,
                                         hardpoints,
                                         weaponPoints,
                                         modelStats,
@@ -565,6 +566,29 @@ function AppPresentation({
                                                       <dt>Health</dt>
                                                       <dd>{health}</dd>
                                                     </dl>
+                                                  )}
+                                                  {!wildCardFactions ||
+                                                  Object.values(
+                                                    wildCardFactions
+                                                  ).length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Wild Card Factions</p>
+                                                      <ul>
+                                                        {Object.values(
+                                                          wildCardFactions
+                                                        ).map(
+                                                          ({ text }, index) => (
+                                                            <li
+                                                              key={`wild_card_faction_${index}`}
+                                                            >
+                                                              {text}
+                                                            </li>
+                                                          )
+                                                        )}
+                                                      </ul>
+                                                    </>
                                                   )}
                                                   {!hardpoints ? (
                                                     <></>
@@ -1187,6 +1211,7 @@ const App = connect(
                     deploymentCost: details.deploymentCost,
                     baseSize: details.baseSize,
                     health: details.health,
+                    wildCardFactions: details.wildCardFactions,
                     hardpoints: details.hardpoints,
                     weaponPoints: details.weaponPoints,
                     modelStats: details.modelStats,
@@ -1226,6 +1251,7 @@ const App = connect(
                     deploymentCost: details.deploymentCost,
                     baseSize: details.baseSize,
                     health: details.health,
+                    wildCardFactions: details.wildCardFactions,
                     hardpoints: details.hardpoints,
                     weaponPoints: details.weaponPoints,
                     modelStats: details.modelStats,

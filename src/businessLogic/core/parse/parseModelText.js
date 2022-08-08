@@ -12,6 +12,7 @@ const parseModelText = (text) => {
   const deploymentCost = extractText(doc, "Deployment_Cost");
   const baseSize = extractText(doc, "Base_Size");
   const health = extractText(doc, "Health");
+  const wildCardFactions = extractList(doc, "Wild_Card_Factions");
   const weaponPoints = extractText(doc, "Weapon_Points");
   const hardpoints = extractText(doc, "Hardpoints");
   const specialRules = extractDefinitions(doc, "Special_Rules");
@@ -98,6 +99,7 @@ const parseModelText = (text) => {
     deploymentCost,
     baseSize,
     health,
+    wildCardFactions,
     hardpoints,
     weaponPoints,
     modelStats,
