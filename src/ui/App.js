@@ -27,6 +27,7 @@ import { Lists } from "../state/Lists";
 import { PageIds } from "../state/PageIds";
 import { Url } from "../state/Url";
 import { WildCardModels } from "../state/WildCardModels";
+import { Models } from "../state/Models";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -449,6 +450,23 @@ function AppPresentation({
                                         pageId,
                                         subtype,
                                         faction,
+                                        squadSize,
+                                        deploymentCost,
+                                        baseSize,
+                                        health,
+                                        hardpoints,
+                                        weaponPoints,
+                                        modelStats,
+                                        specialRules,
+                                        weapons,
+                                        advantages,
+                                        maneuvers,
+                                        weaponSelection,
+                                        cortexes,
+                                        chassisSpecialRules,
+                                        weaponDetails,
+                                        release,
+                                        lore,
                                       },
                                       cardIndex
                                     ) => (
@@ -512,7 +530,454 @@ function AppPresentation({
                                                   </>
                                                 }
                                               />
-                                              {hidden ? <></> : <p>Foo</p>}
+                                              {hidden ? (
+                                                <></>
+                                              ) : (
+                                                <div>
+                                                  {!squadSize ? (
+                                                    <></>
+                                                  ) : (
+                                                    <dl>
+                                                      <dt>Squad Size</dt>
+                                                      <dd>{squadSize}</dd>
+                                                    </dl>
+                                                  )}
+                                                  {!deploymentCost ? (
+                                                    <></>
+                                                  ) : (
+                                                    <dl>
+                                                      <dt>DC</dt>
+                                                      <dd>{deploymentCost}</dd>
+                                                    </dl>
+                                                  )}
+                                                  {!baseSize ? (
+                                                    <></>
+                                                  ) : (
+                                                    <dl>
+                                                      <dt>Base Size</dt>
+                                                      <dd>{baseSize}</dd>
+                                                    </dl>
+                                                  )}
+                                                  {!health ? (
+                                                    <></>
+                                                  ) : (
+                                                    <dl>
+                                                      <dt>Health</dt>
+                                                      <dd>{health}</dd>
+                                                    </dl>
+                                                  )}
+                                                  {!hardpoints ? (
+                                                    <></>
+                                                  ) : (
+                                                    <dl>
+                                                      <dt>Hardpoints</dt>
+                                                      <dd>{hardpoints}</dd>
+                                                    </dl>
+                                                  )}
+                                                  {!weaponPoints ? (
+                                                    <></>
+                                                  ) : (
+                                                    <dl>
+                                                      <dt>Weapon Points</dt>
+                                                      <dd>{weaponPoints}</dd>
+                                                    </dl>
+                                                  )}
+                                                  {!modelStats ||
+                                                  Object.keys(modelStats)
+                                                    .length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <table>
+                                                      <thead>
+                                                        <tr>
+                                                          {Object.keys(
+                                                            modelStats
+                                                          ).map(
+                                                            (name, index) => (
+                                                              <th
+                                                                key={`${name}_stat_${index}`}
+                                                              >
+                                                                {name}
+                                                              </th>
+                                                            )
+                                                          )}
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          {Object.entries(
+                                                            modelStats
+                                                          ).map(
+                                                            (
+                                                              [name, stat],
+                                                              index
+                                                            ) => (
+                                                              <td
+                                                                key={`${name}_stat_value_${index}`}
+                                                              >
+                                                                {stat}
+                                                              </td>
+                                                            )
+                                                          )}
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  )}
+                                                  {!specialRules ||
+                                                  Object.entries(specialRules)
+                                                    .length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Special Rules</p>
+                                                      <dl>
+                                                        {Object.entries(
+                                                          specialRules
+                                                        ).map(
+                                                          (
+                                                            [name, text],
+                                                            index
+                                                          ) => (
+                                                            <React.Fragment
+                                                              key={`special_rules_${index}`}
+                                                            >
+                                                              <dt>{name}</dt>
+                                                              <dd>{text}</dd>
+                                                            </React.Fragment>
+                                                          )
+                                                        )}
+                                                      </dl>
+                                                    </>
+                                                  )}
+                                                  {!weapons ||
+                                                  weapons.length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Weapons</p>
+                                                      <table>
+                                                        <thead>
+                                                          <tr>
+                                                            <th>Name</th>
+                                                            <th>Attack Type</th>
+                                                            <th>Damage Type</th>
+                                                            <th>Range</th>
+                                                            <th>POW</th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          {weapons.map(
+                                                            (weapon, index) => (
+                                                              <React.Fragment
+                                                                key={`weapon_number_${index}`}
+                                                              >
+                                                                <tr>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Name"
+                                                                      ]
+                                                                    }
+                                                                  </td>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Attack Type"
+                                                                      ]
+                                                                    }
+                                                                  </td>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Damage Type"
+                                                                      ]
+                                                                    }
+                                                                  </td>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Range"
+                                                                      ]
+                                                                    }
+                                                                  </td>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "POW"
+                                                                      ]
+                                                                    }
+                                                                  </td>
+                                                                </tr>
+                                                                {!weapon.specialRules ? (
+                                                                  <></>
+                                                                ) : (
+                                                                  Object.entries(
+                                                                    weapon.specialRules
+                                                                  ).map(
+                                                                    (
+                                                                      [
+                                                                        rule,
+                                                                        text,
+                                                                      ],
+                                                                      ruleIndex
+                                                                    ) => (
+                                                                      <tr
+                                                                        key={`weapon_number_${index}_rule_${ruleIndex}`}
+                                                                      >
+                                                                        <td colSpan="5">
+                                                                          <dl>
+                                                                            <dt>
+                                                                              {
+                                                                                rule
+                                                                              }
+                                                                            </dt>
+                                                                            <dd>
+                                                                              {
+                                                                                text
+                                                                              }
+                                                                            </dd>
+                                                                          </dl>
+                                                                        </td>
+                                                                      </tr>
+                                                                    )
+                                                                  )
+                                                                )}
+                                                              </React.Fragment>
+                                                            )
+                                                          )}
+                                                        </tbody>
+                                                      </table>
+                                                    </>
+                                                  )}
+                                                  {!advantages ||
+                                                  Object.entries(advantages)
+                                                    .length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Advantages</p>
+                                                      <dl>
+                                                        {Object.entries(
+                                                          advantages
+                                                        ).map(
+                                                          (
+                                                            [name, text],
+                                                            index
+                                                          ) => (
+                                                            <React.Fragment
+                                                              key={`advantage_${index}`}
+                                                            >
+                                                              <dt>{name}</dt>
+                                                              <dd>{text}</dd>
+                                                            </React.Fragment>
+                                                          )
+                                                        )}
+                                                      </dl>
+                                                    </>
+                                                  )}
+                                                  {!maneuvers ||
+                                                  Object.values(maneuvers)
+                                                    .length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Maneuvers</p>
+                                                      <dl>
+                                                        {Object.entries(
+                                                          maneuvers
+                                                        ).map(
+                                                          (
+                                                            [name, text],
+                                                            index
+                                                          ) => (
+                                                            <React.Fragment
+                                                              key={`advantage_${index}`}
+                                                            >
+                                                              <dt>{name}</dt>
+                                                              <dd>{text}</dd>
+                                                            </React.Fragment>
+                                                          )
+                                                        )}
+                                                      </dl>
+                                                    </>
+                                                  )}
+                                                  {!weaponSelection ||
+                                                  Object.values(weaponSelection)
+                                                    .length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Weapon Selection</p>
+                                                      <ol>
+                                                        {Object.values(
+                                                          weaponSelection
+                                                        ).map((text, index) => (
+                                                          <li
+                                                            key={`weapon_selection_${index}`}
+                                                          >
+                                                            {text}
+                                                          </li>
+                                                        ))}
+                                                      </ol>
+                                                    </>
+                                                  )}
+                                                  {!cortexes ||
+                                                  Object.entries(cortexes)
+                                                    .length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Cortexes</p>
+                                                      <ol>
+                                                        {Object.entries(
+                                                          cortexes
+                                                        ).map(
+                                                          (
+                                                            [
+                                                              cortex,
+                                                              advantages,
+                                                            ],
+                                                            index
+                                                          ) => (
+                                                            <li
+                                                              key={`cortex_${index}`}
+                                                            >
+                                                              {cortex}
+                                                              <dl>
+                                                                {Object.entries(
+                                                                  advantages
+                                                                ).map(
+                                                                  (
+                                                                    [
+                                                                      name,
+                                                                      text,
+                                                                    ],
+                                                                    advantageIndex
+                                                                  ) => (
+                                                                    <React.Fragment
+                                                                      key={`cortex_${index}_advantage_${advantageIndex}`}
+                                                                    >
+                                                                      <dt>
+                                                                        {name}
+                                                                      </dt>
+                                                                      <dd>
+                                                                        {text}
+                                                                      </dd>
+                                                                    </React.Fragment>
+                                                                  )
+                                                                )}
+                                                              </dl>
+                                                            </li>
+                                                          )
+                                                        )}
+                                                      </ol>
+                                                    </>
+                                                  )}
+                                                  {!chassisSpecialRules ||
+                                                  Object.entries(
+                                                    chassisSpecialRules
+                                                  ).length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>
+                                                        Chassis Special Rules
+                                                      </p>
+                                                      <dl>
+                                                        {Object.entries(
+                                                          chassisSpecialRules
+                                                        ).map(
+                                                          (
+                                                            [name, text],
+                                                            index
+                                                          ) => (
+                                                            <React.Fragment
+                                                              key={`advantage_${index}`}
+                                                            >
+                                                              <dt>{name}</dt>
+                                                              <dd>{text}</dd>
+                                                            </React.Fragment>
+                                                          )
+                                                        )}
+                                                      </dl>
+                                                    </>
+                                                  )}
+                                                  {!weaponDetails ||
+                                                  weaponDetails.length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Weapon Details</p>
+                                                      <table>
+                                                        <thead>
+                                                          <tr>
+                                                            <th>Weapon</th>
+                                                            <th>Location</th>
+                                                            <th>Cost</th>
+                                                            <th>Weapon Pack</th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          {weaponDetails.map(
+                                                            (weapon, index) => (
+                                                              <React.Fragment
+                                                                key={`weapon_details_number_${index}`}
+                                                              >
+                                                                <tr>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Weapon"
+                                                                      ].text
+                                                                    }
+                                                                  </td>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Location"
+                                                                      ].text
+                                                                    }
+                                                                  </td>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Cost"
+                                                                      ].text
+                                                                    }
+                                                                  </td>
+                                                                  <td>
+                                                                    {
+                                                                      weapon[
+                                                                        "Weapon Pack"
+                                                                      ].text
+                                                                    }
+                                                                  </td>
+                                                                </tr>
+                                                              </React.Fragment>
+                                                            )
+                                                          )}
+                                                        </tbody>
+                                                      </table>
+                                                    </>
+                                                  )}
+                                                  {!release ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Release</p>
+                                                      <p>{release}</p>
+                                                    </>
+                                                  )}
+                                                  {!lore ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Lore</p>
+                                                      <p>{lore}</p>
+                                                    </>
+                                                  )}
+                                                </div>
+                                              )}
                                             </Card>
                                           </div>
                                         )}
@@ -702,6 +1167,7 @@ const App = connect(
         );
 
         if (model) {
+          const details = Models.selectByPage(page)(state);
           return [
             {
               card: "model",
@@ -714,6 +1180,27 @@ const App = connect(
               ...(model.Subtype
                 ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
                 : {}),
+              ...(!details
+                ? {}
+                : {
+                    squadSize: details.squadSize,
+                    deploymentCost: details.deploymentCost,
+                    baseSize: details.baseSize,
+                    health: details.health,
+                    hardpoints: details.hardpoints,
+                    weaponPoints: details.weaponPoints,
+                    modelStats: details.modelStats,
+                    specialRules: details.specialRules,
+                    weapons: details.weapons,
+                    advantages: details.advantages,
+                    maneuvers: details.maneuvers,
+                    weaponSelection: details.weaponSelection,
+                    cortexes: details.cortexes,
+                    chassisSpecialRules: details.chassisSpecialRules,
+                    weaponDetails: details.weaponDetails,
+                    release: details.release,
+                    lore: details.lore,
+                  }),
             },
           ];
         }

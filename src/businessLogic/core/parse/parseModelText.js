@@ -19,10 +19,6 @@ const parseModelText = (text) => {
   const advantages = extractDefinitions(doc, "Advantages");
   const maneuvers = extractDefinitions(doc, "Maneuvers");
   const weaponSelection = extractLinkList(doc, "Weapon_Selection");
-  const armOptions = extractLinkList(doc, "Arm_Options", { node: "h4" });
-  const shoulderOptions = extractLinkList(doc, "Shoulder_Options", {
-    node: "h4",
-  });
   const cortexes = extractCortexes(doc, "Cortexes");
 
   const modelStatsData = [
@@ -109,10 +105,7 @@ const parseModelText = (text) => {
     weapons,
     advantages,
     maneuvers,
-    weaponSelection:
-      armOptions || shoulderOptions
-        ? { armOptions, shoulderOptions }
-        : weaponSelection,
+    weaponSelection,
     cortexes,
     chassisSpecialRules,
     weaponDetails: weaponDetails(),

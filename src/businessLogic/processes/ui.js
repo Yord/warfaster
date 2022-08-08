@@ -3,6 +3,7 @@ import { all, put, select, take } from "redux-saga/effects";
 import {
   CardDragEnded,
   CardDragStarted,
+  FetchWikiPage,
   MenuItemClicked,
 } from "../../messages";
 import { CypherCodecs } from "../../state/CypherCodecs";
@@ -23,6 +24,7 @@ function* ui() {
     updateCards(),
     updateUrl(),
     parseListsFromQuery(),
+    fetchCardOnShow(),
   ]);
 }
 
@@ -174,6 +176,18 @@ function* parseListsFromQuery() {
       yield put(Lists.set({ lists }));
     } else {
       yield put(Lists.set({ lists: [] }));
+    }
+  }
+}
+
+function* fetchCardOnShow() {
+  while (true) {
+    const { payload } = yield take("Lists.toggleCard");
+    if (payload && payload.pageId) {
+      const page = yield select(PageIds.selectPageByPageId(payload.pageId));
+      if (page) {
+        yield put(FetchWikiPage({ page }));
+      }
     }
   }
 }
