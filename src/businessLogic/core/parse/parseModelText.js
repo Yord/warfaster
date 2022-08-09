@@ -71,6 +71,8 @@ const parseModelText = (text) => {
     const weaponDetailsData = [...weaponDetailsTable.querySelectorAll("tr")]
       .map((tr) => [...tr.querySelectorAll("td, th")])
       .filter((_) => _.length === 4);
+    if (!weaponDetailsData || weaponDetailsData.length === 0) return undefined;
+
     const detailsHeader = weaponDetailsData[0].map((_) =>
       cleanText(_.innerText)
     );
