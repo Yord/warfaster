@@ -450,24 +450,7 @@ function AppPresentation({
                                         pageId,
                                         subtype,
                                         faction,
-                                        squadSize,
-                                        deploymentCost,
-                                        baseSize,
-                                        health,
-                                        wildCardFactions,
-                                        hardpoints,
-                                        weaponPoints,
-                                        modelStats,
-                                        specialRules,
-                                        weapons,
-                                        advantages,
-                                        maneuvers,
-                                        weaponSelection,
-                                        cortexes,
-                                        chassisSpecialRules,
-                                        weaponDetails,
-                                        release,
-                                        lore,
+                                        details,
                                       },
                                       cardIndex
                                     ) => (
@@ -533,43 +516,61 @@ function AppPresentation({
                                               />
                                               {hidden ? (
                                                 <></>
+                                              ) : !details ? (
+                                                <div
+                                                  style={{
+                                                    margin: "10px 0",
+                                                    textAlign: "center",
+                                                  }}
+                                                >
+                                                  <SyncOutlined
+                                                    spin
+                                                    style={{ fontSize: "23px" }}
+                                                  />
+                                                </div>
                                               ) : (
                                                 <div>
-                                                  {!squadSize ? (
+                                                  {!details.squadSize ? (
                                                     <></>
                                                   ) : (
                                                     <dl>
                                                       <dt>Squad Size</dt>
-                                                      <dd>{squadSize}</dd>
+                                                      <dd>
+                                                        {details.squadSize}
+                                                      </dd>
                                                     </dl>
                                                   )}
-                                                  {!deploymentCost ? (
+                                                  {!details.deploymentCost ? (
                                                     <></>
                                                   ) : (
                                                     <dl>
                                                       <dt>DC</dt>
-                                                      <dd>{deploymentCost}</dd>
+                                                      <dd>
+                                                        {details.deploymentCost}
+                                                      </dd>
                                                     </dl>
                                                   )}
-                                                  {!baseSize ? (
+                                                  {!details.baseSize ? (
                                                     <></>
                                                   ) : (
                                                     <dl>
                                                       <dt>Base Size</dt>
-                                                      <dd>{baseSize}</dd>
+                                                      <dd>
+                                                        {details.baseSize}
+                                                      </dd>
                                                     </dl>
                                                   )}
-                                                  {!health ? (
+                                                  {!details.health ? (
                                                     <></>
                                                   ) : (
                                                     <dl>
                                                       <dt>Health</dt>
-                                                      <dd>{health}</dd>
+                                                      <dd>{details.health}</dd>
                                                     </dl>
                                                   )}
-                                                  {!wildCardFactions ||
+                                                  {!details.wildCardFactions ||
                                                   Object.values(
-                                                    wildCardFactions
+                                                    details.wildCardFactions
                                                   ).length === 0 ? (
                                                     <></>
                                                   ) : (
@@ -577,7 +578,7 @@ function AppPresentation({
                                                       <p>Wild Card Factions</p>
                                                       <ul>
                                                         {Object.values(
-                                                          wildCardFactions
+                                                          details.wildCardFactions
                                                         ).map(
                                                           ({ text }, index) => (
                                                             <li
@@ -590,32 +591,37 @@ function AppPresentation({
                                                       </ul>
                                                     </>
                                                   )}
-                                                  {!hardpoints ? (
+                                                  {!details.hardpoints ? (
                                                     <></>
                                                   ) : (
                                                     <dl>
                                                       <dt>Hardpoints</dt>
-                                                      <dd>{hardpoints}</dd>
+                                                      <dd>
+                                                        {details.hardpoints}
+                                                      </dd>
                                                     </dl>
                                                   )}
-                                                  {!weaponPoints ? (
+                                                  {!details.weaponPoints ? (
                                                     <></>
                                                   ) : (
                                                     <dl>
                                                       <dt>Weapon Points</dt>
-                                                      <dd>{weaponPoints}</dd>
+                                                      <dd>
+                                                        {details.weaponPoints}
+                                                      </dd>
                                                     </dl>
                                                   )}
-                                                  {!modelStats ||
-                                                  Object.keys(modelStats)
-                                                    .length === 0 ? (
+                                                  {!details.modelStats ||
+                                                  Object.keys(
+                                                    details.modelStats
+                                                  ).length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <table>
                                                       <thead>
                                                         <tr>
                                                           {Object.keys(
-                                                            modelStats
+                                                            details.modelStats
                                                           ).map(
                                                             (name, index) => (
                                                               <th
@@ -630,7 +636,7 @@ function AppPresentation({
                                                       <tbody>
                                                         <tr>
                                                           {Object.entries(
-                                                            modelStats
+                                                            details.modelStats
                                                           ).map(
                                                             (
                                                               [name, stat],
@@ -647,16 +653,17 @@ function AppPresentation({
                                                       </tbody>
                                                     </table>
                                                   )}
-                                                  {!specialRules ||
-                                                  Object.entries(specialRules)
-                                                    .length === 0 ? (
+                                                  {!details.specialRules ||
+                                                  Object.entries(
+                                                    details.specialRules
+                                                  ).length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
                                                       <p>Special Rules</p>
                                                       <dl>
                                                         {Object.entries(
-                                                          specialRules
+                                                          details.specialRules
                                                         ).map(
                                                           (
                                                             [name, text],
@@ -673,8 +680,9 @@ function AppPresentation({
                                                       </dl>
                                                     </>
                                                   )}
-                                                  {!weapons ||
-                                                  weapons.length === 0 ? (
+                                                  {!details.weapons ||
+                                                  details.weapons.length ===
+                                                    0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
@@ -690,7 +698,7 @@ function AppPresentation({
                                                           </tr>
                                                         </thead>
                                                         <tbody>
-                                                          {weapons.map(
+                                                          {details.weapons.map(
                                                             (weapon, index) => (
                                                               <React.Fragment
                                                                 key={`weapon_number_${index}`}
@@ -773,16 +781,17 @@ function AppPresentation({
                                                       </table>
                                                     </>
                                                   )}
-                                                  {!advantages ||
-                                                  Object.entries(advantages)
-                                                    .length === 0 ? (
+                                                  {!details.advantages ||
+                                                  Object.entries(
+                                                    details.advantages
+                                                  ).length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
                                                       <p>Advantages</p>
                                                       <dl>
                                                         {Object.entries(
-                                                          advantages
+                                                          details.advantages
                                                         ).map(
                                                           (
                                                             [name, text],
@@ -799,16 +808,17 @@ function AppPresentation({
                                                       </dl>
                                                     </>
                                                   )}
-                                                  {!maneuvers ||
-                                                  Object.values(maneuvers)
-                                                    .length === 0 ? (
+                                                  {!details.maneuvers ||
+                                                  Object.values(
+                                                    details.maneuvers
+                                                  ).length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
                                                       <p>Maneuvers</p>
                                                       <dl>
                                                         {Object.entries(
-                                                          maneuvers
+                                                          details.maneuvers
                                                         ).map(
                                                           (
                                                             [name, text],
@@ -825,16 +835,17 @@ function AppPresentation({
                                                       </dl>
                                                     </>
                                                   )}
-                                                  {!weaponSelection ||
-                                                  Object.values(weaponSelection)
-                                                    .length === 0 ? (
+                                                  {!details.weaponSelection ||
+                                                  Object.values(
+                                                    details.weaponSelection
+                                                  ).length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
                                                       <p>Weapon Selection</p>
                                                       <ol>
                                                         {Object.values(
-                                                          weaponSelection
+                                                          details.weaponSelection
                                                         ).map((text, index) => (
                                                           <li
                                                             key={`weapon_selection_${index}`}
@@ -845,16 +856,17 @@ function AppPresentation({
                                                       </ol>
                                                     </>
                                                   )}
-                                                  {!cortexes ||
-                                                  Object.entries(cortexes)
-                                                    .length === 0 ? (
+                                                  {!details.cortexes ||
+                                                  Object.entries(
+                                                    details.cortexes
+                                                  ).length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
                                                       <p>Cortexes</p>
                                                       <ol>
                                                         {Object.entries(
-                                                          cortexes
+                                                          details.cortexes
                                                         ).map(
                                                           (
                                                             [
@@ -897,9 +909,9 @@ function AppPresentation({
                                                       </ol>
                                                     </>
                                                   )}
-                                                  {!chassisSpecialRules ||
+                                                  {!details.chassisSpecialRules ||
                                                   Object.entries(
-                                                    chassisSpecialRules
+                                                    details.chassisSpecialRules
                                                   ).length === 0 ? (
                                                     <></>
                                                   ) : (
@@ -909,7 +921,7 @@ function AppPresentation({
                                                       </p>
                                                       <dl>
                                                         {Object.entries(
-                                                          chassisSpecialRules
+                                                          details.chassisSpecialRules
                                                         ).map(
                                                           (
                                                             [name, text],
@@ -926,8 +938,9 @@ function AppPresentation({
                                                       </dl>
                                                     </>
                                                   )}
-                                                  {!weaponDetails ||
-                                                  weaponDetails.length === 0 ? (
+                                                  {!details.weaponDetails ||
+                                                  details.weaponDetails
+                                                    .length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
@@ -942,7 +955,7 @@ function AppPresentation({
                                                           </tr>
                                                         </thead>
                                                         <tbody>
-                                                          {weaponDetails.map(
+                                                          {details.weaponDetails.map(
                                                             (weapon, index) => (
                                                               <React.Fragment
                                                                 key={`weapon_details_number_${index}`}
@@ -984,20 +997,20 @@ function AppPresentation({
                                                       </table>
                                                     </>
                                                   )}
-                                                  {!release ? (
+                                                  {!details.release ? (
                                                     <></>
                                                   ) : (
                                                     <>
                                                       <p>Release</p>
-                                                      <p>{release}</p>
+                                                      <p>{details.release}</p>
                                                     </>
                                                   )}
-                                                  {!lore ? (
+                                                  {!details.lore ? (
                                                     <></>
                                                   ) : (
                                                     <>
                                                       <p>Lore</p>
-                                                      <p>{lore}</p>
+                                                      <p>{details.lore}</p>
                                                     </>
                                                   )}
                                                 </div>
@@ -1204,28 +1217,7 @@ const App = connect(
               ...(model.Subtype
                 ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
                 : {}),
-              ...(!details
-                ? {}
-                : {
-                    squadSize: details.squadSize,
-                    deploymentCost: details.deploymentCost,
-                    baseSize: details.baseSize,
-                    health: details.health,
-                    wildCardFactions: details.wildCardFactions,
-                    hardpoints: details.hardpoints,
-                    weaponPoints: details.weaponPoints,
-                    modelStats: details.modelStats,
-                    specialRules: details.specialRules,
-                    weapons: details.weapons,
-                    advantages: details.advantages,
-                    maneuvers: details.maneuvers,
-                    weaponSelection: details.weaponSelection,
-                    cortexes: details.cortexes,
-                    chassisSpecialRules: details.chassisSpecialRules,
-                    weaponDetails: details.weaponDetails,
-                    release: details.release,
-                    lore: details.lore,
-                  }),
+              details,
             },
           ];
         }
@@ -1244,28 +1236,7 @@ const App = connect(
               ...(wildCard.Subtype
                 ? { subtype: wildCard.Subtype.map((_) => _.text).join(" ") }
                 : {}),
-              ...(!details
-                ? {}
-                : {
-                    squadSize: details.squadSize,
-                    deploymentCost: details.deploymentCost,
-                    baseSize: details.baseSize,
-                    health: details.health,
-                    wildCardFactions: details.wildCardFactions,
-                    hardpoints: details.hardpoints,
-                    weaponPoints: details.weaponPoints,
-                    modelStats: details.modelStats,
-                    specialRules: details.specialRules,
-                    weapons: details.weapons,
-                    advantages: details.advantages,
-                    maneuvers: details.maneuvers,
-                    weaponSelection: details.weaponSelection,
-                    cortexes: details.cortexes,
-                    chassisSpecialRules: details.chassisSpecialRules,
-                    weaponDetails: details.weaponDetails,
-                    release: details.release,
-                    lore: details.lore,
-                  }),
+              details,
             },
           ];
         }
