@@ -20,6 +20,7 @@ import Wild_Card from "./Wild_Card.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
 import { AppSync } from "../state/AppSync";
 import { CypherCodecs } from "../state/CypherCodecs";
+import { Cyphers as Cyphers2 } from "../state/Cyphers";
 import { Dragging } from "../state/Dragging";
 import { FactionModels } from "../state/FactionModels";
 import { Factions } from "../state/Factions";
@@ -529,7 +530,29 @@ function AppPresentation({
                                                   />
                                                 </div>
                                               ) : (
-                                                <div>
+                                                <div className="card-content">
+                                                  {!details.pow ? (
+                                                    <></>
+                                                  ) : (
+                                                    <p>
+                                                      Pow: {details.pow.text}
+                                                    </p>
+                                                  )}
+                                                  {!details.effect ||
+                                                  details.effect.length ===
+                                                    0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    details.effect.map(
+                                                      (effect, index) => (
+                                                        <p
+                                                          key={`effect_${index}`}
+                                                        >
+                                                          {effect}
+                                                        </p>
+                                                      )
+                                                    )
+                                                  )}
                                                   {!details.squadSize ? (
                                                     <></>
                                                   ) : (
@@ -1242,6 +1265,7 @@ const App = connect(
         }
 
         if (cypher) {
+          const details = Cyphers2.selectByPage(page)(state);
           return [
             {
               card: "cypher",
@@ -1253,6 +1277,7 @@ const App = connect(
               ...(cypher.Faction.text === "Universal"
                 ? { faction: "Universal" }
                 : { faction: cypher.Faction.page }),
+              details,
             },
           ];
         }

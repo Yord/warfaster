@@ -5,7 +5,7 @@ const parseCypherText = (text) => {
 
   const type = extractLink(doc, "Type");
   const pow = extractLink(doc, "Pow");
-  const effect = extractLink(doc, "Effect");
+  const effect = extractParagraphs(doc, "Effect");
   const faction = extractLink(doc, "Faction");
   const source = extractLink(doc, "Source");
 
@@ -31,6 +31,24 @@ function extractLink(doc, id) {
 
   const hrefs = a.href.split("title=");
   return { text: a.innerText, page: hrefs[hrefs.length - 1] };
+}
+
+function extractParagraphs(doc, id) {
+  function helper(node, texts) {
+    switch (node.tagName) {
+      case "P":
+        return helper(node.nextSibling, [...texts, node.innerText.trim()]);
+      case "H2":
+        return texts;
+      default:
+        return helper(node.nextSibling, texts);
+    }
+  }
+
+  const node = doc.querySelector(`h2#${id} ~ p`);
+  if (!node) return undefined;
+
+  return helper(node, []);
 }
 
 function removeUndefinedValues(obj) {

@@ -1,6 +1,6 @@
 import { StateShard } from "./utils";
 
-const Cyphers = StateShard("Cyphers", init, { set }, { select });
+const Cyphers = StateShard("Cyphers", init, { set }, { select, selectByPage });
 
 export { Cyphers };
 
@@ -23,4 +23,11 @@ function set(state, { page, cypher }) {
 
 function select(state) {
   return state.data.cyphers;
+}
+
+function selectByPage(state, page) {
+  const cyphers = select(state);
+  return Object.values(cyphers)
+    .flat()
+    .find((cypher) => cypher.name.page === page);
 }
