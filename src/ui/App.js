@@ -1,7 +1,18 @@
 import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
-import { Badge, Card, Col, Input, Layout, Menu, Row, Tooltip } from "antd";
+import {
+  Badge,
+  Card,
+  Col,
+  Input,
+  Layout,
+  Menu,
+  Option,
+  Row,
+  Select,
+  Tooltip,
+} from "antd";
 import {
   DeleteOutlined,
   DownSquareOutlined,
@@ -886,8 +897,12 @@ function AppPresentation({
                                                     <></>
                                                   ) : (
                                                     <>
-                                                      <p>Cortexes</p>
-                                                      <ol>
+                                                      <p>Cortex</p>
+                                                      <Select
+                                                        onClick={(event) =>
+                                                          event.stopPropagation()
+                                                        }
+                                                      >
                                                         {Object.entries(
                                                           details.cortexes
                                                         ).map(
@@ -898,8 +913,14 @@ function AppPresentation({
                                                             ],
                                                             index
                                                           ) => (
-                                                            <li
+                                                            <Select.Option
                                                               key={`cortex_${index}`}
+                                                              value={`Cortex: ${cortex}`}
+                                                              onClick={(
+                                                                event
+                                                              ) =>
+                                                                event.stopPropagation()
+                                                              }
                                                             >
                                                               {cortex}
                                                               <dl>
@@ -926,10 +947,10 @@ function AppPresentation({
                                                                   )
                                                                 )}
                                                               </dl>
-                                                            </li>
+                                                            </Select.Option>
                                                           )
                                                         )}
-                                                      </ol>
+                                                      </Select>
                                                     </>
                                                   )}
                                                   {!details.chassisSpecialRules ||

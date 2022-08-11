@@ -231,6 +231,17 @@ li.ant-menu-item {
   padding: 6px 8px;
 }
 
+.ant-select {
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: fill-available;
+}
+
+.ant-select-item-option-content {
+  overflow: visible !important;
+  white-space: normal !important;
+}
+
 .cards,
 .ant-menu-submenu-popup,
 .ant-tooltip-inner div.ant-tooltip-inner-box {
