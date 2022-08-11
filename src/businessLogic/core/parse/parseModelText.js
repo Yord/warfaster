@@ -1,3 +1,4 @@
+import { parseAnchor } from "./parsers";
 import { cleanText, prepareDOM } from "./utils";
 
 const parseModelText = (text) => {
@@ -19,7 +20,7 @@ const parseModelText = (text) => {
   const chassisSpecialRules = extractDefinitions(doc, "Chassis_Special_Rules");
   const advantages = extractDefinitions(doc, "Advantages");
   const maneuvers = extractDefinitions(doc, "Maneuvers");
-  const weaponSelection = extractLinkList(doc, "Weapon_Selection");
+  const weaponSelection = extractWeaponSelection(doc, "Weapon_Selection");
   const cortexes = extractCortexes(doc, "Cortexes");
 
   const modelStatsData = [
@@ -166,6 +167,15 @@ function extractList(doc, id) {
     const hrefs = a.href.split("title=");
     return { text: a.innerText, page: hrefs[hrefs.length - 1] };
   });
+}
+
+function extractWeaponSelection(doc, id) {
+  const node = doc.querySelector(`h3#${id} + p`);
+  if (!node) return undefined;
+
+  const anchors = [...node.querySelectorAll("a")];
+
+  return anchors.map((a) => parseAnchor(a).text);
 }
 
 function extractCortexes(doc, id) {
