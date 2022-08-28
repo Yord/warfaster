@@ -141,21 +141,6 @@ function extractText(doc, id, { node = "h3" } = {}) {
   return cleanText(p.innerText);
 }
 
-function extractLinkList(doc, id, { node = "h3" } = {}) {
-  const p = doc.querySelector(`${node}#${id} ~ p`);
-  if (!p) return undefined;
-
-  const as = [...p.querySelectorAll("a")];
-  if (as.length === 0) return undefined;
-
-  return Object.fromEntries(
-    as.map((a) => {
-      const hrefs = a.href.split("title=");
-      return [hrefs[hrefs.length - 1], a.innerText];
-    })
-  );
-}
-
 function extractList(doc, id) {
   const p = doc.querySelector(`h3#${id} ~ p`);
   if (!p) return undefined;
