@@ -513,7 +513,23 @@ function AppPresentation({
                                                 }
                                                 title={
                                                   <>
-                                                    <div>{title}</div>
+                                                    <div>
+                                                      {title}
+                                                      {!details ||
+                                                      !cortexName(
+                                                        details.cortexSelections,
+                                                        cortexIds
+                                                      ) ? (
+                                                        ""
+                                                      ) : (
+                                                        <span className="subtitle">
+                                                          {cortexName(
+                                                            details.cortexSelections,
+                                                            cortexIds
+                                                          )}
+                                                        </span>
+                                                      )}
+                                                    </div>
                                                     <div className="card-type">
                                                       {(faction || "").replace(
                                                         /_/g,
@@ -964,31 +980,10 @@ function AppPresentation({
                                                         value={
                                                           !cortexIds
                                                             ? undefined
-                                                            : (Object.entries(
-                                                                details.cortexSelections
-                                                              ).find(
-                                                                ([
-                                                                  cortex,
-                                                                  advantages,
-                                                                ]) =>
-                                                                  Object.values(
-                                                                    advantages
-                                                                  )
-                                                                    .map(
-                                                                      (
-                                                                        advantage
-                                                                      ) =>
-                                                                        advantage.categoryId
-                                                                    )
-                                                                    .join(
-                                                                      ""
-                                                                    ) ===
-                                                                  cortexIds.join(
-                                                                    ""
-                                                                  )
-                                                              ) || [
-                                                                undefined,
-                                                              ])[0]
+                                                            : cortexName(
+                                                                details.cortexSelections,
+                                                                cortexIds
+                                                              )
                                                         }
                                                       >
                                                         {Object.entries(
@@ -1496,3 +1491,12 @@ const App = connect(
 )(AppPresentation);
 
 export default App;
+
+function cortexName(cortexSelections, cortexIds) {
+  return (Object.entries(cortexSelections).find(
+    ([cortex, advantages]) =>
+      Object.values(advantages)
+        .map((advantage) => advantage.categoryId)
+        .join("") === (cortexIds || []).join("")
+  ) || [undefined])[0];
+}

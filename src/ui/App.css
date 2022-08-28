@@ -312,6 +312,12 @@ li.ant-menu-item {
   font-weight: bold;
 }
 
+.cards .body .card .ant-card-meta-title .subtitle {
+  color: white;
+  font-size: 0.8em;
+  margin-left: 0.8em;
+}
+
 .cards .body .card .ant-card-meta-title img {
   height: 25px;
   margin-right: 0.2em;
