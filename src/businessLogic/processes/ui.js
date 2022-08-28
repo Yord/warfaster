@@ -48,7 +48,7 @@ function* updateCards() {
       const destinationPosition = destination.index;
 
       yield put(
-        Lists.updateCard({
+        Lists.moveCard({
           source: { listIndex: sourceListIndex, cardIndex: sourcePosition },
           destination: {
             listIndex: destinationListIndex,
@@ -118,7 +118,15 @@ function* updateUrl() {
           [`t${index}`]: list.title,
           [`l${index}`]: list.cards.reduce(
             (acc, card) =>
-              acc + toBase62(card.pageId).padStart(codeLength, "0"),
+              acc +
+              toBase62(card.pageId).padStart(codeLength, "0") +
+              (card.cortexIds || card.weaponIds
+                ? `(${(card.cortexIds || [])
+                    .map((id) => toBase62(id).padStart(codeLength, "0"))
+                    .join("")},${(card.weaponIds || [])
+                    .map((id) => toBase62(id).padStart(codeLength, "0"))
+                    .join("")})`
+                : ""),
             ""
           ),
         }),
@@ -164,13 +172,7 @@ function* parseListsFromQuery() {
 
       const lists = titleIndexes.map((index) => ({
         title: params["t" + index],
-        cards: partitionBy(exponent, params["l" + index] || "")
-          .map((pageId) => pageId.replace(/^0+/, "") || "0")
-          .map(fromBase62)
-          .map((pageId) => ({
-            pageId: parseInt(pageId, 10),
-            hidden: true,
-          })),
+        cards: parseList(exponent, params["l" + index]),
       }));
 
       yield put(Lists.set({ lists }));
@@ -190,6 +192,61 @@ function* fetchCardOnShow() {
       }
     }
   }
+}
+
+function parseList(exponent, encodedList) {
+  function parseCards(cards, rest) {
+    if (rest === "") {
+      return cards;
+    }
+
+    const pageId = rest.slice(0, exponent);
+
+    if (rest[exponent] === "(") {
+      const blockEnd = rest.indexOf(")");
+      const delimiter = rest.indexOf(",");
+      if (!blockEnd || !delimiter) {
+        return [];
+      }
+
+      const block = rest.slice(exponent + 1, blockEnd);
+      const [cortexIds, weaponIds] = block.split(",");
+      return parseCards(
+        [
+          ...cards,
+          {
+            pageId,
+            cortexIds: partitionBy(exponent, cortexIds),
+            weaponIds: partitionBy(exponent, weaponIds),
+          },
+        ],
+        rest.slice(blockEnd + 1)
+      );
+    }
+
+    return parseCards(
+      [...cards, { pageId, cortexIds: [], weaponIds: [] }],
+      rest.slice(exponent)
+    );
+  }
+
+  const cards = parseCards([], encodedList);
+
+  const decode = (string) =>
+    parseInt(fromBase62(string.replace(/^0+/, "") || "0"), 10);
+
+  return cards
+    .map(({ pageId, cortexIds, weaponIds }) => ({
+      pageId: decode(pageId),
+      cortexIds: cortexIds.map(decode),
+      weaponIds: weaponIds.map(decode),
+    }))
+    .map(({ pageId, cortexIds, weaponIds }) => ({
+      pageId,
+      ...(cortexIds.length === 0 ? {} : { cortexIds }),
+      ...(weaponIds.length === 0 ? {} : { weaponIds }),
+      hidden: true,
+    }));
 }
 
 function partitionBy(slice, string) {

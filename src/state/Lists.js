@@ -10,9 +10,10 @@ const Lists = StateShard(
     removeCard,
     removeList,
     set,
+    setCardCortex,
     setListTitle,
     toggleCard,
-    updateCard,
+    moveCard,
   },
   { select }
 );
@@ -81,7 +82,7 @@ function moveListBy(state, { listIndex, by }) {
   }
 }
 
-function updateCard(state, { destination, source }) {
+function moveCard(state, { destination, source }) {
   const lists = select(state);
   const card = lists[source.listIndex].cards[source.cardIndex];
   lists[source.listIndex].cards.splice(source.cardIndex, 1);
@@ -93,6 +94,14 @@ function toggleCard(state, { listIndex, cardIndex, pageId }) {
   const card = lists[listIndex].cards[cardIndex];
   if (card.pageId === pageId) {
     card.hidden = !card.hidden;
+  }
+}
+
+function setCardCortex(state, { listIndex, cardIndex, pageId, cortexIds }) {
+  const lists = select(state);
+  const card = lists[listIndex].cards[cardIndex];
+  if (card.pageId === pageId) {
+    card.cortexIds = cortexIds;
   }
 }
 

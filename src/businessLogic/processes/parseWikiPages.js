@@ -13,7 +13,8 @@ import { Factions } from "../../state/Factions";
 import { FactionModels } from "../../state/FactionModels";
 import { Models } from "../../state/Models";
 import { WildCardModels } from "../../state/WildCardModels";
-import { FetchedWikiPage } from "../../messages";
+import { FetchedWikiPage, FetchPageIdsSlice } from "../../messages";
+import { partitionBy } from "./partitionBy";
 
 function* parseWikiPages() {
   while (true) {
@@ -41,7 +42,32 @@ function* parseWikiPages() {
     } else if (factionModels.includes(page) || wildCardModels.includes(page)) {
       const model = parseModelText(data.text);
       model.name = { text: data.title, page };
-      yield put(Models.set({ page, model }));
+
+      const cortexSelections = identifyCortexSelections(
+        model.cortexes,
+        data.categories
+      );
+
+      if (!cortexSelections) {
+        yield put(Models.set({ page, model }));
+      } else {
+        model.cortexSelections = cortexSelections;
+        yield put(Models.set({ page, model }));
+
+        const cortexCategories = Object.values(cortexSelections).flatMap(
+          (advantages) =>
+            Object.values(advantages).flatMap(({ category }) => ({
+              text: category.replace(/_/g, " "),
+              page: category,
+            }))
+        );
+
+        const pageSlices = partitionBy(50, cortexCategories);
+
+        for (const pages of pageSlices) {
+          yield put(FetchPageIdsSlice({ pages }));
+        }
+      }
     } else if (factions.includes(page)) {
       const factionModels = parseFactionModelsText(data.text);
       yield put(FactionModels.set({ page, factionModels }));
@@ -59,3 +85,40 @@ function* parseWikiPages() {
 }
 
 export { parseWikiPages };
+
+function identifyCortexSelections(cortexes, categories) {
+  if (
+    !cortexes ||
+    Object.entries(cortexes).length === 0 ||
+    !categories ||
+    Object.entries(categories).length === 0
+  ) {
+    return undefined;
+  }
+
+  const categoryTexts = categories.map(({ category }) => category);
+
+  return Object.fromEntries(
+    Object.entries(cortexes).map(([cortex, advantages]) => [
+      cortex,
+      Object.fromEntries(
+        Object.entries(advantages).map(([advantage, text]) => [
+          advantage,
+          {
+            category: `Category:${findClosestCategory(
+              advantage,
+              categoryTexts
+            )}`,
+            text,
+          },
+        ])
+      ),
+    ])
+  );
+}
+
+function findClosestCategory(advantage, categoryTexts) {
+  return categoryTexts.find(
+    (category) => advantage === category.replace(/^WNM_/, "").replace(/_/g, " ")
+  );
+}

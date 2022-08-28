@@ -8,7 +8,6 @@ import {
   Input,
   Layout,
   Menu,
-  Option,
   Row,
   Select,
   Tooltip,
@@ -86,6 +85,7 @@ function AppPresentation({
   url,
   bookmark,
   open,
+  setCardCortex,
 }) {
   const rootSubmenuKeys = [
     ...[...factionModels, ...Object.entries(wildCardModels)].map(
@@ -460,6 +460,7 @@ function AppPresentation({
                                         title,
                                         page,
                                         pageId,
+                                        cortexIds,
                                         subtype,
                                         faction,
                                         details,
@@ -898,11 +899,7 @@ function AppPresentation({
                                                   ) : (
                                                     <>
                                                       <p>Cortex</p>
-                                                      <Select
-                                                        onClick={(event) =>
-                                                          event.stopPropagation()
-                                                        }
-                                                      >
+                                                      <ol>
                                                         {Object.entries(
                                                           details.cortexes
                                                         ).map(
@@ -913,14 +910,8 @@ function AppPresentation({
                                                             ],
                                                             index
                                                           ) => (
-                                                            <Select.Option
+                                                            <li
                                                               key={`cortex_${index}`}
-                                                              value={`Cortex: ${cortex}`}
-                                                              onClick={(
-                                                                event
-                                                              ) =>
-                                                                event.stopPropagation()
-                                                              }
                                                             >
                                                               {cortex}
                                                               <dl>
@@ -939,6 +930,117 @@ function AppPresentation({
                                                                     >
                                                                       <dt>
                                                                         {name}
+                                                                      </dt>
+                                                                      <dd>
+                                                                        {text}
+                                                                      </dd>
+                                                                    </React.Fragment>
+                                                                  )
+                                                                )}
+                                                              </dl>
+                                                            </li>
+                                                          )
+                                                        )}
+                                                      </ol>
+                                                    </>
+                                                  )}
+                                                  {!details.cortexSelections ||
+                                                  Object.entries(
+                                                    details.cortexSelections
+                                                  ).length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>Cortex Selections</p>
+                                                      <Select
+                                                        onClick={(event) =>
+                                                          event.stopPropagation()
+                                                        }
+                                                        onSelect={setCardCortex(
+                                                          listIndex,
+                                                          cardIndex,
+                                                          pageId
+                                                        )}
+                                                        value={
+                                                          !cortexIds
+                                                            ? undefined
+                                                            : (Object.entries(
+                                                                details.cortexSelections
+                                                              ).find(
+                                                                ([
+                                                                  cortex,
+                                                                  advantages,
+                                                                ]) =>
+                                                                  Object.values(
+                                                                    advantages
+                                                                  )
+                                                                    .map(
+                                                                      (
+                                                                        advantage
+                                                                      ) =>
+                                                                        advantage.categoryId
+                                                                    )
+                                                                    .join(
+                                                                      ""
+                                                                    ) ===
+                                                                  cortexIds.join(
+                                                                    ""
+                                                                  )
+                                                              ) || [
+                                                                undefined,
+                                                              ])[0]
+                                                        }
+                                                      >
+                                                        {Object.entries(
+                                                          details.cortexSelections
+                                                        ).map(
+                                                          (
+                                                            [
+                                                              cortex,
+                                                              advantages,
+                                                            ],
+                                                            index
+                                                          ) => (
+                                                            <Select.Option
+                                                              key={`cortex_${index}`}
+                                                              label={Object.values(
+                                                                advantages
+                                                              ).map(
+                                                                ({
+                                                                  categoryId,
+                                                                }) => categoryId
+                                                              )}
+                                                              value={cortex}
+                                                              onClick={(
+                                                                event
+                                                              ) =>
+                                                                event.stopPropagation()
+                                                              }
+                                                            >
+                                                              {cortex}
+                                                              <dl>
+                                                                {Object.entries(
+                                                                  advantages
+                                                                ).map(
+                                                                  (
+                                                                    [
+                                                                      name,
+                                                                      {
+                                                                        text,
+                                                                        categoryId,
+                                                                      },
+                                                                    ],
+                                                                    advantageIndex
+                                                                  ) => (
+                                                                    <React.Fragment
+                                                                      key={`cortex_${index}_advantage_${advantageIndex}`}
+                                                                    >
+                                                                      <dt>
+                                                                        {name} (
+                                                                        {
+                                                                          categoryId
+                                                                        }
+                                                                        )
                                                                       </dt>
                                                                       <dd>
                                                                         {text}
@@ -1225,7 +1327,7 @@ const App = connect(
     cypherCodecs: CypherCodecs.select()(state),
     lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
-      cards: cards.flatMap(({ pageId, hidden }) => {
+      cards: cards.flatMap(({ pageId, cortexIds, hidden }) => {
         const pageIdByPage = PageIds.select()(state);
 
         const page =
@@ -1257,11 +1359,40 @@ const App = connect(
               title: model.Name.text,
               page: model.Name.page,
               pageId,
+              cortexIds,
               faction: model.faction,
               ...(model.Subtype
                 ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
                 : {}),
-              details,
+              ...(!details
+                ? {}
+                : {
+                    details: {
+                      ...details,
+                      ...(!details.cortexSelections
+                        ? {}
+                        : {
+                            cortexSelections: Object.fromEntries(
+                              Object.entries(details.cortexSelections).map(
+                                ([cortex, advantages]) => [
+                                  cortex,
+                                  Object.fromEntries(
+                                    Object.entries(advantages).map(
+                                      ([advantage, { text, category }]) => [
+                                        advantage,
+                                        {
+                                          text,
+                                          categoryId: pageIdByPage[category],
+                                        },
+                                      ]
+                                    )
+                                  ),
+                                ]
+                              )
+                            ),
+                          }),
+                    },
+                  }),
             },
           ];
         }
@@ -1350,6 +1481,17 @@ const App = connect(
         if (url) window.open(url, "_self");
       }
     },
+    setCardCortex:
+      (listIndex, cardIndex, pageId) =>
+      (_, { label }) =>
+        dispatch(
+          Lists.setCardCortex({
+            listIndex,
+            cardIndex,
+            pageId,
+            cortexIds: label,
+          })
+        ),
   })
 )(AppPresentation);
 
