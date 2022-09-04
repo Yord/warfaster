@@ -310,12 +310,12 @@ li.ant-menu-item {
 .cards .body .card .ant-card-meta-title {
   color: inherit;
   font-weight: bold;
+  white-space: normal;
 }
 
 .cards .body .card .ant-card-meta-title .subtitle {
   color: white;
   font-size: 0.8em;
-  margin-left: 0.8em;
 }
 
 .cards .body .card .ant-card-meta-title img {

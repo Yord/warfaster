@@ -513,23 +513,7 @@ function AppPresentation({
                                                 }
                                                 title={
                                                   <>
-                                                    <div>
-                                                      {title}
-                                                      {!details ||
-                                                      !cortexName(
-                                                        details.cortexSelections,
-                                                        cortexIds
-                                                      ) ? (
-                                                        ""
-                                                      ) : (
-                                                        <span className="subtitle">
-                                                          {cortexName(
-                                                            details.cortexSelections,
-                                                            cortexIds
-                                                          )}
-                                                        </span>
-                                                      )}
-                                                    </div>
+                                                    <div>{title}</div>
                                                     <div className="card-type">
                                                       {(faction || "").replace(
                                                         /_/g,
@@ -539,6 +523,24 @@ function AppPresentation({
                                                         ? " " + subtype
                                                         : ""}
                                                       {type ? " " + type : ""}
+                                                    </div>
+                                                    <div>
+                                                      {!details ||
+                                                      !cortexName(
+                                                        details.cortexSelections,
+                                                        cortexIds
+                                                      ) ? (
+                                                        ""
+                                                      ) : (
+                                                        <>
+                                                          <span className="subtitle">
+                                                            {cortexName(
+                                                              details.cortexSelections,
+                                                              cortexIds
+                                                            )}
+                                                          </span>
+                                                        </>
+                                                      )}
                                                     </div>
                                                   </>
                                                 }
