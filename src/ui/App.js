@@ -526,6 +526,7 @@ function AppPresentation({
                                                     </div>
                                                     <div>
                                                       {!details ||
+                                                      !details.cortexSelections ||
                                                       !cortexName(
                                                         details.cortexSelections,
                                                         cortexIds
@@ -1022,10 +1023,7 @@ function AppPresentation({
                                                                   (
                                                                     [
                                                                       name,
-                                                                      {
-                                                                        text,
-                                                                        categoryId,
-                                                                      },
+                                                                      { text },
                                                                     ],
                                                                     advantageIndex
                                                                   ) => (
@@ -1033,11 +1031,7 @@ function AppPresentation({
                                                                       key={`cortex_${index}_advantage_${advantageIndex}`}
                                                                     >
                                                                       <dt>
-                                                                        {name} (
-                                                                        {
-                                                                          categoryId
-                                                                        }
-                                                                        )
+                                                                        {name}
                                                                       </dt>
                                                                       <dd>
                                                                         {text}
