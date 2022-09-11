@@ -234,7 +234,7 @@ li.ant-menu-item {
 .ant-select {
   width: -moz-available;
   width: -webkit-fill-available;
-  width: fill-available;
+  width: stretch;
 }
 
 .ant-select-item-option-content {
