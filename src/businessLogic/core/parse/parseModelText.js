@@ -160,7 +160,7 @@ function extractWeaponSelection(doc, id) {
 
   const anchors = [...node.querySelectorAll("a")];
 
-  return anchors.map((a) => parseAnchor(a).text);
+  return anchors.map((a) => parseAnchor(a));
 }
 
 function extractCortexes(doc, id) {

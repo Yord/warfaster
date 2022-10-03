@@ -912,13 +912,20 @@ function AppPresentation({
                                                       <ol>
                                                         {Object.values(
                                                           details.weaponSelection
-                                                        ).map((text, index) => (
-                                                          <li
-                                                            key={`weapon_selection_${index}`}
-                                                          >
-                                                            {text}
-                                                          </li>
-                                                        ))}
+                                                        ).map(
+                                                          (
+                                                            { text, page },
+                                                            index
+                                                          ) => (
+                                                            <li
+                                                              key={`weapon_selection_${index}`}
+                                                            >
+                                                              <a href={page}>
+                                                                {text}
+                                                              </a>
+                                                            </li>
+                                                          )
+                                                        )}
                                                       </ol>
                                                     </>
                                                   )}
