@@ -48,12 +48,23 @@ function* parseWikiPages() {
         data.categories
       );
 
-      if (!cortexSelections) {
-        yield put(Models.set({ page, model }));
-      } else {
+      if (cortexSelections) {
         model.cortexSelections = cortexSelections;
-        yield put(Models.set({ page, model }));
+      }
 
+      const warjackWeaponSelections = buildWarjackWeaponSelections(
+        model.weaponDetails
+      );
+
+      if (warjackWeaponSelections) {
+        model.warjackWeaponSelections = warjackWeaponSelections;
+      }
+
+      yield put(Models.set({ page, model }));
+
+      let fetchPages = [];
+
+      if (cortexSelections) {
         const cortexCategories = Object.values(cortexSelections).flatMap(
           (advantages) =>
             Object.values(advantages).flatMap(({ category }) => ({
@@ -62,7 +73,19 @@ function* parseWikiPages() {
             }))
         );
 
-        const pageSlices = partitionBy(50, cortexCategories);
+        fetchPages = [...fetchPages, ...cortexCategories];
+      }
+
+      if (warjackWeaponSelections) {
+        const weaponPages = Object.values(warjackWeaponSelections).map(
+          ({ name, page }) => ({ text: name, page })
+        );
+
+        fetchPages = [...fetchPages, ...weaponPages];
+      }
+
+      if (fetchPages.length > 0) {
+        const pageSlices = partitionBy(50, fetchPages);
 
         for (const pages of pageSlices) {
           yield put(FetchPageIdsSlice({ pages }));
@@ -85,6 +108,24 @@ function* parseWikiPages() {
 }
 
 export { parseWikiPages };
+
+function buildWarjackWeaponSelections(weaponDetails) {
+  if (!weaponDetails) {
+    return undefined;
+  }
+
+  return Object.fromEntries(
+    weaponDetails.map(({ Cost, Location, Weapon }) => [
+      Weapon.page,
+      {
+        cost: Cost.text,
+        location: Location.text,
+        name: Weapon.text,
+        page: Weapon.page,
+      },
+    ])
+  );
+}
 
 function identifyCortexSelections(cortexes, categories) {
   if (

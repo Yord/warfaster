@@ -86,6 +86,7 @@ function AppPresentation({
   bookmark,
   open,
   setCardCortex,
+  setCardWarjackWeapons,
 }) {
   const rootSubmenuKeys = [
     ...[...factionModels, ...Object.entries(wildCardModels)].map(
@@ -461,6 +462,7 @@ function AppPresentation({
                                         page,
                                         pageId,
                                         cortexIds,
+                                        warjackWeaponIds,
                                         subtype,
                                         faction,
                                         details,
@@ -525,23 +527,33 @@ function AppPresentation({
                                                       {type ? " " + type : ""}
                                                     </div>
                                                     <div>
-                                                      {!details ||
-                                                      !details.cortexSelections ||
-                                                      !cortexName(
-                                                        details.cortexSelections,
-                                                        cortexIds
-                                                      ) ? (
-                                                        ""
-                                                      ) : (
-                                                        <>
-                                                          <span className="subtitle">
-                                                            {cortexName(
-                                                              details.cortexSelections,
-                                                              cortexIds
-                                                            )}
-                                                          </span>
-                                                        </>
-                                                      )}
+                                                      <span className="subtitle">
+                                                        {[
+                                                          ...(!details ||
+                                                          !details.cortexSelections ||
+                                                          !cortexName(
+                                                            details.cortexSelections,
+                                                            cortexIds
+                                                          )
+                                                            ? []
+                                                            : [
+                                                                cortexName(
+                                                                  details.cortexSelections,
+                                                                  cortexIds
+                                                                ),
+                                                              ]),
+                                                          ...(!details ||
+                                                          !details.warjackWeaponSelections ||
+                                                          !warjackWeaponIds ||
+                                                          warjackWeaponIds.length ===
+                                                            0
+                                                            ? []
+                                                            : warjackWeaponNamesSubtitle(
+                                                                details.warjackWeaponSelections,
+                                                                warjackWeaponIds
+                                                              )),
+                                                        ].join(", ")}
+                                                      </span>
                                                     </div>
                                                   </>
                                                 }
@@ -972,6 +984,17 @@ function AppPresentation({
                                                     <>
                                                       <p>Cortex Selections</p>
                                                       <Select
+                                                        defaultValue={
+                                                          <span
+                                                            style={{
+                                                              color: "gray",
+                                                              fontStyle:
+                                                                "italic",
+                                                            }}
+                                                          >
+                                                            Cortex
+                                                          </span>
+                                                        }
                                                         onClick={(event) =>
                                                           event.stopPropagation()
                                                         }
@@ -1073,6 +1096,123 @@ function AppPresentation({
                                                           )
                                                         )}
                                                       </dl>
+                                                    </>
+                                                  )}
+                                                  {!details.hardpointNames ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>
+                                                        Warjack Weapon
+                                                        Selections
+                                                      </p>
+                                                      {details.hardpointNames.map(
+                                                        (
+                                                          hardpointName,
+                                                          hardpointNameIndex
+                                                        ) =>
+                                                          !details.warjackWeaponSelections ||
+                                                          Object.keys(
+                                                            details.warjackWeaponSelections
+                                                          ).length === 0 ? (
+                                                            <></>
+                                                          ) : (
+                                                            <div
+                                                              key={`warjack_weapon_${hardpointNameIndex}`}
+                                                            >
+                                                              <Select
+                                                                defaultValue={
+                                                                  <span
+                                                                    style={{
+                                                                      color:
+                                                                        "gray",
+                                                                      fontStyle:
+                                                                        "italic",
+                                                                    }}
+                                                                  >
+                                                                    {
+                                                                      hardpointName
+                                                                    }
+                                                                  </span>
+                                                                }
+                                                                onClick={(
+                                                                  event
+                                                                ) =>
+                                                                  event.stopPropagation()
+                                                                }
+                                                                onSelect={setCardWarjackWeapons(
+                                                                  listIndex,
+                                                                  cardIndex,
+                                                                  hardpointNameIndex,
+                                                                  pageId
+                                                                )}
+                                                                value={
+                                                                  !warjackWeaponIds ||
+                                                                  !warjackWeaponIds[
+                                                                    hardpointNameIndex
+                                                                  ]
+                                                                    ? undefined
+                                                                    : warjackWeaponNames(
+                                                                        details.warjackWeaponSelections,
+                                                                        warjackWeaponIds[
+                                                                          hardpointNameIndex
+                                                                        ]
+                                                                      )
+                                                                }
+                                                              >
+                                                                {Object.values(
+                                                                  details.warjackWeaponSelections
+                                                                )
+                                                                  .filter(
+                                                                    ({
+                                                                      location,
+                                                                    }) =>
+                                                                      location ===
+                                                                      hardpointName
+                                                                  )
+                                                                  .map(
+                                                                    (
+                                                                      {
+                                                                        name,
+                                                                        page,
+                                                                        pageId,
+                                                                        cost,
+                                                                        location,
+                                                                      },
+                                                                      index
+                                                                    ) => (
+                                                                      <Select.Option
+                                                                        key={`warjack_weapon_${hardpointNameIndex}_${index}`}
+                                                                        label={
+                                                                          pageId
+                                                                        }
+                                                                        value={
+                                                                          name
+                                                                        }
+                                                                        onClick={(
+                                                                          event
+                                                                        ) =>
+                                                                          event.stopPropagation()
+                                                                        }
+                                                                      >
+                                                                        {warjackWeaponName(
+                                                                          name,
+                                                                          cost
+                                                                        )}
+                                                                        <div>
+                                                                          Weapon
+                                                                          details!
+                                                                        </div>
+                                                                        {
+                                                                          // TODO
+                                                                        }
+                                                                      </Select.Option>
+                                                                    )
+                                                                  )}
+                                                              </Select>
+                                                            </div>
+                                                          )
+                                                      )}
                                                     </>
                                                   )}
                                                   {!details.weaponDetails ||
@@ -1318,115 +1458,137 @@ const App = connect(
     cypherCodecs: CypherCodecs.select()(state),
     lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
-      cards: cards.flatMap(({ pageId, cortexIds, hidden }) => {
-        const pageIdByPage = PageIds.select()(state);
+      cards: cards.flatMap(
+        ({ pageId, cortexIds, warjackWeaponIds, hidden }) => {
+          const pageIdByPage = PageIds.select()(state);
 
-        const page =
-          Object.entries(pageIdByPage)
-            .filter(([_, id]) => id === pageId)
-            .map(([page, _]) => page)[0] || "";
+          const page =
+            Object.entries(pageIdByPage)
+              .filter(([_, id]) => id === pageId)
+              .map(([page, _]) => page)[0] || "";
 
-        const model = Object.entries(state.data.factionModels)
-          .flatMap(([faction, models]) =>
-            models.map((model) => ({ ...model, faction }))
-          )
-          .find(({ Name }) => Name.page === page);
-        const wildCard = Object.entries(state.data.wildCardModels)
-          .flatMap(([faction, models]) =>
-            models.map((model) => ({ ...model, faction }))
-          )
-          .find(({ Name }) => Name.page === page);
-        const cypher = state.data.cypherCodecs.find(
-          ({ Cypher }) => Cypher.page === page
-        );
+          const model = Object.entries(state.data.factionModels)
+            .flatMap(([faction, models]) =>
+              models.map((model) => ({ ...model, faction }))
+            )
+            .find(({ Name }) => Name.page === page);
+          const wildCard = Object.entries(state.data.wildCardModels)
+            .flatMap(([faction, models]) =>
+              models.map((model) => ({ ...model, faction }))
+            )
+            .find(({ Name }) => Name.page === page);
+          const cypher = state.data.cypherCodecs.find(
+            ({ Cypher }) => Cypher.page === page
+          );
 
-        if (model) {
-          const details = Models.selectByPage(page)(state);
-          return [
-            {
-              card: "model",
-              hidden,
-              type: model.Type.text,
-              title: model.Name.text,
-              page: model.Name.page,
-              pageId,
-              cortexIds,
-              faction: model.faction,
-              ...(model.Subtype
-                ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
-                : {}),
-              ...(!details
-                ? {}
-                : {
-                    details: {
-                      ...details,
-                      ...(!details.cortexSelections
-                        ? {}
-                        : {
-                            cortexSelections: Object.fromEntries(
-                              Object.entries(details.cortexSelections).map(
-                                ([cortex, advantages]) => [
-                                  cortex,
-                                  Object.fromEntries(
-                                    Object.entries(advantages).map(
-                                      ([advantage, { text, category }]) => [
-                                        advantage,
-                                        {
-                                          text,
-                                          categoryId: pageIdByPage[category],
-                                        },
-                                      ]
-                                    )
-                                  ),
-                                ]
-                              )
-                            ),
-                          }),
-                    },
-                  }),
-            },
-          ];
+          if (model) {
+            const details = Models.selectByPage(page)(state);
+            return [
+              {
+                card: "model",
+                hidden,
+                type: model.Type.text,
+                title: model.Name.text,
+                page: model.Name.page,
+                pageId,
+                cortexIds,
+                warjackWeaponIds,
+                faction: model.faction,
+                ...(model.Subtype
+                  ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+                  : {}),
+                ...(!details
+                  ? {}
+                  : {
+                      details: {
+                        ...details,
+                        ...(!details.hardpoints
+                          ? {}
+                          : {
+                              hardpointNames: parseHardpoints(
+                                details.hardpoints
+                              ),
+                            }),
+                        ...(!details.cortexSelections
+                          ? {}
+                          : {
+                              cortexSelections: Object.fromEntries(
+                                Object.entries(details.cortexSelections).map(
+                                  ([cortex, advantages]) => [
+                                    cortex,
+                                    Object.fromEntries(
+                                      Object.entries(advantages).map(
+                                        ([advantage, { text, category }]) => [
+                                          advantage,
+                                          {
+                                            text,
+                                            categoryId: pageIdByPage[category],
+                                          },
+                                        ]
+                                      )
+                                    ),
+                                  ]
+                                )
+                              ),
+                            }),
+                        ...(!details.warjackWeaponSelections
+                          ? {}
+                          : {
+                              warjackWeaponSelections: Object.fromEntries(
+                                Object.entries(
+                                  details.warjackWeaponSelections
+                                ).map(([page, selection]) => [
+                                  page,
+                                  { ...selection, pageId: pageIdByPage[page] },
+                                ])
+                              ),
+                            }),
+                      },
+                    }),
+              },
+            ];
+          }
+
+          if (wildCard) {
+            const details = Models.selectByPage(page)(state);
+            return [
+              {
+                card: "model",
+                hidden,
+                type: wildCard.Type.text,
+                title: wildCard.Name.text,
+                page: wildCard.Name.page,
+                pageId,
+                faction: "Wild_Card",
+                ...(wildCard.Subtype
+                  ? { subtype: wildCard.Subtype.map((_) => _.text).join(" ") }
+                  : {}),
+                details,
+              },
+            ];
+          }
+
+          if (cypher) {
+            const details = Cyphers2.selectByPage(page)(state);
+            return [
+              {
+                card: "cypher",
+                hidden,
+                type: cypher.Type.text,
+                title: cypher.Cypher.text,
+                page: cypher.Cypher.page,
+                pageId,
+                ...(cypher.Faction.text === "Universal"
+                  ? { faction: "Universal" }
+                  : { faction: cypher.Faction.page }),
+                details,
+              },
+            ];
+          }
+
+          return [];
         }
-
-        if (wildCard) {
-          const details = Models.selectByPage(page)(state);
-          return [
-            {
-              card: "model",
-              hidden,
-              type: wildCard.Type.text,
-              title: wildCard.Name.text,
-              page: wildCard.Name.page,
-              pageId,
-              faction: "Wild_Card",
-              ...(wildCard.Subtype
-                ? { subtype: wildCard.Subtype.map((_) => _.text).join(" ") }
-                : {}),
-              details,
-            },
-          ];
-        }
-
-        if (cypher) {
-          const details = Cyphers2.selectByPage(page)(state);
-          return [
-            {
-              card: "cypher",
-              hidden,
-              type: cypher.Type.text,
-              title: cypher.Cypher.text,
-              page: cypher.Cypher.page,
-              pageId,
-              ...(cypher.Faction.text === "Universal"
-                ? { faction: "Universal" }
-                : { faction: cypher.Faction.page }),
-              details,
-            },
-          ];
-        }
-
-        return [];
-      }),
+      ),
     })),
     dragging: Dragging.select()(state),
     url: Url.select()(state),
@@ -1483,6 +1645,18 @@ const App = connect(
             cortexIds: label,
           })
         ),
+    setCardWarjackWeapons:
+      (listIndex, cardIndex, hardpointNameIndex, pageId) =>
+      (_, { label }) =>
+        dispatch(
+          Lists.setCardWarjackWeapons({
+            listIndex,
+            cardIndex,
+            hardpointNameIndex,
+            pageId,
+            warjackWeaponId: label,
+          })
+        ),
   })
 )(AppPresentation);
 
@@ -1495,4 +1669,83 @@ function cortexName(cortexSelections, cortexIds) {
         .map((advantage) => advantage.categoryId)
         .join("") === (cortexIds || []).join("")
   ) || [undefined])[0];
+}
+
+function warjackWeaponNames(warjackWeaponSelections, weaponId) {
+  const weapon = Object.values(warjackWeaponSelections).find(
+    ({ pageId }) => pageId === weaponId
+  );
+  if (weapon) {
+    return warjackWeaponName(weapon.name, weapon.cost);
+  }
+  return weaponId;
+}
+
+function warjackWeaponNamesSubtitle(warjackWeaponSelections, weaponIds) {
+  return weaponIds.flatMap((weaponId) => {
+    const weapon = Object.values(warjackWeaponSelections).find(
+      ({ pageId }) => pageId === weaponId
+    );
+    if (weapon) {
+      return [weapon.name];
+    }
+    return [];
+  });
+}
+
+function warjackWeaponName(name, cost) {
+  return `${name} (cost ${cost})`;
+}
+
+function parseHardpoints(hardpoints) {
+  // Parses strings of the following type: "3 : 2 Arm, 1 Back"
+
+  const rHardpointCount = "\\s*(\\d+)\\s*";
+  const rHardpointGroup = "\\s*(\\d+)\\s*(\\w+)\\s*";
+
+  let results = null;
+  for (let n = 1; n <= 10; n++) {
+    const regexp = new RegExp(
+      `^${rHardpointCount}:${rHardpointGroup}${repeat(
+        `,${rHardpointGroup}`,
+        n - 1
+      )}$`
+    );
+    results = regexp.exec(hardpoints);
+    if (results !== null) {
+      break;
+    }
+  }
+
+  if (results === null) {
+    return undefined;
+  }
+
+  const hardpointCount = parseInt(results[1], 10);
+
+  const hardpointNames = [];
+  for (let n = 2; n < results.length; n += 2) {
+    const groupCount = parseInt(results[n], 10);
+    const groupName = results[n + 1];
+
+    for (let i = 1; i <= groupCount; i++) {
+      hardpointNames.push(groupName);
+    }
+  }
+
+  if (hardpointCount !== hardpointNames.length) {
+    console.error(
+      "Hardpoints do not add up!",
+      hardpoints,
+      hardpointCount,
+      hardpointNames
+    );
+  }
+
+  return hardpointNames;
+
+  function repeat(s, n) {
+    if (n === 0) return "";
+    return s + repeat(s, n - 1);
+  }
 }

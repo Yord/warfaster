@@ -112,6 +112,16 @@ function* updateUrl() {
       const maxPageId = Math.max(0, ...pageIds.flat());
       const codeLength = Math.ceil(Math.log(maxPageId + 1) / Math.log(62)) || 0;
 
+      function renderWarjackWeaponIds(warjackWeaponIds, codeLength) {
+        const ids = warjackWeaponIds || [];
+        let res = "";
+        for (let i = 0; i < ids.length; i++) {
+          const id = ids[i];
+          res += (id ? toBase62(id) : "0").padStart(codeLength, "0");
+        }
+        return res;
+      }
+
       const state = lists.reduce(
         (state, list, index) => ({
           ...state,
@@ -120,12 +130,13 @@ function* updateUrl() {
             (acc, card) =>
               acc +
               toBase62(card.pageId).padStart(codeLength, "0") +
-              (card.cortexIds || card.weaponIds
+              (card.cortexIds || card.warjackWeaponIds
                 ? `(${(card.cortexIds || [])
                     .map((id) => toBase62(id).padStart(codeLength, "0"))
-                    .join("")},${(card.weaponIds || [])
-                    .map((id) => toBase62(id).padStart(codeLength, "0"))
-                    .join("")})`
+                    .join("")},${renderWarjackWeaponIds(
+                    card.warjackWeaponIds,
+                    codeLength
+                  )})`
                 : ""),
             ""
           ),
@@ -210,14 +221,14 @@ function parseList(exponent, encodedList) {
       }
 
       const block = rest.slice(exponent + 1, blockEnd);
-      const [cortexIds, weaponIds] = block.split(",");
+      const [cortexIds, warjackWeaponIds] = block.split(",");
       return parseCards(
         [
           ...cards,
           {
             pageId,
             cortexIds: partitionBy(exponent, cortexIds),
-            weaponIds: partitionBy(exponent, weaponIds),
+            warjackWeaponIds: partitionBy(exponent, warjackWeaponIds),
           },
         ],
         rest.slice(blockEnd + 1)
@@ -225,26 +236,29 @@ function parseList(exponent, encodedList) {
     }
 
     return parseCards(
-      [...cards, { pageId, cortexIds: [], weaponIds: [] }],
+      [...cards, { pageId, cortexIds: [], warjackWeaponIds: [] }],
       rest.slice(exponent)
     );
   }
 
   const cards = parseCards([], encodedList);
 
-  const decode = (string) =>
-    parseInt(fromBase62(string.replace(/^0+/, "") || "0"), 10);
+  const decode = (string) => {
+    const normalizedString = string.replace(/^0+/, "") || "0";
+    if (normalizedString === "0") return null;
+    return parseInt(fromBase62(normalizedString), 10);
+  };
 
   return cards
-    .map(({ pageId, cortexIds, weaponIds }) => ({
+    .map(({ pageId, cortexIds, warjackWeaponIds }) => ({
       pageId: decode(pageId),
       cortexIds: cortexIds.map(decode),
-      weaponIds: weaponIds.map(decode),
+      warjackWeaponIds: warjackWeaponIds.map(decode),
     }))
-    .map(({ pageId, cortexIds, weaponIds }) => ({
+    .map(({ pageId, cortexIds, warjackWeaponIds }) => ({
       pageId,
       ...(cortexIds.length === 0 ? {} : { cortexIds }),
-      ...(weaponIds.length === 0 ? {} : { weaponIds }),
+      ...(warjackWeaponIds.length === 0 ? {} : { warjackWeaponIds }),
       hidden: true,
     }));
 }
