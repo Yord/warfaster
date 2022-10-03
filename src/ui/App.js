@@ -87,6 +87,7 @@ function AppPresentation({
   open,
   setCardCortex,
   setCardWarjackWeapons,
+  setCardVehicleWeapon,
 }) {
   const rootSubmenuKeys = [
     ...[...factionModels, ...Object.entries(wildCardModels)].map(
@@ -462,6 +463,7 @@ function AppPresentation({
                                         page,
                                         pageId,
                                         cortexIds,
+                                        vehicleWeaponId,
                                         warjackWeaponIds,
                                         subtype,
                                         faction,
@@ -901,17 +903,85 @@ function AppPresentation({
                                                       </dl>
                                                     </>
                                                   )}
-                                                  {!details.weaponSelection ||
+
+                                                  {!details.vehicleWeaponSelection ||
+                                                  details.vehicleWeaponSelection
+                                                    .length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <p>
+                                                        Vehicle Weapon
+                                                        Selections
+                                                      </p>
+                                                      <Select
+                                                        defaultValue={
+                                                          <span
+                                                            style={{
+                                                              color: "gray",
+                                                              fontStyle:
+                                                                "italic",
+                                                            }}
+                                                          >
+                                                            Vehicle Weapon
+                                                          </span>
+                                                        }
+                                                        onClick={(event) =>
+                                                          event.stopPropagation()
+                                                        }
+                                                        onSelect={setCardVehicleWeapon(
+                                                          listIndex,
+                                                          cardIndex,
+                                                          pageId
+                                                        )}
+                                                        value={
+                                                          !vehicleWeaponId
+                                                            ? undefined
+                                                            : vehicleWeaponName(
+                                                                details.vehicleWeaponSelection,
+                                                                vehicleWeaponId
+                                                              )
+                                                        }
+                                                      >
+                                                        {details.vehicleWeaponSelection.map(
+                                                          (
+                                                            { text, pageId },
+                                                            index
+                                                          ) => (
+                                                            <Select.Option
+                                                              key={`vehicle_weapon_${index}`}
+                                                              label={pageId}
+                                                              value={text}
+                                                              onClick={(
+                                                                event
+                                                              ) =>
+                                                                event.stopPropagation()
+                                                              }
+                                                            >
+                                                              {text}
+                                                              {
+                                                                // TODO
+                                                              }
+                                                            </Select.Option>
+                                                          )
+                                                        )}
+                                                      </Select>
+                                                    </>
+                                                  )}
+
+                                                  {!details.vehicleWeaponSelection ||
                                                   Object.values(
-                                                    details.weaponSelection
+                                                    details.vehicleWeaponSelection
                                                   ).length === 0 ? (
                                                     <></>
                                                   ) : (
                                                     <>
-                                                      <p>Weapon Selection</p>
+                                                      <p>
+                                                        Vehicle Weapon Selection
+                                                      </p>
                                                       <ol>
                                                         {Object.values(
-                                                          details.weaponSelection
+                                                          details.vehicleWeaponSelection
                                                         ).map(
                                                           (
                                                             { text, page },
@@ -1466,7 +1536,7 @@ const App = connect(
     lists: Lists.select()(state).map(({ title, cards }) => ({
       title,
       cards: cards.flatMap(
-        ({ pageId, cortexIds, warjackWeaponIds, hidden }) => {
+        ({ pageId, cortexIds, warjackWeaponIds, vehicleWeaponId, hidden }) => {
           const pageIdByPage = PageIds.select()(state);
 
           const page =
@@ -1500,6 +1570,7 @@ const App = connect(
                 pageId,
                 cortexIds,
                 warjackWeaponIds,
+                vehicleWeaponId,
                 faction: model.faction,
                 ...(model.Subtype
                   ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
@@ -1549,6 +1620,18 @@ const App = connect(
                                   { ...selection, pageId: pageIdByPage[page] },
                                 ])
                               ),
+                            }),
+                        ...(!details.vehicleWeaponSelection
+                          ? {}
+                          : {
+                              vehicleWeaponSelection:
+                                details.vehicleWeaponSelection.map(
+                                  ({ text, page }) => ({
+                                    text,
+                                    page,
+                                    pageId: pageIdByPage[page],
+                                  })
+                                ),
                             }),
                       },
                     }),
@@ -1664,6 +1747,17 @@ const App = connect(
             warjackWeaponId: label,
           })
         ),
+    setCardVehicleWeapon:
+      (listIndex, cardIndex, pageId) =>
+      (_, { label }) =>
+        dispatch(
+          Lists.setCardVehicleWeapon({
+            listIndex,
+            cardIndex,
+            pageId,
+            vehicleWeaponId: label,
+          })
+        ),
   })
 )(AppPresentation);
 
@@ -1676,6 +1770,14 @@ function cortexName(cortexSelections, cortexIds) {
         .map((advantage) => advantage.categoryId)
         .join("") === (cortexIds || []).join("")
   ) || [undefined])[0];
+}
+
+function vehicleWeaponName(vehicleWeaponSelection, vehicleWeaponId) {
+  const vehicleWeapon = vehicleWeaponSelection.find(
+    ({ pageId }) => pageId === vehicleWeaponId
+  );
+  if (!vehicleWeapon) return undefined;
+  return vehicleWeapon.text;
 }
 
 function warjackWeaponNames(warjackWeaponSelections, weaponId) {

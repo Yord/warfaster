@@ -84,6 +84,10 @@ function* parseWikiPages() {
         fetchPages = [...fetchPages, ...weaponPages];
       }
 
+      if (model.vehicleWeaponSelection) {
+        fetchPages = [...fetchPages, ...model.vehicleWeaponSelection];
+      }
+
       if (fetchPages.length > 0) {
         const pageSlices = partitionBy(50, fetchPages);
 

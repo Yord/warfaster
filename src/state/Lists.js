@@ -11,6 +11,7 @@ const Lists = StateShard(
     removeList,
     set,
     setCardCortex,
+    setCardVehicleWeapon,
     setCardWarjackWeapons,
     setListTitle,
     toggleCard,
@@ -117,6 +118,17 @@ function setCardWarjackWeapons(
       card.warjackWeaponIds = [];
     }
     card.warjackWeaponIds[hardpointNameIndex] = warjackWeaponId;
+  }
+}
+
+function setCardVehicleWeapon(
+  state,
+  { listIndex, cardIndex, pageId, vehicleWeaponId }
+) {
+  const lists = select(state);
+  const card = lists[listIndex].cards[cardIndex];
+  if (card.pageId === pageId) {
+    card.vehicleWeaponId = vehicleWeaponId;
   }
 }
 

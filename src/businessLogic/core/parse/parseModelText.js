@@ -20,7 +20,10 @@ const parseModelText = (text) => {
   const chassisSpecialRules = extractDefinitions(doc, "Chassis_Special_Rules");
   const advantages = extractDefinitions(doc, "Advantages");
   const maneuvers = extractDefinitions(doc, "Maneuvers");
-  const weaponSelection = extractWeaponSelection(doc, "Weapon_Selection");
+  const vehicleWeaponSelection = extractWeaponSelection(
+    doc,
+    "Weapon_Selection"
+  );
   const cortexes = extractCortexes(doc, "Cortexes");
 
   const modelStatsData = [
@@ -110,7 +113,7 @@ const parseModelText = (text) => {
     weapons,
     advantages,
     maneuvers,
-    weaponSelection,
+    vehicleWeaponSelection,
     cortexes,
     chassisSpecialRules,
     weaponDetails: weaponDetails(),

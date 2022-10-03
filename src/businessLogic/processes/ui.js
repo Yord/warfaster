@@ -137,6 +137,12 @@ function* updateUrl() {
                     card.warjackWeaponIds,
                     codeLength
                   )})`
+                : "") +
+              (card.vehicleWeaponId
+                ? `[${toBase62(card.vehicleWeaponId).padStart(
+                    codeLength,
+                    "0"
+                  )}]`
                 : ""),
             ""
           ),
@@ -229,6 +235,28 @@ function parseList(exponent, encodedList) {
             pageId,
             cortexIds: partitionBy(exponent, cortexIds),
             warjackWeaponIds: partitionBy(exponent, warjackWeaponIds),
+            vehicleWeaponId: [],
+          },
+        ],
+        rest.slice(blockEnd + 1)
+      );
+    }
+
+    if (rest[exponent] === "[") {
+      const blockEnd = rest.indexOf("]");
+      if (!blockEnd) {
+        return [];
+      }
+
+      const vehicleWeaponId = rest.slice(exponent + 1, blockEnd);
+      return parseCards(
+        [
+          ...cards,
+          {
+            pageId,
+            cortexIds: [],
+            warjackWeaponIds: [],
+            vehicleWeaponId: [vehicleWeaponId],
           },
         ],
         rest.slice(blockEnd + 1)
@@ -236,7 +264,10 @@ function parseList(exponent, encodedList) {
     }
 
     return parseCards(
-      [...cards, { pageId, cortexIds: [], warjackWeaponIds: [] }],
+      [
+        ...cards,
+        { pageId, cortexIds: [], warjackWeaponIds: [], vehicleWeaponId: [] },
+      ],
       rest.slice(exponent)
     );
   }
@@ -250,15 +281,19 @@ function parseList(exponent, encodedList) {
   };
 
   return cards
-    .map(({ pageId, cortexIds, warjackWeaponIds }) => ({
+    .map(({ pageId, cortexIds, warjackWeaponIds, vehicleWeaponId }) => ({
       pageId: decode(pageId),
       cortexIds: cortexIds.map(decode),
       warjackWeaponIds: warjackWeaponIds.map(decode),
+      vehicleWeaponId: vehicleWeaponId.map(decode),
     }))
-    .map(({ pageId, cortexIds, warjackWeaponIds }) => ({
+    .map(({ pageId, cortexIds, warjackWeaponIds, vehicleWeaponId }) => ({
       pageId,
       ...(cortexIds.length === 0 ? {} : { cortexIds }),
       ...(warjackWeaponIds.length === 0 ? {} : { warjackWeaponIds }),
+      ...(vehicleWeaponId.length === 0
+        ? {}
+        : { vehicleWeaponId: vehicleWeaponId[0] }),
       hidden: true,
     }));
 }
