@@ -531,6 +531,14 @@ function AppPresentation({
                                                     <div>
                                                       <span className="subtitle">
                                                         {[
+                                                          ...(!vehicleWeaponId
+                                                            ? []
+                                                            : [
+                                                                vehicleWeaponName(
+                                                                  details.vehicleWeaponSelection,
+                                                                  vehicleWeaponId
+                                                                ),
+                                                              ]),
                                                           ...(!details ||
                                                           !details.cortexSelections ||
                                                           !cortexName(
