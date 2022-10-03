@@ -531,7 +531,12 @@ function AppPresentation({
                                                     <div>
                                                       <span className="subtitle">
                                                         {[
-                                                          ...(!vehicleWeaponId
+                                                          ...(!details ||
+                                                          !details.vehicleWeaponSelection ||
+                                                          !vehicleWeaponName(
+                                                            details.vehicleWeaponSelection,
+                                                            vehicleWeaponId
+                                                          )
                                                             ? []
                                                             : [
                                                                 vehicleWeaponName(
