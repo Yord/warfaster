@@ -6,6 +6,7 @@ import {
   FetchWikiPage,
   MenuItemClicked,
 } from "../../messages";
+import { AppSync } from "../../state/AppSync";
 import { CypherCodecs } from "../../state/CypherCodecs";
 import { Dragging } from "../../state/Dragging";
 import { FactionModels } from "../../state/FactionModels";
@@ -24,6 +25,7 @@ function* ui() {
     updateCards(),
     updateUrl(),
     parseListsFromQuery(),
+    parseListsFromQuery2(),
     fetchCardOnShow(),
   ]);
 }
@@ -173,29 +175,58 @@ function* parseListsFromQuery() {
   });
 
   while (true) {
-    const event = yield take(loadChannel);
+    yield take(loadChannel);
 
-    const urlParams = new URLSearchParams(event.target.location.search);
-    const params = Object.fromEntries(urlParams);
+    yield* parseLists();
+  }
+}
 
-    const version = params.v;
-    const exponent = parseInt(params.e, 10) || 0;
+function* parseListsFromQuery2() {
+  yield take(AppSync.done().type);
 
-    if (version === "1" && exponent) {
-      const titleIndexes = Object.keys(params)
-        .filter((key) => key.match(/^t[\d]+$/))
-        .map((key) => parseInt(key.substring(1), 10))
-        .sort((a, b) => a - b);
+  yield* parseLists();
+}
 
-      const lists = titleIndexes.map((index) => ({
-        title: params["t" + index],
-        cards: parseList(exponent, params["l" + index]),
-      }));
+function* parseLists() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlParams);
 
-      yield put(Lists.set({ lists }));
-    } else {
-      yield put(Lists.set({ lists: [] }));
+  const version = params.v;
+  const exponent = parseInt(params.e, 10) || 0;
+
+  if (version === "1" && exponent) {
+    const titleIndexes = Object.keys(params)
+      .filter((key) => key.match(/^t[\d]+$/))
+      .map((key) => parseInt(key.substring(1), 10))
+      .sort((a, b) => a - b);
+
+    const lists = titleIndexes.map((index) => ({
+      title: params["t" + index],
+      cards: parseList(exponent, params["l" + index]),
+    }));
+
+    // If the card is either a configured warjack or a configured vehicle, its page must be
+    // fetched in order for its subtitle to be shown correctly. A warjack or vehicle can be
+    // identified by having at least one cortex id, warjack weapon id or vehicle weapon id.
+    for (const list of lists) {
+      for (const {
+        pageId,
+        cortexIds,
+        warjackWeaponIds,
+        vehicleWeaponId,
+      } of list.cards) {
+        if (cortexIds || warjackWeaponIds || vehicleWeaponId) {
+          const page = yield select(PageIds.selectPageByPageId(pageId));
+          if (page) {
+            yield put(FetchWikiPage({ page }));
+          }
+        }
+      }
     }
+
+    yield put(Lists.set({ lists }));
+  } else {
+    yield put(Lists.set({ lists: [] }));
   }
 }
 
