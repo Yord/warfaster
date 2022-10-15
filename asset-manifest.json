@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/warfaster/static/css/main.890021df.chunk.css",
-    "main.js": "/warfaster/static/js/main.dc303ecc.chunk.js",
-    "main.js.map": "/warfaster/static/js/main.dc303ecc.chunk.js.map",
+    "main.js": "/warfaster/static/js/main.c36397af.chunk.js",
+    "main.js.map": "/warfaster/static/js/main.c36397af.chunk.js.map",
     "runtime-main.js": "/warfaster/static/js/runtime-main.a6286c1c.js",
     "runtime-main.js.map": "/warfaster/static/js/runtime-main.a6286c1c.js.map",
     "static/css/2.81b0985c.chunk.css": "/warfaster/static/css/2.81b0985c.chunk.css",
@@ -25,6 +25,6 @@
     "static/css/2.81b0985c.chunk.css",
     "static/js/2.e3d7aacb.chunk.js",
     "static/css/main.890021df.chunk.css",
-    "static/js/main.dc303ecc.chunk.js"
+    "static/js/main.c36397af.chunk.js"
   ]
 }
