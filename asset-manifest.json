@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/warfaster/static/css/main.890021df.chunk.css",
+    "main.js": "/warfaster/static/js/main.ee2b95df.chunk.js",
+    "main.js.map": "/warfaster/static/js/main.ee2b95df.chunk.js.map",
+    "runtime-main.js": "/warfaster/static/js/runtime-main.a6286c1c.js",
+    "runtime-main.js.map": "/warfaster/static/js/runtime-main.a6286c1c.js.map",
+    "static/css/2.81b0985c.chunk.css": "/warfaster/static/css/2.81b0985c.chunk.css",
+    "static/js/2.e3d7aacb.chunk.js": "/warfaster/static/js/2.e3d7aacb.chunk.js",
+    "static/js/2.e3d7aacb.chunk.js.map": "/warfaster/static/js/2.e3d7aacb.chunk.js.map",
+    "index.html": "/warfaster/index.html",
+    "static/css/2.81b0985c.chunk.css.map": "/warfaster/static/css/2.81b0985c.chunk.css.map",
+    "static/css/main.890021df.chunk.css.map": "/warfaster/static/css/main.890021df.chunk.css.map",
+    "static/js/2.e3d7aacb.chunk.js.LICENSE.txt": "/warfaster/static/js/2.e3d7aacb.chunk.js.LICENSE.txt",
+    "static/media/Aeternus_Continuum.d1b19d0e.png": "/warfaster/static/media/Aeternus_Continuum.d1b19d0e.png",
+    "static/media/Cyphers.1ae05c50.png": "/warfaster/static/media/Cyphers.1ae05c50.png",
+    "static/media/Empyrean.4ab49225.png": "/warfaster/static/media/Empyrean.4ab49225.png",
+    "static/media/Iron_Star_Alliance.82d76402.png": "/warfaster/static/media/Iron_Star_Alliance.82d76402.png",
+    "static/media/Lost_Legion.78737fb2.png": "/warfaster/static/media/Lost_Legion.78737fb2.png",
+    "static/media/Marcher_Worlds.61a330cf.png": "/warfaster/static/media/Marcher_Worlds.61a330cf.png",
+    "static/media/Wild_Card.3da9dbca.png": "/warfaster/static/media/Wild_Card.3da9dbca.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a6286c1c.js",
+    "static/css/2.81b0985c.chunk.css",
+    "static/js/2.e3d7aacb.chunk.js",
+    "static/css/main.890021df.chunk.css",
+    "static/js/main.ee2b95df.chunk.js"
+  ]
+}
