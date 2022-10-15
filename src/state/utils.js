@@ -9,12 +9,15 @@ const StateShard = (namespace, init, actions, selectors) => ({
   namespace,
   init,
   dispatch: Object.fromEntries(
-    Object.entries(actions).map(([type, f]) => [namespace + "." + type, f])
+    Object.entries(actions).map(([functionName, f]) => [
+      namespace + "." + functionName,
+      f,
+    ])
   ),
   ...Object.fromEntries(
-    Object.entries(actions).map(([type, f]) => [
-      f.name,
-      (payload = {}) => ({ type: namespace + "." + type, payload }),
+    Object.keys(actions).map((functionName) => [
+      functionName,
+      (payload = {}) => ({ type: namespace + "." + functionName, payload }),
     ])
   ),
   ...Object.fromEntries(
