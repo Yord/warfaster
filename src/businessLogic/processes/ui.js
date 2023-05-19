@@ -194,40 +194,41 @@ function* parseLists() {
   const version = params.v;
   const exponent = parseInt(params.e, 10) || 0;
 
+  let lists = null;
   if (version === "1" && exponent) {
     const titleIndexes = Object.keys(params)
       .filter((key) => key.match(/^t[\d]+$/))
       .map((key) => parseInt(key.substring(1), 10))
       .sort((a, b) => a - b);
 
-    const lists = titleIndexes.map((index) => ({
+    lists = titleIndexes.map((index) => ({
       title: params["t" + index],
       cards: parseList(exponent, params["l" + index]),
     }));
+  } else {
+    lists = yield select(Lists.select());
+  }
 
-    // If the card is either a configured warjack or a configured vehicle, its page must be
-    // fetched in order for its subtitle to be shown correctly. A warjack or vehicle can be
-    // identified by having at least one cortex id, warjack weapon id or vehicle weapon id.
-    for (const list of lists) {
-      for (const {
-        pageId,
-        cortexIds,
-        warjackWeaponIds,
-        vehicleWeaponId,
-      } of list.cards) {
-        if (cortexIds || warjackWeaponIds || vehicleWeaponId) {
-          const page = yield select(PageIds.selectPageByPageId(pageId));
-          if (page) {
-            yield put(FetchWikiPage({ page }));
-          }
+  // If the card is either a configured warjack or a configured vehicle, its page must be
+  // fetched in order for its subtitle to be shown correctly. A warjack or vehicle can be
+  // identified by having at least one cortex id, warjack weapon id or vehicle weapon id.
+  for (const list of lists) {
+    for (const {
+      pageId,
+      cortexIds,
+      warjackWeaponIds,
+      vehicleWeaponId,
+    } of list.cards) {
+      if (cortexIds || warjackWeaponIds || vehicleWeaponId) {
+        const page = yield select(PageIds.selectPageByPageId(pageId));
+        if (page) {
+          yield put(FetchWikiPage({ page }));
         }
       }
     }
-
-    yield put(Lists.set({ lists }));
-  } else {
-    yield put(Lists.set({ lists: [] }));
   }
+
+  yield put(Lists.set({ lists }));
 }
 
 function* fetchCardOnShow() {
