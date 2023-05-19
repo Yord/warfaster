@@ -242,7 +242,35 @@ li.ant-menu-item {
   white-space: normal !important;
 }
 
+.ant-drawer-content-wrapper {
+  max-width: 400px;
+}
+
+.ant-drawer-content, .ant-drawer-header {
+  background-color: transparent;
+}
+
+.ant-drawer-body {
+  margin: 4px 2px;
+  padding: 0px 10px 0px 0px;
+  overflow-x: hidden;
+}
+
+.ant-drawer-header-no-title button {
+  color: white;
+  padding: 13px;
+}
+
+.ant-drawer-header-no-title button:hover {
+  color: white
+}
+
+.ant-drawer-header-no-title button .anticon-menu-unfold {
+  font-size: 20px;
+}
+
 .cards,
+.ant-drawer-content-wrapper,
 .ant-menu-submenu-popup,
 .ant-tooltip-inner div.ant-tooltip-inner-box {
   background-color: hsl(200, 10%, 12%) !important;
