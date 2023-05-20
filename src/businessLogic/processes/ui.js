@@ -127,7 +127,7 @@ function* updateUrl() {
       const state = lists.reduce(
         (state, list, index) => ({
           ...state,
-          [`t${index}`]: list.title,
+          ...(list.title ? { [`t${index}`]: list.title } : {}),
           [`l${index}`]: list.cards.reduce(
             (acc, card) =>
               acc +
@@ -196,13 +196,13 @@ function* parseLists() {
 
   let lists = null;
   if (version === "1" && exponent) {
-    const titleIndexes = Object.keys(params)
-      .filter((key) => key.match(/^t[\d]+$/))
+    const listIndexes = Object.keys(params)
+      .filter((key) => key.match(/^l[\d]+$/))
       .map((key) => parseInt(key.substring(1), 10))
       .sort((a, b) => a - b);
 
-    lists = titleIndexes.map((index) => ({
-      title: params["t" + index],
+    lists = listIndexes.map((index) => ({
+      title: params["t" + index] || "",
       cards: parseList(exponent, params["l" + index]),
     }));
   } else {

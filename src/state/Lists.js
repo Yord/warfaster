@@ -24,7 +24,7 @@ export { Lists };
 
 const oneEmptyList = [
   {
-    title: "Empty",
+    title: "",
     cards: [],
   },
 ];
