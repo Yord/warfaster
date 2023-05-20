@@ -23,7 +23,7 @@ import {
 } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Aeternus_Continuum from "./Aeternus_Continuum.png";
-import Cyphers from "./Cyphers.png";
+import Fallback from "./Fallback.png";
 import Empyrean from "./Empyrean.png";
 import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
 import Lost_Legion from "./Lost_Legion.png";
@@ -61,9 +61,9 @@ function FactionImage({ faction }) {
     case "Wild_Card":
       return <img src={Wild_Card} alt={faction} height="35px" />;
     case "Universal":
-      return <img src={Cyphers} alt={faction} height="35px" />;
+      return <img src={Fallback} alt={faction} height="35px" />;
     default:
-      return <img src={Cyphers} alt={faction} height="35px" />;
+      return <img src={Fallback} alt={faction} height="35px" />;
   }
 }
 
@@ -227,10 +227,6 @@ function AppPresentation({
                         icon={<FactionImage faction={faction} />}
                       ></SubMenu>
                     ))}
-                    <SubMenu
-                      key="cypher_codecs"
-                      icon={<FactionImage faction="Cyphers" />}
-                    ></SubMenu>
                   </Menu>
                 </Content>
                 <Content>
@@ -1478,6 +1474,47 @@ function AppPresentation({
                       );
                     })}
                 </Menu.ItemGroup>
+                {Object.entries(
+                  cypherCodecs
+                    .filter(
+                      (cypher) =>
+                        [factionName, "Universal"].indexOf(
+                          cypher.Faction.text
+                        ) !== -1
+                    )
+                    .reduce(
+                      (acc, cypher) => ({
+                        ...acc,
+                        [cypher.Faction.text]: [
+                          ...(acc[cypher.Faction.text] || []),
+                          cypher,
+                        ],
+                      }),
+                      {}
+                    )
+                )
+                  .sort(([a], [b]) =>
+                    a === "Universal" ? 1 : b === "Universal" ? -1 : 1
+                  )
+                  .map(([faction, cyphers]) => (
+                    <Menu.ItemGroup title={`${faction} Cyphers`} key={faction}>
+                      {cyphers
+                        .sort((c1, c2) =>
+                          c1.Type.text < c2.Type.text ? -1 : 1
+                        )
+                        .map(({ Cypher, Type }) => (
+                          <Menu.Item
+                            key={":" + Cypher.page}
+                            className={Type.text}
+                          >
+                            <span onClick={menuItemClicked(Cypher.page)}>
+                              <span className="card">{Cypher.text}</span>
+                              <span className="types">{Type.text}</span>
+                            </span>
+                          </Menu.Item>
+                        ))}
+                    </Menu.ItemGroup>
+                  ))}
               </Menu>
             </Drawer>
           ))}
