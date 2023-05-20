@@ -90,6 +90,7 @@ function AppPresentation({
   setCardCortex,
   setCardWarjackWeapons,
   setCardVehicleWeapon,
+  factions,
 }) {
   const [openDrawer, setOpenDrawer] = React.useState("");
 
@@ -304,7 +305,11 @@ function AppPresentation({
                                 <Row>
                                   <Col span={16} className="army-list-title">
                                     <TextArea
-                                      placeholder="Name your list"
+                                      placeholder={generateListNamePlaceholder(
+                                        cards,
+                                        factions,
+                                        "Name your list"
+                                      )}
                                       value={title}
                                       maxLength={30}
                                       autoSize
@@ -1753,6 +1758,7 @@ const App = connect(
     })),
     dragging: Dragging.select()(state),
     url: Url.select()(state),
+    factions: Factions.select()(state),
   }),
   (dispatch) => ({
     toggleCard: (listIndex, cardIndex, pageId, card) => {
@@ -1833,6 +1839,43 @@ const App = connect(
 )(AppPresentation);
 
 export default App;
+
+function generateListNamePlaceholder(cards, factionNames, defaultValue) {
+  const factions = cards.map((card) => card.faction);
+  if (factions.length === 0) return defaultValue;
+
+  const justFactions = factions.filter(
+    (faction) => ["Universal", "Wild_Card"].indexOf(faction) === -1
+  );
+  if (justFactions.length === 0) {
+    const justCyphers = factions.filter((faction) => faction === "Universal");
+    if (justCyphers.length === factions.length) return "Universal Cyphers";
+
+    return defaultValue;
+  }
+
+  const factionsPresent = justFactions.reduce(
+    (acc, faction) => ({ ...acc, [faction]: true }),
+    {}
+  );
+  if (Object.keys(factionsPresent).length > 1) return "Several factions";
+
+  const factionName = factionNames[Object.keys(factionsPresent)[0]].text;
+  if (factionName) {
+    const types = cards.map((card) => card.type);
+
+    const cyperTypes = ["Fury", "Geometric", "Harmonic", "Overdrive"];
+    const noCyphers = types.filter((type) => cyperTypes.indexOf(type) === -1);
+    if (noCyphers.length === types.length) return factionName + " Models";
+
+    const justCyphers = types.filter((type) => cyperTypes.indexOf(type) > -1);
+    if (justCyphers.length === types.length) return factionName + " Cyphers";
+
+    return factionName;
+  }
+
+  return defaultValue;
+}
 
 function cortexName(cortexSelections, cortexIds) {
   return (Object.entries(cortexSelections).find(
