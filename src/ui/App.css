@@ -242,6 +242,11 @@ li.ant-menu-item {
   white-space: normal !important;
 }
 
+.ant-drawer-open {
+  max-width: 400px;
+  width: 80%;
+}
+
 .ant-drawer-content-wrapper {
   max-width: 400px;
 }
