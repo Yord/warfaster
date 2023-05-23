@@ -13,6 +13,7 @@ import { FactionModels } from "../../state/FactionModels";
 import { Lists } from "../../state/Lists";
 import { PageIds } from "../../state/PageIds";
 import { Url } from "../../state/Url";
+import { WarjackWeapons } from "../../state/WarjackWeapons";
 import { WildCardModels } from "../../state/WildCardModels";
 import { toBase62, fromBase62 } from "./base62";
 
@@ -27,6 +28,7 @@ function* ui() {
     parseListsFromQuery(),
     parseListsFromQuery2(),
     fetchCardOnShow(),
+    fetchWeaponsIfWarjackAdded(),
   ]);
 }
 
@@ -229,6 +231,40 @@ function* parseLists() {
   }
 
   yield put(Lists.set({ lists }));
+}
+
+function* fetchWeaponsIfWarjackAdded() {
+  while (true) {
+    const { payload } = yield take("Models.set");
+    if (
+      payload &&
+      payload.model &&
+      payload.model.types &&
+      payload.model.types.map((type) => type.text).includes("Warjack")
+    ) {
+      const weaponDetails = payload.model.weaponDetails;
+      if (weaponDetails) {
+        for (const { Weapon } of weaponDetails) {
+          const page = Weapon.page;
+          if (page) {
+            const pageWithoutTarget = page.split("#")[0];
+            const weapon = yield select(
+              WarjackWeapons.selectByPage(pageWithoutTarget)
+            );
+            if (!weapon) {
+              yield put(
+                WarjackWeapons.set({
+                  page: pageWithoutTarget,
+                  warjackWeapon: {},
+                })
+              );
+            }
+            yield put(FetchWikiPage({ page: pageWithoutTarget }));
+          }
+        }
+      }
+    }
+  }
 }
 
 function* fetchCardOnShow() {

@@ -3,6 +3,7 @@ import { parseCypherCodecsText } from "./parseCypherCodecsText";
 import { parseFactionModelsText } from "./parseFactionModelsText";
 import { parseFactionsText } from "./parseFactionsText";
 import { parseModelText } from "./parseModelText";
+import { parseWarjackWeapon } from "./parseWarjackWeapon";
 import { parseWildCardText } from "./parseWildCardText";
 
 export {
@@ -11,5 +12,6 @@ export {
   parseFactionModelsText,
   parseFactionsText,
   parseModelText,
+  parseWarjackWeapon,
   parseWildCardText,
 };

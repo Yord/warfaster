@@ -41,6 +41,7 @@ import { PageIds } from "../state/PageIds";
 import { Url } from "../state/Url";
 import { WildCardModels } from "../state/WildCardModels";
 import { Models } from "../state/Models";
+import { WarjackWeapons } from "../state/WarjackWeapons";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -91,6 +92,7 @@ function AppPresentation({
   setCardWarjackWeapons,
   setCardVehicleWeapon,
   factions,
+  warjackWeapons,
 }) {
   const [openDrawer, setOpenDrawer] = React.useState("");
 
@@ -1191,13 +1193,211 @@ function AppPresentation({
                                                                           event.stopPropagation()
                                                                         }
                                                                       >
-                                                                        {warjackWeaponName(
-                                                                          name,
-                                                                          cost
-                                                                        )}
+                                                                        <h3>
+                                                                          {warjackWeaponName(
+                                                                            name,
+                                                                            cost
+                                                                          )}
+                                                                        </h3>
                                                                         <div>
-                                                                          Weapon
-                                                                          details!
+                                                                          {!warjackWeapons[
+                                                                            page.split(
+                                                                              "#"
+                                                                            )[0]
+                                                                          ] ? (
+                                                                            "Weapon details missing!"
+                                                                          ) : (
+                                                                            <>
+                                                                              <div>
+                                                                                Location:{" "}
+                                                                                {
+                                                                                  warjackWeapons[
+                                                                                    page.split(
+                                                                                      "#"
+                                                                                    )[0]
+                                                                                  ]
+                                                                                    .location
+                                                                                }
+                                                                              </div>
+                                                                              {!warjackWeapons[
+                                                                                page.split(
+                                                                                  "#"
+                                                                                )[0]
+                                                                              ]
+                                                                                .specialRules ? (
+                                                                                ""
+                                                                              ) : (
+                                                                                <dl>
+                                                                                  {Object.entries(
+                                                                                    warjackWeapons[
+                                                                                      page.split(
+                                                                                        "#"
+                                                                                      )[0]
+                                                                                    ]
+                                                                                      .specialRules
+                                                                                  ).map(
+                                                                                    (
+                                                                                      [
+                                                                                        name,
+                                                                                        rule,
+                                                                                      ],
+                                                                                      index
+                                                                                    ) => (
+                                                                                      <React.Fragment
+                                                                                        key={`special_rules_${page}_${index}`}
+                                                                                      >
+                                                                                        <dt>
+                                                                                          {
+                                                                                            name
+                                                                                          }
+                                                                                        </dt>
+                                                                                        <dd>
+                                                                                          {
+                                                                                            rule
+                                                                                          }
+                                                                                        </dd>
+                                                                                      </React.Fragment>
+                                                                                    )
+                                                                                  )}
+                                                                                </dl>
+                                                                              )}
+                                                                              {!warjackWeapons[
+                                                                                page.split(
+                                                                                  "#"
+                                                                                )[0]
+                                                                              ]
+                                                                                .weapons ? (
+                                                                                ""
+                                                                              ) : (
+                                                                                <table>
+                                                                                  <thead>
+                                                                                    <tr>
+                                                                                      <th>
+                                                                                        Name
+                                                                                      </th>
+                                                                                      <th>
+                                                                                        Attack
+                                                                                        Type
+                                                                                      </th>
+                                                                                      <th>
+                                                                                        Damage
+                                                                                        Type
+                                                                                      </th>
+                                                                                      <th>
+                                                                                        Range
+                                                                                      </th>
+                                                                                      <th>
+                                                                                        POW
+                                                                                      </th>
+                                                                                    </tr>
+                                                                                  </thead>
+                                                                                  <tbody>
+                                                                                    {warjackWeapons[
+                                                                                      page.split(
+                                                                                        "#"
+                                                                                      )[0]
+                                                                                    ].weapons.map(
+                                                                                      (
+                                                                                        weapon,
+                                                                                        index
+                                                                                      ) => (
+                                                                                        <React.Fragment
+                                                                                          key={`warjack_weapons_weapon_${page}_${index}`}
+                                                                                        >
+                                                                                          <tr>
+                                                                                            <td>
+                                                                                              {
+                                                                                                weapon[
+                                                                                                  "Name"
+                                                                                                ]
+                                                                                              }
+                                                                                            </td>
+                                                                                            <td>
+                                                                                              {
+                                                                                                weapon[
+                                                                                                  "Attack Type"
+                                                                                                ]
+                                                                                              }
+                                                                                            </td>
+                                                                                            <td>
+                                                                                              {weapon[
+                                                                                                "Damage Type"
+                                                                                              ]
+                                                                                                .join
+                                                                                                ? weapon[
+                                                                                                    "Damage Type"
+                                                                                                  ].join(
+                                                                                                    " "
+                                                                                                  )
+                                                                                                : weapon[
+                                                                                                    "Damage Type"
+                                                                                                  ]}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                              {
+                                                                                                weapon[
+                                                                                                  "Range"
+                                                                                                ]
+                                                                                              }
+                                                                                            </td>
+                                                                                            <td>
+                                                                                              {
+                                                                                                weapon[
+                                                                                                  "POW"
+                                                                                                ]
+                                                                                              }
+                                                                                            </td>
+                                                                                          </tr>
+                                                                                          {!weapon.specialRules ? (
+                                                                                            <>
+
+                                                                                            </>
+                                                                                          ) : (
+                                                                                            <tr>
+                                                                                              <td colSpan="5">
+                                                                                                <dl>
+                                                                                                  {Object.entries(
+                                                                                                    weapon.specialRules
+                                                                                                  ).map(
+                                                                                                    (
+                                                                                                      [
+                                                                                                        name,
+                                                                                                        rule,
+                                                                                                      ],
+                                                                                                      index
+                                                                                                    ) => (
+                                                                                                      <React.Fragment
+                                                                                                        key={`warjack_weapons_weapon_${weapon["Name"]}_special_rules_${page}_${index}`}
+                                                                                                      >
+                                                                                                        {
+                                                                                                          <>
+                                                                                                            <dt>
+                                                                                                              {
+                                                                                                                name
+                                                                                                              }
+                                                                                                            </dt>
+                                                                                                            <dd>
+                                                                                                              {
+                                                                                                                rule
+                                                                                                              }
+                                                                                                            </dd>
+                                                                                                          </>
+                                                                                                        }
+                                                                                                      </React.Fragment>
+                                                                                                    )
+                                                                                                  )}
+                                                                                                </dl>
+                                                                                              </td>
+                                                                                            </tr>
+                                                                                          )}
+                                                                                        </React.Fragment>
+                                                                                      )
+                                                                                    )}
+                                                                                  </tbody>
+                                                                                </table>
+                                                                              )}
+                                                                            </>
+                                                                          )}
                                                                         </div>
                                                                         {
                                                                           // TODO
@@ -1759,6 +1959,7 @@ const App = connect(
     dragging: Dragging.select()(state),
     url: Url.select()(state),
     factions: Factions.select()(state),
+    warjackWeapons: WarjackWeapons.select()(state),
   }),
   (dispatch) => ({
     toggleCard: (listIndex, cardIndex, pageId, card) => {
