@@ -42,6 +42,8 @@ import { Url } from "../state/Url";
 import { WildCardModels } from "../state/WildCardModels";
 import { Models } from "../state/Models";
 import { WarjackWeapons } from "../state/WarjackWeapons";
+import { CadreModels } from "../state/CadreModels";
+import { CadreCategoryMembers } from "../state/CadreCategoryMembers";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -93,6 +95,7 @@ function AppPresentation({
   setCardVehicleWeapon,
   factions,
   warjackWeapons,
+  cadres,
 }) {
   const [openDrawer, setOpenDrawer] = React.useState("");
 
@@ -1612,7 +1615,7 @@ function AppPresentation({
               )}
             </Droppable>
           </DragDropContext>
-          {factionModels.map(([factionName, faction, models]) => (
+          {factionModels.map(([factionName, faction, models, cadreModels]) => (
             <Drawer
               key={`drawer_${faction}`}
               visible={openDrawer === faction}
@@ -1652,7 +1655,44 @@ function AppPresentation({
                     );
                   })}
                 </Menu.ItemGroup>
-                <Menu.ItemGroup title={`${factionName} Wild Cards`}>
+                {!cadreModels ? (
+                  <></>
+                ) : (
+                  cadreModels.map(({ cadrePageId, cadreModels }) => (
+                    <Menu.ItemGroup
+                      key={`Cadre:${cadrePageId}`}
+                      title={cadres[cadrePageId]}
+                    >
+                      {cadreModels.map(({ name, page, type, subtype }) => {
+                        const shortName = name.slice(0, 40);
+
+                        return (
+                          <Menu.Item
+                            key={faction + ":" + page + ":cadre:" + cadrePageId}
+                            className={faction}
+                          >
+                            <span onClick={menuItemClicked(page)}>
+                              <span className="card">
+                                {shortName.length === name.length ? (
+                                  shortName
+                                ) : (
+                                  <Tooltip placement="top" title={name}>
+                                    {shortName}...
+                                  </Tooltip>
+                                )}
+                              </span>
+                              <span className="types">
+                                {subtype ? subtype : ""}
+                                {type ? (subtype ? " " : "") + type : ""}
+                              </span>
+                            </span>
+                          </Menu.Item>
+                        );
+                      })}
+                    </Menu.ItemGroup>
+                  ))
+                )}
+                <Menu.ItemGroup title="Wild Cards">
                   {(wildCardModels[faction] || [])
                     .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
                     .map(({ name, page, type, subtype }, j) => {
@@ -1784,14 +1824,43 @@ const App = connect(
       .map(([faction, models]) => [
         Factions.select()(state)[faction].text,
         faction,
-        models.map((model) => ({
-          name: model.Name.text,
-          page: model.Name.page,
-          type: model.Type.text,
-          ...(model.Subtype
-            ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
-            : {}),
-        })),
+        models
+          .map((model) => ({
+            name: model.Name.text,
+            page: model.Name.page,
+            type: model.Type.text,
+            ...(model.Subtype
+              ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+              : {}),
+          }))
+          .filter(
+            (model) =>
+              !Object.values(CadreModels.select()(state))
+                .flatMap((models) =>
+                  models.map((cadreModel) => cadreModel.title)
+                )
+                .includes(model.name)
+          ),
+        Object.entries(CadreModels.select()(state)).flatMap(
+          ([cadrePageId, cadreModels]) => {
+            const cadre = cadreModels.map((model) => model.title);
+            const allCadreModels = models
+              .filter((model) => cadre.includes(model.Name.text))
+              .map((model) => ({
+                name: model.Name.text,
+                page: model.Name.page,
+                type: model.Type.text,
+                ...(model.Subtype
+                  ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+                  : {}),
+              }));
+
+            if (allCadreModels.length === cadreModels.length)
+              return [{ cadrePageId, cadreModels: allCadreModels }];
+
+            return [];
+          }
+        ),
       ]),
     wildCardModels: Object.fromEntries(
       Object.entries(WildCardModels.select()(state))
@@ -1960,6 +2029,7 @@ const App = connect(
     url: Url.select()(state),
     factions: Factions.select()(state),
     warjackWeapons: WarjackWeapons.select()(state),
+    cadres: CadreCategoryMembers.select()(state),
   }),
   (dispatch) => ({
     toggleCard: (listIndex, cardIndex, pageId, card) => {

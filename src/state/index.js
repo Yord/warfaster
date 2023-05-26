@@ -1,4 +1,6 @@
 import { AppSync } from "./AppSync";
+import { CadreCategoryMembers } from "./CadreCategoryMembers";
+import { CadreModels } from "./CadreModels";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
 import { Dragging } from "./Dragging";
@@ -16,6 +18,8 @@ import { immer, initAll } from "./utils";
 
 const objects = [
   AppSync,
+  CadreCategoryMembers,
+  CadreModels,
   CypherCodecs,
   Cyphers,
   Factions,

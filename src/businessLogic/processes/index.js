@@ -1,6 +1,7 @@
 import { all, put } from "redux-saga/effects";
 import { FetchWikiPage, RefreshWikiPages } from "../../messages";
 import { cacheWikiPages } from "./cacheWikiPages";
+import { fetchCadres } from "./fetchCadres";
 import { parseWikiPages } from "./parseWikiPages";
 import { triggerFetchWikiPages } from "./triggerFetchWikiPages";
 import { ui } from "./ui";
@@ -11,6 +12,7 @@ function* processes() {
     parseWikiPages(),
     triggerFetchWikiPages(),
     ui(),
+    fetchCadres(), // TODO: do this in a common action channel with FetchWikiPage to avoid overloading the PP page
     fetchInitialData(),
     refresh(),
   ]);
