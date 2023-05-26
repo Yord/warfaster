@@ -4,7 +4,7 @@ import { jsonp } from "../jsonp";
 
 function* fetchCadreCategoryMembers() {
   const data = yield select(CadreCategoryMembers.select());
-  if (!data) {
+  if (Object.keys(data).length === 0) {
     const data = yield call(jsonp, fetchMembers());
     if (data.batchcomplete && data.query) {
       const categorymembers = data.query.categorymembers;
