@@ -2135,17 +2135,17 @@ const App = connect(
               .filter(([_, id]) => id === pageId)
               .map(([page, _]) => page)[0] || "";
 
-          const model = Object.entries(state.data.factionModels)
+          const model = Object.entries(FactionModels.select()(state))
             .flatMap(([faction, models]) =>
               models.map((model) => ({ ...model, faction }))
             )
             .find(({ Name }) => Name.page === page);
-          const wildCard = Object.entries(state.data.wildCardModels)
+          const wildCard = Object.entries(WildCardModels.select()(state))
             .flatMap(([faction, models]) =>
               models.map((model) => ({ ...model, faction }))
             )
             .find(({ Name }) => Name.page === page);
-          const cypher = state.data.cypherCodecs.find(
+          const cypher = CypherCodecs.select()(state).find(
             ({ Cypher }) => Cypher.page === page
           );
 
