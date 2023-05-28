@@ -13,6 +13,7 @@ import { FactionModels } from "../../state/FactionModels";
 import { Lists } from "../../state/Lists";
 import { PageIds } from "../../state/PageIds";
 import { Url } from "../../state/Url";
+import { VehicleWeapons } from "../../state/VehicleWeapons";
 import { WarjackWeapons } from "../../state/WarjackWeapons";
 import { WildCardModels } from "../../state/WildCardModels";
 import { toBase62, fromBase62 } from "./base62";
@@ -28,6 +29,7 @@ function* ui() {
     parseListsFromQuery(),
     parseListsFromQuery2(),
     fetchCardOnShow(),
+    fetchWeaponsIfVehicleAdded(),
     fetchWeaponsIfWarjackAdded(),
   ]);
 }
@@ -231,6 +233,40 @@ function* parseLists() {
   }
 
   yield put(Lists.set({ lists }));
+}
+
+function* fetchWeaponsIfVehicleAdded() {
+  while (true) {
+    const { payload } = yield take("Models.set");
+    console.log("fetchWeaponsIfVehicleAdded", { payload });
+    if (
+      payload &&
+      payload.model &&
+      payload.model.types &&
+      payload.model.types.map((type) => type.text).includes("Vehicle")
+    ) {
+      const vehicleWeaponSelection = payload.model.vehicleWeaponSelection;
+      if (vehicleWeaponSelection) {
+        for (const { page } of vehicleWeaponSelection) {
+          if (page) {
+            const pageWithoutTarget = page.split("#")[0];
+            const weapon = yield select(
+              VehicleWeapons.selectByPage(pageWithoutTarget)
+            );
+            if (!weapon) {
+              yield put(
+                VehicleWeapons.set({
+                  page: pageWithoutTarget,
+                  vehicleWeapon: {},
+                })
+              );
+            }
+            yield put(FetchWikiPage({ page: pageWithoutTarget }));
+          }
+        }
+      }
+    }
+  }
 }
 
 function* fetchWeaponsIfWarjackAdded() {

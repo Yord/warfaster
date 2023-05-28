@@ -41,6 +41,7 @@ import { PageIds } from "../state/PageIds";
 import { Url } from "../state/Url";
 import { WildCardModels } from "../state/WildCardModels";
 import { Models } from "../state/Models";
+import { VehicleWeapons } from "../state/VehicleWeapons";
 import { WarjackWeapons } from "../state/WarjackWeapons";
 import { CadreModels } from "../state/CadreModels";
 import { CadreCategoryMembers } from "../state/CadreCategoryMembers";
@@ -95,6 +96,7 @@ function AppPresentation({
   setCardWarjackWeapons,
   setCardVehicleWeapon,
   factions,
+  vehicleWeapons,
   warjackWeapons,
   cadres,
 }) {
@@ -870,7 +872,11 @@ function AppPresentation({
                                                       >
                                                         {details.vehicleWeaponSelection.map(
                                                           (
-                                                            { text, pageId },
+                                                            {
+                                                              text,
+                                                              page,
+                                                              pageId,
+                                                            },
                                                             index
                                                           ) => (
                                                             <Select.Option
@@ -883,10 +889,207 @@ function AppPresentation({
                                                                 event.stopPropagation()
                                                               }
                                                             >
-                                                              {text}
-                                                              {
-                                                                // TODO
-                                                              }
+                                                              <h3>{text}</h3>
+                                                              <div>
+                                                                {!vehicleWeapons[
+                                                                  page.split(
+                                                                    "#"
+                                                                  )[0]
+                                                                ] ? (
+                                                                  "Weapon details missing!"
+                                                                ) : (
+                                                                  <>
+                                                                    <div>
+                                                                      Location:{" "}
+                                                                      {
+                                                                        vehicleWeapons[
+                                                                          page.split(
+                                                                            "#"
+                                                                          )[0]
+                                                                        ]
+                                                                          .location
+                                                                      }
+                                                                    </div>
+                                                                    {!vehicleWeapons[
+                                                                      page.split(
+                                                                        "#"
+                                                                      )[0]
+                                                                    ]
+                                                                      .specialRules ? (
+                                                                      ""
+                                                                    ) : (
+                                                                      <dl>
+                                                                        {Object.entries(
+                                                                          vehicleWeapons[
+                                                                            page.split(
+                                                                              "#"
+                                                                            )[0]
+                                                                          ]
+                                                                            .specialRules
+                                                                        ).map(
+                                                                          (
+                                                                            [
+                                                                              name,
+                                                                              rule,
+                                                                            ],
+                                                                            index
+                                                                          ) => (
+                                                                            <React.Fragment
+                                                                              key={`special_rules_${page}_${index}`}
+                                                                            >
+                                                                              <dt>
+                                                                                {
+                                                                                  name
+                                                                                }
+                                                                              </dt>
+                                                                              <dd>
+                                                                                {
+                                                                                  rule
+                                                                                }
+                                                                              </dd>
+                                                                            </React.Fragment>
+                                                                          )
+                                                                        )}
+                                                                      </dl>
+                                                                    )}
+                                                                    {!vehicleWeapons[
+                                                                      page.split(
+                                                                        "#"
+                                                                      )[0]
+                                                                    ]
+                                                                      .weapons ? (
+                                                                      ""
+                                                                    ) : (
+                                                                      <table>
+                                                                        <thead>
+                                                                          <tr>
+                                                                            <th>
+                                                                              Name
+                                                                            </th>
+                                                                            <th>
+                                                                              Attack
+                                                                              Type
+                                                                            </th>
+                                                                            <th>
+                                                                              Damage
+                                                                              Type
+                                                                            </th>
+                                                                            <th>
+                                                                              Range
+                                                                            </th>
+                                                                            <th>
+                                                                              POW
+                                                                            </th>
+                                                                          </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                          {vehicleWeapons[
+                                                                            page.split(
+                                                                              "#"
+                                                                            )[0]
+                                                                          ].weapons.map(
+                                                                            (
+                                                                              weapon,
+                                                                              index
+                                                                            ) => (
+                                                                              <React.Fragment
+                                                                                key={`vehicle_weapons_weapon_${page}_${index}`}
+                                                                              >
+                                                                                <tr>
+                                                                                  <td>
+                                                                                    {
+                                                                                      weapon[
+                                                                                        "Name"
+                                                                                      ]
+                                                                                    }
+                                                                                  </td>
+                                                                                  <td>
+                                                                                    {
+                                                                                      weapon[
+                                                                                        "Attack Type"
+                                                                                      ]
+                                                                                    }
+                                                                                  </td>
+                                                                                  <td>
+                                                                                    {weapon[
+                                                                                      "Damage Type"
+                                                                                    ]
+                                                                                      .join
+                                                                                      ? weapon[
+                                                                                          "Damage Type"
+                                                                                        ].join(
+                                                                                          " "
+                                                                                        )
+                                                                                      : weapon[
+                                                                                          "Damage Type"
+                                                                                        ]}
+                                                                                  </td>
+                                                                                  <td>
+                                                                                    {
+                                                                                      weapon[
+                                                                                        "Range"
+                                                                                      ]
+                                                                                    }
+                                                                                  </td>
+                                                                                  <td>
+                                                                                    {
+                                                                                      weapon[
+                                                                                        "POW"
+                                                                                      ]
+                                                                                    }
+                                                                                  </td>
+                                                                                </tr>
+                                                                                {!weapon.specialRules ? (
+                                                                                  <>
+
+                                                                                  </>
+                                                                                ) : (
+                                                                                  <tr>
+                                                                                    <td colSpan="5">
+                                                                                      <dl>
+                                                                                        {Object.entries(
+                                                                                          weapon.specialRules
+                                                                                        ).map(
+                                                                                          (
+                                                                                            [
+                                                                                              name,
+                                                                                              rule,
+                                                                                            ],
+                                                                                            index
+                                                                                          ) => (
+                                                                                            <React.Fragment
+                                                                                              key={`vehicle_weapons_weapon_${weapon["Name"]}_special_rules_${page}_${index}`}
+                                                                                            >
+                                                                                              {
+                                                                                                <>
+                                                                                                  <dt>
+                                                                                                    {
+                                                                                                      name
+                                                                                                    }
+                                                                                                  </dt>
+                                                                                                  <dd>
+                                                                                                    {
+                                                                                                      rule
+                                                                                                    }
+                                                                                                  </dd>
+                                                                                                </>
+                                                                                              }
+                                                                                            </React.Fragment>
+                                                                                          )
+                                                                                        )}
+                                                                                      </dl>
+                                                                                    </td>
+                                                                                  </tr>
+                                                                                )}
+                                                                              </React.Fragment>
+                                                                            )
+                                                                          )}
+                                                                        </tbody>
+                                                                      </table>
+                                                                    )}
+                                                                  </>
+                                                                )}
+                                                              </div>
                                                             </Select.Option>
                                                           )
                                                         )}
@@ -1403,9 +1606,6 @@ function AppPresentation({
                                                                             </>
                                                                           )}
                                                                         </div>
-                                                                        {
-                                                                          // TODO
-                                                                        }
                                                                       </Select.Option>
                                                                     )
                                                                   )}
@@ -2074,6 +2274,7 @@ const App = connect(
     dragging: Dragging.select()(state),
     url: Url.select()(state),
     factions: Factions.select()(state),
+    vehicleWeapons: VehicleWeapons.select()(state),
     warjackWeapons: WarjackWeapons.select()(state),
     cadres: CadreCategoryMembers.select()(state),
   }),

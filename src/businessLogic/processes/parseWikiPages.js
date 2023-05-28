@@ -5,6 +5,7 @@ import {
   parseFactionModelsText,
   parseFactionsText,
   parseModelText,
+  parseVehicleWeapon,
   parseWarjackWeapon,
   parseWildCardText,
 } from "../core/parse";
@@ -13,6 +14,7 @@ import { CypherCodecs } from "../../state/CypherCodecs";
 import { Factions } from "../../state/Factions";
 import { FactionModels } from "../../state/FactionModels";
 import { Models } from "../../state/Models";
+import { VehicleWeapons } from "../../state/VehicleWeapons";
 import { WarjackWeapons } from "../../state/WarjackWeapons";
 import { WildCardModels } from "../../state/WildCardModels";
 import { FetchedWikiPage, FetchPageIdsSlice } from "../../messages";
@@ -35,6 +37,7 @@ function* parseWikiPages() {
       yield select(WildCardModels.selectModelPages())
     );
 
+    const vehicleWeapons = Object.keys(yield select(VehicleWeapons.select()));
     const warjackWeapons = Object.keys(yield select(WarjackWeapons.select()));
 
     if (page === "Warcaster") {
@@ -112,6 +115,9 @@ function* parseWikiPages() {
     } else if (warjackWeapons.includes(page)) {
       const warjackWeapon = parseWarjackWeapon(data.text);
       yield put(WarjackWeapons.set({ page, warjackWeapon }));
+    } else if (vehicleWeapons.includes(page)) {
+      const vehicleWeapon = parseVehicleWeapon(data.text);
+      yield put(VehicleWeapons.set({ page, vehicleWeapon }));
     } else {
       // TODO: Cannot parse WikiPage
     }

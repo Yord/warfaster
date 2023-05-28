@@ -10,6 +10,7 @@ import { Lists } from "./Lists";
 import { Models } from "./Models";
 import { PageIds } from "./PageIds";
 import { Url } from "./Url";
+import { VehicleWeapons } from "./VehicleWeapons";
 import { Version } from "./Version";
 import { WarjackWeapons } from "./WarjackWeapons";
 import { WikiPages } from "./WikiPages";
@@ -27,6 +28,7 @@ const objects = [
   Models,
   PageIds,
   Url,
+  VehicleWeapons,
   WarjackWeapons,
   WildCardModels,
   WikiPages,

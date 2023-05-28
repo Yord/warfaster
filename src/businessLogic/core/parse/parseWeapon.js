@@ -1,12 +1,27 @@
 import { parseAnchor } from "./parsers";
 import { prepareDOM } from "./utils";
 
+const parseVehicleWeapon = (text) => {
+  const doc = prepareDOM(text);
+
+  const vehicleWeapon = doc.querySelector("#Vehicle_Weapon");
+  const prefix = vehicleWeapon ? "#Vehicle_Weapon ~ " : "";
+
+  return parseVehicleOrWarjackWeapon(prefix, doc);
+};
+
 const parseWarjackWeapon = (text) => {
   const doc = prepareDOM(text);
 
   const warjackWeapon = doc.querySelector("#Warjack_Weapon");
   const prefix = warjackWeapon ? "#Warjack_Weapon ~ " : "";
 
+  return parseVehicleOrWarjackWeapon(prefix, doc);
+};
+
+export { parseVehicleWeapon, parseWarjackWeapon };
+
+function parseVehicleOrWarjackWeapon(prefix, doc) {
   let res = {};
 
   const availableFor = [
@@ -134,6 +149,4 @@ const parseWarjackWeapon = (text) => {
   }
 
   return res;
-};
-
-export { parseWarjackWeapon };
+}
