@@ -251,7 +251,8 @@ li.ant-menu-item {
   max-width: 400px;
 }
 
-.ant-drawer-content, .ant-drawer-header {
+.ant-drawer-content,
+.ant-drawer-header {
   background-color: transparent;
 }
 
@@ -267,7 +268,7 @@ li.ant-menu-item {
 }
 
 .ant-drawer-header-no-title button:hover {
-  color: white
+  color: white;
 }
 
 .ant-drawer-header-no-title button .anticon-menu-unfold {
@@ -294,6 +295,12 @@ li.ant-menu-item {
 .ant-menu-item-group-title {
   color: white;
   font-weight: bold;
+  padding: 0;
+}
+
+.ant-menu-item-group-title div {
+  cursor: pointer;
+  padding: 8px 16px;
 }
 
 .cards .header {

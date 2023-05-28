@@ -78,6 +78,7 @@ function AppPresentation({
   cypherCodecs,
   dragging,
   menuItemClicked,
+  allMenuItemsClicked,
   dragEnd,
   dragStart,
   lists,
@@ -1630,7 +1631,17 @@ function AppPresentation({
                 mode="inline"
                 triggerSubMenuAction="click"
               >
-                <Menu.ItemGroup title={factionName}>
+                <Menu.ItemGroup
+                  title={
+                    <div
+                      onClick={allMenuItemsClicked(
+                        models.map((model) => model.page)
+                      )}
+                    >
+                      {factionName}
+                    </div>
+                  }
+                >
                   {models.map(({ name, page, type, subtype }) => {
                     const shortName = name.slice(0, 40);
 
@@ -1661,7 +1672,15 @@ function AppPresentation({
                   cadreModels.map(({ cadrePageId, cadreModels }) => (
                     <Menu.ItemGroup
                       key={`Cadre:${cadrePageId}`}
-                      title={cadres[cadrePageId]}
+                      title={
+                        <div
+                          onClick={allMenuItemsClicked(
+                            cadreModels.map((model) => model.page)
+                          )}
+                        >
+                          {cadres[cadrePageId]}
+                        </div>
+                      }
                     >
                       {cadreModels.map(({ name, page, type, subtype }) => {
                         const shortName = name.slice(0, 40);
@@ -1692,7 +1711,19 @@ function AppPresentation({
                     </Menu.ItemGroup>
                   ))
                 )}
-                <Menu.ItemGroup title="Wild Cards">
+                <Menu.ItemGroup
+                  title={
+                    <div
+                      onClick={allMenuItemsClicked(
+                        (wildCardModels[faction] || []).map(
+                          (model) => model.page
+                        )
+                      )}
+                    >
+                      Wild Cards
+                    </div>
+                  }
+                >
                   {(wildCardModels[faction] || [])
                     .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
                     .map(({ name, page, type, subtype }, j) => {
@@ -1742,7 +1773,22 @@ function AppPresentation({
                     a === "Universal" ? 1 : b === "Universal" ? -1 : 1
                   )
                   .map(([faction, cyphers]) => (
-                    <Menu.ItemGroup title={`${faction} Cyphers`} key={faction}>
+                    <Menu.ItemGroup
+                      title={
+                        <div
+                          onClick={allMenuItemsClicked(
+                            cyphers
+                              .sort((c1, c2) =>
+                                c1.Type.text < c2.Type.text ? -1 : 1
+                              )
+                              .map(({ Cypher }) => Cypher.page)
+                          )}
+                        >
+                          {`${faction} Cyphers`}
+                        </div>
+                      }
+                      key={faction}
+                    >
                       {cyphers
                         .sort((c1, c2) =>
                           c1.Type.text < c2.Type.text ? -1 : 1
@@ -2040,6 +2086,10 @@ const App = connect(
     dragEnd: (event) => dispatch(CardDragEnded(event)),
     menuItemClicked: (page) => (event) => {
       dispatch(MenuItemClicked({ page }));
+      event.stopPropagation();
+    },
+    allMenuItemsClicked: (pages) => (event) => {
+      pages.forEach((page) => dispatch(MenuItemClicked({ page })));
       event.stopPropagation();
     },
     removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
