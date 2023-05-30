@@ -10,6 +10,7 @@ import { AppSync } from "../../state/AppSync";
 import { CypherCodecs } from "../../state/CypherCodecs";
 import { Dragging } from "../../state/Dragging";
 import { FactionModels } from "../../state/FactionModels";
+import { Requests } from "../../state/io/Requests";
 import { Lists } from "../../state/Lists";
 import { PageIds } from "../../state/PageIds";
 import { Url } from "../../state/Url";
@@ -226,6 +227,7 @@ function* parseLists() {
       if (cortexIds || warjackWeaponIds || vehicleWeaponId) {
         const page = yield select(PageIds.selectPageByPageId(pageId));
         if (page) {
+          yield put(Requests.parsePage({ page, parserName: "parseModel" }));
           yield put(FetchWikiPage({ page }));
         }
       }
@@ -238,7 +240,6 @@ function* parseLists() {
 function* fetchWeaponsIfVehicleAdded() {
   while (true) {
     const { payload } = yield take("Models.set");
-    console.log("fetchWeaponsIfVehicleAdded", { payload });
     if (
       payload &&
       payload.model &&
@@ -261,6 +262,12 @@ function* fetchWeaponsIfVehicleAdded() {
                 })
               );
             }
+            yield put(
+              Requests.parsePage({
+                page: pageWithoutTarget,
+                parserName: "parseVehicleOrWarjackWeapon",
+              })
+            );
             yield put(FetchWikiPage({ page: pageWithoutTarget }));
           }
         }
@@ -295,6 +302,12 @@ function* fetchWeaponsIfWarjackAdded() {
                 })
               );
             }
+            yield put(
+              Requests.parsePage({
+                page: pageWithoutTarget,
+                parserName: "parseVehicleOrWarjackWeapon",
+              })
+            );
             yield put(FetchWikiPage({ page: pageWithoutTarget }));
           }
         }
@@ -309,6 +322,7 @@ function* fetchCardOnShow() {
     if (payload && payload.pageId) {
       const page = yield select(PageIds.selectPageByPageId(payload.pageId));
       if (page) {
+        yield put(Requests.parsePage({ page, parserName: "parseModel" }));
         yield put(FetchWikiPage({ page }));
       }
     }

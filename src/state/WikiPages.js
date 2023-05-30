@@ -23,10 +23,9 @@ function init(state) {
 
 // Actions
 
-function addPage(state, { page, type, data }) {
+function addPage(state, { page, data }) {
   const pages = select(state);
-  data.page = page;
-  data.type = type;
+  if (!data.page) data.page = page;
   pages[page] = data;
 }
 

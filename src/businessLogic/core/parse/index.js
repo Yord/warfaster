@@ -3,7 +3,7 @@ import { parseCypherCodecsText } from "./parseCypherCodecsText";
 import { parseFactionModelsText } from "./parseFactionModelsText";
 import { parseFactionsText } from "./parseFactionsText";
 import { parseModelText } from "./parseModelText";
-import { parseVehicleWeapon, parseWarjackWeapon } from "./parseWeapon";
+import { parseVehicleAndWarjackWeaponText } from "./parseVehicleAndWarjackWeaponText";
 import { parseWildCardText } from "./parseWildCardText";
 
 export {
@@ -12,7 +12,6 @@ export {
   parseFactionModelsText,
   parseFactionsText,
   parseModelText,
-  parseVehicleWeapon,
-  parseWarjackWeapon,
+  parseVehicleAndWarjackWeaponText,
   parseWildCardText,
 };

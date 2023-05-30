@@ -18,6 +18,7 @@ import { WildCardModels } from "../../../state/WildCardModels";
 import { FetchPageIdsSlice } from "../../../messages";
 
 import { partitionBy } from "../partitionBy";
+import { Requests } from "../../../state/io/Requests";
 
 function* fetchPageIds() {
   yield all([fetchPageIds2(), fetchPageIdsSlice()]);
@@ -111,6 +112,7 @@ function* fetchPageIds2() {
     );
 
     for (const pages of pageSlices) {
+      yield Requests.queryPageIds({ pages, parserName: "???" }); // TODO: assign parser name
       yield put(FetchPageIdsSlice({ pages }));
     }
 

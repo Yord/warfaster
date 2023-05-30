@@ -32,10 +32,14 @@ function* fetchWikiPage() {
   while (true) {
     const { payload } = yield take(wikiPageChannel);
     const page = payload.page;
-    const data = yield select(WikiPages.selectPageByPage(page));
 
-    if (!data) {
+    const cached = yield select(WikiPages.selectPageByPage(page));
+
+    if (cached) {
+      yield put(FetchedWikiPage({ page, data: cached }));
+    } else {
       const data = yield call(jsonp, parsePage(page));
+
       yield put(FetchedWikiPage({ page, data: data.parse }));
 
       const twoSecondsInMs = 2 * 1000;

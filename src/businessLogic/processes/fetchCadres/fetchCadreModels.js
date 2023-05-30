@@ -11,6 +11,7 @@ import { CadreCategoryMembers } from "../../../state/CadreCategoryMembers";
 import { CadreModels } from "../../../state/CadreModels";
 import { jsonp } from "../jsonp";
 import { FetchCadreModels } from "../../../messages";
+import { Requests } from "../../../state/io/Requests";
 
 function* fetchCadreModels() {
   yield all([fetchCadreModelsForAllCategoryMembers(), fetchCadreModelsPage()]);
@@ -26,6 +27,7 @@ function* fetchCadreModelsForAllCategoryMembers() {
 
     const pageIds = Object.keys(cadreCategoryMembers);
     for (const pageId of pageIds) {
+      yield put(Requests.queryCadreModels({ pageId, parserName: "???" })); // TODO: assign parser name
       yield put(FetchCadreModels({ cadrePageId: pageId }));
     }
   }

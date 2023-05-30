@@ -1,11 +1,13 @@
 import { call, put, select } from "redux-saga/effects";
 import { CadreCategoryMembers } from "../../../state/CadreCategoryMembers";
+import { Requests } from "../../../state/io/Requests";
 import { jsonp } from "../jsonp";
 
 function* fetchCadreCategoryMembers() {
   const data = yield select(CadreCategoryMembers.select());
   if (Object.keys(data).length === 0) {
     const data = yield call(jsonp, fetchMembers());
+    yield put(Requests.queryCadres({ parserName: "???" })); // TODO: assign parser name
     if (data.batchcomplete && data.query) {
       const categorymembers = data.query.categorymembers;
       if (categorymembers) {

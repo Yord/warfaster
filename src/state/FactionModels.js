@@ -21,10 +21,7 @@ function init(state) {
 
 function set(state, { page, factionModels }) {
   const models = select(state);
-  if (!models[page]) {
-    models[page] = [];
-  }
-  models[page] = [...models[page], ...factionModels];
+  models[page] = factionModels;
 }
 
 // Selectors

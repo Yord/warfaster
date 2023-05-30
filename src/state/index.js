@@ -8,6 +8,7 @@ import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
 import { Lists } from "./Lists";
 import { Models } from "./Models";
+import { Requests } from "./io/Requests";
 import { PageIds } from "./PageIds";
 import { Url } from "./Url";
 import { VehicleWeapons } from "./VehicleWeapons";
@@ -26,6 +27,7 @@ const objects = [
   Factions,
   FactionModels,
   Models,
+  Requests,
   PageIds,
   Url,
   VehicleWeapons,

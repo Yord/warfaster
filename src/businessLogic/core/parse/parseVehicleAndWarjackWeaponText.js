@@ -1,25 +1,31 @@
 import { parseAnchor } from "./parsers";
 import { prepareDOM } from "./utils";
 
-const parseVehicleWeapon = (text) => {
+const parseVehicleAndWarjackWeaponText = (text) => {
   const doc = prepareDOM(text);
 
-  const vehicleWeapon = doc.querySelector("#Vehicle_Weapon");
-  const prefix = vehicleWeapon ? "#Vehicle_Weapon ~ " : "";
+  const vehicleWeaponId = doc.querySelector("#Vehicle_Weapon");
+  const warjackWeaponId = doc.querySelector("#Warjack_Weapon");
 
-  return parseVehicleOrWarjackWeapon(prefix, doc);
+  if (vehicleWeaponId && warjackWeaponId) {
+    const vehicleWeapon = parseVehicleOrWarjackWeapon(
+      "#Vehicle_Weapon ~ ",
+      doc
+    );
+    const warjackWeapon = parseVehicleOrWarjackWeapon(
+      "#Warjack_Weapon ~ ",
+      doc
+    );
+
+    return { vehicleWeapon, warjackWeapon };
+  } else {
+    const vehicleOrWarjackWeapon = parseVehicleOrWarjackWeapon("", doc);
+
+    return { vehicleOrWarjackWeapon };
+  }
 };
 
-const parseWarjackWeapon = (text) => {
-  const doc = prepareDOM(text);
-
-  const warjackWeapon = doc.querySelector("#Warjack_Weapon");
-  const prefix = warjackWeapon ? "#Warjack_Weapon ~ " : "";
-
-  return parseVehicleOrWarjackWeapon(prefix, doc);
-};
-
-export { parseVehicleWeapon, parseWarjackWeapon };
+export { parseVehicleAndWarjackWeaponText };
 
 function parseVehicleOrWarjackWeapon(prefix, doc) {
   let res = {};

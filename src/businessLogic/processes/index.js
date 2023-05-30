@@ -1,5 +1,6 @@
 import { all, put } from "redux-saga/effects";
 import { FetchWikiPage, RefreshWikiPages } from "../../messages";
+import { Requests } from "../../state/io/Requests";
 import { cacheWikiPages } from "./cacheWikiPages";
 import { fetchCadres } from "./fetchCadres";
 import { parseWikiPages } from "./parseWikiPages";
@@ -21,8 +22,13 @@ function* processes() {
 export { processes };
 
 function* fetchInitialData() {
-  const pages = ["Warcaster", "Wild_Card", "Cypher_Codecs"];
-  for (const page of pages) {
+  const pages = [
+    ["Warcaster", "parseFactions"],
+    ["Wild_Card", "parseWildCard"],
+    ["Cypher_Codecs", "parseCypherCodecs"],
+  ];
+  for (const [page, parserName] of pages) {
+    yield put(Requests.parsePage({ page, parserName }));
     yield put(FetchWikiPage({ page }));
   }
 }

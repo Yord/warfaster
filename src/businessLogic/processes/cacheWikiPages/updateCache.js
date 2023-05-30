@@ -29,6 +29,7 @@ import {
 import { jsonp } from "../jsonp";
 
 import { WikiPages } from "../../../state/WikiPages";
+import { Requests } from "../../../state/io/Requests";
 
 function* updateCache() {
   yield all([
@@ -48,11 +49,12 @@ function* refreshWikiPages() {
   const pageidsList = [];
   for (let i = 0; i < pageIds.length; i += queryLength) {
     const ids = pageIds.slice(i, i + queryLength);
-    const pageids = ids.join("|");
+    const pageids = ids.join("|"); // TODO: This is an implementation detail. Move it down.
     pageidsList.push(pageids);
   }
 
   for (const pageids of pageidsList) {
+    yield put(Requests.queryRevisions({ pageIds: pageids, parserName: "???" })); // TODO: assign parser name
     yield put(FetchWikiPageRevisions({ pageids }));
   }
 }
@@ -101,6 +103,12 @@ function* refreshOutdatedWikiPages() {
         yield put(WikiPages.removePage({ page: page.page }));
       } else if (page.revid < revInfo.revid) {
         yield put(WikiPages.removePage({ page: page.page }));
+        yield put(
+          Requests.parsePage({
+            page: page.page,
+            parserName: "???", // TODO: Fetch the parser from the state.
+          })
+        );
         yield put(FetchWikiPage({ page: page.page, type: page.type }));
       }
     }
