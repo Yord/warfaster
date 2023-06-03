@@ -4,6 +4,7 @@ const CypherCodecs = StateShard(
   "CypherCodecs",
   init,
   { set },
+  {},
   { select, selectPages, selectByPage }
 );
 

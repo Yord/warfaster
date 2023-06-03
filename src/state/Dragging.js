@@ -4,6 +4,7 @@ const Dragging = StateShard(
   "Dragging",
   init,
   { activate, deactivate },
+  {},
   { select }
 );
 

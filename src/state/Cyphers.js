@@ -1,6 +1,12 @@
 import { StateShard } from "./utils";
 
-const Cyphers = StateShard("Cyphers", init, { set }, { select, selectByPage });
+const Cyphers = StateShard(
+  "Cyphers",
+  init,
+  { set },
+  {},
+  { select, selectByPage }
+);
 
 export { Cyphers };
 

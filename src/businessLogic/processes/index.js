@@ -1,6 +1,7 @@
 import { all, put } from "redux-saga/effects";
-import { FetchWikiPage, RefreshWikiPages } from "../../messages";
+import { RefreshWikiPages } from "../../messages";
 import { Requests } from "../../state/io/Requests";
+import { cacheParserNames } from "./cacheParserNames";
 import { cacheWikiPages } from "./cacheWikiPages";
 import { fetchCadres } from "./fetchCadres";
 import { parseWikiPages } from "./parseWikiPages";
@@ -12,8 +13,9 @@ function* processes() {
     cacheWikiPages(),
     parseWikiPages(),
     triggerFetchWikiPages(),
+    cacheParserNames(),
     ui(),
-    fetchCadres(), // TODO: do this in a common action channel with FetchWikiPage to avoid overloading the PP page
+    fetchCadres(),
     fetchInitialData(),
     refresh(),
   ]);
@@ -23,13 +25,12 @@ export { processes };
 
 function* fetchInitialData() {
   const pages = [
-    ["Warcaster", "parseFactions"],
-    ["Wild_Card", "parseWildCard"],
-    ["Cypher_Codecs", "parseCypherCodecs"],
+    { page: "Warcaster", parserName: "parseFactions" },
+    { page: "Wild_Card", parserName: "parseWildCard" },
+    { page: "Cypher_Codecs", parserName: "parseCypherCodecs" },
   ];
-  for (const [page, parserName] of pages) {
-    yield put(Requests.parsePage({ page, parserName }));
-    yield put(FetchWikiPage({ page }));
+  for (const page of pages) {
+    yield* Requests.parsePage(page);
   }
 }
 

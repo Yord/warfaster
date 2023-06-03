@@ -2,27 +2,27 @@ import { select, take } from "redux-saga/effects";
 
 import { FetchedWikiPage } from "../../messages";
 import parsers from "./parsers";
-import { Requests } from "../../state/io/Requests";
+import { ParserNames } from "../../state/ParserNames";
 
 function* parseWikiPages() {
   while (true) {
-    const { payload } = yield take(FetchedWikiPage().type);
-    const { page } = payload;
+    const action = yield take(FetchedWikiPage().type);
+    const { payload } = action;
 
-    const requests = yield select(Requests.select());
+    let parserName = payload.parserName;
+    if (!parserName) {
+      parserName = yield select(ParserNames.selectByPage(payload.page));
+    }
 
-    const request = requests.find(
-      ({ queryParams }) =>
-        queryParams.action === "parse" && queryParams.page === page
-    );
-    if (!request) {
-      console.error("Request invalid!", request);
+    if (!parserName) {
+      console.error("Parser name not found!", action);
       continue;
     }
 
-    const parser = parsers[request.parserName];
+    const parser = parsers[parserName];
+
     if (!parser) {
-      console.error(`Parser with name ${request.parserName} not found!`);
+      console.error("Parser not found!", action);
       continue;
     }
 

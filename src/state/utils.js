@@ -5,7 +5,7 @@ const initAll = (...objects) =>
 
 const immer = (f) => (state, action) => produce(f(action) || identity)(state);
 
-const StateShard = (namespace, init, actions, selectors) => ({
+const StateShard = (namespace, init, actions, actionCreators, selectors) => ({
   namespace,
   init,
   dispatch: Object.fromEntries(
@@ -20,6 +20,7 @@ const StateShard = (namespace, init, actions, selectors) => ({
       (payload = {}) => ({ type: namespace + "." + functionName, payload }),
     ])
   ),
+  ...actionCreators,
   ...Object.fromEntries(
     Object.entries(selectors).map(([name, f]) => [
       name,

@@ -3,7 +3,6 @@ import { all, put, select, take } from "redux-saga/effects";
 import {
   CardDragEnded,
   CardDragStarted,
-  FetchWikiPage,
   MenuItemClicked,
 } from "../../messages";
 import { AppSync } from "../../state/AppSync";
@@ -227,8 +226,7 @@ function* parseLists() {
       if (cortexIds || warjackWeaponIds || vehicleWeaponId) {
         const page = yield select(PageIds.selectPageByPageId(pageId));
         if (page) {
-          yield put(Requests.parsePage({ page, parserName: "parseModel" }));
-          yield put(FetchWikiPage({ page }));
+          yield* Requests.parsePage({ page, parserName: "parseModel" });
         }
       }
     }
@@ -262,13 +260,10 @@ function* fetchWeaponsIfVehicleAdded() {
                 })
               );
             }
-            yield put(
-              Requests.parsePage({
-                page: pageWithoutTarget,
-                parserName: "parseVehicleOrWarjackWeapon",
-              })
-            );
-            yield put(FetchWikiPage({ page: pageWithoutTarget }));
+            yield* Requests.parsePage({
+              page: pageWithoutTarget,
+              parserName: "parseVehicleOrWarjackWeapon",
+            });
           }
         }
       }
@@ -302,13 +297,10 @@ function* fetchWeaponsIfWarjackAdded() {
                 })
               );
             }
-            yield put(
-              Requests.parsePage({
-                page: pageWithoutTarget,
-                parserName: "parseVehicleOrWarjackWeapon",
-              })
-            );
-            yield put(FetchWikiPage({ page: pageWithoutTarget }));
+            yield* Requests.parsePage({
+              page: pageWithoutTarget,
+              parserName: "parseVehicleOrWarjackWeapon",
+            });
           }
         }
       }
@@ -322,8 +314,12 @@ function* fetchCardOnShow() {
     if (payload && payload.pageId) {
       const page = yield select(PageIds.selectPageByPageId(payload.pageId));
       if (page) {
-        yield put(Requests.parsePage({ page, parserName: "parseModel" }));
-        yield put(FetchWikiPage({ page }));
+        const cypher = yield select(CypherCodecs.selectByPage(page));
+        if (cypher) {
+          yield* Requests.parsePage({ page, parserName: "parseCypher" });
+        } else {
+          yield* Requests.parsePage({ page, parserName: "parseModel" });
+        }
       }
     }
   }

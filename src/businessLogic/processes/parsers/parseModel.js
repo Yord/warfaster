@@ -1,7 +1,6 @@
 import { put } from "redux-saga/effects";
 import { parseModelText } from "../../core/parse";
 import { Models } from "../../../state/Models";
-import { FetchPageIdsSlice } from "../../../messages";
 import { partitionBy } from "../partitionBy";
 import { Requests } from "../../../state/io/Requests";
 
@@ -58,8 +57,7 @@ function* parseModel({ data, page }) {
     const pageSlices = partitionBy(50, fetchPages);
 
     for (const pages of pageSlices) {
-      yield Requests.queryPageIds({ pages, parserName: "???" }); // TODO: assign parser name
-      yield put(FetchPageIdsSlice({ pages }));
+      yield* Requests.queryPageIds({ pages: pages });
     }
   }
 }

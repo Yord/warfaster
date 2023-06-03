@@ -4,7 +4,7 @@ import { updateCache } from "./updateCache";
 import { fetchPageIds } from "./fetchPageIds";
 
 function* cacheWikiPages() {
-  yield all([updateCache(), cacheWikiPages2(), fetchPageIds()]);
+  yield all([fetchPageIds(), updateCache(), cacheWikiPages2()]);
 }
 
 export { cacheWikiPages };

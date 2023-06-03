@@ -4,6 +4,7 @@ const FactionModels = StateShard(
   "FactionModels",
   init,
   { set },
+  {},
   { select, selectModelPages, selectByPage }
 );
 

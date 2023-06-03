@@ -1,6 +1,6 @@
 import { StateShard } from "./utils";
 
-const Url = StateShard("Url", init, { set }, { select });
+const Url = StateShard("Url", init, { set }, {}, { select });
 
 export { Url };
 

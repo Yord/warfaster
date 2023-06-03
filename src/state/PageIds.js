@@ -4,6 +4,7 @@ const PageIds = StateShard(
   "PageIds",
   init,
   { addPages },
+  {},
   { select, selectByPage, selectByPages, selectPageByPageId }
 );
 

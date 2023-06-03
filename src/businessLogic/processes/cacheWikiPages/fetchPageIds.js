@@ -1,13 +1,4 @@
-import {
-  actionChannel,
-  all,
-  call,
-  delay,
-  put,
-  take,
-  select,
-} from "redux-saga/effects";
-import { jsonp } from "../jsonp";
+import { all, put, take, select } from "redux-saga/effects";
 
 import { AppSync } from "../../../state/AppSync";
 import { CypherCodecs } from "../../../state/CypherCodecs";
@@ -15,18 +6,11 @@ import { FactionModels } from "../../../state/FactionModels";
 import { Factions } from "../../../state/Factions";
 import { PageIds } from "../../../state/PageIds";
 import { WildCardModels } from "../../../state/WildCardModels";
-import { FetchPageIdsSlice } from "../../../messages";
 
 import { partitionBy } from "../partitionBy";
 import { Requests } from "../../../state/io/Requests";
 
 function* fetchPageIds() {
-  yield all([fetchPageIds2(), fetchPageIdsSlice()]);
-}
-
-export { fetchPageIds };
-
-function* fetchPageIds2() {
   const cachedPageIds = yield select(PageIds.select());
 
   if (Object.keys(cachedPageIds).length === 0) {
@@ -112,8 +96,7 @@ function* fetchPageIds2() {
     );
 
     for (const pages of pageSlices) {
-      yield Requests.queryPageIds({ pages, parserName: "???" }); // TODO: assign parser name
-      yield put(FetchPageIdsSlice({ pages }));
+      yield* Requests.queryPageIds({ pages });
     }
 
     let processedCount = 0;
@@ -126,30 +109,4 @@ function* fetchPageIds2() {
   }
 }
 
-function* fetchPageIdsSlice() {
-  const pageIdsSliceChannel = yield actionChannel(FetchPageIdsSlice().type);
-
-  while (true) {
-    const { payload } = yield take(pageIdsSliceChannel);
-    const pages = payload.pages;
-
-    const data = yield call(jsonp, pageInfo(pages.map((_) => _.text)));
-    const titleToPageId = Object.fromEntries(
-      data.query.pages.map(({ title, pageid }) => [title, pageid])
-    );
-
-    const pageIdByTitle = Object.fromEntries(
-      pages.map(({ text, page }) => [page, titleToPageId[text]])
-    );
-
-    yield put(PageIds.addPages({ pageIdByTitle }));
-
-    const twoSecondsInMs = 2 * 1000;
-    yield delay(twoSecondsInMs);
-  }
-}
-
-function pageInfo(pages) {
-  const pageList = encodeURIComponent(pages.join("|"));
-  return `https://privateerpress.wiki/api.php?action=query&formatversion=2&format=json&prop=pageprops&titles=${pageList}`;
-}
+export { fetchPageIds };

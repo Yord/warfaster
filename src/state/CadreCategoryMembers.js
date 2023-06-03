@@ -4,6 +4,7 @@ const CadreCategoryMembers = StateShard(
   "CadreCategoryMembers",
   init,
   { set },
+  {},
   { select }
 );
 

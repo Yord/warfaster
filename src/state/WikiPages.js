@@ -4,6 +4,7 @@ const WikiPages = StateShard(
   "WikiPages",
   init,
   { addPage, removePage },
+  {},
   {
     selectPageByPage,
     selectPagesByPageIds,

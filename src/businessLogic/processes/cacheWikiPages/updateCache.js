@@ -11,32 +11,15 @@ cached revision is higher or equal, the page is not refreshed and remains
 cached.
 */
 
-import {
-  FetchWikiPage,
-  FetchWikiPageRevisions,
-  FetchedWikiPageRevisions,
-  RefreshWikiPages,
-} from "../../../messages";
-import {
-  actionChannel,
-  all,
-  call,
-  delay,
-  put,
-  take,
-  select,
-} from "redux-saga/effects";
-import { jsonp } from "../jsonp";
+import { FetchedWikiPageRevisions, RefreshWikiPages } from "../../../messages";
+import { all, put, take, select } from "redux-saga/effects";
 
 import { WikiPages } from "../../../state/WikiPages";
 import { Requests } from "../../../state/io/Requests";
+import { ParserNames } from "../../../state/ParserNames";
 
 function* updateCache() {
-  yield all([
-    refreshWikiPages(),
-    fetchWikiPageRevisions(),
-    refreshOutdatedWikiPages(),
-  ]);
+  yield all([refreshWikiPages(), refreshOutdatedWikiPages()]);
 }
 
 export { updateCache };
@@ -46,35 +29,10 @@ function* refreshWikiPages() {
   const pageIds = yield select(WikiPages.selectPageIds());
 
   const queryLength = 50;
-  const pageidsList = [];
   for (let i = 0; i < pageIds.length; i += queryLength) {
-    const ids = pageIds.slice(i, i + queryLength);
-    const pageids = ids.join("|"); // TODO: This is an implementation detail. Move it down.
-    pageidsList.push(pageids);
-  }
-
-  for (const pageids of pageidsList) {
-    yield put(Requests.queryRevisions({ pageIds: pageids, parserName: "???" })); // TODO: assign parser name
-    yield put(FetchWikiPageRevisions({ pageids }));
-  }
-}
-
-function* fetchWikiPageRevisions() {
-  const revisionsChannel = yield actionChannel(FetchWikiPageRevisions().type);
-
-  while (true) {
-    const { payload } = yield take(revisionsChannel);
-    const pageids = payload.pageids;
-
-    const data = yield call(jsonp, revisionsQuery(pageids));
-    yield put(
-      FetchedWikiPageRevisions({
-        pageRevisions: data.query.pages,
-      })
-    );
-
-    const twoSecondsInMs = 2 * 1000;
-    yield delay(twoSecondsInMs);
+    yield* Requests.queryRevisions({
+      pageIds: pageIds.slice(i, i + queryLength),
+    });
   }
 }
 
@@ -103,18 +61,12 @@ function* refreshOutdatedWikiPages() {
         yield put(WikiPages.removePage({ page: page.page }));
       } else if (page.revid < revInfo.revid) {
         yield put(WikiPages.removePage({ page: page.page }));
-        yield put(
-          Requests.parsePage({
-            page: page.page,
-            parserName: "???", // TODO: Fetch the parser from the state.
-          })
-        );
-        yield put(FetchWikiPage({ page: page.page, type: page.type }));
+        const parserName = yield select(ParserNames.selectByPage(page.page));
+        yield* Requests.parsePage({
+          page: page.page,
+          parserName, // TODO: Test if this works
+        });
       }
     }
   }
-}
-
-function revisionsQuery(pageids) {
-  return `https://privateerpress.wiki/api.php?action=query&pageids=${pageids}&prop=revisions&formatversion=2&format=json`;
 }

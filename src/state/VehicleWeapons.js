@@ -4,6 +4,7 @@ const VehicleWeapons = StateShard(
   "VehicleWeapons",
   init,
   { set },
+  {},
   { select, selectByPage }
 );
 

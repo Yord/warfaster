@@ -1,6 +1,12 @@
 import { StateShard } from "./utils";
 
-const Models = StateShard("Models", init, { set }, { select, selectByPage });
+const Models = StateShard(
+  "Models",
+  init,
+  { set },
+  {},
+  { select, selectByPage }
+);
 
 export { Models };
 

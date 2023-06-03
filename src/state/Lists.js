@@ -17,6 +17,7 @@ const Lists = StateShard(
     toggleCard,
     moveCard,
   },
+  {},
   { select }
 );
 

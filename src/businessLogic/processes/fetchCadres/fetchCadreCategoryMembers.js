@@ -1,31 +1,7 @@
-import { call, put, select } from "redux-saga/effects";
-import { CadreCategoryMembers } from "../../../state/CadreCategoryMembers";
 import { Requests } from "../../../state/io/Requests";
-import { jsonp } from "../jsonp";
 
 function* fetchCadreCategoryMembers() {
-  const data = yield select(CadreCategoryMembers.select());
-  if (Object.keys(data).length === 0) {
-    const data = yield call(jsonp, fetchMembers());
-    yield put(Requests.queryCadres({ parserName: "???" })); // TODO: assign parser name
-    if (data.batchcomplete && data.query) {
-      const categorymembers = data.query.categorymembers;
-      if (categorymembers) {
-        const cadreCategoryMembers = Object.fromEntries(
-          categorymembers.map((member) => [
-            member.pageid,
-            member.title.replace(/^Category:/, ""),
-          ])
-        );
-
-        yield put(CadreCategoryMembers.set({ cadreCategoryMembers }));
-      }
-    }
-  }
+  yield* Requests.queryCadres();
 }
 
 export { fetchCadreCategoryMembers };
-
-function fetchMembers() {
-  return `https://privateerpress.wiki/api.php?action=query&formatversion=2&format=json&list=categorymembers&cmtitle=Category:Cadre&cmtype=subcat&cmlimit=max`;
-}

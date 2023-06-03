@@ -4,6 +4,7 @@ const CadreModels = StateShard(
   "CadreModels",
   init,
   { set, setByCadrePageId },
+  {},
   { select, selectCadreModelsByPageId }
 );
 

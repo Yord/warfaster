@@ -1,9 +1,17 @@
 import { StateShard } from "../utils";
+import { put } from "redux-saga/effects";
 
 const Requests = StateShard(
   "Requests",
   init,
-  { parsePage, queryCadreModels, queryCadres, queryRevisions, queryPageIds },
+  { fetch },
+  {
+    parsePage,
+    queryCadreModels,
+    queryCadres,
+    queryRevisions,
+    queryPageIds,
+  },
   { select }
 );
 
@@ -19,62 +27,80 @@ function init(state) {
 
 // Actions
 
-function parsePage(state, { page, parserName }) {
-  select(state).push({
-    queryParams: {
-      action: "parse",
-      page,
-    },
-    parserName,
-  });
+function fetch(state, { parserName, queryParams }) {
+  select(state).push({ parserName, queryParams });
 }
 
-function queryCadreModels(state, { pageId, parserName }) {
-  select(state).push({
-    queryParams: {
-      action: "query",
-      list: "categorymembers",
-      cmpageid: pageId,
-      cmtype: "page",
-      cmlimit: "max",
-    },
-    parserName,
-  });
+// Action Creators
+
+function* parsePage({ page, parserName }) {
+  yield put(
+    Requests.fetch({
+      desc: "parsePage",
+      parserName,
+      queryParams: {
+        action: "parse",
+        page,
+      },
+    })
+  );
 }
 
-function queryCadres(state, { parserName }) {
-  select(state).push({
-    queryParams: {
-      action: "query",
-      list: "categorymembers",
-      cmtitle: "Category:Cadre",
-      cmtype: "subcat",
-      cmlimit: "max",
-    },
-    parserName,
-  });
+function* queryCadreModels({ pageId }) {
+  yield put(
+    Requests.fetch({
+      desc: "queryCadreModels",
+      queryParams: {
+        action: "query",
+        list: "categorymembers",
+        cmpageid: pageId,
+        cmtype: "page",
+        cmlimit: "max",
+      },
+    })
+  );
 }
 
-function queryRevisions(state, { pageIds, parserName }) {
-  select(state).push({
-    queryParams: {
-      action: "query",
-      prop: "revisions",
-      pageids: pageIds, // TODO: encodeURIComponent(pageIds.join("|"))
-    },
-    parserName,
-  });
+function* queryCadres() {
+  yield put(
+    Requests.fetch({
+      desc: "queryCadres",
+      queryParams: {
+        action: "query",
+        list: "categorymembers",
+        cmtitle: "Category:Cadre",
+        cmtype: "subcat",
+        cmlimit: "max",
+      },
+    })
+  );
 }
 
-function queryPageIds(state, { pages, parserName }) {
-  select(state).push({
-    queryParams: {
-      action: "query",
-      prop: "pageprops",
-      titles: encodeURIComponent(pages.join("|")),
-    },
-    parserName,
-  });
+function* queryRevisions({ pageIds }) {
+  yield put(
+    Requests.fetch({
+      desc: "queryRevisions",
+      queryParams: {
+        action: "query",
+        prop: "revisions",
+        pageids: pageIds.join("|"),
+      },
+    })
+  );
+}
+
+function* queryPageIds({ pages }) {
+  yield put(
+    Requests.fetch({
+      desc: "queryPageIds",
+      pages,
+      queryParams: {
+        action: "query",
+        prop: "pageprops",
+        titles: encodeURIComponent(pages.map((_) => _.text).join("|")),
+      },
+    })
+  );
 }
 
 // Selectors

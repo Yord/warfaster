@@ -20,8 +20,6 @@ function* parseVehicleOrWarjackWeapon({ data, page }) {
       types.some(({ text }) => text === "Warjack")
     );
 
-    console.log({ vehicles, warjacks });
-
     const vehicleWeapons = vehicles.flatMap((vehicle) =>
       vehicle.vehicleWeaponSelection.map((weapon) => weapon.page)
     );
@@ -30,8 +28,6 @@ function* parseVehicleOrWarjackWeapon({ data, page }) {
         ? []
         : warjack.weaponDetails.map(({ Weapon }) => Weapon.page)
     );
-
-    console.log({ vehicleWeapons, warjackWeapons });
 
     if (vehicleWeapons.includes(page) && warjackWeapons.includes(page)) {
       console.error(

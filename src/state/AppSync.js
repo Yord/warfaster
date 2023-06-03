@@ -4,6 +4,7 @@ const AppSync = StateShard(
   "AppSync",
   init,
   { done, addReasons },
+  {},
   { selectDone, selectReasons }
 );
 
