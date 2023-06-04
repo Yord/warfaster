@@ -15,7 +15,6 @@ import { Url } from "./Url";
 import { VehicleWeapons } from "./VehicleWeapons";
 import { Version } from "./Version";
 import { WarjackWeapons } from "./WarjackWeapons";
-import { WikiPages } from "./WikiPages";
 import { WildCardModels } from "./WildCardModels";
 import { immer, initAll } from "./utils";
 
@@ -35,7 +34,6 @@ const objects = [
   VehicleWeapons,
   WarjackWeapons,
   WildCardModels,
-  WikiPages,
   // UI
   Dragging,
   Lists,

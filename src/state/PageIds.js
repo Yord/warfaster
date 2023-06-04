@@ -5,7 +5,7 @@ const PageIds = StateShard(
   init,
   { addPages },
   {},
-  { select, selectByPage, selectByPages, selectPageByPageId }
+  { select, selectByPage, selectPageByPageId }
 );
 
 export { PageIds };
@@ -36,11 +36,6 @@ function select(state) {
 function selectByPage(state, page) {
   const pageIds = select(state);
   return pageIds[page];
-}
-
-function selectByPages(state, pages) {
-  const pageIds = select(state);
-  return pages.reduce((acc, page) => [...acc, pageIds[page]], []);
 }
 
 function selectPageByPageId(state, pageId) {

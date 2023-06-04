@@ -8,8 +8,10 @@ function* parseVehicleOrWarjackWeapon({ data, page }) {
   const { vehicleWeapon, vehicleOrWarjackWeapon, warjackWeapon } =
     parseVehicleAndWarjackWeaponText(data.text);
 
-  if (vehicleWeapon) yield put(VehicleWeapons.set({ page, vehicleWeapon }));
-  if (warjackWeapon) yield put(WarjackWeapons.set({ page, warjackWeapon }));
+  if (vehicleWeapon)
+    yield put(VehicleWeapons.setForPage({ page, vehicleWeapon }));
+  if (warjackWeapon)
+    yield put(WarjackWeapons.setForPage({ page, warjackWeapon }));
   if (vehicleOrWarjackWeapon) {
     const models = Object.values(yield select(Models.select()));
 
@@ -37,13 +39,19 @@ function* parseVehicleOrWarjackWeapon({ data, page }) {
 
     if (vehicleWeapons.includes(page)) {
       yield put(
-        VehicleWeapons.set({ page, vehicleWeapon: vehicleOrWarjackWeapon })
+        VehicleWeapons.setForPage({
+          page,
+          vehicleWeapon: vehicleOrWarjackWeapon,
+        })
       );
     }
 
     if (warjackWeapons.includes(page)) {
       yield put(
-        WarjackWeapons.set({ page, warjackWeapon: vehicleOrWarjackWeapon })
+        WarjackWeapons.setForPage({
+          page,
+          warjackWeapon: vehicleOrWarjackWeapon,
+        })
       );
     }
   }

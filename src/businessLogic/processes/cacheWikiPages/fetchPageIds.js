@@ -54,7 +54,7 @@ function* fetchPageIds() {
       factions.map((faction) =>
         take(
           (action) =>
-            action.type === FactionModels.set().type &&
+            action.type === FactionModels.setForPage().type &&
             action.payload.page === faction
         )
       )

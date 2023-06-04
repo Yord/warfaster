@@ -3,7 +3,7 @@ import { StateShard } from "./utils";
 const Models = StateShard(
   "Models",
   init,
-  { set },
+  { setForPage },
   {},
   { select, selectByPage }
 );
@@ -20,7 +20,7 @@ function init(state) {
 
 // Actions
 
-function set(state, { page, model }) {
+function setForPage(state, { page, model }) {
   const models = select(state);
   models[page] = model;
 }

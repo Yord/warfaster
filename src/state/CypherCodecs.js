@@ -5,7 +5,7 @@ const CypherCodecs = StateShard(
   init,
   { set },
   {},
-  { select, selectPages, selectByPage }
+  { select, selectByPage }
 );
 
 export { CypherCodecs };
@@ -28,11 +28,6 @@ function set(state, { cypherCodecs }) {
 
 function select(state) {
   return state.data.cypherCodecs;
-}
-
-function selectPages(state) {
-  const codecs = select(state);
-  return codecs.map((codec) => codec.Cypher.page);
 }
 
 function selectByPage(state, page) {

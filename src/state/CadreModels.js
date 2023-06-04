@@ -3,7 +3,7 @@ import { StateShard } from "./utils";
 const CadreModels = StateShard(
   "CadreModels",
   init,
-  { set, setByCadrePageId },
+  { set, setForCadrePageId },
   {},
   { select, selectCadreModelsByPageId }
 );
@@ -24,7 +24,7 @@ function set(state, { cadreModels }) {
   state.data.cadreModels = cadreModels;
 }
 
-function setByCadrePageId(state, { cadrePageId, cadreModels }) {
+function setForCadrePageId(state, { cadrePageId, cadreModels }) {
   select(state)[cadrePageId] = cadreModels;
 }
 

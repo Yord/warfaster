@@ -25,7 +25,7 @@ function* parseModel({ data, page }) {
     model.warjackWeaponSelections = warjackWeaponSelections;
   }
 
-  yield put(Models.set({ page, model }));
+  yield put(Models.setForPage({ page, model }));
 
   let fetchPages = [];
 

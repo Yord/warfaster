@@ -3,9 +3,9 @@ import { StateShard } from "./utils";
 const Cyphers = StateShard(
   "Cyphers",
   init,
-  { set },
+  { setForPage },
   {},
-  { select, selectByPage }
+  { selectByPage }
 );
 
 export { Cyphers };
@@ -20,7 +20,7 @@ function init(state) {
 
 // Actions
 
-function set(state, { page, cypher }) {
+function setForPage(state, { page, cypher }) {
   const cyphers = select(state);
   cyphers[page] = cypher;
 }

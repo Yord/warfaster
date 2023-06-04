@@ -3,9 +3,9 @@ import { StateShard } from "./utils";
 const FactionModels = StateShard(
   "FactionModels",
   init,
-  { set },
+  { setForPage },
   {},
-  { select, selectModelPages, selectByPage }
+  { select, selectByPage }
 );
 
 export { FactionModels };
@@ -20,7 +20,7 @@ function init(state) {
 
 // Actions
 
-function set(state, { page, factionModels }) {
+function setForPage(state, { page, factionModels }) {
   const models = select(state);
   models[page] = factionModels;
 }
@@ -29,13 +29,6 @@ function set(state, { page, factionModels }) {
 
 function select(state) {
   return state.data.factionModels;
-}
-
-function selectModelPages(state) {
-  const models = select(state);
-  return Object.values(models)
-    .flat()
-    .map((model) => model.Name.page);
 }
 
 function selectByPage(state, page) {

@@ -4,7 +4,7 @@ import { FactionModels } from "../../../state/FactionModels";
 
 function* parseFactionModels({ data, page }) {
   const factionModels = parseFactionModelsText(data.text);
-  yield put(FactionModels.set({ page, factionModels }));
+  yield put(FactionModels.setForPage({ page, factionModels }));
 }
 
 export { parseFactionModels };

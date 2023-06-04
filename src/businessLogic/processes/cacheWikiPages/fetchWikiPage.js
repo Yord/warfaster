@@ -72,7 +72,7 @@ function* fetchWikiPage() {
           title,
         }));
 
-        yield put(CadreModels.setByCadrePageId({ cadrePageId, cadreModels }));
+        yield put(CadreModels.setForCadrePageId({ cadrePageId, cadreModels }));
       }
     }
 

@@ -11,6 +11,7 @@ import { Dragging } from "../../state/Dragging";
 import { FactionModels } from "../../state/FactionModels";
 import { Requests } from "../../state/io/Requests";
 import { Lists } from "../../state/Lists";
+import { Models } from "../../state/Models";
 import { PageIds } from "../../state/PageIds";
 import { Url } from "../../state/Url";
 import { VehicleWeapons } from "../../state/VehicleWeapons";
@@ -237,7 +238,7 @@ function* parseLists() {
 
 function* fetchWeaponsIfVehicleAdded() {
   while (true) {
-    const { payload } = yield take("Models.set");
+    const { payload } = yield take(Models.setForPage().type);
     if (
       payload &&
       payload.model &&
@@ -254,7 +255,7 @@ function* fetchWeaponsIfVehicleAdded() {
             );
             if (!weapon) {
               yield put(
-                VehicleWeapons.set({
+                VehicleWeapons.setForPage({
                   page: pageWithoutTarget,
                   vehicleWeapon: {},
                 })
@@ -273,7 +274,7 @@ function* fetchWeaponsIfVehicleAdded() {
 
 function* fetchWeaponsIfWarjackAdded() {
   while (true) {
-    const { payload } = yield take("Models.set");
+    const { payload } = yield take(Models.setForPage().type);
     if (
       payload &&
       payload.model &&
@@ -291,7 +292,7 @@ function* fetchWeaponsIfWarjackAdded() {
             );
             if (!weapon) {
               yield put(
-                WarjackWeapons.set({
+                WarjackWeapons.setForPage({
                   page: pageWithoutTarget,
                   warjackWeapon: {},
                 })
@@ -310,7 +311,7 @@ function* fetchWeaponsIfWarjackAdded() {
 
 function* fetchCardOnShow() {
   while (true) {
-    const { payload } = yield take("Lists.toggleCard");
+    const { payload } = yield take(Lists.toggleCard().type);
     if (payload && payload.pageId) {
       const page = yield select(PageIds.selectPageByPageId(payload.pageId));
       if (page) {

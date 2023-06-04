@@ -1,12 +1,6 @@
 import { StateShard } from "./utils";
 
-const Factions = StateShard(
-  "Factions",
-  init,
-  { set },
-  {},
-  { select, selectPages }
-);
+const Factions = StateShard("Factions", init, { set }, {}, { select });
 
 export { Factions };
 
@@ -28,9 +22,4 @@ function set(state, { factions }) {
 
 function select(state) {
   return state.data.factions;
-}
-
-function selectPages(state) {
-  const factions = select(state);
-  return Object.keys(factions);
 }

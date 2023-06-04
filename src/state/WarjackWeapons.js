@@ -3,7 +3,7 @@ import { StateShard } from "./utils";
 const WarjackWeapons = StateShard(
   "WarjackWeapons",
   init,
-  { set },
+  { setForPage },
   {},
   { select, selectByPage }
 );
@@ -20,7 +20,7 @@ function init(state) {
 
 // Actions
 
-function set(state, { page, warjackWeapon }) {
+function setForPage(state, { page, warjackWeapon }) {
   const warjackWeapons = select(state);
   warjackWeapons[page] = warjackWeapon;
 }

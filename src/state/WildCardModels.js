@@ -5,7 +5,7 @@ const WildCardModels = StateShard(
   init,
   { set },
   {},
-  { select, selectByPage, selectModelPages }
+  { select, selectByPage }
 );
 
 export { WildCardModels };
@@ -31,13 +31,6 @@ function set(state, { wildCards }) {
 
 function select(state) {
   return state.data.wildCardModels;
-}
-
-function selectModelPages(state) {
-  const models = select(state);
-  return Object.values(models)
-    .flat()
-    .map((model) => model.Name.page);
 }
 
 function selectByPage(state, page) {
