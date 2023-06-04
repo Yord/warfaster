@@ -14,7 +14,6 @@ cached.
 import { FetchedWikiPageRevisions, RefreshWikiPages } from "../../../messages";
 import { all, put, take, select } from "redux-saga/effects";
 
-import { WikiPages } from "../../../state/WikiPages";
 import { Requests } from "../../../state/io/Requests";
 import { ParserNames } from "../../../state/ParserNames";
 
