@@ -26,13 +26,13 @@ export { updateCache };
 
 function* refreshWikiPages() {
   yield take(RefreshWikiPages().type);
-  const pageIds = yield select(WikiPages.selectPageIds());
+  const parsedPageIds = yield select(Requests.selectCachedParsedPageIds());
 
   const queryLength = 50;
-  for (let i = 0; i < pageIds.length; i += queryLength) {
-    yield* Requests.queryRevisions({
-      pageIds: pageIds.slice(i, i + queryLength),
-    });
+  for (let i = 0; i < parsedPageIds.length; i += queryLength) {
+    const pageIds = parsedPageIds.slice(i, i + queryLength);
+
+    yield* Requests.queryRevisions({ pageIds });
   }
 }
 
@@ -54,18 +54,22 @@ function* refreshOutdatedWikiPages() {
     );
     const pageIds = pageRevisions.map((revision) => revision.pageid);
 
-    const pages = yield select(WikiPages.selectPagesByPageIds(pageIds));
-    for (const page of pages) {
-      const revInfo = revInfoByPageId[page.pageid];
+    const requests = yield select(
+      Requests.selectCachedRequestsByPageIds(pageIds)
+    );
+
+    for (const [url, { data, queryParams }] of Object.entries(requests)) {
+      const { page } = queryParams;
+      const { parse } = data;
+
+      const revInfo = revInfoByPageId[parse.pageid];
       if (revInfo.missing) {
-        yield put(WikiPages.removePage({ page: page.page }));
-      } else if (page.revid < revInfo.revid) {
-        yield put(WikiPages.removePage({ page: page.page }));
-        const parserName = yield select(ParserNames.selectByPage(page.page));
-        yield* Requests.parsePage({
-          page: page.page,
-          parserName, // TODO: Test if this works
-        });
+        yield put(Requests.expire({ url }));
+      } else if (parse.revid < revInfo.revid) {
+        yield put(Requests.expire({ url }));
+        const parserName = yield select(ParserNames.selectByPage(page));
+
+        yield* Requests.parsePage({ page, parserName });
       }
     }
   }

@@ -30,14 +30,17 @@ function* fetchWikiPage() {
     const { payload } = action;
     const { desc, parserName, queryParams, url } = payload;
 
-    let data = yield select(Requests.selectCachedUrl(url));
+    let request = yield select(Requests.selectCachedUrl(url));
     let wait = false;
-    if (!data) {
-      data = yield call(jsonp, url);
+    if (!request) {
+      const data = yield call(jsonp, url);
+      request = { data, queryParams };
       wait = true;
-      yield put(Requests.cache({ url, data }));
+      yield put(Requests.cache({ url, data, queryParams }));
     }
     yield put(Requests.fetched({ url }));
+
+    const data = request.data;
 
     if (desc === "queryRevisions") {
       const pageRevisions = data.query.pages;

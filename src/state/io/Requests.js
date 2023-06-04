@@ -4,7 +4,7 @@ import { put } from "redux-saga/effects";
 const Requests = StateShard(
   "Requests",
   init,
-  { cache, fetch, fetched },
+  { cache, expire, fetch, fetched },
   {
     parsePage,
     queryCadreModels,
@@ -12,7 +12,12 @@ const Requests = StateShard(
     queryRevisions,
     queryPageIds,
   },
-  { selectCachedUrl, selectPending }
+  {
+    selectCachedRequestsByPageIds,
+    selectCachedParsedPageIds,
+    selectCachedUrl,
+    selectPending,
+  }
 );
 
 export { Requests };
@@ -27,9 +32,16 @@ function init(state) {
 
 // Actions
 
-function cache(state, { url, data }) {
+function cache(state, { url, data, queryParams }) {
   const cached = selectCached(state);
-  cached[url] = data;
+
+  cached[url] = { data, queryParams };
+}
+
+function expire(state, { url }) {
+  const cached = selectCached(state);
+
+  delete cached[url];
 }
 
 function fetch(state, params) {
@@ -42,8 +54,8 @@ function fetch(state, params) {
 
 function fetched(state, { url }) {
   const pending = selectPending(state);
-  const index = pending.findIndex((request) => request.url === url);
 
+  const index = pending.findIndex((request) => request.url === url);
   if (index > -1) {
     pending.splice(index, 1);
   }
@@ -147,6 +159,23 @@ function selectCached(state) {
 function selectCachedUrl(state, url) {
   const cached = selectCached(state);
   return cached[url];
+}
+
+function selectCachedRequestsByPageIds(state, pageIds) {
+  const cached = selectCached(state);
+  return Object.fromEntries(
+    Object.entries(cached).filter(
+      ([key, { data }]) =>
+        data && data.parse && pageIds.includes(data.parse.pageid)
+    )
+  );
+}
+
+function selectCachedParsedPageIds(state) {
+  const cached = selectCached(state);
+  return Object.values(cached)
+    .filter(({ data }) => data && data.parse)
+    .map(({ data }) => data.parse.pageid);
 }
 
 function selectPending(state) {
