@@ -4,7 +4,7 @@ import { put } from "redux-saga/effects";
 const Requests = StateShard(
   "Requests",
   init,
-  { fetch },
+  { cache, fetch, fetched },
   {
     parsePage,
     queryCadreModels,
@@ -12,7 +12,7 @@ const Requests = StateShard(
     queryRevisions,
     queryPageIds,
   },
-  { select }
+  { selectCachedUrl, selectPending }
 );
 
 export { Requests };
@@ -22,83 +22,113 @@ function init(state) {
     state.io = {};
   }
 
-  state.io.requests = [];
+  state.io.requests = { cached: {}, pending: [] };
 }
 
 // Actions
 
-function fetch(state, { parserName, queryParams }) {
-  select(state).push({ parserName, queryParams });
+function cache(state, { url, data }) {
+  const cached = selectCached(state);
+  cached[url] = data;
+}
+
+function fetch(state, params) {
+  const pending = selectPending(state);
+
+  if (!pending.find((request) => request.url === params.url)) {
+    pending.push(params);
+  }
+}
+
+function fetched(state, { url }) {
+  const pending = selectPending(state);
+  const index = pending.findIndex((request) => request.url === url);
+
+  if (index > -1) {
+    pending.splice(index, 1);
+  }
 }
 
 // Action Creators
 
 function* parsePage({ page, parserName }) {
+  const queryParams = { action: "parse", page };
+
   yield put(
     Requests.fetch({
       desc: "parsePage",
       parserName,
-      queryParams: {
-        action: "parse",
-        page,
-      },
+      queryParams,
+      url: jsonApiRequest(queryParams),
     })
   );
 }
 
 function* queryCadreModels({ pageId }) {
+  const queryParams = {
+    action: "query",
+    list: "categorymembers",
+    cmpageid: pageId,
+    cmtype: "page",
+    cmlimit: "max",
+  };
+
   yield put(
     Requests.fetch({
       desc: "queryCadreModels",
-      queryParams: {
-        action: "query",
-        list: "categorymembers",
-        cmpageid: pageId,
-        cmtype: "page",
-        cmlimit: "max",
-      },
+      queryParams,
+      url: jsonApiRequest(queryParams),
     })
   );
 }
 
 function* queryCadres() {
+  const queryParams = {
+    action: "query",
+    list: "categorymembers",
+    cmtitle: "Category:Cadre",
+    cmtype: "subcat",
+    cmlimit: "max",
+  };
+
   yield put(
     Requests.fetch({
       desc: "queryCadres",
-      queryParams: {
-        action: "query",
-        list: "categorymembers",
-        cmtitle: "Category:Cadre",
-        cmtype: "subcat",
-        cmlimit: "max",
-      },
+      queryParams,
+      url: jsonApiRequest(queryParams),
     })
   );
 }
 
 function* queryRevisions({ pageIds }) {
+  const queryParams = {
+    action: "query",
+    prop: "revisions",
+    pageids: pageIds.join("|"),
+  };
+
   yield put(
     Requests.fetch({
       desc: "queryRevisions",
-      queryParams: {
-        action: "query",
-        prop: "revisions",
-        pageids: pageIds.join("|"),
-      },
+      queryParams,
+      url: jsonApiRequest(queryParams),
     })
   );
 }
 
 function* queryPageIds({ pages }) {
+  const queryParams = {
+    action: "query",
+    prop: "pageprops",
+    titles: encodeURIComponent(pages.map((_) => _.text).join("|")),
+  };
+
   yield put(
     Requests.fetch({
       desc: "queryPageIds",
       pages,
-      queryParams: {
-        action: "query",
-        prop: "pageprops",
-        titles: encodeURIComponent(pages.map((_) => _.text).join("|")),
-      },
+      queryParams,
+      url: jsonApiRequest(queryParams),
     })
   );
 }
@@ -107,4 +137,35 @@ function* queryPageIds({ pages }) {
 
 function select(state) {
   return state.io.requests;
+}
+
+function selectCached(state) {
+  const requests = select(state);
+  return requests.cached;
+}
+
+function selectCachedUrl(state, url) {
+  const cached = selectCached(state);
+  return cached[url];
+}
+
+function selectPending(state) {
+  const requests = select(state);
+  return requests.pending;
+}
+
+// Utils
+
+function jsonApiRequest(queryParams) {
+  const jsonFormat = {
+    formatversion: 2,
+    format: "json",
+  };
+  const params = { ...queryParams, ...jsonFormat };
+
+  const queryString = Object.entries(params)
+    .map((keyValue) => keyValue.join("="))
+    .join("&");
+
+  return "https://privateerpress.wiki/api.php?" + queryString;
 }

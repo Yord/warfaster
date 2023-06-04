@@ -1,10 +1,10 @@
 import { all } from "redux-saga/effects";
-import { cacheWikiPages as cacheWikiPages2 } from "./cacheWikiPages";
+import { fetchWikiPage } from "./fetchWikiPage";
 import { updateCache } from "./updateCache";
 import { fetchPageIds } from "./fetchPageIds";
 
 function* cacheWikiPages() {
-  yield all([fetchPageIds(), updateCache(), cacheWikiPages2()]);
+  yield all([fetchPageIds(), updateCache(), fetchWikiPage()]);
 }
 
 export { cacheWikiPages };
