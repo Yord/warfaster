@@ -331,7 +331,7 @@ li.ant-menu-item {
   border-right-color: #d2ccca;
   border-style: solid;
   border-width: 2px;
-  box-shadow: #cfc9c7 5px 0 10px, inset #cfc9c7 -2px 0 15px;
+  box-shadow: #cfc9c7 2px 0 10px, inset #cfc9c7 -2px 0 15px;
   clip-path: polygon(0% 0%, 115% 0%, 115% 100%, 0% 100%);
   color: #d1c5b1 !important;
 }
@@ -375,7 +375,7 @@ li.Fury {
   background: linear-gradient(0deg, rgb(120 13 51 / 70%), rgb(120 13 51 / 90%));
   border-color: rgb(120 13 51 / 100%);
   border-right-color: #f25373;
-  box-shadow: #ff335a 5px 0 10px, inset #ff335a -2px 0 15px;
+  box-shadow: #ff335a 2px 0 10px, inset #ff335a -2px 0 15px;
   color: #f5276a !important;
 }
 
@@ -386,7 +386,7 @@ li.Harmonic {
   background: linear-gradient(0deg, rgb(63 43 119 / 70%), rgb(63 43 119 / 90%));
   border-color: rgb(63 43 119 / 100%);
   border-right-color: #ba8eca;
-  box-shadow: #a282b8 5px 0 10px, inset #a282b8 -2px 0 15px;
+  box-shadow: #a282b8 2px 0 10px, inset #a282b8 -2px 0 15px;
   color: #be58a2 !important;
 }
 
@@ -397,7 +397,7 @@ li.Geometric {
   background: linear-gradient(0deg, rgb(109 50 23 / 70%), rgb(109 50 23 / 90%));
   border-color: rgb(109 50 23 / 100%);
   border-right-color: #da8a46;
-  box-shadow: #da8a46 5px 0 10px, inset #da8a46 -2px 0 15px;
+  box-shadow: #da8a46 2px 0 10px, inset #da8a46 -2px 0 15px;
   color: #f48324 !important;
 }
 
@@ -408,7 +408,7 @@ li.Overdrive {
   background: linear-gradient(0deg, rgb(8 65 95 / 70%), rgb(8 65 95 / 90%));
   border-color: rgb(8 65 95);
   border-right-color: #2fa9c9;
-  box-shadow: #63adc9 5px 0 10px, inset #63adc9 -2px 0 15px;
+  box-shadow: #63adc9 2px 0 10px, inset #63adc9 -2px 0 15px;
   color: #2dc3e7 !important;
 }
 
