@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/warfaster/static/css/main.4fbc717f.chunk.css",
+    "main.css": "/warfaster/static/css/main.4aade64e.chunk.css",
     "main.js": "/warfaster/static/js/main.8d68c7a8.chunk.js",
     "main.js.map": "/warfaster/static/js/main.8d68c7a8.chunk.js.map",
     "runtime-main.js": "/warfaster/static/js/runtime-main.a6286c1c.js",
@@ -10,7 +10,7 @@
     "static/js/2.ae3d9029.chunk.js.map": "/warfaster/static/js/2.ae3d9029.chunk.js.map",
     "index.html": "/warfaster/index.html",
     "static/css/2.3898f0f5.chunk.css.map": "/warfaster/static/css/2.3898f0f5.chunk.css.map",
-    "static/css/main.4fbc717f.chunk.css.map": "/warfaster/static/css/main.4fbc717f.chunk.css.map",
+    "static/css/main.4aade64e.chunk.css.map": "/warfaster/static/css/main.4aade64e.chunk.css.map",
     "static/js/2.ae3d9029.chunk.js.LICENSE.txt": "/warfaster/static/js/2.ae3d9029.chunk.js.LICENSE.txt",
     "static/media/Aeternus_Continuum.d1b19d0e.png": "/warfaster/static/media/Aeternus_Continuum.d1b19d0e.png",
     "static/media/Empyrean.4ab49225.png": "/warfaster/static/media/Empyrean.4ab49225.png",
@@ -24,7 +24,7 @@
     "static/js/runtime-main.a6286c1c.js",
     "static/css/2.3898f0f5.chunk.css",
     "static/js/2.ae3d9029.chunk.js",
-    "static/css/main.4fbc717f.chunk.css",
+    "static/css/main.4aade64e.chunk.css",
     "static/js/main.8d68c7a8.chunk.js"
   ]
 }
