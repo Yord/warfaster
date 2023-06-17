@@ -18,6 +18,7 @@ const parseModelText = (text) => {
   const hardpoints = extractText(doc, "Hardpoints");
   const specialRules = extractDefinitions(doc, "Special_Rules");
   const chassisSpecialRules = extractDefinitions(doc, "Chassis_Special_Rules");
+  const chassisAdvantages = extractDefinitions(doc, "Chassis_Advantages");
   const advantages = extractDefinitions(doc, "Advantages");
   const maneuvers = extractDefinitions(doc, "Maneuvers");
   const vehicleWeaponSelection = extractWeaponSelection(
@@ -116,6 +117,7 @@ const parseModelText = (text) => {
     vehicleWeaponSelection,
     cortexes,
     chassisSpecialRules,
+    chassisAdvantages,
     weaponDetails: weaponDetails(),
     release,
     lore,

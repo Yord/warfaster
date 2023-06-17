@@ -1279,6 +1279,26 @@ function AppPresentation({
                                                         )
                                                       )
                                                     )}
+                                                    {!details.chassisAdvantages ||
+                                                    Object.entries(
+                                                      details.chassisAdvantages
+                                                    ).length === 0 ? (
+                                                      <></>
+                                                    ) : (
+                                                      Object.entries(
+                                                        details.chassisAdvantages
+                                                      ).map(
+                                                        (
+                                                          [name, text],
+                                                          index
+                                                        ) => (
+                                                          <AdvantageImage
+                                                            key={`advantage_${index}`}
+                                                            advantage={name}
+                                                          />
+                                                        )
+                                                      )
+                                                    )}
                                                   </div>
                                                   {!details.specialRules ||
                                                   Object.entries(
@@ -2153,15 +2173,11 @@ function vehicleWeaponName2(
     ({ pageId }) => pageId === vehicleWeaponId
   );
 
-  console.log({ vehicleWeapon });
-
   if (vehicleWeapon) {
     const { page } = vehicleWeapon;
     const weaponConfig = vehicleWeapons[page.split("#")[0]];
     if (weaponConfig) {
       const { pointCost: cost } = weaponConfig;
-
-      console.log({ weaponConfig });
 
       return (
         <>
