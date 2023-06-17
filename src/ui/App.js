@@ -1388,6 +1388,40 @@ function AppPresentation({
                                                       </dl>
                                                     </>
                                                   )}
+                                                  {!details.storeLinks ||
+                                                  details.storeLinks.length ===
+                                                    0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <div className="special-rules">
+                                                      <span>PP Store</span>{" "}
+                                                      <span>
+                                                        -{" "}
+                                                        {details.storeLinks.map(
+                                                          (linkText, index) => (
+                                                            <React.Fragment
+                                                              key={`store_link_${index}`}
+                                                            >
+                                                              <span
+                                                                dangerouslySetInnerHTML={{
+                                                                  __html:
+                                                                    linkText,
+                                                                }}
+                                                              />
+                                                              {index ===
+                                                              details.storeLinks
+                                                                .length -
+                                                                1 ? (
+                                                                <></>
+                                                              ) : (
+                                                                <> </>
+                                                              )}
+                                                            </React.Fragment>
+                                                          )
+                                                        )}
+                                                      </span>
+                                                    </div>
+                                                  )}
                                                   {!details.release ? (
                                                     <></>
                                                   ) : (

@@ -4,6 +4,7 @@ import { cleanText, prepareDOM } from "./utils";
 const parseModelText = (text) => {
   const doc = prepareDOM(text);
 
+  const storeLinks = extractStoreLinks(doc);
   const factionAndTypes =
     extractList(doc, "Unit_Faction_and_Type") ||
     extractList(doc, "Model_Faction_and_Type");
@@ -100,6 +101,7 @@ const parseModelText = (text) => {
   const lore = extractText(doc, "Lore", { node: "h1" });
 
   const model = {
+    storeLinks,
     faction,
     types,
     squadSize,
@@ -127,6 +129,15 @@ const parseModelText = (text) => {
 };
 
 export { parseModelText };
+
+function extractStoreLinks(doc) {
+  return [...doc.querySelectorAll("p")]
+    .filter((p) =>
+      [...p.querySelectorAll("a")].some((a) => a.href.includes("store"))
+    )
+    .map((p) => p.innerHTML.replace(/\n/g, ""))
+    .flatMap((html) => html.split("<br>"));
+}
 
 function removeUndefinedValues(obj) {
   if (Array.isArray(obj)) return obj.map(removeUndefinedValues);
