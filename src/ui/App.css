@@ -237,6 +237,71 @@ li.ant-menu-item {
   width: stretch;
 }
 
+.ant-select-item {
+  color: inherit !important;
+  font-weight: inherit !important;
+}
+
+.card h3 {
+  color: white;
+  margin: 0.5em 0 0 0;
+  text-transform: uppercase;
+}
+
+.select-warjack-weapon .ant-select-selector,
+.select-warjack-cortex .ant-select-selector {
+  border: 0 !important;
+  background-color: inherit !important;
+  height: auto !important;
+  padding: 0 0 0 0 !important;
+}
+
+.select-warjack-weapon,
+.select-warjack-weapon .ant-select-selection-item,
+.select-warjack-cortex,
+.select-warjack-cortex .ant-select-selection-item {
+  color: inherit !important;
+  line-height: inherit !important;
+}
+
+.select-warjack-weapon .ant-select-arrow,
+.select-warjack-cortex .ant-select-arrow {
+  color: white;
+  right: -15px !important;
+}
+
+.select-warjack-cortex .ant-select-arrow {
+  top: 12px;
+}
+
+.select-warjack-weapon .ant-select-arrow {
+  top: 35px;
+}
+
+.select-warjack-weapon .ant-select-selection-item::after,
+.select-warjack-cortex .ant-select-selection-item::after {
+  display: none !important;
+}
+
+.select-warjack-weapon .ant-select-selection-item,
+.select-warjack-cortex .ant-select-selection-item {
+  padding: 0 !important;
+  white-space: normal;
+}
+
+.ant-select-dropdown {
+  color: inherit;
+}
+
+.ant-select-item-option-active,
+.ant-select-item-option-selected {
+  background: none !important;
+}
+
+.cost {
+  color: white;
+}
+
 .ant-select-item-option-content {
   overflow: visible !important;
   white-space: normal !important;
@@ -276,6 +341,9 @@ li.ant-menu-item {
 }
 
 .cards,
+.cards .body .ant-select-dropdown,
+div.model-stats,
+div.model-weapons,
 .ant-drawer-content-wrapper,
 .ant-menu-submenu-popup,
 .ant-tooltip-inner div.ant-tooltip-inner-box {
@@ -369,10 +437,11 @@ li.ant-menu-item {
 }
 
 .cards .body div.Aeternus_Continuum,
+.cards .body div.Aeternus_Continuum .ant-select-dropdown > div,
 li.Aeternus_Continuum,
 .cards .body .card.Fury,
 li.Fury {
-  background: linear-gradient(0deg, rgb(120 13 51 / 70%), rgb(120 13 51 / 90%));
+  background: rgb(120 13 51 / 70%);
   border-color: rgb(120 13 51 / 100%);
   border-right-color: #f25373;
   box-shadow: #ff335a 2px 0 10px, inset #ff335a -2px 0 15px;
@@ -380,10 +449,11 @@ li.Fury {
 }
 
 .cards .body div.Empyrean,
+.cards .body div.Empyrean .ant-select-dropdown > div,
 li.Empyrean,
 .cards .body .card.Harmonic,
 li.Harmonic {
-  background: linear-gradient(0deg, rgb(63 43 119 / 70%), rgb(63 43 119 / 90%));
+  background: rgb(63 43 119 / 70%);
   border-color: rgb(63 43 119 / 100%);
   border-right-color: #ba8eca;
   box-shadow: #a282b8 2px 0 10px, inset #a282b8 -2px 0 15px;
@@ -391,10 +461,11 @@ li.Harmonic {
 }
 
 .cards .body div.Iron_Star_Alliance,
+.cards .body div.Iron_Star_Alliance .ant-select-dropdown > div,
 li.Iron_Star_Alliance,
 .cards .body .card.Geometric,
 li.Geometric {
-  background: linear-gradient(0deg, rgb(109 50 23 / 70%), rgb(109 50 23 / 90%));
+  background: rgb(109 50 23 / 70%);
   border-color: rgb(109 50 23 / 100%);
   border-right-color: #da8a46;
   box-shadow: #da8a46 2px 0 10px, inset #da8a46 -2px 0 15px;
@@ -402,10 +473,11 @@ li.Geometric {
 }
 
 .cards .body div.Marcher_Worlds,
+.cards .body div.Marcher_Worlds .ant-select-dropdown > div,
 li.Marcher_Worlds,
 .cards .body .card.Overdrive,
 li.Overdrive {
-  background: linear-gradient(0deg, rgb(8 65 95 / 70%), rgb(8 65 95 / 90%));
+  background: rgb(8 65 95 / 70%);
   border-color: rgb(8 65 95);
   border-right-color: #2fa9c9;
   box-shadow: #63adc9 2px 0 10px, inset #63adc9 -2px 0 15px;
@@ -422,6 +494,10 @@ li.Overdrive {
   color: inherit;
   font-size: inherit;
   margin: 6px 12px;
+}
+
+.card .cypher-effect {
+  color: white;
 }
 
 .card .ant-card-meta-title {
@@ -443,7 +519,6 @@ li.Overdrive {
 }
 
 .card-content {
-  color: white;
   margin-top: 1em;
 }
 
@@ -516,6 +591,176 @@ li.Overdrive {
   font-size: 3em;
   margin-bottom: 0;
   text-align: center;
+}
+
+.card div.model-weapons .faction-melee,
+.card div.model-weapons .faction-ranged {
+  max-height: 40px;
+  max-width: 40px;
+  object-fit: none;
+}
+
+.card.Aeternus_Continuum div.model-weapons .faction-melee {
+  content: url(./img/faction_icons/Aeternus_Continuum_Melee.png);
+}
+
+.card.Aeternus_Continuum div.model-weapons .faction-ranged {
+  content: url(./img/faction_icons/Aeternus_Continuum_Ranged.png);
+}
+
+.card.Empyrean div.model-weapons .faction-melee {
+  content: url(./img/faction_icons/Empyrean_Melee.png);
+}
+
+.card.Empyrean div.model-weapons .faction-ranged {
+  content: url(./img/faction_icons/Empyrean_Ranged.png);
+}
+
+.card.Iron_Star_Alliance div.model-weapons .faction-melee {
+  content: url(./img/faction_icons/Iron_Star_Alliance_Melee.png);
+}
+
+.card.Iron_Star_Alliance div.model-weapons .faction-ranged {
+  content: url(./img/faction_icons/Iron_Star_Alliance_Ranged.png);
+}
+
+.card.Marcher_Worlds div.model-weapons .faction-melee {
+  content: url(./img/faction_icons/Marcher_Worlds_Melee.png);
+}
+
+.card.Marcher_Worlds div.model-weapons .faction-ranged {
+  content: url(./img/faction_icons/Marcher_Worlds_Ranged.png);
+}
+
+.card.Wild_Card div.model-weapons .faction-melee {
+  content: url(./img/faction_icons/Wild_Card_Melee.png);
+}
+
+.card.Wild_Card div.model-weapons .faction-ranged {
+  content: url(./img/faction_icons/Wild_Card_Ranged.png);
+}
+
+div.model-stats,
+div.model-weapons {
+  align-items: center;
+  border-radius: 5px;
+  display: flex;
+  font-family: Orbitron;
+  font-weight: bold;
+  gap: 5px;
+  justify-content: center;
+  margin: 0.5em 0;
+  padding: 8px;
+}
+
+div.model-stats > div {
+  flex: 1;
+  text-align: center;
+}
+
+div.model-stats > div > div:first-of-type {
+  font-size: 0.8em;
+}
+
+div.model-stats > div > div:last-of-type {
+  color: white;
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+div.model-weapons > div {
+  flex: 1;
+}
+
+div.model-weapons > div:nth-of-type(1) {
+  font-size: 1.2em;
+}
+
+div.model-weapons > div:nth-of-type(1) span {
+  filter: hue-rotate(125deg) saturate(25%);
+  -webkit-filter: hue-rotate(125deg) saturate(25%);
+  -moz-filter: hue-rotate(125deg) saturate(25%);
+}
+
+div.model-weapons > div:nth-of-type(2) {
+  flex: 5;
+}
+
+div.model-weapons > div:nth-of-type(2) > div:first-of-type {
+  color: white;
+  text-transform: uppercase;
+}
+
+div.model-weapons > div:nth-of-type(2) > div:last-of-type {
+  font-size: 0.7em;
+  line-height: 1;
+}
+
+div.model-weapons > div:nth-of-type(n+3) > div {
+  text-align: center;
+}
+
+div.model-weapons > div:nth-of-type(n+3) > div:first-of-type {
+  font-size: 0.8em;
+}
+
+div.model-weapons > div:nth-of-type(n+3) > div:last-of-type {
+  color: white;
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+div.model-weapons-special-rules > span:first-of-type,
+div.model-cortex-special-rules > span:first-of-type,
+div.special-rules > span:first-of-type {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+div.model-weapons-special-rules > span:last-of-type,
+div.model-cortex-special-rules > span:last-of-type,
+div.special-rules > span:last-of-type {
+  color: white
+}
+
+.card-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0.5em 0;
+}
+
+.deployment-cost {
+  font-family: Orbitron;
+  font-size: 0.7em;
+}
+
+.metallic-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 1em;
+  border-radius: 20px;
+  width: 28px;
+  height: 28px;
+  font-weight: bold;
+  box-shadow: inset 0px 1px 1px 0px rgba(255, 255, 255, 0.5), inset 0px -1px 1px 0px rgba(0, 0, 0, 0.5), 0px 0px 1px 1px rgba(0, 0, 0, 0.8), 0px 3px 6px 0px hsl(200,100%,25%);
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.8);
+  background-image: linear-gradient(180deg, rgb(116 116 116), rgb(9 15 32));
+}
+
+.metallic-img {
+  filter: drop-shadow(0px 3px 6px hsl(200,100%,25%));
+}
+
+.metallic-img-tiny {
+  filter: drop-shadow(0px 2px 2px hsl(200,100%,25%));
+  margin-left: 5px;
+  margin-top: -2px;
 }
 
 @keyframes shake {

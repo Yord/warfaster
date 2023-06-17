@@ -14,21 +14,48 @@ import {
   Tooltip,
 } from "antd";
 import {
+  CaretDownOutlined,
   DeleteOutlined,
   DownSquareOutlined,
+  HeartFilled,
   MenuUnfoldOutlined,
   PlusSquareOutlined,
   SyncOutlined,
+  TeamOutlined,
   UpSquareOutlined,
 } from "@ant-design/icons";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import Aeternus_Continuum from "./Aeternus_Continuum.png";
-import Fallback from "./Fallback.png";
-import Empyrean from "./Empyrean.png";
-import Iron_Star_Alliance from "./Iron_Star_Alliance.png";
-import Lost_Legion from "./Lost_Legion.png";
-import Marcher_Worlds from "./Marcher_Worlds.png";
-import Wild_Card from "./Wild_Card.png";
+import CompoundArmor from "./img/advantages/Compound_Armor.png";
+import Flight from "./img/advantages/Flight.png";
+import Pathfinder from "./img/advantages/Pathfinder.png";
+import Revelator from "./img/advantages/Revelator.png";
+import Stealth from "./img/advantages/Stealth.png";
+import WeaponExpert from "./img/advantages/Weapon_Expert.png";
+import AeternusContinuum from "./img/factions/Aeternus_Continuum.png";
+import Fallback from "./img/factions/Fallback.png";
+import Empyrean from "./img/factions/Empyrean.png";
+import IronStarAlliance from "./img/factions/Iron_Star_Alliance.png";
+import LostLegion from "./img/factions/Lost_Legion.png";
+import MarcherWorlds from "./img/factions/Marcher_Worlds.png";
+import WildCard from "./img/factions/Wild_Card.png";
+import AeternusContinuumCharged from "./img/faction_icons/Aeternus_Continuum_Charged.png";
+import AeternusContinuumSpike from "./img/faction_icons/Aeternus_Continuum_Spike.png";
+import EmpyreanCharged from "./img/faction_icons/Empyrean_Charged.png";
+import EmpyreanSpike from "./img/faction_icons/Empyrean_Spike.png";
+import IronStarAllianceCharged from "./img/faction_icons/Iron_Star_Alliance_Charged.png";
+import IronStarAllianceSpike from "./img/faction_icons/Iron_Star_Alliance_Spike.png";
+import MarcherWorldsCharged from "./img/faction_icons/Marcher_Worlds_Charged.png";
+import MarcherWorldsSpike from "./img/faction_icons/Marcher_Worlds_Spike.png";
+import WildCardCharged from "./img/faction_icons/Wild_Card_Charged.png";
+import WildCardSpike from "./img/faction_icons/Wild_Card_Spike.png";
+import BlastWeapon from "./img/weapon_qualities/Blast_Weapon.png";
+import Corrosion from "./img/weapon_qualities/Corrosion.png";
+import Fire from "./img/weapon_qualities/Fire.png";
+import LockDown from "./img/weapon_qualities/Lock_Down.png";
+import Repulsor from "./img/weapon_qualities/Repulsor.png";
+import SprayWeapon from "./img/weapon_qualities/Spray_Weapon.png";
+import Strafe from "./img/weapon_qualities/Strafe.png";
+import SystemFailure from "./img/weapon_qualities/System_Failure.png";
 import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
 import { AppSync } from "../state/AppSync";
 import { CypherCodecs } from "../state/CypherCodecs";
@@ -50,25 +77,244 @@ const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
 const { SubMenu } = Menu;
 
-function FactionImage({ faction }) {
+function FactionImage({ faction, style, height = "35px" }) {
   switch (faction) {
     case "Aeternus_Continuum":
-      return <img src={Aeternus_Continuum} alt={faction} height="35px" />;
+      return (
+        <img
+          src={AeternusContinuum}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
     case "Empyrean":
-      return <img src={Empyrean} alt={faction} height="35px" />;
+      return <img src={Empyrean} height={height} alt={faction} style={style} />;
     case "Iron_Star_Alliance":
-      return <img src={Iron_Star_Alliance} alt={faction} height="35px" />;
+      return (
+        <img
+          src={IronStarAlliance}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
     case "Lost_Legion":
-      return <img src={Lost_Legion} alt={faction} height="35px" />;
+      return (
+        <img src={LostLegion} height={height} alt={faction} style={style} />
+      );
     case "Marcher_Worlds":
-      return <img src={Marcher_Worlds} alt={faction} height="35px" />;
+      return (
+        <img src={MarcherWorlds} height={height} alt={faction} style={style} />
+      );
     case "Wild_Card":
-      return <img src={Wild_Card} alt={faction} height="35px" />;
+      return <img src={WildCard} height={height} alt={faction} style={style} />;
     case "Universal":
-      return <img src={Fallback} alt={faction} height="35px" />;
+      return <img src={Fallback} height={height} alt={faction} style={style} />;
     default:
-      return <img src={Fallback} alt={faction} height="35px" />;
+      return <img src={Fallback} height={height} alt={faction} style={style} />;
   }
+}
+
+function Spike({ faction, style: style2, height = "18px" }) {
+  const style = { ...style2, marginTop: "-4px" };
+  switch (faction) {
+    case "Aeternus_Continuum":
+      return (
+        <img
+          src={AeternusContinuumSpike}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    case "Empyrean":
+      return (
+        <img src={EmpyreanSpike} height={height} alt={faction} style={style} />
+      );
+    case "Iron_Star_Alliance":
+      return (
+        <img
+          src={IronStarAllianceSpike}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    case "Marcher_Worlds":
+      return (
+        <img
+          src={MarcherWorldsSpike}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    case "Wild_Card":
+      return (
+        <img src={WildCardSpike} height={height} alt={faction} style={style} />
+      );
+    default:
+      return (
+        <img src={WildCardSpike} height={height} alt={faction} style={style} />
+      );
+  }
+}
+
+function Charged({ faction, style: style2, height = "18px" }) {
+  const style = { ...style2, marginTop: "-4px" };
+  switch (faction) {
+    case "Aeternus_Continuum":
+      return (
+        <img
+          src={AeternusContinuumCharged}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    case "Empyrean":
+      return (
+        <img
+          src={EmpyreanCharged}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    case "Iron_Star_Alliance":
+      return (
+        <img
+          src={IronStarAllianceCharged}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    case "Marcher_Worlds":
+      return (
+        <img
+          src={MarcherWorldsCharged}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    case "Wild_Card":
+      return (
+        <img
+          src={WildCardCharged}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+    default:
+      return (
+        <img
+          src={WildCardCharged}
+          height={height}
+          alt={faction}
+          style={style}
+        />
+      );
+  }
+}
+
+function AdvantageImage({ advantage, style, height = "30px" }) {
+  switch (advantage) {
+    case "Compound Armor":
+      return (
+        <img
+          src={CompoundArmor}
+          className="metallic-img"
+          alt={advantage}
+          height={height}
+          style={style}
+        />
+      );
+    case "Flight":
+      return (
+        <img
+          src={Flight}
+          className="metallic-img"
+          alt={advantage}
+          height={height}
+          style={style}
+        />
+      );
+    case "Pathfinder":
+      return (
+        <img
+          src={Pathfinder}
+          className="metallic-img"
+          alt={advantage}
+          height={height}
+          style={style}
+        />
+      );
+    case "Revelator":
+      return (
+        <img
+          src={Revelator}
+          className="metallic-img"
+          alt={advantage}
+          height={height}
+          style={style}
+        />
+      );
+    case "Stealth":
+      return (
+        <img
+          src={Stealth}
+          className="metallic-img"
+          alt={advantage}
+          height={height}
+          style={style}
+        />
+      );
+    case "Weapon Expert":
+      return (
+        <img
+          src={WeaponExpert}
+          className="metallic-img"
+          alt={advantage}
+          height={height}
+          style={style}
+        />
+      );
+    default:
+      return <div className="metallic-circle"></div>;
+  }
+}
+
+const weaponQualities = {
+  "Blast Weapon": BlastWeapon,
+  Corrosion,
+  Fire,
+  "Lock Down": LockDown,
+  Repulsor,
+  "Spray Weapon": SprayWeapon,
+  Strafe,
+  "System Failure": SystemFailure,
+};
+
+function WeaponQuality({ weaponQuality, style, height = "16px" }) {
+  const src = weaponQualities[weaponQuality];
+
+  if (src) {
+    return (
+      <img
+        src={src}
+        className="metallic-img-tiny"
+        alt={weaponQuality}
+        height={height}
+        style={style}
+      />
+    );
+  }
+
+  return <></>;
 }
 
 function AppPresentation({
@@ -421,9 +667,25 @@ function AppPresentation({
                                                         textAlign: "center",
                                                       }}
                                                     >
-                                                      <FactionImage
-                                                        faction={faction}
-                                                      />
+                                                      {!details ||
+                                                      !details.deploymentCost ? (
+                                                        <FactionImage
+                                                          faction={faction}
+                                                        />
+                                                      ) : (
+                                                        <>
+                                                          <FactionImage
+                                                            faction={faction}
+                                                            height="23px"
+                                                          />
+                                                          <div className="deployment-cost">
+                                                            DC{" "}
+                                                            {
+                                                              details.deploymentCost
+                                                            }
+                                                          </div>
+                                                        </>
+                                                      )}
                                                     </div>
                                                   ) : (
                                                     <FactionImage faction="Universal" />
@@ -503,682 +765,29 @@ function AppPresentation({
                                                 </div>
                                               ) : (
                                                 <div className="card-content">
-                                                  {!details.pow ? (
-                                                    <></>
-                                                  ) : (
-                                                    <p>
-                                                      Pow: {details.pow.text}
-                                                    </p>
-                                                  )}
-                                                  {!details.effect ||
-                                                  details.effect.length ===
-                                                    0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    details.effect.map(
-                                                      (effect, index) => (
-                                                        <p
-                                                          key={`effect_${index}`}
-                                                        >
-                                                          {effect}
-                                                        </p>
-                                                      )
-                                                    )
-                                                  )}
-                                                  {!details.squadSize ? (
-                                                    <></>
-                                                  ) : (
-                                                    <dl>
-                                                      <dt>Squad Size</dt>
-                                                      <dd>
-                                                        {details.squadSize}
-                                                      </dd>
-                                                    </dl>
-                                                  )}
-                                                  {!details.deploymentCost ? (
-                                                    <></>
-                                                  ) : (
-                                                    <dl>
-                                                      <dt>DC</dt>
-                                                      <dd>
-                                                        {details.deploymentCost}
-                                                      </dd>
-                                                    </dl>
-                                                  )}
-                                                  {!details.baseSize ? (
-                                                    <></>
-                                                  ) : (
-                                                    <dl>
-                                                      <dt>Base Size</dt>
-                                                      <dd>
-                                                        {details.baseSize}
-                                                      </dd>
-                                                    </dl>
-                                                  )}
-                                                  {!details.health ? (
-                                                    <></>
-                                                  ) : (
-                                                    <dl>
-                                                      <dt>Health</dt>
-                                                      <dd>{details.health}</dd>
-                                                    </dl>
-                                                  )}
-                                                  {!details.wildCardFactions ||
-                                                  Object.values(
-                                                    details.wildCardFactions
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>Wild Card Factions</p>
-                                                      <ul>
-                                                        {Object.values(
-                                                          details.wildCardFactions
-                                                        ).map(
-                                                          ({ text }, index) => (
-                                                            <li
-                                                              key={`wild_card_faction_${index}`}
-                                                            >
-                                                              {text}
-                                                            </li>
-                                                          )
-                                                        )}
-                                                      </ul>
-                                                    </>
-                                                  )}
-                                                  {!details.hardpoints ? (
-                                                    <></>
-                                                  ) : (
-                                                    <dl>
-                                                      <dt>Hardpoints</dt>
-                                                      <dd>
-                                                        {details.hardpoints}
-                                                      </dd>
-                                                    </dl>
-                                                  )}
-                                                  {!details.weaponPoints ? (
-                                                    <></>
-                                                  ) : (
-                                                    <dl>
-                                                      <dt>Weapon Points</dt>
-                                                      <dd>
-                                                        {details.weaponPoints}
-                                                      </dd>
-                                                    </dl>
-                                                  )}
                                                   {!details.modelStats ||
                                                   Object.keys(
                                                     details.modelStats
                                                   ).length === 0 ? (
                                                     <></>
                                                   ) : (
-                                                    <table>
-                                                      <thead>
-                                                        <tr>
-                                                          {Object.keys(
-                                                            details.modelStats
-                                                          ).map(
-                                                            (name, index) => (
-                                                              <th
-                                                                key={`${name}_stat_${index}`}
-                                                              >
-                                                                {name}
-                                                              </th>
-                                                            )
-                                                          )}
-                                                        </tr>
-                                                      </thead>
-                                                      <tbody>
-                                                        <tr>
-                                                          {Object.entries(
-                                                            details.modelStats
-                                                          ).map(
-                                                            (
-                                                              [name, stat],
-                                                              index
-                                                            ) => (
-                                                              <td
-                                                                key={`${name}_stat_value_${index}`}
-                                                              >
-                                                                {stat}
-                                                              </td>
-                                                            )
-                                                          )}
-                                                        </tr>
-                                                      </tbody>
-                                                    </table>
-                                                  )}
-                                                  {!details.specialRules ||
-                                                  Object.entries(
-                                                    details.specialRules
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>Special Rules</p>
-                                                      <dl>
-                                                        {Object.entries(
-                                                          details.specialRules
-                                                        ).map(
-                                                          (
-                                                            [name, text],
-                                                            index
-                                                          ) => (
-                                                            <React.Fragment
-                                                              key={`special_rules_${index}`}
-                                                            >
-                                                              <dt>{name}</dt>
-                                                              <dd>{text}</dd>
-                                                            </React.Fragment>
-                                                          )
-                                                        )}
-                                                      </dl>
-                                                    </>
-                                                  )}
-                                                  {!details.weapons ||
-                                                  details.weapons.length ===
-                                                    0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>Weapons</p>
-                                                      <table>
-                                                        <thead>
-                                                          <tr>
-                                                            <th>Name</th>
-                                                            <th>Attack Type</th>
-                                                            <th>Damage Type</th>
-                                                            <th>Range</th>
-                                                            <th>POW</th>
-                                                          </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                          {details.weapons.map(
-                                                            (weapon, index) => (
-                                                              <React.Fragment
-                                                                key={`weapon_number_${index}`}
-                                                              >
-                                                                <tr>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Name"
-                                                                      ]
-                                                                    }
-                                                                  </td>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Attack Type"
-                                                                      ]
-                                                                    }
-                                                                  </td>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Damage Type"
-                                                                      ]
-                                                                    }
-                                                                  </td>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Range"
-                                                                      ]
-                                                                    }
-                                                                  </td>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "POW"
-                                                                      ]
-                                                                    }
-                                                                  </td>
-                                                                </tr>
-                                                                {!weapon.specialRules ? (
-                                                                  <></>
-                                                                ) : (
-                                                                  Object.entries(
-                                                                    weapon.specialRules
-                                                                  ).map(
-                                                                    (
-                                                                      [
-                                                                        rule,
-                                                                        text,
-                                                                      ],
-                                                                      ruleIndex
-                                                                    ) => (
-                                                                      <tr
-                                                                        key={`weapon_number_${index}_rule_${ruleIndex}`}
-                                                                      >
-                                                                        <td colSpan="5">
-                                                                          <dl>
-                                                                            <dt>
-                                                                              {
-                                                                                rule
-                                                                              }
-                                                                            </dt>
-                                                                            <dd>
-                                                                              {
-                                                                                text
-                                                                              }
-                                                                            </dd>
-                                                                          </dl>
-                                                                        </td>
-                                                                      </tr>
-                                                                    )
-                                                                  )
-                                                                )}
-                                                              </React.Fragment>
-                                                            )
-                                                          )}
-                                                        </tbody>
-                                                      </table>
-                                                    </>
-                                                  )}
-                                                  {!details.advantages ||
-                                                  Object.entries(
-                                                    details.advantages
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>Advantages</p>
-                                                      <dl>
-                                                        {Object.entries(
-                                                          details.advantages
-                                                        ).map(
-                                                          (
-                                                            [name, text],
-                                                            index
-                                                          ) => (
-                                                            <React.Fragment
-                                                              key={`advantage_${index}`}
-                                                            >
-                                                              <dt>{name}</dt>
-                                                              <dd>{text}</dd>
-                                                            </React.Fragment>
-                                                          )
-                                                        )}
-                                                      </dl>
-                                                    </>
-                                                  )}
-                                                  {!details.maneuvers ||
-                                                  Object.values(
-                                                    details.maneuvers
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>Maneuvers</p>
-                                                      <dl>
-                                                        {Object.entries(
-                                                          details.maneuvers
-                                                        ).map(
-                                                          (
-                                                            [name, text],
-                                                            index
-                                                          ) => (
-                                                            <React.Fragment
-                                                              key={`advantage_${index}`}
-                                                            >
-                                                              <dt>{name}</dt>
-                                                              <dd>{text}</dd>
-                                                            </React.Fragment>
-                                                          )
-                                                        )}
-                                                      </dl>
-                                                    </>
-                                                  )}
-
-                                                  {!details.vehicleWeaponSelection ||
-                                                  details.vehicleWeaponSelection
-                                                    .length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>
-                                                        Vehicle Weapon
-                                                        Selections
-                                                      </p>
-                                                      <Select
-                                                        defaultValue={
-                                                          <span
-                                                            style={{
-                                                              color: "gray",
-                                                              fontStyle:
-                                                                "italic",
-                                                            }}
+                                                    <div className="model-stats">
+                                                      {Object.entries(
+                                                        details.modelStats
+                                                      ).map(
+                                                        (
+                                                          [name, stat],
+                                                          index
+                                                        ) => (
+                                                          <div
+                                                            key={`${name}_stat`}
                                                           >
-                                                            Vehicle Weapon
-                                                          </span>
-                                                        }
-                                                        onClick={(event) =>
-                                                          event.stopPropagation()
-                                                        }
-                                                        onSelect={setCardVehicleWeapon(
-                                                          listIndex,
-                                                          cardIndex,
-                                                          pageId
-                                                        )}
-                                                        value={
-                                                          !vehicleWeaponId
-                                                            ? undefined
-                                                            : vehicleWeaponName(
-                                                                details.vehicleWeaponSelection,
-                                                                vehicleWeaponId
-                                                              )
-                                                        }
-                                                      >
-                                                        {details.vehicleWeaponSelection.map(
-                                                          (
-                                                            {
-                                                              text,
-                                                              page,
-                                                              pageId,
-                                                            },
-                                                            index
-                                                          ) => (
-                                                            <Select.Option
-                                                              key={`vehicle_weapon_${index}`}
-                                                              label={pageId}
-                                                              value={text}
-                                                              onClick={(
-                                                                event
-                                                              ) =>
-                                                                event.stopPropagation()
-                                                              }
-                                                            >
-                                                              <h3>{text}</h3>
-                                                              <div>
-                                                                {!vehicleWeapons[
-                                                                  page.split(
-                                                                    "#"
-                                                                  )[0]
-                                                                ] ? (
-                                                                  "Weapon details missing!"
-                                                                ) : (
-                                                                  <>
-                                                                    <div>
-                                                                      Location:{" "}
-                                                                      {
-                                                                        vehicleWeapons[
-                                                                          page.split(
-                                                                            "#"
-                                                                          )[0]
-                                                                        ]
-                                                                          .location
-                                                                      }
-                                                                    </div>
-                                                                    {!vehicleWeapons[
-                                                                      page.split(
-                                                                        "#"
-                                                                      )[0]
-                                                                    ]
-                                                                      .specialRules ? (
-                                                                      ""
-                                                                    ) : (
-                                                                      <dl>
-                                                                        {Object.entries(
-                                                                          vehicleWeapons[
-                                                                            page.split(
-                                                                              "#"
-                                                                            )[0]
-                                                                          ]
-                                                                            .specialRules
-                                                                        ).map(
-                                                                          (
-                                                                            [
-                                                                              name,
-                                                                              rule,
-                                                                            ],
-                                                                            index
-                                                                          ) => (
-                                                                            <React.Fragment
-                                                                              key={`special_rules_${page}_${index}`}
-                                                                            >
-                                                                              <dt>
-                                                                                {
-                                                                                  name
-                                                                                }
-                                                                              </dt>
-                                                                              <dd>
-                                                                                {
-                                                                                  rule
-                                                                                }
-                                                                              </dd>
-                                                                            </React.Fragment>
-                                                                          )
-                                                                        )}
-                                                                      </dl>
-                                                                    )}
-                                                                    {!vehicleWeapons[
-                                                                      page.split(
-                                                                        "#"
-                                                                      )[0]
-                                                                    ]
-                                                                      .weapons ? (
-                                                                      ""
-                                                                    ) : (
-                                                                      <table>
-                                                                        <thead>
-                                                                          <tr>
-                                                                            <th>
-                                                                              Name
-                                                                            </th>
-                                                                            <th>
-                                                                              Attack
-                                                                              Type
-                                                                            </th>
-                                                                            <th>
-                                                                              Damage
-                                                                              Type
-                                                                            </th>
-                                                                            <th>
-                                                                              Range
-                                                                            </th>
-                                                                            <th>
-                                                                              POW
-                                                                            </th>
-                                                                          </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                          {vehicleWeapons[
-                                                                            page.split(
-                                                                              "#"
-                                                                            )[0]
-                                                                          ].weapons.map(
-                                                                            (
-                                                                              weapon,
-                                                                              index
-                                                                            ) => (
-                                                                              <React.Fragment
-                                                                                key={`vehicle_weapons_weapon_${page}_${index}`}
-                                                                              >
-                                                                                <tr>
-                                                                                  <td>
-                                                                                    {
-                                                                                      weapon[
-                                                                                        "Name"
-                                                                                      ]
-                                                                                    }
-                                                                                  </td>
-                                                                                  <td>
-                                                                                    {
-                                                                                      weapon[
-                                                                                        "Attack Type"
-                                                                                      ]
-                                                                                    }
-                                                                                  </td>
-                                                                                  <td>
-                                                                                    {weapon[
-                                                                                      "Damage Type"
-                                                                                    ]
-                                                                                      .join
-                                                                                      ? weapon[
-                                                                                          "Damage Type"
-                                                                                        ].join(
-                                                                                          " "
-                                                                                        )
-                                                                                      : weapon[
-                                                                                          "Damage Type"
-                                                                                        ]}
-                                                                                  </td>
-                                                                                  <td>
-                                                                                    {
-                                                                                      weapon[
-                                                                                        "Range"
-                                                                                      ]
-                                                                                    }
-                                                                                  </td>
-                                                                                  <td>
-                                                                                    {
-                                                                                      weapon[
-                                                                                        "POW"
-                                                                                      ]
-                                                                                    }
-                                                                                  </td>
-                                                                                </tr>
-                                                                                {!weapon.specialRules ? (
-                                                                                  <>
-
-                                                                                  </>
-                                                                                ) : (
-                                                                                  <tr>
-                                                                                    <td colSpan="5">
-                                                                                      <dl>
-                                                                                        {Object.entries(
-                                                                                          weapon.specialRules
-                                                                                        ).map(
-                                                                                          (
-                                                                                            [
-                                                                                              name,
-                                                                                              rule,
-                                                                                            ],
-                                                                                            index
-                                                                                          ) => (
-                                                                                            <React.Fragment
-                                                                                              key={`vehicle_weapons_weapon_${weapon["Name"]}_special_rules_${page}_${index}`}
-                                                                                            >
-                                                                                              {
-                                                                                                <>
-                                                                                                  <dt>
-                                                                                                    {
-                                                                                                      name
-                                                                                                    }
-                                                                                                  </dt>
-                                                                                                  <dd>
-                                                                                                    {
-                                                                                                      rule
-                                                                                                    }
-                                                                                                  </dd>
-                                                                                                </>
-                                                                                              }
-                                                                                            </React.Fragment>
-                                                                                          )
-                                                                                        )}
-                                                                                      </dl>
-                                                                                    </td>
-                                                                                  </tr>
-                                                                                )}
-                                                                              </React.Fragment>
-                                                                            )
-                                                                          )}
-                                                                        </tbody>
-                                                                      </table>
-                                                                    )}
-                                                                  </>
-                                                                )}
-                                                              </div>
-                                                            </Select.Option>
-                                                          )
-                                                        )}
-                                                      </Select>
-                                                    </>
-                                                  )}
-
-                                                  {!details.vehicleWeaponSelection ||
-                                                  Object.values(
-                                                    details.vehicleWeaponSelection
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>
-                                                        Vehicle Weapon Selection
-                                                      </p>
-                                                      <ol>
-                                                        {Object.values(
-                                                          details.vehicleWeaponSelection
-                                                        ).map(
-                                                          (
-                                                            { text, page },
-                                                            index
-                                                          ) => (
-                                                            <li
-                                                              key={`weapon_selection_${index}`}
-                                                            >
-                                                              <a href={page}>
-                                                                {text}
-                                                              </a>
-                                                            </li>
-                                                          )
-                                                        )}
-                                                      </ol>
-                                                    </>
-                                                  )}
-                                                  {!details.cortexes ||
-                                                  Object.entries(
-                                                    details.cortexes
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <p>Cortex</p>
-                                                      <ol>
-                                                        {Object.entries(
-                                                          details.cortexes
-                                                        ).map(
-                                                          (
-                                                            [
-                                                              cortex,
-                                                              advantages,
-                                                            ],
-                                                            index
-                                                          ) => (
-                                                            <li
-                                                              key={`cortex_${index}`}
-                                                            >
-                                                              {cortex}
-                                                              <dl>
-                                                                {Object.entries(
-                                                                  advantages
-                                                                ).map(
-                                                                  (
-                                                                    [
-                                                                      name,
-                                                                      text,
-                                                                    ],
-                                                                    advantageIndex
-                                                                  ) => (
-                                                                    <React.Fragment
-                                                                      key={`cortex_${index}_advantage_${advantageIndex}`}
-                                                                    >
-                                                                      <dt>
-                                                                        {name}
-                                                                      </dt>
-                                                                      <dd>
-                                                                        {text}
-                                                                      </dd>
-                                                                    </React.Fragment>
-                                                                  )
-                                                                )}
-                                                              </dl>
-                                                            </li>
-                                                          )
-                                                        )}
-                                                      </ol>
-                                                    </>
+                                                            <div>{name}</div>
+                                                            <div>{stat}</div>
+                                                          </div>
+                                                        )
+                                                      )}
+                                                    </div>
                                                   )}
                                                   {!details.cortexSelections ||
                                                   Object.entries(
@@ -1187,18 +796,17 @@ function AppPresentation({
                                                     <></>
                                                   ) : (
                                                     <>
-                                                      <p>Cortex Selections</p>
                                                       <Select
+                                                        suffixIcon={
+                                                          <CaretDownOutlined />
+                                                        }
+                                                        className="select-warjack-cortex"
                                                         defaultValue={
-                                                          <span
-                                                            style={{
-                                                              color: "gray",
-                                                              fontStyle:
-                                                                "italic",
-                                                            }}
-                                                          >
-                                                            Cortex
-                                                          </span>
+                                                          <div>
+                                                            <h3>
+                                                              Select Cortex
+                                                            </h3>
+                                                          </div>
                                                         }
                                                         onClick={(event) =>
                                                           event.stopPropagation()
@@ -1215,6 +823,11 @@ function AppPresentation({
                                                                 details.cortexSelections,
                                                                 cortexIds
                                                               )
+                                                        }
+                                                        getPopupContainer={() =>
+                                                          document.querySelectorAll(
+                                                            ".card"
+                                                          )[cardIndex]
                                                         }
                                                       >
                                                         {Object.entries(
@@ -1243,74 +856,54 @@ function AppPresentation({
                                                                 event.stopPropagation()
                                                               }
                                                             >
-                                                              {cortex}
-                                                              <dl>
-                                                                {Object.entries(
-                                                                  advantages
-                                                                ).map(
-                                                                  (
-                                                                    [
-                                                                      name,
-                                                                      { text },
-                                                                    ],
-                                                                    advantageIndex
-                                                                  ) => (
-                                                                    <React.Fragment
-                                                                      key={`cortex_${index}_advantage_${advantageIndex}`}
-                                                                    >
-                                                                      <dt>
-                                                                        {name}
-                                                                      </dt>
-                                                                      <dd>
-                                                                        {text}
-                                                                      </dd>
-                                                                    </React.Fragment>
-                                                                  )
-                                                                )}
-                                                              </dl>
+                                                              <h3>{cortex}</h3>
+                                                              {Object.entries(
+                                                                advantages
+                                                              ).map(
+                                                                (
+                                                                  [
+                                                                    rule,
+                                                                    { text },
+                                                                  ],
+                                                                  advantageIndex
+                                                                ) => (
+                                                                  <div
+                                                                    key={`cortex_${index}_advantage_${advantageIndex}`}
+                                                                    className="model-cortex-special-rules"
+                                                                  >
+                                                                    <span>
+                                                                      {markChargedOrSpike(
+                                                                        faction,
+                                                                        text
+                                                                      )}
+                                                                      {rule}
+                                                                    </span>{" "}
+                                                                    <span>
+                                                                      - {text}
+                                                                    </span>
+                                                                  </div>
+                                                                )
+                                                              )}
                                                             </Select.Option>
                                                           )
                                                         )}
                                                       </Select>
                                                     </>
                                                   )}
-                                                  {!details.chassisSpecialRules ||
-                                                  Object.entries(
-                                                    details.chassisSpecialRules
-                                                  ).length === 0 ? (
+                                                  {!details.weaponPoints ? (
                                                     <></>
                                                   ) : (
-                                                    <>
-                                                      <p>
-                                                        Chassis Special Rules
-                                                      </p>
-                                                      <dl>
-                                                        {Object.entries(
-                                                          details.chassisSpecialRules
-                                                        ).map(
-                                                          (
-                                                            [name, text],
-                                                            index
-                                                          ) => (
-                                                            <React.Fragment
-                                                              key={`advantage_${index}`}
-                                                            >
-                                                              <dt>{name}</dt>
-                                                              <dd>{text}</dd>
-                                                            </React.Fragment>
-                                                          )
-                                                        )}
-                                                      </dl>
-                                                    </>
+                                                    <div className="special-rules">
+                                                      <span>Weapon Points</span>{" "}
+                                                      <span>
+                                                        - {details.weaponPoints}
+                                                      </span>
+                                                    </div>
                                                   )}
                                                   {!details.hardpointNames ? (
                                                     <></>
                                                   ) : (
                                                     <>
-                                                      <p>
-                                                        Warjack Weapon
-                                                        Selections
-                                                      </p>
                                                       {details.hardpointNames.map(
                                                         (
                                                           hardpointName,
@@ -1326,19 +919,18 @@ function AppPresentation({
                                                               key={`warjack_weapon_${hardpointNameIndex}`}
                                                             >
                                                               <Select
+                                                                suffixIcon={
+                                                                  <CaretDownOutlined />
+                                                                }
+                                                                className="select-warjack-weapon"
                                                                 defaultValue={
-                                                                  <span
+                                                                  <div
+                                                                    className="model-weapons"
                                                                     style={{
-                                                                      color:
-                                                                        "gray",
-                                                                      fontStyle:
-                                                                        "italic",
+                                                                      height:
+                                                                        "52px",
                                                                     }}
-                                                                  >
-                                                                    {
-                                                                      hardpointName
-                                                                    }
-                                                                  </span>
+                                                                  ></div>
                                                                 }
                                                                 onClick={(
                                                                   event
@@ -1358,11 +950,18 @@ function AppPresentation({
                                                                   ]
                                                                     ? undefined
                                                                     : warjackWeaponNames(
+                                                                        faction,
+                                                                        warjackWeapons,
                                                                         details.warjackWeaponSelections,
                                                                         warjackWeaponIds[
                                                                           hardpointNameIndex
                                                                         ]
                                                                       )
+                                                                }
+                                                                getPopupContainer={() =>
+                                                                  document.querySelectorAll(
+                                                                    ".card"
+                                                                  )[cardIndex]
                                                                 }
                                                               >
                                                                 {Object.values(
@@ -1400,212 +999,14 @@ function AppPresentation({
                                                                           event.stopPropagation()
                                                                         }
                                                                       >
-                                                                        <h3>
-                                                                          {warjackWeaponName(
-                                                                            name,
-                                                                            cost
+                                                                        <>
+                                                                          {warjackWeaponNames(
+                                                                            faction,
+                                                                            warjackWeapons,
+                                                                            details.warjackWeaponSelections,
+                                                                            pageId
                                                                           )}
-                                                                        </h3>
-                                                                        <div>
-                                                                          {!warjackWeapons[
-                                                                            page.split(
-                                                                              "#"
-                                                                            )[0]
-                                                                          ] ? (
-                                                                            "Weapon details missing!"
-                                                                          ) : (
-                                                                            <>
-                                                                              <div>
-                                                                                Location:{" "}
-                                                                                {
-                                                                                  warjackWeapons[
-                                                                                    page.split(
-                                                                                      "#"
-                                                                                    )[0]
-                                                                                  ]
-                                                                                    .location
-                                                                                }
-                                                                              </div>
-                                                                              {!warjackWeapons[
-                                                                                page.split(
-                                                                                  "#"
-                                                                                )[0]
-                                                                              ]
-                                                                                .specialRules ? (
-                                                                                ""
-                                                                              ) : (
-                                                                                <dl>
-                                                                                  {Object.entries(
-                                                                                    warjackWeapons[
-                                                                                      page.split(
-                                                                                        "#"
-                                                                                      )[0]
-                                                                                    ]
-                                                                                      .specialRules
-                                                                                  ).map(
-                                                                                    (
-                                                                                      [
-                                                                                        name,
-                                                                                        rule,
-                                                                                      ],
-                                                                                      index
-                                                                                    ) => (
-                                                                                      <React.Fragment
-                                                                                        key={`special_rules_${page}_${index}`}
-                                                                                      >
-                                                                                        <dt>
-                                                                                          {
-                                                                                            name
-                                                                                          }
-                                                                                        </dt>
-                                                                                        <dd>
-                                                                                          {
-                                                                                            rule
-                                                                                          }
-                                                                                        </dd>
-                                                                                      </React.Fragment>
-                                                                                    )
-                                                                                  )}
-                                                                                </dl>
-                                                                              )}
-                                                                              {!warjackWeapons[
-                                                                                page.split(
-                                                                                  "#"
-                                                                                )[0]
-                                                                              ]
-                                                                                .weapons ? (
-                                                                                ""
-                                                                              ) : (
-                                                                                <table>
-                                                                                  <thead>
-                                                                                    <tr>
-                                                                                      <th>
-                                                                                        Name
-                                                                                      </th>
-                                                                                      <th>
-                                                                                        Attack
-                                                                                        Type
-                                                                                      </th>
-                                                                                      <th>
-                                                                                        Damage
-                                                                                        Type
-                                                                                      </th>
-                                                                                      <th>
-                                                                                        Range
-                                                                                      </th>
-                                                                                      <th>
-                                                                                        POW
-                                                                                      </th>
-                                                                                    </tr>
-                                                                                  </thead>
-                                                                                  <tbody>
-                                                                                    {warjackWeapons[
-                                                                                      page.split(
-                                                                                        "#"
-                                                                                      )[0]
-                                                                                    ].weapons.map(
-                                                                                      (
-                                                                                        weapon,
-                                                                                        index
-                                                                                      ) => (
-                                                                                        <React.Fragment
-                                                                                          key={`warjack_weapons_weapon_${page}_${index}`}
-                                                                                        >
-                                                                                          <tr>
-                                                                                            <td>
-                                                                                              {
-                                                                                                weapon[
-                                                                                                  "Name"
-                                                                                                ]
-                                                                                              }
-                                                                                            </td>
-                                                                                            <td>
-                                                                                              {
-                                                                                                weapon[
-                                                                                                  "Attack Type"
-                                                                                                ]
-                                                                                              }
-                                                                                            </td>
-                                                                                            <td>
-                                                                                              {weapon[
-                                                                                                "Damage Type"
-                                                                                              ]
-                                                                                                .join
-                                                                                                ? weapon[
-                                                                                                    "Damage Type"
-                                                                                                  ].join(
-                                                                                                    " "
-                                                                                                  )
-                                                                                                : weapon[
-                                                                                                    "Damage Type"
-                                                                                                  ]}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                              {
-                                                                                                weapon[
-                                                                                                  "Range"
-                                                                                                ]
-                                                                                              }
-                                                                                            </td>
-                                                                                            <td>
-                                                                                              {
-                                                                                                weapon[
-                                                                                                  "POW"
-                                                                                                ]
-                                                                                              }
-                                                                                            </td>
-                                                                                          </tr>
-                                                                                          {!weapon.specialRules ? (
-                                                                                            <>
-
-                                                                                            </>
-                                                                                          ) : (
-                                                                                            <tr>
-                                                                                              <td colSpan="5">
-                                                                                                <dl>
-                                                                                                  {Object.entries(
-                                                                                                    weapon.specialRules
-                                                                                                  ).map(
-                                                                                                    (
-                                                                                                      [
-                                                                                                        name,
-                                                                                                        rule,
-                                                                                                      ],
-                                                                                                      index
-                                                                                                    ) => (
-                                                                                                      <React.Fragment
-                                                                                                        key={`warjack_weapons_weapon_${weapon["Name"]}_special_rules_${page}_${index}`}
-                                                                                                      >
-                                                                                                        {
-                                                                                                          <>
-                                                                                                            <dt>
-                                                                                                              {
-                                                                                                                name
-                                                                                                              }
-                                                                                                            </dt>
-                                                                                                            <dd>
-                                                                                                              {
-                                                                                                                rule
-                                                                                                              }
-                                                                                                            </dd>
-                                                                                                          </>
-                                                                                                        }
-                                                                                                      </React.Fragment>
-                                                                                                    )
-                                                                                                  )}
-                                                                                                </dl>
-                                                                                              </td>
-                                                                                            </tr>
-                                                                                          )}
-                                                                                        </React.Fragment>
-                                                                                      )
-                                                                                    )}
-                                                                                  </tbody>
-                                                                                </table>
-                                                                              )}
-                                                                            </>
-                                                                          )}
-                                                                        </div>
+                                                                        </>
                                                                       </Select.Option>
                                                                     )
                                                                   )}
@@ -1615,80 +1016,403 @@ function AppPresentation({
                                                       )}
                                                     </>
                                                   )}
-                                                  {!details.weaponDetails ||
-                                                  details.weaponDetails
+                                                  {!details.vehicleWeaponSelection ||
+                                                  details.vehicleWeaponSelection
                                                     .length === 0 ? (
                                                     <></>
                                                   ) : (
-                                                    <>
-                                                      <p>Weapon Details</p>
-                                                      <table>
-                                                        <thead>
-                                                          <tr>
-                                                            <th>Weapon</th>
-                                                            <th>Location</th>
-                                                            <th>Cost</th>
-                                                            <th>Weapon Pack</th>
-                                                          </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                          {details.weaponDetails.map(
-                                                            (weapon, index) => (
-                                                              <React.Fragment
-                                                                key={`weapon_details_number_${index}`}
-                                                              >
-                                                                <tr>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Weapon"
-                                                                      ].text
-                                                                    }
-                                                                  </td>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Location"
-                                                                      ].text
-                                                                    }
-                                                                  </td>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Cost"
-                                                                      ].text
-                                                                    }
-                                                                  </td>
-                                                                  <td>
-                                                                    {
-                                                                      weapon[
-                                                                        "Weapon Pack"
-                                                                      ].text
-                                                                    }
-                                                                  </td>
-                                                                </tr>
-                                                              </React.Fragment>
+                                                    <div key="vehicle_weapon_selection">
+                                                      <Select
+                                                        suffixIcon={
+                                                          <CaretDownOutlined />
+                                                        }
+                                                        className="select-warjack-weapon"
+                                                        defaultValue={
+                                                          <div
+                                                            className="model-weapons"
+                                                            style={{
+                                                              height: "52px",
+                                                            }}
+                                                          ></div>
+                                                        }
+                                                        onClick={(event) =>
+                                                          event.stopPropagation()
+                                                        }
+                                                        onSelect={setCardVehicleWeapon(
+                                                          listIndex,
+                                                          cardIndex,
+                                                          pageId
+                                                        )}
+                                                        value={
+                                                          !vehicleWeaponId ||
+                                                          !details ||
+                                                          !details.vehicleWeaponSelection
+                                                            ? undefined
+                                                            : vehicleWeaponName2(
+                                                                faction,
+                                                                vehicleWeapons,
+                                                                details.vehicleWeaponSelection,
+                                                                vehicleWeaponId
+                                                              )
+                                                        }
+                                                        getPopupContainer={() =>
+                                                          document.querySelectorAll(
+                                                            ".card"
+                                                          )[cardIndex]
+                                                        }
+                                                      >
+                                                        {details.vehicleWeaponSelection.map(
+                                                          (
+                                                            {
+                                                              text,
+                                                              page,
+                                                              pageId,
+                                                            },
+                                                            index
+                                                          ) => (
+                                                            <Select.Option
+                                                              key={`vehicle_weapon_selection_${index}`}
+                                                              label={pageId}
+                                                              value={text}
+                                                              onClick={(
+                                                                event
+                                                              ) =>
+                                                                event.stopPropagation()
+                                                              }
+                                                            >
+                                                              {vehicleWeaponName2(
+                                                                faction,
+                                                                vehicleWeapons,
+                                                                details.vehicleWeaponSelection,
+                                                                pageId
+                                                              )}
+                                                            </Select.Option>
+                                                          )
+                                                        )}
+                                                      </Select>
+                                                    </div>
+                                                  )}
+                                                  {!details.weapons ||
+                                                  details.weapons.length ===
+                                                    0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    details.weapons.map(
+                                                      (weapon, index) => (
+                                                        <React.Fragment
+                                                          key={`weapon_number_${index}`}
+                                                        >
+                                                          <div className="model-weapons">
+                                                            <div>
+                                                              {weapon[
+                                                                "Attack Type"
+                                                              ] === "Melee" ? (
+                                                                <img
+                                                                  className="faction-melee"
+                                                                  alt=" "
+                                                                />
+                                                              ) : (
+                                                                <img
+                                                                  className="faction-ranged"
+                                                                  alt=" "
+                                                                />
+                                                              )}
+                                                            </div>
+                                                            <div>
+                                                              <div>
+                                                                {weapon["Name"]}
+                                                                {Object.keys(
+                                                                  weapon.specialRules ||
+                                                                    {}
+                                                                ).map(
+                                                                  (
+                                                                    rule,
+                                                                    index2
+                                                                  ) => (
+                                                                    <WeaponQuality
+                                                                      key={`weapon_number_${index}_rule_${index2}`}
+                                                                      weaponQuality={
+                                                                        rule
+                                                                      }
+                                                                    />
+                                                                  )
+                                                                )}
+                                                              </div>
+                                                              <div>
+                                                                {
+                                                                  weapon[
+                                                                    "Damage Type"
+                                                                  ]
+                                                                }
+                                                              </div>
+                                                            </div>
+                                                            <div>
+                                                              <div>RNG</div>
+                                                              <div>
+                                                                {
+                                                                  weapon[
+                                                                    "Range"
+                                                                  ]
+                                                                }
+                                                              </div>
+                                                            </div>
+                                                            <div>
+                                                              <div>POW</div>
+                                                              <div>
+                                                                {weapon["POW"]}
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          {!weapon.specialRules ? (
+                                                            <></>
+                                                          ) : (
+                                                            Object.entries(
+                                                              weapon.specialRules
                                                             )
+                                                              .filter(
+                                                                ([rule]) =>
+                                                                  !weaponQualities[
+                                                                    rule
+                                                                  ]
+                                                              )
+                                                              .map(
+                                                                (
+                                                                  [rule, text],
+                                                                  ruleIndex
+                                                                ) => (
+                                                                  <div
+                                                                    key={`weapon_number_${index}_${ruleIndex}`}
+                                                                    className="model-weapons-special-rules"
+                                                                  >
+                                                                    <span>
+                                                                      {markChargedOrSpike(
+                                                                        faction,
+                                                                        text
+                                                                      )}
+                                                                      {rule}
+                                                                    </span>{" "}
+                                                                    <span>
+                                                                      - {text}
+                                                                    </span>
+                                                                  </div>
+                                                                )
+                                                              )
                                                           )}
-                                                        </tbody>
-                                                      </table>
+                                                        </React.Fragment>
+                                                      )
+                                                    )
+                                                  )}
+                                                  <div className="card-icons">
+                                                    {!details.wildCardFactions ||
+                                                    Object.values(
+                                                      details.wildCardFactions
+                                                    ).length === 0 ? (
+                                                      <></>
+                                                    ) : (
+                                                      Object.values(
+                                                        details.wildCardFactions
+                                                      ).map(
+                                                        ({ page }, index) => (
+                                                          <FactionImage
+                                                            key={`wild_card_faction_${index}`}
+                                                            faction={page}
+                                                            height="30px"
+                                                            style={{
+                                                              filter:
+                                                                "drop-shadow(0px 3px 6px hsl(200,100%,25%))",
+                                                            }}
+                                                          />
+                                                        )
+                                                      )
+                                                    )}
+                                                    {!details.baseSize ? (
+                                                      <></>
+                                                    ) : (
+                                                      <div className="metallic-circle">
+                                                        {details.baseSize.replace(
+                                                          " mm",
+                                                          ""
+                                                        )}
+                                                      </div>
+                                                    )}
+                                                    {!details.health ? (
+                                                      <></>
+                                                    ) : (
+                                                      <div className="metallic-circle">
+                                                        <HeartFilled
+                                                          style={{
+                                                            fontSize: "0.8em",
+                                                          }}
+                                                        />
+                                                        {details.health}
+                                                      </div>
+                                                    )}
+                                                    {!details.squadSize ? (
+                                                      <></>
+                                                    ) : (
+                                                      <div className="metallic-circle">
+                                                        <TeamOutlined
+                                                          style={{
+                                                            fontSize: "0.8em",
+                                                          }}
+                                                        />
+                                                        {details.squadSize}
+                                                      </div>
+                                                    )}
+                                                    {!details.advantages ||
+                                                    Object.entries(
+                                                      details.advantages
+                                                    ).length === 0 ? (
+                                                      <></>
+                                                    ) : (
+                                                      Object.entries(
+                                                        details.advantages
+                                                      ).map(
+                                                        (
+                                                          [name, text],
+                                                          index
+                                                        ) => (
+                                                          <AdvantageImage
+                                                            key={`advantage_${index}`}
+                                                            advantage={name}
+                                                          />
+                                                        )
+                                                      )
+                                                    )}
+                                                  </div>
+                                                  {!details.specialRules ||
+                                                  Object.entries(
+                                                    details.specialRules
+                                                  ).length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    Object.entries(
+                                                      details.specialRules
+                                                    ).map(
+                                                      ([rule, text], index) => (
+                                                        <div
+                                                          key={`special_rules_${index}`}
+                                                          className="special-rules"
+                                                        >
+                                                          <span>
+                                                            {markChargedOrSpike(
+                                                              faction,
+                                                              text
+                                                            )}
+                                                            {rule}
+                                                          </span>{" "}
+                                                          <span>- {text}</span>
+                                                        </div>
+                                                      )
+                                                    )
+                                                  )}
+                                                  {!details.chassisSpecialRules ||
+                                                  Object.entries(
+                                                    details.chassisSpecialRules
+                                                  ).length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    Object.entries(
+                                                      details.chassisSpecialRules
+                                                    ).map(
+                                                      ([rule, text], index) => (
+                                                        <div
+                                                          key={`chassis_special_rules_${index}`}
+                                                          className="special-rules"
+                                                        >
+                                                          <span>
+                                                            {markChargedOrSpike(
+                                                              faction,
+                                                              text
+                                                            )}
+                                                            {rule}
+                                                          </span>{" "}
+                                                          <span>- {text}</span>
+                                                        </div>
+                                                      )
+                                                    )
+                                                  )}
+                                                  {!details.maneuvers ||
+                                                  Object.values(
+                                                    details.maneuvers
+                                                  ).length === 0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    <>
+                                                      <h3>Maneuvers</h3>
+                                                      <dl>
+                                                        {Object.entries(
+                                                          details.maneuvers
+                                                        ).map(
+                                                          (
+                                                            [rule, text],
+                                                            index
+                                                          ) => (
+                                                            <div
+                                                              key={`maneuvers_advantage_${index}`}
+                                                              className="special-rules"
+                                                            >
+                                                              <span>
+                                                                {markChargedOrSpike(
+                                                                  faction,
+                                                                  text
+                                                                )}
+                                                                {rule}
+                                                              </span>{" "}
+                                                              <span>
+                                                                - {text}
+                                                              </span>
+                                                            </div>
+                                                          )
+                                                        )}
+                                                      </dl>
                                                     </>
                                                   )}
                                                   {!details.release ? (
                                                     <></>
                                                   ) : (
-                                                    <>
-                                                      <p>Release</p>
-                                                      <p>{details.release}</p>
-                                                    </>
+                                                    <div className="special-rules">
+                                                      <span>Release</span>{" "}
+                                                      <span>
+                                                        - {details.release}
+                                                      </span>
+                                                    </div>
                                                   )}
                                                   {!details.lore ? (
                                                     <></>
                                                   ) : (
-                                                    <>
-                                                      <p>Lore</p>
-                                                      <p>{details.lore}</p>
-                                                    </>
+                                                    <div className="special-rules">
+                                                      <span>Lore</span>{" "}
+                                                      <span>
+                                                        - {details.lore}
+                                                      </span>
+                                                    </div>
+                                                  )}
+                                                  {!details.pow ? (
+                                                    <></>
+                                                  ) : (
+                                                    <div className="special-rules">
+                                                      <span>Pow</span>{" "}
+                                                      <span>
+                                                        - {details.pow.text}
+                                                      </span>
+                                                    </div>
+                                                  )}
+                                                  {!details.effect ||
+                                                  details.effect.length ===
+                                                    0 ? (
+                                                    <></>
+                                                  ) : (
+                                                    details.effect.map(
+                                                      (effect, index) => (
+                                                        <p
+                                                          className="cypher-effect"
+                                                          key={`cypher_effect_${listIndex}_${cardIndex}_${index}`}
+                                                        >
+                                                          {effect}
+                                                        </p>
+                                                      )
+                                                    )
                                                   )}
                                                 </div>
                                               )}
@@ -2207,8 +1931,11 @@ const App = connect(
                                 Object.entries(
                                   details.warjackWeaponSelections
                                 ).map(([page, selection]) => [
-                                  page,
-                                  { ...selection, pageId: pageIdByPage[page] },
+                                  page.split("#")[0],
+                                  {
+                                    ...selection,
+                                    pageId: pageIdByPage[page.split("#")[0]],
+                                  },
                                 ])
                               ),
                             }),
@@ -2219,8 +1946,8 @@ const App = connect(
                                 details.vehicleWeaponSelection.map(
                                   ({ text, page }) => ({
                                     text,
-                                    page,
-                                    pageId: pageIdByPage[page],
+                                    page: page.split("#")[0],
+                                    pageId: pageIdByPage[page.split("#")[0]],
                                   })
                                 ),
                             }),
@@ -2416,14 +2143,266 @@ function vehicleWeaponName(vehicleWeaponSelection, vehicleWeaponId) {
   return vehicleWeapon.text;
 }
 
-function warjackWeaponNames(warjackWeaponSelections, weaponId) {
+function vehicleWeaponName2(
+  faction,
+  vehicleWeapons,
+  vehicleWeaponSelection,
+  vehicleWeaponId
+) {
+  const vehicleWeapon = vehicleWeaponSelection.find(
+    ({ pageId }) => pageId === vehicleWeaponId
+  );
+
+  console.log({ vehicleWeapon });
+
+  if (vehicleWeapon) {
+    const { page } = vehicleWeapon;
+    const weaponConfig = vehicleWeapons[page.split("#")[0]];
+    if (weaponConfig) {
+      const { pointCost: cost } = weaponConfig;
+
+      console.log({ weaponConfig });
+
+      return (
+        <>
+          {!weaponConfig ||
+          !weaponConfig.weapons ||
+          weaponConfig.weapons.length === 0 ? (
+            <></>
+          ) : (
+            weaponConfig.weapons.map((weapon, index) => (
+              <React.Fragment key={`vehicle_weapon_selection_number_${index}`}>
+                <div className="model-weapons">
+                  <div>
+                    {weapon["Attack Type"] === "Melee" ? (
+                      <img className="faction-melee" alt=" " />
+                    ) : (
+                      <img className="faction-ranged" alt=" " />
+                    )}
+                  </div>
+                  <div>
+                    <div>
+                      {weapon["Name"]}
+                      {Object.keys(weapon.specialRules || {}).map(
+                        (rule, index2) => (
+                          <WeaponQuality
+                            key={`vehicle_weapon_selection_number_${index}_rule_${index2}`}
+                            weaponQuality={rule}
+                          />
+                        )
+                      )}
+                    </div>
+                    <div>
+                      <span className="cost">Cost {cost}</span>{" "}
+                      {weapon["Damage Type"]}
+                    </div>
+                  </div>
+                  <div>
+                    <div>RNG</div>
+                    <div>{weapon["Range"]}</div>
+                  </div>
+                  <div>
+                    <div>POW</div>
+                    <div>{weapon["POW"]}</div>
+                  </div>
+                </div>
+                {!weapon.specialRules ? (
+                  <></>
+                ) : (
+                  Object.entries(weapon.specialRules)
+                    .filter(([rule]) => !weaponQualities[rule])
+                    .map(([rule, text], ruleIndex) => (
+                      <div
+                        key={`vehicle_weapon_selection_number_${index}_${ruleIndex}`}
+                        className="model-weapons-special-rules"
+                      >
+                        <span>
+                          {markChargedOrSpike(faction, text)}
+                          {rule}
+                        </span>{" "}
+                        <span>- {text}</span>
+                      </div>
+                    ))
+                )}
+              </React.Fragment>
+            ))
+          )}
+          {!weaponConfig ||
+          !weaponConfig.specialRules ||
+          weaponConfig.specialRules.length === 0 ? (
+            <></>
+          ) : (
+            <>
+              {!weaponConfig.weapons || weaponConfig.weapons.length === 0 ? (
+                <div className="model-weapons-special-rules">
+                  <span>Cost</span> <span>- {cost}</span>
+                </div>
+              ) : (
+                <></>
+              )}
+              {Object.entries(weaponConfig.specialRules)
+                .filter(([rule]) => !weaponQualities[rule])
+                .map(([rule, text], ruleIndex) => (
+                  <div
+                    key={`vehicle_weapon_selection_rules_number_${ruleIndex}`}
+                    className="model-weapons-special-rules"
+                  >
+                    <span>
+                      {markChargedOrSpike(faction, text)}
+                      {rule}
+                    </span>{" "}
+                    <span>- {text}</span>
+                  </div>
+                ))}
+            </>
+          )}
+        </>
+      );
+    }
+    return undefined;
+  }
+  return undefined;
+}
+
+function markCharged(faction, text) {
+  return text.includes("charged") ? (
+    <>
+      <Charged faction={faction} />{" "}
+    </>
+  ) : (
+    <></>
+  );
+}
+
+function markSpike(faction, text) {
+  return text.includes("spike") ? (
+    <>
+      <Spike faction={faction} />{" "}
+    </>
+  ) : (
+    <></>
+  );
+}
+
+function markChargedOrSpike(faction, text) {
+  return (
+    <>
+      {markCharged(faction, text)}
+      {markSpike(faction, text)}
+    </>
+  );
+}
+
+function warjackWeaponNames(
+  faction,
+  warjackWeapons,
+  warjackWeaponSelections,
+  weaponId
+) {
   const weapon = Object.values(warjackWeaponSelections).find(
     ({ pageId }) => pageId === weaponId
   );
   if (weapon) {
-    return warjackWeaponName(weapon.name, weapon.cost);
+    const { cost, page } = weapon;
+    const weaponConfig = warjackWeapons[page.split("#")[0]];
+
+    return (
+      <>
+        {!weaponConfig ||
+        !weaponConfig.weapons ||
+        weaponConfig.weapons.length === 0 ? (
+          <></>
+        ) : (
+          weaponConfig.weapons.map((weapon, index) => (
+            <React.Fragment key={`weapon_selection_number_${index}`}>
+              <div className="model-weapons">
+                <div>
+                  {weapon["Attack Type"] === "Melee" ? (
+                    <img className="faction-melee" alt=" " />
+                  ) : (
+                    <img className="faction-ranged" alt=" " />
+                  )}
+                </div>
+                <div>
+                  <div>
+                    {weapon["Name"]}
+                    {Object.keys(weapon.specialRules || {}).map(
+                      (rule, index2) => (
+                        <WeaponQuality
+                          key={`weapon_selection_number_${index}_rule_${index2}`}
+                          weaponQuality={rule}
+                        />
+                      )
+                    )}
+                  </div>
+                  <div>
+                    <span className="cost">Cost {cost}</span>{" "}
+                    {weapon["Damage Type"]}
+                  </div>
+                </div>
+                <div>
+                  <div>RNG</div>
+                  <div>{weapon["Range"]}</div>
+                </div>
+                <div>
+                  <div>POW</div>
+                  <div>{weapon["POW"]}</div>
+                </div>
+              </div>
+              {!weapon.specialRules ? (
+                <></>
+              ) : (
+                Object.entries(weapon.specialRules)
+                  .filter(([rule]) => !weaponQualities[rule])
+                  .map(([rule, text], ruleIndex) => (
+                    <div
+                      key={`weapon_selection_number_${index}_${ruleIndex}`}
+                      className="model-weapons-special-rules"
+                    >
+                      <span>
+                        {markChargedOrSpike(faction, text)}
+                        {rule}
+                      </span>{" "}
+                      <span>- {text}</span>
+                    </div>
+                  ))
+              )}
+            </React.Fragment>
+          ))
+        )}
+        {!weaponConfig ||
+        !weaponConfig.specialRules ||
+        weaponConfig.specialRules.length === 0 ? (
+          <></>
+        ) : (
+          <>
+            {!weaponConfig.weapons || weaponConfig.weapons.length === 0 ? (
+              <div className="model-weapons-special-rules">
+                <span>Cost</span> <span>- {cost}</span>
+              </div>
+            ) : (
+              <></>
+            )}
+            {Object.entries(weaponConfig.specialRules)
+              .filter(([rule]) => !weaponQualities[rule])
+              .map(([rule, text], ruleIndex) => (
+                <div
+                  key={`weapon_selection_rules_number_${ruleIndex}`}
+                  className="model-weapons-special-rules"
+                >
+                  <span>
+                    {markChargedOrSpike(faction, text)}
+                    {rule}
+                  </span>{" "}
+                  <span>- {text}</span>
+                </div>
+              ))}
+          </>
+        )}
+      </>
+    );
   }
-  return weaponId;
+  return undefined;
 }
 
 function warjackWeaponNamesSubtitle(warjackWeaponSelections, weaponIds) {
@@ -2436,10 +2415,6 @@ function warjackWeaponNamesSubtitle(warjackWeaponSelections, weaponIds) {
     }
     return [];
   });
-}
-
-function warjackWeaponName(name, cost) {
-  return `${name} (cost ${cost})`;
 }
 
 function parseHardpoints(hardpoints) {
