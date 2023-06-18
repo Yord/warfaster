@@ -22,12 +22,14 @@ ReactDOM.render(
 saga.run(processes);
 
 function initStore(saga) {
+  const reset = document.location.search === "?reset";
+
   const persistedState = localStorage.getItem("reduxState")
     ? JSON.parse(localStorage.getItem("reduxState"))
     : state;
 
   const latestState =
-    new Date(persistedState.version) >= new Date(state.version)
+    !reset && new Date(persistedState.version) >= new Date(state.version)
       ? persistedState
       : state;
 
