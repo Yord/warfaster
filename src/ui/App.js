@@ -1394,7 +1394,9 @@ function AppPresentation({
                                                     <></>
                                                   ) : (
                                                     <div className="special-rules">
-                                                      <span>PP Store</span>{" "}
+                                                      <span>
+                                                        Privateer Press Store
+                                                      </span>{" "}
                                                       <span>
                                                         -{" "}
                                                         {details.storeLinks.map(

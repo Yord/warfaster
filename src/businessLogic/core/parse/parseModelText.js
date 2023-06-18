@@ -206,7 +206,7 @@ function parseDefinitionText(node) {
 
   const pairs = definitions.flatMap((definition) => {
     const separator = ": ";
-    const groups = definition.split(separator).map(cleanText);
+    const groups = definition.split(separator).map(cleanText).map(encodeHTML);
     if (groups.length < 2) return [];
     const key = groups[0];
     const val = groups.slice(1).join(separator);
@@ -215,6 +215,15 @@ function parseDefinitionText(node) {
   if (pairs.length === 0) return undefined;
 
   return Object.fromEntries(pairs);
+}
+
+function encodeHTML(text) {
+  const parser = new DOMParser();
+  const dom = parser.parseFromString(
+    "<!doctype html><body>" + text,
+    "text/html"
+  );
+  return dom.body.textContent;
 }
 
 function extractDefinitions(doc, id) {
