@@ -2246,7 +2246,9 @@ function vehicleWeaponName2(
                     </div>
                     <div>
                       <span className="cost">Cost {cost}</span>{" "}
-                      {weapon["Damage Type"]}
+                      {weapon["Damage Type"].join
+                        ? weapon["Damage Type"].join(" ")
+                        : weapon["Damage Type"]}
                     </div>
                   </div>
                   <div>
@@ -2389,7 +2391,9 @@ function warjackWeaponNames(
                   </div>
                   <div>
                     <span className="cost">Cost {cost}</span>{" "}
-                    {weapon["Damage Type"]}
+                    {weapon["Damage Type"].join
+                      ? weapon["Damage Type"].join(" ")
+                      : weapon["Damage Type"]}
                   </div>
                 </div>
                 <div>
