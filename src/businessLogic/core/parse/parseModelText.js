@@ -200,6 +200,15 @@ function extractCortexes(doc, id) {
 }
 
 function parseDefinitionText(node) {
+  const uls = [...node.querySelectorAll("ul")];
+
+  for (const ul of uls) {
+    const list = [...ul.querySelectorAll("li")].map(
+      (li) => " • " + li.innerText
+    );
+    ul.replaceWith(list.join(""));
+  }
+
   const definitions = node.innerHTML
     .split("<br>")
     .map((_) => _.replace(/<[^>]+>/g, "").trim());
@@ -209,7 +218,7 @@ function parseDefinitionText(node) {
     const groups = definition.split(separator).map(cleanText).map(encodeHTML);
     if (groups.length < 2) return [];
     const key = groups[0];
-    const val = groups.slice(1).join(separator);
+    const val = groups.slice(1).join(separator).replace(/\s•\s/g, "\n • ");
     return [[key, val]];
   });
   if (pairs.length === 0) return undefined;
@@ -227,8 +236,11 @@ function encodeHTML(text) {
 }
 
 function extractDefinitions(doc, id) {
+  const ul = doc.querySelector(`h3#${id} ~ p ~ ul`);
   const p = doc.querySelector(`h3#${id} ~ p`);
   if (!p) return undefined;
+
+  if (ul) p.append(ul);
 
   return parseDefinitionText(p);
 }

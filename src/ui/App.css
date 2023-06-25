@@ -720,7 +720,8 @@ div.special-rules > span:first-of-type {
 div.model-weapons-special-rules > span:last-of-type,
 div.model-cortex-special-rules > span:last-of-type,
 div.special-rules > span:last-of-type {
-  color: white
+  color: white;
+  white-space: pre-wrap;
 }
 
 .card-icons {
