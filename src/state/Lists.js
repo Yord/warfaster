@@ -103,8 +103,13 @@ function toggleCard(state, { listIndex, cardIndex, pageId }) {
 function setCardCortex(state, { listIndex, cardIndex, pageId, cortexIds }) {
   const lists = select(state);
   const card = lists[listIndex].cards[cardIndex];
-  if (card.pageId === pageId) {
-    card.cortexIds = cortexIds;
+
+  if (!pageId) {
+    delete card.cortexIds;
+  } else {
+    if (card.pageId === pageId) {
+      card.cortexIds = cortexIds;
+    }
   }
 }
 
@@ -118,7 +123,11 @@ function setCardWarjackWeapons(
     if (!card.warjackWeaponIds) {
       card.warjackWeaponIds = [];
     }
-    card.warjackWeaponIds[hardpointNameIndex] = warjackWeaponId;
+    if (!warjackWeaponId) {
+      delete card.warjackWeaponIds[hardpointNameIndex];
+    } else {
+      card.warjackWeaponIds[hardpointNameIndex] = warjackWeaponId;
+    }
   }
 }
 
@@ -129,7 +138,11 @@ function setCardVehicleWeapon(
   const lists = select(state);
   const card = lists[listIndex].cards[cardIndex];
   if (card.pageId === pageId) {
-    card.vehicleWeaponId = vehicleWeaponId;
+    if (!vehicleWeaponId) {
+      delete card.vehicleWeaponId;
+    } else {
+      card.vehicleWeaponId = vehicleWeaponId;
+    }
   }
 }
 

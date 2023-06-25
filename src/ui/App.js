@@ -801,13 +801,7 @@ function AppPresentation({
                                                           <CaretDownOutlined />
                                                         }
                                                         className="select-warjack-cortex"
-                                                        defaultValue={
-                                                          <div>
-                                                            <h3>
-                                                              Select Cortex
-                                                            </h3>
-                                                          </div>
-                                                        }
+                                                        defaultValue="none"
                                                         onClick={(event) =>
                                                           event.stopPropagation()
                                                         }
@@ -818,7 +812,7 @@ function AppPresentation({
                                                         )}
                                                         value={
                                                           !cortexIds
-                                                            ? undefined
+                                                            ? "none"
                                                             : cortexName(
                                                                 details.cortexSelections,
                                                                 cortexIds
@@ -830,6 +824,20 @@ function AppPresentation({
                                                           )[cardIndex]
                                                         }
                                                       >
+                                                        <Select.Option
+                                                          key={"cortex_-1"}
+                                                          label={undefined}
+                                                          value="none"
+                                                          onClick={(event) =>
+                                                            event.stopPropagation()
+                                                          }
+                                                        >
+                                                          <div>
+                                                            <h3>
+                                                              Select Cortex
+                                                            </h3>
+                                                          </div>
+                                                        </Select.Option>
                                                         {Object.entries(
                                                           details.cortexSelections
                                                         ).map(
@@ -923,15 +931,7 @@ function AppPresentation({
                                                                   <CaretDownOutlined />
                                                                 }
                                                                 className="select-warjack-weapon"
-                                                                defaultValue={
-                                                                  <div
-                                                                    className="model-weapons"
-                                                                    style={{
-                                                                      height:
-                                                                        "52px",
-                                                                    }}
-                                                                  ></div>
-                                                                }
+                                                                defaultValue="none"
                                                                 onClick={(
                                                                   event
                                                                 ) =>
@@ -948,7 +948,7 @@ function AppPresentation({
                                                                   !warjackWeaponIds[
                                                                     hardpointNameIndex
                                                                   ]
-                                                                    ? undefined
+                                                                    ? "none"
                                                                     : warjackWeaponNames(
                                                                         faction,
                                                                         warjackWeapons,
@@ -964,6 +964,26 @@ function AppPresentation({
                                                                   )[cardIndex]
                                                                 }
                                                               >
+                                                                <Select.Option
+                                                                  key={`warjack_weapon_${hardpointNameIndex}_-1`}
+                                                                  label={
+                                                                    undefined
+                                                                  }
+                                                                  value="none"
+                                                                  onClick={(
+                                                                    event
+                                                                  ) =>
+                                                                    event.stopPropagation()
+                                                                  }
+                                                                >
+                                                                  <div
+                                                                    className="model-weapons"
+                                                                    style={{
+                                                                      height:
+                                                                        "52px",
+                                                                    }}
+                                                                  ></div>
+                                                                </Select.Option>
                                                                 {Object.values(
                                                                   details.warjackWeaponSelections
                                                                 )
@@ -1027,14 +1047,7 @@ function AppPresentation({
                                                           <CaretDownOutlined />
                                                         }
                                                         className="select-warjack-weapon"
-                                                        defaultValue={
-                                                          <div
-                                                            className="model-weapons"
-                                                            style={{
-                                                              height: "52px",
-                                                            }}
-                                                          ></div>
-                                                        }
+                                                        defaultValue="none"
                                                         onClick={(event) =>
                                                           event.stopPropagation()
                                                         }
@@ -1047,7 +1060,7 @@ function AppPresentation({
                                                           !vehicleWeaponId ||
                                                           !details ||
                                                           !details.vehicleWeaponSelection
-                                                            ? undefined
+                                                            ? "none"
                                                             : vehicleWeaponName2(
                                                                 faction,
                                                                 vehicleWeapons,
@@ -1061,6 +1074,23 @@ function AppPresentation({
                                                           )[cardIndex]
                                                         }
                                                       >
+                                                        <Select.Option
+                                                          key={
+                                                            "vehicle_weapon_selection_-1"
+                                                          }
+                                                          label={undefined}
+                                                          value="none"
+                                                          onClick={(event) =>
+                                                            event.stopPropagation()
+                                                          }
+                                                        >
+                                                          <div
+                                                            className="model-weapons"
+                                                            style={{
+                                                              height: "52px",
+                                                            }}
+                                                          ></div>
+                                                        </Select.Option>
                                                         {details.vehicleWeaponSelection.map(
                                                           (
                                                             {
