@@ -371,6 +371,14 @@ div.model-weapons,
   padding: 8px 16px;
 }
 
+.ant-card-hoverable {
+  cursor: default;
+}
+
+.ant-card-meta {
+  cursor: pointer;
+}
+
 .cards .header {
   padding: 0 0 0 16px;
 }

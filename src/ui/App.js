@@ -650,14 +650,14 @@ function AppPresentation({
                                                 faction,
                                                 type,
                                               ]}
-                                              onClick={toggleCard(
-                                                listIndex,
-                                                cardIndex,
-                                                pageId,
-                                                card
-                                              )}
                                             >
                                               <Card.Meta
+                                                onClick={toggleCard(
+                                                  listIndex,
+                                                  cardIndex,
+                                                  pageId,
+                                                  card
+                                                )}
                                                 avatar={
                                                   faction ? (
                                                     <div
