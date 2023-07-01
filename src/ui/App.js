@@ -786,6 +786,48 @@ function AppPresentation({
                                         </div>
                                       ) : (
                                         <div className="card-content">
+                                          {!details.storeLinks ||
+                                          details.storeLinks.length === 0 ? (
+                                            <></>
+                                          ) : (
+                                            <div className="special-rules">
+                                              <span
+                                                onClick={toggleSection(
+                                                  "privateer press store"
+                                                )}
+                                              >
+                                                Privateer Press Store
+                                              </span>{" "}
+                                              <span>
+                                                -{" "}
+                                                {toggledSections[
+                                                  "privateer press store"
+                                                ]
+                                                  ? "Click to expand"
+                                                  : details.storeLinks.map(
+                                                      (linkText, index) => (
+                                                        <React.Fragment
+                                                          key={`store_link_${index}`}
+                                                        >
+                                                          <span
+                                                            dangerouslySetInnerHTML={{
+                                                              __html: linkText,
+                                                            }}
+                                                          />
+                                                          {index ===
+                                                          details.storeLinks
+                                                            .length -
+                                                            1 ? (
+                                                            <></>
+                                                          ) : (
+                                                            <> </>
+                                                          )}
+                                                        </React.Fragment>
+                                                      )
+                                                    )}
+                                              </span>
+                                            </div>
+                                          )}
                                           {!details.modelStats ||
                                           Object.keys(details.modelStats)
                                             .length === 0 ? (
@@ -1406,48 +1448,6 @@ function AppPresentation({
                                                 ))}
                                               </dl>
                                             </>
-                                          )}
-                                          {!details.storeLinks ||
-                                          details.storeLinks.length === 0 ? (
-                                            <></>
-                                          ) : (
-                                            <div className="special-rules">
-                                              <span
-                                                onClick={toggleSection(
-                                                  "privateer press store"
-                                                )}
-                                              >
-                                                Privateer Press Store
-                                              </span>{" "}
-                                              <span>
-                                                -{" "}
-                                                {toggledSections[
-                                                  "privateer press store"
-                                                ]
-                                                  ? "Click to expand"
-                                                  : details.storeLinks.map(
-                                                      (linkText, index) => (
-                                                        <React.Fragment
-                                                          key={`store_link_${index}`}
-                                                        >
-                                                          <span
-                                                            dangerouslySetInnerHTML={{
-                                                              __html: linkText,
-                                                            }}
-                                                          />
-                                                          {index ===
-                                                          details.storeLinks
-                                                            .length -
-                                                            1 ? (
-                                                            <></>
-                                                          ) : (
-                                                            <> </>
-                                                          )}
-                                                        </React.Fragment>
-                                                      )
-                                                    )}
-                                              </span>
-                                            </div>
                                           )}
                                           {!details.release ? (
                                             <></>
