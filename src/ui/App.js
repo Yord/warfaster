@@ -222,67 +222,109 @@ function Charged({ faction, style: style2, height = "18px" }) {
   }
 }
 
-function AdvantageImage({ advantage, style, height = "30px" }) {
+function AdvantageImage({ advantage, text, style, height = "30px" }) {
   switch (advantage) {
     case "Compound Armor":
       return (
-        <img
-          src={CompoundArmor}
-          className="metallic-img"
-          alt={advantage}
-          height={height}
-          style={style}
-        />
+        <Tooltip
+          key={`${advantage}_tooltip`}
+          placement="top"
+          title={`${advantage} - ${text}`}
+          trigger="click"
+        >
+          <img
+            src={CompoundArmor}
+            className="metallic-img"
+            alt={advantage}
+            height={height}
+            style={style}
+          />
+        </Tooltip>
       );
     case "Flight":
       return (
-        <img
-          src={Flight}
-          className="metallic-img"
-          alt={advantage}
-          height={height}
-          style={style}
-        />
+        <Tooltip
+          key={`${advantage}_tooltip`}
+          placement="top"
+          title={`${advantage} - ${text}`}
+          trigger="click"
+        >
+          <img
+            src={Flight}
+            className="metallic-img"
+            alt={advantage}
+            height={height}
+            style={style}
+          />
+        </Tooltip>
       );
     case "Pathfinder":
       return (
-        <img
-          src={Pathfinder}
-          className="metallic-img"
-          alt={advantage}
-          height={height}
-          style={style}
-        />
+        <Tooltip
+          key={`${advantage}_tooltip`}
+          placement="top"
+          title={`${advantage} - ${text}`}
+          trigger="click"
+        >
+          <img
+            src={Pathfinder}
+            className="metallic-img"
+            alt={advantage}
+            height={height}
+            style={style}
+          />
+        </Tooltip>
       );
     case "Revelator":
       return (
-        <img
-          src={Revelator}
-          className="metallic-img"
-          alt={advantage}
-          height={height}
-          style={style}
-        />
+        <Tooltip
+          key={`${advantage}_tooltip`}
+          placement="top"
+          title={`${advantage} - ${text}`}
+          trigger="click"
+        >
+          <img
+            src={Revelator}
+            className="metallic-img"
+            alt={advantage}
+            height={height}
+            style={style}
+          />
+        </Tooltip>
       );
     case "Stealth":
       return (
-        <img
-          src={Stealth}
-          className="metallic-img"
-          alt={advantage}
-          height={height}
-          style={style}
-        />
+        <Tooltip
+          key={`${advantage}_tooltip`}
+          placement="top"
+          title={`${advantage} - ${text}`}
+          trigger="click"
+        >
+          <img
+            src={Stealth}
+            className="metallic-img"
+            alt={advantage}
+            height={height}
+            style={style}
+          />
+        </Tooltip>
       );
     case "Weapon Expert":
       return (
-        <img
-          src={WeaponExpert}
-          className="metallic-img"
-          alt={advantage}
-          height={height}
-          style={style}
-        />
+        <Tooltip
+          key={`${advantage}_tooltip`}
+          placement="top"
+          title={`${advantage} - ${text}`}
+          trigger="click"
+        >
+          <img
+            src={WeaponExpert}
+            className="metallic-img"
+            alt={advantage}
+            height={height}
+            style={style}
+          />
+        </Tooltip>
       );
     default:
       return <div className="metallic-circle"></div>;
@@ -1276,50 +1318,78 @@ function AppPresentation({
                                               Object.values(
                                                 details.wildCardFactions
                                               ).map(({ page }, index) => (
-                                                <FactionImage
-                                                  key={`wild_card_faction_${index}`}
-                                                  faction={page}
-                                                  height="30px"
-                                                  style={{
-                                                    filter:
-                                                      "drop-shadow(0px 3px 6px hsl(200,100%,25%))",
-                                                  }}
-                                                />
+                                                <Tooltip
+                                                  key={`wild_card_faction_${index}_tooltip`}
+                                                  placement="top"
+                                                  title="Wild card faction"
+                                                  trigger="click"
+                                                >
+                                                  <FactionImage
+                                                    key={`wild_card_faction_${index}`}
+                                                    faction={page}
+                                                    height="30px"
+                                                    style={{
+                                                      filter:
+                                                        "drop-shadow(0px 3px 6px hsl(200,100%,25%))",
+                                                    }}
+                                                  />
+                                                </Tooltip>
                                               ))
                                             )}
                                             {!details.baseSize ? (
                                               <></>
                                             ) : (
-                                              <div className="metallic-circle">
-                                                {details.baseSize.replace(
-                                                  " mm",
-                                                  ""
-                                                )}
-                                              </div>
+                                              <Tooltip
+                                                key="base_size_tooltip"
+                                                placement="top"
+                                                title="Base size"
+                                                trigger="click"
+                                              >
+                                                <div className="metallic-circle">
+                                                  {details.baseSize.replace(
+                                                    " mm",
+                                                    ""
+                                                  )}
+                                                </div>
+                                              </Tooltip>
                                             )}
                                             {!details.health ? (
                                               <></>
                                             ) : (
-                                              <div className="metallic-circle">
-                                                <HeartFilled
-                                                  style={{
-                                                    fontSize: "0.8em",
-                                                  }}
-                                                />
-                                                {details.health}
-                                              </div>
+                                              <Tooltip
+                                                key="hp_tooltip"
+                                                placement="top"
+                                                title="Health"
+                                                trigger="click"
+                                              >
+                                                <div className="metallic-circle">
+                                                  <HeartFilled
+                                                    style={{
+                                                      fontSize: "0.8em",
+                                                    }}
+                                                  />
+                                                  {details.health}
+                                                </div>
+                                              </Tooltip>
                                             )}
                                             {!details.squadSize ? (
                                               <></>
                                             ) : (
-                                              <div className="metallic-circle">
-                                                <TeamOutlined
-                                                  style={{
-                                                    fontSize: "0.8em",
-                                                  }}
-                                                />
-                                                {details.squadSize}
-                                              </div>
+                                              <Tooltip
+                                                key="squad_size_tooltip"
+                                                placement="top"
+                                                title="Squad size"
+                                                trigger="click"
+                                              >
+                                                <div className="metallic-circle">
+                                                  <TeamOutlined
+                                                    style={{
+                                                      fontSize: "0.8em",
+                                                    }}
+                                                  />
+                                                  {details.squadSize}
+                                                </div>
+                                              </Tooltip>
                                             )}
                                             {!details.advantages ||
                                             Object.entries(details.advantages)
@@ -1332,6 +1402,7 @@ function AppPresentation({
                                                 <AdvantageImage
                                                   key={`advantage_${index}`}
                                                   advantage={name}
+                                                  text={text}
                                                 />
                                               ))
                                             )}
