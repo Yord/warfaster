@@ -24,7 +24,6 @@ import {
   TeamOutlined,
   UpSquareOutlined,
 } from "@ant-design/icons";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import CompoundArmor from "./img/advantages/Compound_Armor.png";
 import Flight from "./img/advantages/Flight.png";
 import Pathfinder from "./img/advantages/Pathfinder.png";
@@ -56,11 +55,10 @@ import Repulsor from "./img/weapon_qualities/Repulsor.png";
 import SprayWeapon from "./img/weapon_qualities/Spray_Weapon.png";
 import Strafe from "./img/weapon_qualities/Strafe.png";
 import SystemFailure from "./img/weapon_qualities/System_Failure.png";
-import { CardDragEnded, CardDragStarted, MenuItemClicked } from "../messages";
+import { MenuItemClicked } from "../messages";
 import { AppSync } from "../state/AppSync";
 import { CypherCodecs } from "../state/CypherCodecs";
 import { Cyphers } from "../state/Cyphers";
-import { Dragging } from "../state/Dragging";
 import { FactionModels } from "../state/FactionModels";
 import { Factions } from "../state/Factions";
 import { Lists } from "../state/Lists";
@@ -323,11 +321,8 @@ function AppPresentation({
   factionModels,
   wildCardModels,
   cypherCodecs,
-  dragging,
   menuItemClicked,
   allMenuItemsClicked,
-  dragEnd,
-  dragStart,
   lists,
   toggleCard,
   removeList,
@@ -363,1269 +358,1064 @@ function AppPresentation({
     <div className="App">
       <Layout>
         <Layout>
-          <DragDropContext onDragStart={dragStart} onDragEnd={dragEnd}>
-            <Header>
-              <Droppable key={"trash_header"} droppableId={"trash_header"}>
-                {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {dragging ? (
-                      <div
-                        style={{
-                          animation:
-                            "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
-                          color: "white",
-                        }}
-                      >
-                        <DeleteOutlined />
+          <Header>
+            <div>
+              <a className="logo" href="/">
+                WARFASTER
+              </a>
+            </div>
+          </Header>
+          {!initialized ? (
+            <Content>
+              <Layout>
+                <Row>
+                  <Col xs={24} sm={12} md={12} lg={12} xl={8} xxl={8}>
+                    <div className="cards" key="cards0">
+                      <div style={{ cursor: "pointer" }} className="header">
+                        <Row>
+                          <Col span={16} className="army-list-title">
+                            <TextArea
+                              value={"Setting up Warfaster"}
+                              maxLength={30}
+                              autoSize
+                            />
+                          </Col>
+                          <Col span={8} className="faction-icons">
+                            <SyncOutlined
+                              spin
+                              style={{
+                                color: "#d1c5b1",
+                                fontSize: "23px",
+                                margin: "3px 10px 0 0",
+                              }}
+                            />
+                          </Col>
+                        </Row>
                       </div>
-                    ) : (
-                      <a className="logo" href="/">
-                        WARFASTER
-                      </a>
-                    )}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </Header>
-            {!initialized ? (
+
+                      <div>
+                        {syncReasons.map(({ reason, description }, index) => (
+                          <div className="body" key={`reason${index}`}>
+                            <Card hoverable className="card">
+                              <Card.Meta
+                                avatar={
+                                  <div
+                                    style={{
+                                      height: "25px",
+                                      width: "35px",
+                                      textAlign: "center",
+                                    }}
+                                  >
+                                    <SyncOutlined
+                                      spin
+                                      style={{
+                                        color: "#d1c5b1",
+                                        fontSize: "35px",
+                                      }}
+                                    />
+                                  </div>
+                                }
+                                title={
+                                  <>
+                                    <div>{reason}</div>
+                                    <div className="card-type">
+                                      {description}
+                                    </div>
+                                  </>
+                                }
+                              />
+                            </Card>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="footer">
+                        <Badge
+                          size="small"
+                          key="_badge"
+                          count={syncReasons.length}
+                          offset={[10, 5]}
+                        >
+                          Loading:
+                        </Badge>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Layout>
+            </Content>
+          ) : (
+            <>
+              <Content>
+                <Menu
+                  id="factions"
+                  openKeys={[]}
+                  onOpenChange={onOpenChangeDrawers}
+                  mode="horizontal"
+                  triggerSubMenuAction="click"
+                >
+                  {factionModels.map(([factionName, faction, models]) => (
+                    <SubMenu
+                      key={faction}
+                      icon={<FactionImage faction={faction} />}
+                    ></SubMenu>
+                  ))}
+                </Menu>
+              </Content>
               <Content>
                 <Layout>
-                  <Row>
-                    <Col xs={24} sm={12} md={12} lg={12} xl={8} xxl={8}>
-                      <div className="cards" key="cards0">
-                        <div style={{ cursor: "pointer" }} className="header">
-                          <Row>
-                            <Col span={16} className="army-list-title">
-                              <TextArea
-                                value={"Setting up Warfaster"}
-                                maxLength={30}
-                                autoSize
-                              />
-                            </Col>
-                            <Col span={8} className="faction-icons">
-                              <SyncOutlined
-                                spin
-                                style={{
-                                  color: "#d1c5b1",
-                                  fontSize: "23px",
-                                  margin: "3px 10px 0 0",
-                                }}
-                              />
-                            </Col>
-                          </Row>
-                        </div>
-
-                        <div>
-                          {syncReasons.map(({ reason, description }, index) => (
-                            <div className="body" key={`reason${index}`}>
-                              <Card hoverable className="card">
-                                <Card.Meta
-                                  avatar={
-                                    <div
-                                      style={{
-                                        height: "25px",
-                                        width: "35px",
-                                        textAlign: "center",
-                                      }}
-                                    >
-                                      <SyncOutlined
-                                        spin
-                                        style={{
-                                          color: "#d1c5b1",
-                                          fontSize: "35px",
-                                        }}
-                                      />
-                                    </div>
-                                  }
-                                  title={
-                                    <>
-                                      <div>{reason}</div>
-                                      <div className="card-type">
-                                        {description}
-                                      </div>
-                                    </>
-                                  }
-                                />
-                              </Card>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="footer">
-                          <Badge
-                            size="small"
-                            key="_badge"
-                            count={syncReasons.length}
-                            offset={[10, 5]}
-                          >
-                            Loading:
-                          </Badge>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                </Layout>
-              </Content>
-            ) : (
-              <>
-                <Content>
-                  <Menu
-                    id="factions"
-                    openKeys={[]}
-                    onOpenChange={onOpenChangeDrawers}
-                    mode="horizontal"
-                    triggerSubMenuAction="click"
-                  >
-                    {factionModels.map(([factionName, faction, models]) => (
-                      <SubMenu
-                        key={faction}
-                        icon={<FactionImage faction={faction} />}
-                      ></SubMenu>
-                    ))}
-                  </Menu>
-                </Content>
-                <Content>
-                  <Layout>
-                    <Row gutter={16}>
-                      {lists.map(({ title, cards }, listIndex) => (
-                        <Col
-                          key={`lists_col_${listIndex}`}
-                          xs={24}
-                          sm={12}
-                          md={12}
-                          lg={12}
-                          xl={8}
-                          xxl={8}
-                        >
-                          <div className="cards" key={`cards${listIndex}`}>
-                            <Tooltip
-                              placement="top"
-                              color="transparent"
-                              trigger="click"
-                              align={{ offset: [0, 17] }}
-                              title={
-                                <div className="ant-tooltip-inner-box">
-                                  <div
-                                    onClick={removeList(listIndex)}
-                                    style={{
-                                      cursor: "pointer",
-                                      display: "inline-block",
-                                      paddingRight: "4px",
-                                      fontSize: "1.5em",
-                                    }}
-                                  >
-                                    <DeleteOutlined />
-                                  </div>
-                                  <div
-                                    onClick={addEmptyList(listIndex)}
-                                    style={{
-                                      cursor: "pointer",
-                                      display: "inline-block",
-                                      padding: "0 4px",
-                                      fontSize: "1.5em",
-                                    }}
-                                  >
-                                    <PlusSquareOutlined />
-                                  </div>
-                                  <div
-                                    onClick={moveListBy(listIndex, -1)}
-                                    style={{
-                                      cursor: "pointer",
-                                      display: "inline-block",
-                                      padding: "0 4px",
-                                      fontSize: "1.5em",
-                                    }}
-                                  >
-                                    <UpSquareOutlined />
-                                  </div>
-                                  <div
-                                    onClick={moveListBy(listIndex, 1)}
-                                    style={{
-                                      cursor: "pointer",
-                                      display: "inline-block",
-                                      paddingLeft: "4px",
-                                      fontSize: "1.5em",
-                                    }}
-                                  >
-                                    <DownSquareOutlined />
-                                  </div>
-                                </div>
-                              }
-                            >
-                              <div
-                                style={{ cursor: "pointer" }}
-                                className="header"
-                              >
-                                <Row>
-                                  <Col span={16} className="army-list-title">
-                                    <TextArea
-                                      placeholder={generateListNamePlaceholder(
-                                        cards,
-                                        factions,
-                                        "Name your list"
-                                      )}
-                                      value={title}
-                                      maxLength={30}
-                                      autoSize
-                                      onChange={setListTitle(listIndex)}
-                                    />
-                                  </Col>
-                                  <Col span={8} className="faction-icons">
-                                    {Object.entries(
-                                      cards.reduce(
-                                        (acc, card) => ({
-                                          ...acc,
-                                          ...(card.faction
-                                            ? {
-                                                [card.faction]:
-                                                  (acc[card.faction] || 0) + 1,
-                                              }
-                                            : {
-                                                Universal:
-                                                  (acc.Universal || 0) + 1,
-                                              }),
-                                        }),
-                                        {}
-                                      )
-                                    )
-                                      .sort()
-                                      .map(([faction, count], i) => (
-                                        <Badge
-                                          size="small"
-                                          key={`badge${i}`}
-                                          count={count}
-                                          offset={[0, 10]}
-                                        >
-                                          <FactionImage faction={faction} />
-                                        </Badge>
-                                      ))}
-                                  </Col>
-                                </Row>
-                              </div>
-                            </Tooltip>
-
-                            <Droppable
-                              key={`cards_${listIndex}`}
-                              droppableId={`cards_${listIndex}`}
-                            >
-                              {(provided) => (
+                  <Row gutter={16}>
+                    {lists.map(({ title, cards }, listIndex) => (
+                      <Col
+                        key={`lists_col_${listIndex}`}
+                        xs={24}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={8}
+                        xxl={8}
+                      >
+                        <div className="cards" key={`cards${listIndex}`}>
+                          <Tooltip
+                            placement="top"
+                            color="transparent"
+                            trigger="click"
+                            align={{ offset: [0, 17] }}
+                            title={
+                              <div className="ant-tooltip-inner-box">
                                 <div
-                                  ref={provided.innerRef}
-                                  {...provided.droppableProps}
+                                  onClick={removeList(listIndex)}
+                                  style={{
+                                    cursor: "pointer",
+                                    display: "inline-block",
+                                    paddingRight: "4px",
+                                    fontSize: "1.5em",
+                                  }}
                                 >
-                                  {cards.map(
-                                    (
-                                      {
-                                        card,
-                                        hidden,
-                                        type,
-                                        title,
-                                        page,
-                                        pageId,
-                                        cortexIds,
-                                        vehicleWeaponId,
-                                        warjackWeaponIds,
-                                        subtype,
-                                        faction,
-                                        details,
-                                      },
-                                      cardIndex
-                                    ) => (
-                                      <Draggable
-                                        key={`${page}_${listIndex}_${cardIndex}`}
-                                        draggableId={`${page}_${listIndex}_${cardIndex}`}
-                                        index={cardIndex}
+                                  <DeleteOutlined />
+                                </div>
+                                <div
+                                  onClick={addEmptyList(listIndex)}
+                                  style={{
+                                    cursor: "pointer",
+                                    display: "inline-block",
+                                    padding: "0 4px",
+                                    fontSize: "1.5em",
+                                  }}
+                                >
+                                  <PlusSquareOutlined />
+                                </div>
+                                <div
+                                  onClick={moveListBy(listIndex, -1)}
+                                  style={{
+                                    cursor: "pointer",
+                                    display: "inline-block",
+                                    padding: "0 4px",
+                                    fontSize: "1.5em",
+                                  }}
+                                >
+                                  <UpSquareOutlined />
+                                </div>
+                                <div
+                                  onClick={moveListBy(listIndex, 1)}
+                                  style={{
+                                    cursor: "pointer",
+                                    display: "inline-block",
+                                    paddingLeft: "4px",
+                                    fontSize: "1.5em",
+                                  }}
+                                >
+                                  <DownSquareOutlined />
+                                </div>
+                              </div>
+                            }
+                          >
+                            <div
+                              style={{ cursor: "pointer" }}
+                              className="header"
+                            >
+                              <Row>
+                                <Col span={16} className="army-list-title">
+                                  <TextArea
+                                    placeholder={generateListNamePlaceholder(
+                                      cards,
+                                      factions,
+                                      "Name your list"
+                                    )}
+                                    value={title}
+                                    maxLength={30}
+                                    autoSize
+                                    onChange={setListTitle(listIndex)}
+                                  />
+                                </Col>
+                                <Col span={8} className="faction-icons">
+                                  {Object.entries(
+                                    cards.reduce(
+                                      (acc, card) => ({
+                                        ...acc,
+                                        ...(card.faction
+                                          ? {
+                                              [card.faction]:
+                                                (acc[card.faction] || 0) + 1,
+                                            }
+                                          : {
+                                              Universal:
+                                                (acc.Universal || 0) + 1,
+                                            }),
+                                      }),
+                                      {}
+                                    )
+                                  )
+                                    .sort()
+                                    .map(([faction, count], i) => (
+                                      <Badge
+                                        size="small"
+                                        key={`badge${i}`}
+                                        count={count}
+                                        offset={[0, 10]}
                                       >
-                                        {(provided) => (
+                                        <FactionImage faction={faction} />
+                                      </Badge>
+                                    ))}
+                                </Col>
+                              </Row>
+                            </div>
+                          </Tooltip>
+
+                          <div key={`cards_${listIndex}`}>
+                            {cards.map(
+                              (
+                                {
+                                  card,
+                                  hidden,
+                                  type,
+                                  title,
+                                  page,
+                                  pageId,
+                                  cortexIds,
+                                  vehicleWeaponId,
+                                  warjackWeaponIds,
+                                  subtype,
+                                  faction,
+                                  details,
+                                },
+                                cardIndex
+                              ) => (
+                                <div
+                                  className="body"
+                                  key={`${page}_${listIndex}_${cardIndex}`}
+                                >
+                                  <Card
+                                    hoverable
+                                    className={["card", faction, type]}
+                                  >
+                                    <Card.Meta
+                                      onClick={toggleCard(
+                                        listIndex,
+                                        cardIndex,
+                                        pageId,
+                                        card
+                                      )}
+                                      avatar={
+                                        faction ? (
                                           <div
-                                            className="body"
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
+                                            style={{
+                                              height: "25px",
+                                              width: "35px",
+                                              textAlign: "center",
+                                            }}
                                           >
-                                            <Card
-                                              hoverable
-                                              className={[
-                                                "card",
-                                                faction,
-                                                type,
-                                              ]}
-                                            >
-                                              <Card.Meta
-                                                onClick={toggleCard(
-                                                  listIndex,
-                                                  cardIndex,
-                                                  pageId,
-                                                  card
-                                                )}
-                                                avatar={
-                                                  faction ? (
-                                                    <div
-                                                      style={{
-                                                        height: "25px",
-                                                        width: "35px",
-                                                        textAlign: "center",
-                                                      }}
-                                                    >
-                                                      {!details ||
-                                                      !details.deploymentCost ? (
-                                                        <FactionImage
-                                                          faction={faction}
-                                                        />
-                                                      ) : (
-                                                        <>
-                                                          <FactionImage
-                                                            faction={faction}
-                                                            height="23px"
-                                                          />
-                                                          <div className="deployment-cost">
-                                                            DC{" "}
-                                                            {
-                                                              details.deploymentCost
-                                                            }
-                                                          </div>
-                                                        </>
-                                                      )}
-                                                    </div>
-                                                  ) : (
-                                                    <FactionImage faction="Universal" />
-                                                  )
-                                                }
-                                                title={
-                                                  <>
-                                                    <div>{title}</div>
-                                                    <div className="card-type">
-                                                      {(faction || "").replace(
-                                                        /_/g,
-                                                        " "
-                                                      )}
-                                                      {subtype
-                                                        ? " " + subtype
-                                                        : ""}
-                                                      {type ? " " + type : ""}
-                                                    </div>
-                                                    <div>
-                                                      <span className="subtitle">
-                                                        {[
-                                                          ...(!details ||
-                                                          !details.vehicleWeaponSelection ||
-                                                          !vehicleWeaponName(
-                                                            details.vehicleWeaponSelection,
-                                                            vehicleWeaponId
-                                                          )
-                                                            ? []
-                                                            : [
-                                                                vehicleWeaponName(
-                                                                  details.vehicleWeaponSelection,
-                                                                  vehicleWeaponId
-                                                                ),
-                                                              ]),
-                                                          ...(!details ||
-                                                          !details.cortexSelections ||
-                                                          !cortexName(
-                                                            details.cortexSelections,
-                                                            cortexIds
-                                                          )
-                                                            ? []
-                                                            : [
-                                                                cortexName(
-                                                                  details.cortexSelections,
-                                                                  cortexIds
-                                                                ),
-                                                              ]),
-                                                          ...(!details ||
-                                                          !details.warjackWeaponSelections ||
-                                                          !warjackWeaponIds ||
-                                                          warjackWeaponIds.length ===
-                                                            0
-                                                            ? []
-                                                            : warjackWeaponNamesSubtitle(
-                                                                details.warjackWeaponSelections,
-                                                                warjackWeaponIds
-                                                              )),
-                                                        ].join(", ")}
-                                                      </span>
-                                                    </div>
-                                                  </>
-                                                }
-                                              />
-                                              {hidden ? (
-                                                <></>
-                                              ) : !details ? (
-                                                <div
-                                                  style={{
-                                                    margin: "10px 0",
-                                                    textAlign: "center",
-                                                  }}
-                                                >
-                                                  <SyncOutlined
-                                                    spin
-                                                    style={{ fontSize: "23px" }}
-                                                  />
+                                            {!details ||
+                                            !details.deploymentCost ? (
+                                              <FactionImage faction={faction} />
+                                            ) : (
+                                              <>
+                                                <FactionImage
+                                                  faction={faction}
+                                                  height="23px"
+                                                />
+                                                <div className="deployment-cost">
+                                                  DC {details.deploymentCost}
                                                 </div>
-                                              ) : (
-                                                <div className="card-content">
-                                                  {!details.modelStats ||
-                                                  Object.keys(
-                                                    details.modelStats
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <div className="model-stats">
-                                                      {Object.entries(
-                                                        details.modelStats
-                                                      ).map(
-                                                        (
-                                                          [name, stat],
-                                                          index
-                                                        ) => (
-                                                          <div
-                                                            key={`${name}_stat`}
-                                                          >
-                                                            <div>{name}</div>
-                                                            <div>{stat}</div>
-                                                          </div>
-                                                        )
-                                                      )}
-                                                    </div>
-                                                  )}
-                                                  {!details.cortexSelections ||
-                                                  Object.entries(
-                                                    details.cortexSelections
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <Select
-                                                        suffixIcon={
-                                                          <CaretDownOutlined />
-                                                        }
-                                                        className="select-warjack-cortex"
-                                                        defaultValue="none"
-                                                        onClick={(event) =>
-                                                          event.stopPropagation()
-                                                        }
-                                                        onSelect={setCardCortex(
-                                                          listIndex,
-                                                          cardIndex,
-                                                          pageId
-                                                        )}
-                                                        value={
-                                                          !cortexIds
-                                                            ? "none"
-                                                            : cortexName(
-                                                                details.cortexSelections,
-                                                                cortexIds
-                                                              )
-                                                        }
-                                                        getPopupContainer={() =>
-                                                          document.querySelectorAll(
-                                                            ".card"
-                                                          )[cardIndex]
-                                                        }
-                                                      >
-                                                        <Select.Option
-                                                          key={"cortex_-1"}
-                                                          label={undefined}
-                                                          value="none"
-                                                          onClick={(event) =>
-                                                            event.stopPropagation()
-                                                          }
+                                              </>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <FactionImage faction="Universal" />
+                                        )
+                                      }
+                                      title={
+                                        <>
+                                          <div>{title}</div>
+                                          <div className="card-type">
+                                            {(faction || "").replace(/_/g, " ")}
+                                            {subtype ? " " + subtype : ""}
+                                            {type ? " " + type : ""}
+                                          </div>
+                                          <div>
+                                            <span className="subtitle">
+                                              {[
+                                                ...(!details ||
+                                                !details.vehicleWeaponSelection ||
+                                                !vehicleWeaponName(
+                                                  details.vehicleWeaponSelection,
+                                                  vehicleWeaponId
+                                                )
+                                                  ? []
+                                                  : [
+                                                      vehicleWeaponName(
+                                                        details.vehicleWeaponSelection,
+                                                        vehicleWeaponId
+                                                      ),
+                                                    ]),
+                                                ...(!details ||
+                                                !details.cortexSelections ||
+                                                !cortexName(
+                                                  details.cortexSelections,
+                                                  cortexIds
+                                                )
+                                                  ? []
+                                                  : [
+                                                      cortexName(
+                                                        details.cortexSelections,
+                                                        cortexIds
+                                                      ),
+                                                    ]),
+                                                ...(!details ||
+                                                !details.warjackWeaponSelections ||
+                                                !warjackWeaponIds ||
+                                                warjackWeaponIds.length === 0
+                                                  ? []
+                                                  : warjackWeaponNamesSubtitle(
+                                                      details.warjackWeaponSelections,
+                                                      warjackWeaponIds
+                                                    )),
+                                              ].join(", ")}
+                                            </span>
+                                          </div>
+                                        </>
+                                      }
+                                    />
+                                    {hidden ? (
+                                      <></>
+                                    ) : !details ? (
+                                      <div
+                                        style={{
+                                          margin: "10px 0",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        <SyncOutlined
+                                          spin
+                                          style={{ fontSize: "23px" }}
+                                        />
+                                      </div>
+                                    ) : (
+                                      <div className="card-content">
+                                        {!details.modelStats ||
+                                        Object.keys(details.modelStats)
+                                          .length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          <div className="model-stats">
+                                            {Object.entries(
+                                              details.modelStats
+                                            ).map(([name, stat], index) => (
+                                              <div key={`${name}_stat`}>
+                                                <div>{name}</div>
+                                                <div>{stat}</div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        )}
+                                        {!details.cortexSelections ||
+                                        Object.entries(details.cortexSelections)
+                                          .length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          <>
+                                            <Select
+                                              suffixIcon={<CaretDownOutlined />}
+                                              className="select-warjack-cortex"
+                                              defaultValue="none"
+                                              onClick={(event) =>
+                                                event.stopPropagation()
+                                              }
+                                              onSelect={setCardCortex(
+                                                listIndex,
+                                                cardIndex,
+                                                pageId
+                                              )}
+                                              value={
+                                                !cortexIds
+                                                  ? "none"
+                                                  : cortexName(
+                                                      details.cortexSelections,
+                                                      cortexIds
+                                                    )
+                                              }
+                                              getPopupContainer={() =>
+                                                document.querySelectorAll(
+                                                  ".card"
+                                                )[cardIndex]
+                                              }
+                                            >
+                                              <Select.Option
+                                                key={"cortex_-1"}
+                                                label={undefined}
+                                                value="none"
+                                                onClick={(event) =>
+                                                  event.stopPropagation()
+                                                }
+                                              >
+                                                <div>
+                                                  <h3>Select Cortex</h3>
+                                                </div>
+                                              </Select.Option>
+                                              {Object.entries(
+                                                details.cortexSelections
+                                              ).map(
+                                                (
+                                                  [cortex, advantages],
+                                                  index
+                                                ) => (
+                                                  <Select.Option
+                                                    key={`cortex_${index}`}
+                                                    label={Object.values(
+                                                      advantages
+                                                    ).map(
+                                                      ({ categoryId }) =>
+                                                        categoryId
+                                                    )}
+                                                    value={cortex}
+                                                    onClick={(event) =>
+                                                      event.stopPropagation()
+                                                    }
+                                                  >
+                                                    <h3>{cortex}</h3>
+                                                    {Object.entries(
+                                                      advantages
+                                                    ).map(
+                                                      (
+                                                        [rule, { text }],
+                                                        advantageIndex
+                                                      ) => (
+                                                        <div
+                                                          key={`cortex_${index}_advantage_${advantageIndex}`}
+                                                          className="model-cortex-special-rules"
                                                         >
-                                                          <div>
-                                                            <h3>
-                                                              Select Cortex
-                                                            </h3>
-                                                          </div>
-                                                        </Select.Option>
-                                                        {Object.entries(
-                                                          details.cortexSelections
-                                                        ).map(
-                                                          (
-                                                            [
-                                                              cortex,
-                                                              advantages,
-                                                            ],
-                                                            index
-                                                          ) => (
-                                                            <Select.Option
-                                                              key={`cortex_${index}`}
-                                                              label={Object.values(
-                                                                advantages
-                                                              ).map(
-                                                                ({
-                                                                  categoryId,
-                                                                }) => categoryId
-                                                              )}
-                                                              value={cortex}
-                                                              onClick={(
-                                                                event
-                                                              ) =>
-                                                                event.stopPropagation()
-                                                              }
-                                                            >
-                                                              <h3>{cortex}</h3>
-                                                              {Object.entries(
-                                                                advantages
-                                                              ).map(
-                                                                (
-                                                                  [
-                                                                    rule,
-                                                                    { text },
-                                                                  ],
-                                                                  advantageIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={`cortex_${index}_advantage_${advantageIndex}`}
-                                                                    className="model-cortex-special-rules"
-                                                                  >
-                                                                    <span>
-                                                                      {markChargedOrSpike(
-                                                                        faction,
-                                                                        text
-                                                                      )}
-                                                                      {rule}
-                                                                    </span>{" "}
-                                                                    <span>
-                                                                      - {text}
-                                                                    </span>
-                                                                  </div>
-                                                                )
-                                                              )}
-                                                            </Select.Option>
-                                                          )
-                                                        )}
-                                                      </Select>
-                                                    </>
-                                                  )}
-                                                  {!details.weaponPoints ? (
-                                                    <></>
-                                                  ) : (
-                                                    <div className="special-rules">
-                                                      <span>Weapon Points</span>{" "}
-                                                      <span>
-                                                        - {details.weaponPoints}
-                                                      </span>
-                                                    </div>
-                                                  )}
-                                                  {!details.hardpointNames ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      {details.hardpointNames.map(
-                                                        (
-                                                          hardpointName,
+                                                          <span>
+                                                            {markChargedOrSpike(
+                                                              faction,
+                                                              text
+                                                            )}
+                                                            {rule}
+                                                          </span>{" "}
+                                                          <span>- {text}</span>
+                                                        </div>
+                                                      )
+                                                    )}
+                                                  </Select.Option>
+                                                )
+                                              )}
+                                            </Select>
+                                          </>
+                                        )}
+                                        {!details.weaponPoints ? (
+                                          <></>
+                                        ) : (
+                                          <div className="special-rules">
+                                            <span>Weapon Points</span>{" "}
+                                            <span>
+                                              - {details.weaponPoints}
+                                            </span>
+                                          </div>
+                                        )}
+                                        {!details.hardpointNames ? (
+                                          <></>
+                                        ) : (
+                                          <>
+                                            {details.hardpointNames.map(
+                                              (
+                                                hardpointName,
+                                                hardpointNameIndex
+                                              ) =>
+                                                !details.warjackWeaponSelections ||
+                                                Object.keys(
+                                                  details.warjackWeaponSelections
+                                                ).length === 0 ? (
+                                                  <></>
+                                                ) : (
+                                                  <div
+                                                    key={`warjack_weapon_${hardpointNameIndex}`}
+                                                  >
+                                                    <Select
+                                                      suffixIcon={
+                                                        <CaretDownOutlined />
+                                                      }
+                                                      className="select-warjack-weapon"
+                                                      defaultValue="none"
+                                                      onClick={(event) =>
+                                                        event.stopPropagation()
+                                                      }
+                                                      onSelect={setCardWarjackWeapons(
+                                                        listIndex,
+                                                        cardIndex,
+                                                        hardpointNameIndex,
+                                                        pageId
+                                                      )}
+                                                      value={
+                                                        !warjackWeaponIds ||
+                                                        !warjackWeaponIds[
                                                           hardpointNameIndex
-                                                        ) =>
-                                                          !details.warjackWeaponSelections ||
-                                                          Object.keys(
-                                                            details.warjackWeaponSelections
-                                                          ).length === 0 ? (
-                                                            <></>
-                                                          ) : (
-                                                            <div
-                                                              key={`warjack_weapon_${hardpointNameIndex}`}
-                                                            >
-                                                              <Select
-                                                                suffixIcon={
-                                                                  <CaretDownOutlined />
-                                                                }
-                                                                className="select-warjack-weapon"
-                                                                defaultValue="none"
-                                                                onClick={(
-                                                                  event
-                                                                ) =>
-                                                                  event.stopPropagation()
-                                                                }
-                                                                onSelect={setCardWarjackWeapons(
-                                                                  listIndex,
-                                                                  cardIndex,
-                                                                  hardpointNameIndex,
-                                                                  pageId
-                                                                )}
-                                                                value={
-                                                                  !warjackWeaponIds ||
-                                                                  !warjackWeaponIds[
-                                                                    hardpointNameIndex
-                                                                  ]
-                                                                    ? "none"
-                                                                    : warjackWeaponNames(
-                                                                        faction,
-                                                                        warjackWeapons,
-                                                                        details.warjackWeaponSelections,
-                                                                        warjackWeaponIds[
-                                                                          hardpointNameIndex
-                                                                        ]
-                                                                      )
-                                                                }
-                                                                getPopupContainer={() =>
-                                                                  document.querySelectorAll(
-                                                                    ".card"
-                                                                  )[cardIndex]
-                                                                }
-                                                              >
-                                                                <Select.Option
-                                                                  key={`warjack_weapon_${hardpointNameIndex}_-1`}
-                                                                  label={
-                                                                    undefined
-                                                                  }
-                                                                  value="none"
-                                                                  onClick={(
-                                                                    event
-                                                                  ) =>
-                                                                    event.stopPropagation()
-                                                                  }
-                                                                >
-                                                                  <div
-                                                                    className="model-weapons"
-                                                                    style={{
-                                                                      height:
-                                                                        "52px",
-                                                                    }}
-                                                                  ></div>
-                                                                </Select.Option>
-                                                                {Object.values(
-                                                                  details.warjackWeaponSelections
-                                                                )
-                                                                  .filter(
-                                                                    ({
-                                                                      location,
-                                                                    }) =>
-                                                                      location ===
-                                                                      hardpointName
-                                                                  )
-                                                                  .map(
-                                                                    (
-                                                                      {
-                                                                        name,
-                                                                        page,
-                                                                        pageId,
-                                                                        cost,
-                                                                        location,
-                                                                      },
-                                                                      index
-                                                                    ) => (
-                                                                      <Select.Option
-                                                                        key={`warjack_weapon_${hardpointNameIndex}_${index}`}
-                                                                        label={
-                                                                          pageId
-                                                                        }
-                                                                        value={
-                                                                          name
-                                                                        }
-                                                                        onClick={(
-                                                                          event
-                                                                        ) =>
-                                                                          event.stopPropagation()
-                                                                        }
-                                                                      >
-                                                                        <>
-                                                                          {warjackWeaponNames(
-                                                                            faction,
-                                                                            warjackWeapons,
-                                                                            details.warjackWeaponSelections,
-                                                                            pageId
-                                                                          )}
-                                                                        </>
-                                                                      </Select.Option>
-                                                                    )
-                                                                  )}
-                                                              </Select>
-                                                            </div>
-                                                          )
-                                                      )}
-                                                    </>
-                                                  )}
-                                                  {!details.vehicleWeaponSelection ||
-                                                  details.vehicleWeaponSelection
-                                                    .length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <div key="vehicle_weapon_selection">
-                                                      <Select
-                                                        suffixIcon={
-                                                          <CaretDownOutlined />
-                                                        }
-                                                        className="select-warjack-weapon"
-                                                        defaultValue="none"
+                                                        ]
+                                                          ? "none"
+                                                          : warjackWeaponNames(
+                                                              faction,
+                                                              warjackWeapons,
+                                                              details.warjackWeaponSelections,
+                                                              warjackWeaponIds[
+                                                                hardpointNameIndex
+                                                              ]
+                                                            )
+                                                      }
+                                                      getPopupContainer={() =>
+                                                        document.querySelectorAll(
+                                                          ".card"
+                                                        )[cardIndex]
+                                                      }
+                                                    >
+                                                      <Select.Option
+                                                        key={`warjack_weapon_${hardpointNameIndex}_-1`}
+                                                        label={undefined}
+                                                        value="none"
                                                         onClick={(event) =>
                                                           event.stopPropagation()
                                                         }
-                                                        onSelect={setCardVehicleWeapon(
-                                                          listIndex,
-                                                          cardIndex,
-                                                          pageId
-                                                        )}
-                                                        value={
-                                                          !vehicleWeaponId ||
-                                                          !details ||
-                                                          !details.vehicleWeaponSelection
-                                                            ? "none"
-                                                            : vehicleWeaponName2(
-                                                                faction,
-                                                                vehicleWeapons,
-                                                                details.vehicleWeaponSelection,
-                                                                vehicleWeaponId
-                                                              )
-                                                        }
-                                                        getPopupContainer={() =>
-                                                          document.querySelectorAll(
-                                                            ".card"
-                                                          )[cardIndex]
-                                                        }
                                                       >
-                                                        <Select.Option
-                                                          key={
-                                                            "vehicle_weapon_selection_-1"
-                                                          }
-                                                          label={undefined}
-                                                          value="none"
-                                                          onClick={(event) =>
-                                                            event.stopPropagation()
-                                                          }
-                                                        >
-                                                          <div
-                                                            className="model-weapons"
-                                                            style={{
-                                                              height: "52px",
-                                                            }}
-                                                          ></div>
-                                                        </Select.Option>
-                                                        {details.vehicleWeaponSelection.map(
+                                                        <div
+                                                          className="model-weapons"
+                                                          style={{
+                                                            height: "52px",
+                                                          }}
+                                                        ></div>
+                                                      </Select.Option>
+                                                      {Object.values(
+                                                        details.warjackWeaponSelections
+                                                      )
+                                                        .filter(
+                                                          ({ location }) =>
+                                                            location ===
+                                                            hardpointName
+                                                        )
+                                                        .map(
                                                           (
                                                             {
-                                                              text,
+                                                              name,
                                                               page,
                                                               pageId,
+                                                              cost,
+                                                              location,
                                                             },
                                                             index
                                                           ) => (
                                                             <Select.Option
-                                                              key={`vehicle_weapon_selection_${index}`}
+                                                              key={`warjack_weapon_${hardpointNameIndex}_${index}`}
                                                               label={pageId}
-                                                              value={text}
+                                                              value={name}
                                                               onClick={(
                                                                 event
                                                               ) =>
                                                                 event.stopPropagation()
                                                               }
                                                             >
-                                                              {vehicleWeaponName2(
-                                                                faction,
-                                                                vehicleWeapons,
-                                                                details.vehicleWeaponSelection,
-                                                                pageId
-                                                              )}
+                                                              <>
+                                                                {warjackWeaponNames(
+                                                                  faction,
+                                                                  warjackWeapons,
+                                                                  details.warjackWeaponSelections,
+                                                                  pageId
+                                                                )}
+                                                              </>
                                                             </Select.Option>
                                                           )
                                                         )}
-                                                      </Select>
-                                                    </div>
-                                                  )}
-                                                  {!details.weapons ||
-                                                  details.weapons.length ===
-                                                    0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    details.weapons.map(
-                                                      (weapon, index) => (
-                                                        <React.Fragment
-                                                          key={`weapon_number_${index}`}
-                                                        >
-                                                          <div className="model-weapons">
-                                                            <div>
-                                                              {weapon[
-                                                                "Attack Type"
-                                                              ] === "Melee" ? (
-                                                                <img
-                                                                  className="faction-melee"
-                                                                  alt=" "
-                                                                />
-                                                              ) : (
-                                                                <img
-                                                                  className="faction-ranged"
-                                                                  alt=" "
-                                                                />
-                                                              )}
-                                                            </div>
-                                                            <div>
-                                                              <div>
-                                                                {weapon["Name"]}
-                                                                {Object.keys(
-                                                                  weapon.specialRules ||
-                                                                    {}
-                                                                ).map(
-                                                                  (
-                                                                    rule,
-                                                                    index2
-                                                                  ) => (
-                                                                    <WeaponQuality
-                                                                      key={`weapon_number_${index}_rule_${index2}`}
-                                                                      weaponQuality={
-                                                                        rule
-                                                                      }
-                                                                    />
-                                                                  )
-                                                                )}
-                                                              </div>
-                                                              <div>
-                                                                {
-                                                                  weapon[
-                                                                    "Damage Type"
-                                                                  ]
-                                                                }
-                                                              </div>
-                                                            </div>
-                                                            <div>
-                                                              <div>RNG</div>
-                                                              <div>
-                                                                {
-                                                                  weapon[
-                                                                    "Range"
-                                                                  ]
-                                                                }
-                                                              </div>
-                                                            </div>
-                                                            <div>
-                                                              <div>POW</div>
-                                                              <div>
-                                                                {weapon["POW"]}
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                          {!weapon.specialRules ? (
-                                                            <></>
-                                                          ) : (
-                                                            Object.entries(
-                                                              weapon.specialRules
-                                                            )
-                                                              .filter(
-                                                                ([rule]) =>
-                                                                  !weaponQualities[
-                                                                    rule
-                                                                  ]
-                                                              )
-                                                              .map(
-                                                                (
-                                                                  [rule, text],
-                                                                  ruleIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={`weapon_number_${index}_${ruleIndex}`}
-                                                                    className="model-weapons-special-rules"
-                                                                  >
-                                                                    <span>
-                                                                      {markChargedOrSpike(
-                                                                        faction,
-                                                                        text
-                                                                      )}
-                                                                      {rule}
-                                                                    </span>{" "}
-                                                                    <span>
-                                                                      - {text}
-                                                                    </span>
-                                                                  </div>
-                                                                )
-                                                              )
-                                                          )}
-                                                        </React.Fragment>
-                                                      )
-                                                    )
-                                                  )}
-                                                  <div className="card-icons">
-                                                    {!details.wildCardFactions ||
-                                                    Object.values(
-                                                      details.wildCardFactions
-                                                    ).length === 0 ? (
-                                                      <></>
-                                                    ) : (
-                                                      Object.values(
-                                                        details.wildCardFactions
-                                                      ).map(
-                                                        ({ page }, index) => (
-                                                          <FactionImage
-                                                            key={`wild_card_faction_${index}`}
-                                                            faction={page}
-                                                            height="30px"
-                                                            style={{
-                                                              filter:
-                                                                "drop-shadow(0px 3px 6px hsl(200,100%,25%))",
-                                                            }}
-                                                          />
-                                                        )
-                                                      )
-                                                    )}
-                                                    {!details.baseSize ? (
-                                                      <></>
-                                                    ) : (
-                                                      <div className="metallic-circle">
-                                                        {details.baseSize.replace(
-                                                          " mm",
-                                                          ""
-                                                        )}
-                                                      </div>
-                                                    )}
-                                                    {!details.health ? (
-                                                      <></>
-                                                    ) : (
-                                                      <div className="metallic-circle">
-                                                        <HeartFilled
-                                                          style={{
-                                                            fontSize: "0.8em",
-                                                          }}
-                                                        />
-                                                        {details.health}
-                                                      </div>
-                                                    )}
-                                                    {!details.squadSize ? (
-                                                      <></>
-                                                    ) : (
-                                                      <div className="metallic-circle">
-                                                        <TeamOutlined
-                                                          style={{
-                                                            fontSize: "0.8em",
-                                                          }}
-                                                        />
-                                                        {details.squadSize}
-                                                      </div>
-                                                    )}
-                                                    {!details.advantages ||
-                                                    Object.entries(
-                                                      details.advantages
-                                                    ).length === 0 ? (
-                                                      <></>
-                                                    ) : (
-                                                      Object.entries(
-                                                        details.advantages
-                                                      ).map(
-                                                        (
-                                                          [name, text],
-                                                          index
-                                                        ) => (
-                                                          <AdvantageImage
-                                                            key={`advantage_${index}`}
-                                                            advantage={name}
-                                                          />
-                                                        )
-                                                      )
-                                                    )}
-                                                    {!details.chassisAdvantages ||
-                                                    Object.entries(
-                                                      details.chassisAdvantages
-                                                    ).length === 0 ? (
-                                                      <></>
-                                                    ) : (
-                                                      Object.entries(
-                                                        details.chassisAdvantages
-                                                      ).map(
-                                                        (
-                                                          [name, text],
-                                                          index
-                                                        ) => (
-                                                          <AdvantageImage
-                                                            key={`advantage_${index}`}
-                                                            advantage={name}
-                                                          />
-                                                        )
-                                                      )
-                                                    )}
+                                                    </Select>
                                                   </div>
-                                                  {!details.specialRules ||
-                                                  Object.entries(
-                                                    details.specialRules
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    Object.entries(
-                                                      details.specialRules
-                                                    ).map(
-                                                      ([rule, text], index) => (
-                                                        <div
-                                                          key={`special_rules_${index}`}
-                                                          className="special-rules"
-                                                        >
-                                                          <span>
-                                                            {markChargedOrSpike(
-                                                              faction,
-                                                              text
-                                                            )}
-                                                            {rule}
-                                                          </span>{" "}
-                                                          <span>- {text}</span>
-                                                        </div>
-                                                      )
-                                                    )
-                                                  )}
-                                                  {!details.chassisSpecialRules ||
-                                                  Object.entries(
-                                                    details.chassisSpecialRules
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    Object.entries(
-                                                      details.chassisSpecialRules
-                                                    ).map(
-                                                      ([rule, text], index) => (
-                                                        <div
-                                                          key={`chassis_special_rules_${index}`}
-                                                          className="special-rules"
-                                                        >
-                                                          <span>
-                                                            {markChargedOrSpike(
-                                                              faction,
-                                                              text
-                                                            )}
-                                                            {rule}
-                                                          </span>{" "}
-                                                          <span>- {text}</span>
-                                                        </div>
-                                                      )
-                                                    )
-                                                  )}
-                                                  {!details.maneuvers ||
-                                                  Object.values(
-                                                    details.maneuvers
-                                                  ).length === 0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <>
-                                                      <h3>Maneuvers</h3>
-                                                      <dl>
-                                                        {Object.entries(
-                                                          details.maneuvers
-                                                        ).map(
-                                                          (
-                                                            [rule, text],
-                                                            index
-                                                          ) => (
-                                                            <div
-                                                              key={`maneuvers_advantage_${index}`}
-                                                              className="special-rules"
-                                                            >
-                                                              <span>
-                                                                {markChargedOrSpike(
-                                                                  faction,
-                                                                  text
-                                                                )}
-                                                                {rule}
-                                                              </span>{" "}
-                                                              <span>
-                                                                - {text}
-                                                              </span>
-                                                            </div>
-                                                          )
-                                                        )}
-                                                      </dl>
-                                                    </>
-                                                  )}
-                                                  {!details.storeLinks ||
-                                                  details.storeLinks.length ===
-                                                    0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    <div className="special-rules">
-                                                      <span>
-                                                        Privateer Press Store
-                                                      </span>{" "}
-                                                      <span>
-                                                        -{" "}
-                                                        {details.storeLinks.map(
-                                                          (linkText, index) => (
-                                                            <React.Fragment
-                                                              key={`store_link_${index}`}
-                                                            >
-                                                              <span
-                                                                dangerouslySetInnerHTML={{
-                                                                  __html:
-                                                                    linkText,
-                                                                }}
-                                                              />
-                                                              {index ===
-                                                              details.storeLinks
-                                                                .length -
-                                                                1 ? (
-                                                                <></>
-                                                              ) : (
-                                                                <> </>
-                                                              )}
-                                                            </React.Fragment>
-                                                          )
-                                                        )}
-                                                      </span>
-                                                    </div>
-                                                  )}
-                                                  {!details.release ? (
-                                                    <></>
-                                                  ) : (
-                                                    <div className="special-rules">
-                                                      <span>Release</span>{" "}
-                                                      <span>
-                                                        - {details.release}
-                                                      </span>
-                                                    </div>
-                                                  )}
-                                                  {!details.lore ? (
-                                                    <></>
-                                                  ) : (
-                                                    <div className="special-rules">
-                                                      <span>Lore</span>{" "}
-                                                      <span>
-                                                        - {details.lore}
-                                                      </span>
-                                                    </div>
-                                                  )}
-                                                  {!details.pow ? (
-                                                    <></>
-                                                  ) : (
-                                                    <div className="special-rules">
-                                                      <span>Pow</span>{" "}
-                                                      <span>
-                                                        - {details.pow.text}
-                                                      </span>
-                                                    </div>
-                                                  )}
-                                                  {!details.effect ||
-                                                  details.effect.length ===
-                                                    0 ? (
-                                                    <></>
-                                                  ) : (
-                                                    details.effect.map(
-                                                      (effect, index) => (
-                                                        <p
-                                                          className="cypher-effect"
-                                                          key={`cypher_effect_${listIndex}_${cardIndex}_${index}`}
-                                                        >
-                                                          {effect}
-                                                        </p>
-                                                      )
-                                                    )
-                                                  )}
-                                                </div>
+                                                )
+                                            )}
+                                          </>
+                                        )}
+                                        {!details.vehicleWeaponSelection ||
+                                        details.vehicleWeaponSelection
+                                          .length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          <div key="vehicle_weapon_selection">
+                                            <Select
+                                              suffixIcon={<CaretDownOutlined />}
+                                              className="select-warjack-weapon"
+                                              defaultValue="none"
+                                              onClick={(event) =>
+                                                event.stopPropagation()
+                                              }
+                                              onSelect={setCardVehicleWeapon(
+                                                listIndex,
+                                                cardIndex,
+                                                pageId
                                               )}
-                                            </Card>
+                                              value={
+                                                !vehicleWeaponId ||
+                                                !details ||
+                                                !details.vehicleWeaponSelection
+                                                  ? "none"
+                                                  : vehicleWeaponName2(
+                                                      faction,
+                                                      vehicleWeapons,
+                                                      details.vehicleWeaponSelection,
+                                                      vehicleWeaponId
+                                                    )
+                                              }
+                                              getPopupContainer={() =>
+                                                document.querySelectorAll(
+                                                  ".card"
+                                                )[cardIndex]
+                                              }
+                                            >
+                                              <Select.Option
+                                                key={
+                                                  "vehicle_weapon_selection_-1"
+                                                }
+                                                label={undefined}
+                                                value="none"
+                                                onClick={(event) =>
+                                                  event.stopPropagation()
+                                                }
+                                              >
+                                                <div
+                                                  className="model-weapons"
+                                                  style={{
+                                                    height: "52px",
+                                                  }}
+                                                ></div>
+                                              </Select.Option>
+                                              {details.vehicleWeaponSelection.map(
+                                                (
+                                                  { text, page, pageId },
+                                                  index
+                                                ) => (
+                                                  <Select.Option
+                                                    key={`vehicle_weapon_selection_${index}`}
+                                                    label={pageId}
+                                                    value={text}
+                                                    onClick={(event) =>
+                                                      event.stopPropagation()
+                                                    }
+                                                  >
+                                                    {vehicleWeaponName2(
+                                                      faction,
+                                                      vehicleWeapons,
+                                                      details.vehicleWeaponSelection,
+                                                      pageId
+                                                    )}
+                                                  </Select.Option>
+                                                )
+                                              )}
+                                            </Select>
                                           </div>
                                         )}
-                                      </Draggable>
-                                    )
-                                  )}
-                                  {provided.placeholder}
+                                        {!details.weapons ||
+                                        details.weapons.length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          details.weapons.map(
+                                            (weapon, index) => (
+                                              <React.Fragment
+                                                key={`weapon_number_${index}`}
+                                              >
+                                                <div className="model-weapons">
+                                                  <div>
+                                                    {weapon["Attack Type"] ===
+                                                    "Melee" ? (
+                                                      <img
+                                                        className="faction-melee"
+                                                        alt=" "
+                                                      />
+                                                    ) : (
+                                                      <img
+                                                        className="faction-ranged"
+                                                        alt=" "
+                                                      />
+                                                    )}
+                                                  </div>
+                                                  <div>
+                                                    <div>
+                                                      {weapon["Name"]}
+                                                      {Object.keys(
+                                                        weapon.specialRules ||
+                                                          {}
+                                                      ).map((rule, index2) => (
+                                                        <WeaponQuality
+                                                          key={`weapon_number_${index}_rule_${index2}`}
+                                                          weaponQuality={rule}
+                                                        />
+                                                      ))}
+                                                    </div>
+                                                    <div>
+                                                      {weapon["Damage Type"]}
+                                                    </div>
+                                                  </div>
+                                                  <div>
+                                                    <div>RNG</div>
+                                                    <div>{weapon["Range"]}</div>
+                                                  </div>
+                                                  <div>
+                                                    <div>POW</div>
+                                                    <div>{weapon["POW"]}</div>
+                                                  </div>
+                                                </div>
+                                                {!weapon.specialRules ? (
+                                                  <></>
+                                                ) : (
+                                                  Object.entries(
+                                                    weapon.specialRules
+                                                  )
+                                                    .filter(
+                                                      ([rule]) =>
+                                                        !weaponQualities[rule]
+                                                    )
+                                                    .map(
+                                                      (
+                                                        [rule, text],
+                                                        ruleIndex
+                                                      ) => (
+                                                        <div
+                                                          key={`weapon_number_${index}_${ruleIndex}`}
+                                                          className="model-weapons-special-rules"
+                                                        >
+                                                          <span>
+                                                            {markChargedOrSpike(
+                                                              faction,
+                                                              text
+                                                            )}
+                                                            {rule}
+                                                          </span>{" "}
+                                                          <span>- {text}</span>
+                                                        </div>
+                                                      )
+                                                    )
+                                                )}
+                                              </React.Fragment>
+                                            )
+                                          )
+                                        )}
+                                        <div className="card-icons">
+                                          {!details.wildCardFactions ||
+                                          Object.values(
+                                            details.wildCardFactions
+                                          ).length === 0 ? (
+                                            <></>
+                                          ) : (
+                                            Object.values(
+                                              details.wildCardFactions
+                                            ).map(({ page }, index) => (
+                                              <FactionImage
+                                                key={`wild_card_faction_${index}`}
+                                                faction={page}
+                                                height="30px"
+                                                style={{
+                                                  filter:
+                                                    "drop-shadow(0px 3px 6px hsl(200,100%,25%))",
+                                                }}
+                                              />
+                                            ))
+                                          )}
+                                          {!details.baseSize ? (
+                                            <></>
+                                          ) : (
+                                            <div className="metallic-circle">
+                                              {details.baseSize.replace(
+                                                " mm",
+                                                ""
+                                              )}
+                                            </div>
+                                          )}
+                                          {!details.health ? (
+                                            <></>
+                                          ) : (
+                                            <div className="metallic-circle">
+                                              <HeartFilled
+                                                style={{
+                                                  fontSize: "0.8em",
+                                                }}
+                                              />
+                                              {details.health}
+                                            </div>
+                                          )}
+                                          {!details.squadSize ? (
+                                            <></>
+                                          ) : (
+                                            <div className="metallic-circle">
+                                              <TeamOutlined
+                                                style={{
+                                                  fontSize: "0.8em",
+                                                }}
+                                              />
+                                              {details.squadSize}
+                                            </div>
+                                          )}
+                                          {!details.advantages ||
+                                          Object.entries(details.advantages)
+                                            .length === 0 ? (
+                                            <></>
+                                          ) : (
+                                            Object.entries(
+                                              details.advantages
+                                            ).map(([name, text], index) => (
+                                              <AdvantageImage
+                                                key={`advantage_${index}`}
+                                                advantage={name}
+                                              />
+                                            ))
+                                          )}
+                                          {!details.chassisAdvantages ||
+                                          Object.entries(
+                                            details.chassisAdvantages
+                                          ).length === 0 ? (
+                                            <></>
+                                          ) : (
+                                            Object.entries(
+                                              details.chassisAdvantages
+                                            ).map(([name, text], index) => (
+                                              <AdvantageImage
+                                                key={`advantage_${index}`}
+                                                advantage={name}
+                                              />
+                                            ))
+                                          )}
+                                        </div>
+                                        {!details.specialRules ||
+                                        Object.entries(details.specialRules)
+                                          .length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          Object.entries(
+                                            details.specialRules
+                                          ).map(([rule, text], index) => (
+                                            <div
+                                              key={`special_rules_${index}`}
+                                              className="special-rules"
+                                            >
+                                              <span>
+                                                {markChargedOrSpike(
+                                                  faction,
+                                                  text
+                                                )}
+                                                {rule}
+                                              </span>{" "}
+                                              <span>- {text}</span>
+                                            </div>
+                                          ))
+                                        )}
+                                        {!details.chassisSpecialRules ||
+                                        Object.entries(
+                                          details.chassisSpecialRules
+                                        ).length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          Object.entries(
+                                            details.chassisSpecialRules
+                                          ).map(([rule, text], index) => (
+                                            <div
+                                              key={`chassis_special_rules_${index}`}
+                                              className="special-rules"
+                                            >
+                                              <span>
+                                                {markChargedOrSpike(
+                                                  faction,
+                                                  text
+                                                )}
+                                                {rule}
+                                              </span>{" "}
+                                              <span>- {text}</span>
+                                            </div>
+                                          ))
+                                        )}
+                                        {!details.maneuvers ||
+                                        Object.values(details.maneuvers)
+                                          .length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          <>
+                                            <h3>Maneuvers</h3>
+                                            <dl>
+                                              {Object.entries(
+                                                details.maneuvers
+                                              ).map(([rule, text], index) => (
+                                                <div
+                                                  key={`maneuvers_advantage_${index}`}
+                                                  className="special-rules"
+                                                >
+                                                  <span>
+                                                    {markChargedOrSpike(
+                                                      faction,
+                                                      text
+                                                    )}
+                                                    {rule}
+                                                  </span>{" "}
+                                                  <span>- {text}</span>
+                                                </div>
+                                              ))}
+                                            </dl>
+                                          </>
+                                        )}
+                                        {!details.storeLinks ||
+                                        details.storeLinks.length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          <div className="special-rules">
+                                            <span>Privateer Press Store</span>{" "}
+                                            <span>
+                                              -{" "}
+                                              {details.storeLinks.map(
+                                                (linkText, index) => (
+                                                  <React.Fragment
+                                                    key={`store_link_${index}`}
+                                                  >
+                                                    <span
+                                                      dangerouslySetInnerHTML={{
+                                                        __html: linkText,
+                                                      }}
+                                                    />
+                                                    {index ===
+                                                    details.storeLinks.length -
+                                                      1 ? (
+                                                      <></>
+                                                    ) : (
+                                                      <> </>
+                                                    )}
+                                                  </React.Fragment>
+                                                )
+                                              )}
+                                            </span>
+                                          </div>
+                                        )}
+                                        {!details.release ? (
+                                          <></>
+                                        ) : (
+                                          <div className="special-rules">
+                                            <span>Release</span>{" "}
+                                            <span>- {details.release}</span>
+                                          </div>
+                                        )}
+                                        {!details.lore ? (
+                                          <></>
+                                        ) : (
+                                          <div className="special-rules">
+                                            <span>Lore</span>{" "}
+                                            <span>- {details.lore}</span>
+                                          </div>
+                                        )}
+                                        {!details.pow ? (
+                                          <></>
+                                        ) : (
+                                          <div className="special-rules">
+                                            <span>Pow</span>{" "}
+                                            <span>- {details.pow.text}</span>
+                                          </div>
+                                        )}
+                                        {!details.effect ||
+                                        details.effect.length === 0 ? (
+                                          <></>
+                                        ) : (
+                                          details.effect.map(
+                                            (effect, index) => (
+                                              <p
+                                                className="cypher-effect"
+                                                key={`cypher_effect_${listIndex}_${cardIndex}_${index}`}
+                                              >
+                                                {effect}
+                                              </p>
+                                            )
+                                          )
+                                        )}
+                                      </div>
+                                    )}
+                                  </Card>
                                 </div>
-                              )}
-                            </Droppable>
-
-                            {cards.length > 0 ? (
-                              <div className="footer">
-                                <Badge
-                                  size="small"
-                                  key="_badge"
-                                  count={cards.length}
-                                  offset={[10, 5]}
-                                >
-                                  Card:
-                                </Badge>
-                                {Object.entries(
-                                  cards.reduce(
-                                    (acc, card) => ({
-                                      ...acc,
-                                      [card.type]: (acc[card.type] || 0) + 1,
-                                    }),
-                                    {}
-                                  )
-                                )
-                                  .sort()
-                                  .map(([type, count], i) => (
-                                    <Badge
-                                      size="small"
-                                      key={`badge${i}`}
-                                      count={count}
-                                      offset={[10, 5]}
-                                    >
-                                      {type}:
-                                    </Badge>
-                                  ))}
-                              </div>
-                            ) : (
-                              <></>
+                              )
                             )}
                           </div>
-                        </Col>
-                      ))}
-                    </Row>
-                  </Layout>
-                </Content>
-              </>
-            )}
-            <Droppable key={"trash_footer"} droppableId={"trash_footer"}>
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {dragging ? (
-                    <>
-                      <div className="trash-footer">
-                        <div
-                          style={{
-                            animation:
-                              "shake 0.82s cubic-bezier(.36,.07,.19,.97) both",
-                            color: "white",
-                          }}
-                        >
-                          <DeleteOutlined />
-                          <div style={{ display: "none" }}>
-                            {provided.placeholder}
-                          </div>
+
+                          {cards.length > 0 ? (
+                            <div className="footer">
+                              <Badge
+                                size="small"
+                                key="_badge"
+                                count={cards.length}
+                                offset={[10, 5]}
+                              >
+                                Card:
+                              </Badge>
+                              {Object.entries(
+                                cards.reduce(
+                                  (acc, card) => ({
+                                    ...acc,
+                                    [card.type]: (acc[card.type] || 0) + 1,
+                                  }),
+                                  {}
+                                )
+                              )
+                                .sort()
+                                .map(([type, count], i) => (
+                                  <Badge
+                                    size="small"
+                                    key={`badge${i}`}
+                                    count={count}
+                                    offset={[10, 5]}
+                                  >
+                                    {type}:
+                                  </Badge>
+                                ))}
+                            </div>
+                          ) : (
+                            <></>
+                          )}
                         </div>
-                      </div>
-                      <Footer>
-                        <div className="copyright-notice">
-                          Images originating from the Privateer Press website
-                          are © 2001—
-                          <>{new Date().getFullYear()}</> Privateer Press, Inc.
-                          All Rights Reserved. Privateer Press, warcaster and
-                          their logos are trademarks of Privateer Press, Inc.
-                          Images and trademarks used without permission. This
-                          website is unofficial and is not endorsed by Privateer
-                          Press.
-                        </div>
-                      </Footer>
-                    </>
-                  ) : (
-                    <Footer>
-                      <div className="bookmark">
-                        <Layout>
-                          <Row>
-                            <Col
-                              xs={24}
-                              sm={24}
-                              md={18}
-                              lg={18}
-                              xl={16}
-                              xxl={16}
-                            >
-                              <input
-                                value={url}
-                                onChange={setUrl}
-                                onKeyDown={open}
-                                onClick={bookmark}
-                              />
-                            </Col>
-                          </Row>
-                        </Layout>
-                      </div>
-                      <div className="copyright-notice">
-                        Images originating from the Privateer Press website are
-                        © 2001—
-                        <>{new Date().getFullYear()}</> Privateer Press, Inc.
-                        All Rights Reserved. Privateer Press, warcaster and
-                        their logos are trademarks of Privateer Press, Inc.
-                        Images and trademarks used without permission. This
-                        website is unofficial and is not endorsed by Privateer
-                        Press.
-                      </div>
-                    </Footer>
-                  )}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+                      </Col>
+                    ))}
+                  </Row>
+                </Layout>
+              </Content>
+            </>
+          )}
+
+          <div>
+            <Footer>
+              <div className="bookmark">
+                <Layout>
+                  <Row>
+                    <Col xs={24} sm={24} md={18} lg={18} xl={16} xxl={16}>
+                      <input
+                        value={url}
+                        onChange={setUrl}
+                        onKeyDown={open}
+                        onClick={bookmark}
+                      />
+                    </Col>
+                  </Row>
+                </Layout>
+              </div>
+              <div className="copyright-notice">
+                Images originating from the Privateer Press website are © 2001—
+                <>{new Date().getFullYear()}</> Privateer Press, Inc. All Rights
+                Reserved. Privateer Press, warcaster and their logos are
+                trademarks of Privateer Press, Inc. Images and trademarks used
+                without permission. This website is unofficial and is not
+                endorsed by Privateer Press.
+              </div>
+            </Footer>
+          </div>
+
           {factionModels.map(([factionName, faction, models, cadreModels]) => (
             <Drawer
               key={`drawer_${faction}`}
@@ -2084,7 +1874,6 @@ const App = connect(
         }
       ),
     })),
-    dragging: Dragging.select()(state),
     url: Url.select()(state),
     factions: Factions.select()(state),
     vehicleWeapons: VehicleWeapons.select()(state),
@@ -2096,8 +1885,6 @@ const App = connect(
       return () =>
         dispatch(Lists.toggleCard({ listIndex, cardIndex, pageId, card }));
     },
-    dragStart: (event) => dispatch(CardDragStarted(event)),
-    dragEnd: (event) => dispatch(CardDragEnded(event)),
     menuItemClicked: (page) => (event) => {
       dispatch(MenuItemClicked({ page }));
       event.stopPropagation();

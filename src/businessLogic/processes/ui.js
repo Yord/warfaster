@@ -1,13 +1,8 @@
 import { eventChannel } from "redux-saga";
 import { all, put, select, take } from "redux-saga/effects";
-import {
-  CardDragEnded,
-  CardDragStarted,
-  MenuItemClicked,
-} from "../../messages";
+import { MenuItemClicked } from "../../messages";
 import { AppSync } from "../../state/AppSync";
 import { CypherCodecs } from "../../state/CypherCodecs";
-import { Dragging } from "../../state/Dragging";
 import { FactionModels } from "../../state/FactionModels";
 import { Requests } from "../../state/io/Requests";
 import { Lists } from "../../state/Lists";
@@ -22,10 +17,6 @@ import { toBase62, fromBase62 } from "./base62";
 function* ui() {
   yield all([
     addCard(),
-    removeCards(),
-    setDraggingFalse(),
-    setDraggingTrue(),
-    updateCards(),
     updateUrl(),
     parseListsFromQuery(),
     parseListsFromQuery2(),
@@ -36,53 +27,6 @@ function* ui() {
 }
 
 export { ui };
-
-function* updateCards() {
-  while (true) {
-    const { payload } = yield take(CardDragEnded().type);
-    const { reason, source, destination } = payload;
-    if (reason === "DROP" && destination.droppableId.startsWith("cards_")) {
-      const sourceListIndex = parseInt(
-        source.droppableId.replace("cards_", ""),
-        10
-      );
-      const sourcePosition = source.index;
-
-      const destinationListIndex = parseInt(
-        destination.droppableId.replace("cards_", ""),
-        10
-      );
-      const destinationPosition = destination.index;
-
-      yield put(
-        Lists.moveCard({
-          source: { listIndex: sourceListIndex, cardIndex: sourcePosition },
-          destination: {
-            listIndex: destinationListIndex,
-            cardIndex: destinationPosition,
-          },
-        })
-      );
-    }
-  }
-}
-
-function* removeCards() {
-  while (true) {
-    const { payload } = yield take(CardDragEnded().type);
-    const { reason, source, destination } = payload;
-    if (reason === "DROP" && destination.droppableId.startsWith("trash")) {
-      const listIndex = parseInt(source.droppableId.replace("cards_", ""), 10);
-      const cardIndex = source.index;
-
-      yield put(
-        Lists.removeCard({
-          source: { listIndex, cardIndex },
-        })
-      );
-    }
-  }
-}
 
 function* addCard() {
   while (true) {
@@ -95,18 +39,6 @@ function* addCard() {
       const pageId = yield select(PageIds.selectByPage(page));
       yield put(Lists.addCard({ pageId }));
     }
-  }
-}
-
-function* setDraggingTrue() {
-  while (yield take(CardDragStarted().type)) {
-    yield put(Dragging.activate());
-  }
-}
-
-function* setDraggingFalse() {
-  while (yield take(CardDragEnded().type)) {
-    yield put(Dragging.deactivate());
   }
 }
 

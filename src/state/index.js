@@ -3,7 +3,6 @@ import { CadreCategoryMembers } from "./CadreCategoryMembers";
 import { CadreModels } from "./CadreModels";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
-import { Dragging } from "./Dragging";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
 import { Lists } from "./Lists";
@@ -35,7 +34,6 @@ const objects = [
   WarjackWeapons,
   WildCardModels,
   // UI
-  Dragging,
   Lists,
   // General
   Version,
