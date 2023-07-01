@@ -11,6 +11,7 @@ import { Models } from "./Models";
 import { PageIds } from "./PageIds";
 import { ParserNames } from "./ParserNames";
 import { Requests } from "./io/Requests";
+import { ToggleSections } from "./ToggleSections";
 import { Url } from "./Url";
 import { VehicleWeapons } from "./VehicleWeapons";
 import { Version } from "./Version";
@@ -31,6 +32,7 @@ const objects = [
   PageIds,
   ParserNames,
   Requests,
+  ToggleSections,
   Url,
   VehicleWeapons,
   WarjackWeapons,

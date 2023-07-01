@@ -65,6 +65,7 @@ import { FactionModels } from "../state/FactionModels";
 import { Factions } from "../state/Factions";
 import { Lists } from "../state/Lists";
 import { PageIds } from "../state/PageIds";
+import { ToggleSections } from "../state/ToggleSections";
 import { Url } from "../state/Url";
 import { WildCardModels } from "../state/WildCardModels";
 import { Models } from "../state/Models";
@@ -346,6 +347,8 @@ function AppPresentation({
   cadres,
   editMode,
   toggleEditMode,
+  toggledSections,
+  toggleSection,
 }) {
   const [openDrawer, setOpenDrawer] = React.useState("");
 
@@ -767,7 +770,7 @@ function AppPresentation({
                                           </div>
                                         }
                                       />
-                                      {hidden ? (
+                                      {hidden || editMode ? (
                                         <></>
                                       ) : !details ? (
                                         <div
@@ -878,7 +881,11 @@ function AppPresentation({
                                                             key={`cortex_${index}_advantage_${advantageIndex}`}
                                                             className="model-cortex-special-rules"
                                                           >
-                                                            <span>
+                                                            <span
+                                                              onClick={toggleSection(
+                                                                rule
+                                                              )}
+                                                            >
                                                               {markChargedOrSpike(
                                                                 faction,
                                                                 text
@@ -886,7 +893,12 @@ function AppPresentation({
                                                               {rule}
                                                             </span>{" "}
                                                             <span>
-                                                              - {text}
+                                                              -{" "}
+                                                              {toggledSections[
+                                                                rule
+                                                              ]
+                                                                ? "Click to expand"
+                                                                : text}
                                                             </span>
                                                           </div>
                                                         )
@@ -952,7 +964,9 @@ function AppPresentation({
                                                                 details.warjackWeaponSelections,
                                                                 warjackWeaponIds[
                                                                   hardpointNameIndex
-                                                                ]
+                                                                ],
+                                                                toggleSection,
+                                                                toggledSections
                                                               )
                                                         }
                                                         getPopupContainer={() =>
@@ -1010,7 +1024,9 @@ function AppPresentation({
                                                                     faction,
                                                                     warjackWeapons,
                                                                     details.warjackWeaponSelections,
-                                                                    pageId
+                                                                    pageId,
+                                                                    toggleSection,
+                                                                    toggledSections
                                                                   )}
                                                                 </>
                                                               </Select.Option>
@@ -1051,7 +1067,9 @@ function AppPresentation({
                                                         faction,
                                                         vehicleWeapons,
                                                         details.vehicleWeaponSelection,
-                                                        vehicleWeaponId
+                                                        vehicleWeaponId,
+                                                        toggleSection,
+                                                        toggledSections
                                                       )
                                                 }
                                                 getPopupContainer={() =>
@@ -1094,7 +1112,9 @@ function AppPresentation({
                                                         faction,
                                                         vehicleWeapons,
                                                         details.vehicleWeaponSelection,
-                                                        pageId
+                                                        pageId,
+                                                        toggleSection,
+                                                        toggledSections
                                                       )}
                                                     </Select.Option>
                                                   )
@@ -1177,7 +1197,11 @@ function AppPresentation({
                                                             key={`weapon_number_${index}_${ruleIndex}`}
                                                             className="model-weapons-special-rules"
                                                           >
-                                                            <span>
+                                                            <span
+                                                              onClick={toggleSection(
+                                                                rule
+                                                              )}
+                                                            >
                                                               {markChargedOrSpike(
                                                                 faction,
                                                                 text
@@ -1185,7 +1209,12 @@ function AppPresentation({
                                                               {rule}
                                                             </span>{" "}
                                                             <span>
-                                                              - {text}
+                                                              -{" "}
+                                                              {toggledSections[
+                                                                rule
+                                                              ]
+                                                                ? "Click to expand"
+                                                                : text}
                                                             </span>
                                                           </div>
                                                         )
@@ -1292,14 +1321,21 @@ function AppPresentation({
                                                 key={`special_rules_${index}`}
                                                 className="special-rules"
                                               >
-                                                <span>
+                                                <span
+                                                  onClick={toggleSection(rule)}
+                                                >
                                                   {markChargedOrSpike(
                                                     faction,
                                                     text
                                                   )}
                                                   {rule}
                                                 </span>{" "}
-                                                <span>- {text}</span>
+                                                <span>
+                                                  -{" "}
+                                                  {toggledSections[rule]
+                                                    ? "Click to expand"
+                                                    : text}
+                                                </span>
                                               </div>
                                             ))
                                           )}
@@ -1316,14 +1352,21 @@ function AppPresentation({
                                                 key={`chassis_special_rules_${index}`}
                                                 className="special-rules"
                                               >
-                                                <span>
+                                                <span
+                                                  onClick={toggleSection(rule)}
+                                                >
                                                   {markChargedOrSpike(
                                                     faction,
                                                     text
                                                   )}
                                                   {rule}
                                                 </span>{" "}
-                                                <span>- {text}</span>
+                                                <span>
+                                                  -{" "}
+                                                  {toggledSections[rule]
+                                                    ? "Click to expand"
+                                                    : text}
+                                                </span>
                                               </div>
                                             ))
                                           )}
@@ -1342,14 +1385,23 @@ function AppPresentation({
                                                     key={`maneuvers_advantage_${index}`}
                                                     className="special-rules"
                                                   >
-                                                    <span>
+                                                    <span
+                                                      onClick={toggleSection(
+                                                        rule
+                                                      )}
+                                                    >
                                                       {markChargedOrSpike(
                                                         faction,
                                                         text
                                                       )}
                                                       {rule}
                                                     </span>{" "}
-                                                    <span>- {text}</span>
+                                                    <span>
+                                                      -{" "}
+                                                      {toggledSections[rule]
+                                                        ? "Click to expand"
+                                                        : text}
+                                                    </span>
                                                   </div>
                                                 ))}
                                               </dl>
@@ -1360,30 +1412,40 @@ function AppPresentation({
                                             <></>
                                           ) : (
                                             <div className="special-rules">
-                                              <span>Privateer Press Store</span>{" "}
+                                              <span
+                                                onClick={toggleSection(
+                                                  "privateer press store"
+                                                )}
+                                              >
+                                                Privateer Press Store
+                                              </span>{" "}
                                               <span>
                                                 -{" "}
-                                                {details.storeLinks.map(
-                                                  (linkText, index) => (
-                                                    <React.Fragment
-                                                      key={`store_link_${index}`}
-                                                    >
-                                                      <span
-                                                        dangerouslySetInnerHTML={{
-                                                          __html: linkText,
-                                                        }}
-                                                      />
-                                                      {index ===
-                                                      details.storeLinks
-                                                        .length -
-                                                        1 ? (
-                                                        <></>
-                                                      ) : (
-                                                        <> </>
-                                                      )}
-                                                    </React.Fragment>
-                                                  )
-                                                )}
+                                                {toggledSections[
+                                                  "privateer press store"
+                                                ]
+                                                  ? "Click to expand"
+                                                  : details.storeLinks.map(
+                                                      (linkText, index) => (
+                                                        <React.Fragment
+                                                          key={`store_link_${index}`}
+                                                        >
+                                                          <span
+                                                            dangerouslySetInnerHTML={{
+                                                              __html: linkText,
+                                                            }}
+                                                          />
+                                                          {index ===
+                                                          details.storeLinks
+                                                            .length -
+                                                            1 ? (
+                                                            <></>
+                                                          ) : (
+                                                            <> </>
+                                                          )}
+                                                        </React.Fragment>
+                                                      )
+                                                    )}
                                               </span>
                                             </div>
                                           )}
@@ -1391,16 +1453,36 @@ function AppPresentation({
                                             <></>
                                           ) : (
                                             <div className="special-rules">
-                                              <span>Release</span>{" "}
-                                              <span>- {details.release}</span>
+                                              <span
+                                                onClick={toggleSection(
+                                                  "release"
+                                                )}
+                                              >
+                                                Release
+                                              </span>{" "}
+                                              <span>
+                                                -{" "}
+                                                {toggledSections["release"]
+                                                  ? "Click to expand"
+                                                  : details.release}
+                                              </span>
                                             </div>
                                           )}
                                           {!details.lore ? (
                                             <></>
                                           ) : (
                                             <div className="special-rules">
-                                              <span>Lore</span>{" "}
-                                              <span>- {details.lore}</span>
+                                              <span
+                                                onClick={toggleSection("lore")}
+                                              >
+                                                Lore
+                                              </span>{" "}
+                                              <span>
+                                                -{" "}
+                                                {toggledSections["lore"]
+                                                  ? "Click to expand"
+                                                  : details.lore}
+                                              </span>
                                             </div>
                                           )}
                                           {!details.pow ? (
@@ -1939,12 +2021,13 @@ const App = connect(
     warjackWeapons: WarjackWeapons.select()(state),
     cadres: CadreCategoryMembers.select()(state),
     editMode: EditMode.select()(state),
+    toggledSections: ToggleSections.select()(state),
   }),
   (dispatch) => ({
-    toggleCard: (listIndex, cardIndex, pageId, card) => {
-      return () =>
-        dispatch(Lists.toggleCard({ listIndex, cardIndex, pageId, card }));
-    },
+    toggleCard: (listIndex, cardIndex, pageId, card) => () =>
+      dispatch(Lists.toggleCard({ listIndex, cardIndex, pageId, card })),
+    toggleSection: (section) => () =>
+      dispatch(ToggleSections.toggle({ section })),
     menuItemClicked: (page) => (event) => {
       dispatch(MenuItemClicked({ page }));
       event.stopPropagation();
@@ -2090,7 +2173,9 @@ function vehicleWeaponName2(
   faction,
   vehicleWeapons,
   vehicleWeaponSelection,
-  vehicleWeaponId
+  vehicleWeaponId,
+  toggleSection,
+  toggledSections
 ) {
   const vehicleWeapon = vehicleWeaponSelection.find(
     ({ pageId }) => pageId === vehicleWeaponId
@@ -2157,11 +2242,13 @@ function vehicleWeaponName2(
                         key={`vehicle_weapon_selection_number_${index}_${ruleIndex}`}
                         className="model-weapons-special-rules"
                       >
-                        <span>
+                        <span onClick={toggleSection(rule)}>
                           {markChargedOrSpike(faction, text)}
                           {rule}
                         </span>{" "}
-                        <span>- {text}</span>
+                        <span>
+                          - {toggledSections[rule] ? "Click to expand" : text}
+                        </span>
                       </div>
                     ))
                 )}
@@ -2238,7 +2325,9 @@ function warjackWeaponNames(
   faction,
   warjackWeapons,
   warjackWeaponSelections,
-  weaponId
+  weaponId,
+  toggleSection,
+  toggledSections
 ) {
   const weapon = Object.values(warjackWeaponSelections).find(
     ({ pageId }) => pageId === weaponId
@@ -2302,11 +2391,13 @@ function warjackWeaponNames(
                       key={`weapon_selection_number_${index}_${ruleIndex}`}
                       className="model-weapons-special-rules"
                     >
-                      <span>
+                      <span onClick={toggleSection(rule)}>
                         {markChargedOrSpike(faction, text)}
                         {rule}
                       </span>{" "}
-                      <span>- {text}</span>
+                      <span>
+                        - {toggledSections[rule] ? "Click to expand" : text}
+                      </span>
                     </div>
                   ))
               )}
@@ -2333,11 +2424,13 @@ function warjackWeaponNames(
                   key={`weapon_selection_rules_number_${ruleIndex}`}
                   className="model-weapons-special-rules"
                 >
-                  <span>
+                  <span onClick={toggleSection(rule)}>
                     {markChargedOrSpike(faction, text)}
                     {rule}
                   </span>{" "}
-                  <span>- {text}</span>
+                  <span>
+                    - {toggledSections[rule] ? "Click to expand" : text}
+                  </span>
                 </div>
               ))}
           </>

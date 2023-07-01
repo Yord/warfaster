@@ -537,7 +537,7 @@ li.Overdrive {
 }
 
 .card .ant-card-body {
-  padding: 12px 0px 8px 0px;
+  padding: 12px 12px 8px 12px;
 }
 
 .card .ant-card-meta-avatar {
@@ -739,6 +739,7 @@ div.model-weapons > div:nth-of-type(n+3) > div:last-of-type {
 div.model-weapons-special-rules > span:first-of-type,
 div.model-cortex-special-rules > span:first-of-type,
 div.special-rules > span:first-of-type {
+  cursor: pointer;
   font-weight: 500;
   text-transform: uppercase;
 }
