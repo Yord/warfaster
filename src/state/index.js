@@ -3,6 +3,7 @@ import { CadreCategoryMembers } from "./CadreCategoryMembers";
 import { CadreModels } from "./CadreModels";
 import { Cyphers } from "./Cyphers";
 import { CypherCodecs } from "./CypherCodecs";
+import { EditMode } from "./EditMode";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
 import { Lists } from "./Lists";
@@ -23,6 +24,7 @@ const objects = [
   CadreModels,
   CypherCodecs,
   Cyphers,
+  EditMode,
   Factions,
   FactionModels,
   Models,

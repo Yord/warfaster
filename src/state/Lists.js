@@ -60,9 +60,9 @@ function addEmptyList(state, { listIndex }) {
   lists.splice(listIndex, 0, oneEmptyList[0]);
 }
 
-function removeCard(state, { source }) {
+function removeCard(state, { listIndex, cardIndex }) {
   const lists = select(state);
-  lists[source.listIndex].cards.splice(source.cardIndex, 1);
+  lists[listIndex].cards.splice(cardIndex, 1);
 }
 
 function removeList(state, { listIndex }) {
@@ -85,11 +85,27 @@ function moveListBy(state, { listIndex, by }) {
   }
 }
 
-function moveCard(state, { destination, source }) {
+function moveCard(state, { listIndex, cardIndex, up }) {
   const lists = select(state);
-  const card = lists[source.listIndex].cards[source.cardIndex];
-  lists[source.listIndex].cards.splice(source.cardIndex, 1);
-  lists[destination.listIndex].cards.splice(destination.cardIndex, 0, card);
+  const list = lists[listIndex];
+  const card = list.cards[cardIndex];
+
+  const newCardIndex = cardIndex + (up ? -1 : 1);
+  if (newCardIndex >= 0 && newCardIndex < list.cards.length) {
+    list.cards.splice(cardIndex, 1);
+    list.cards.splice(newCardIndex, 0, card);
+  } else if (newCardIndex === -1 && listIndex > 0) {
+    const newList = lists[listIndex - 1];
+    list.cards.splice(cardIndex, 1);
+    newList.cards.push(card);
+  } else if (
+    newCardIndex === list.cards.length &&
+    listIndex < lists.length - 1
+  ) {
+    const newList = lists[listIndex + 1];
+    list.cards.splice(cardIndex, 1);
+    newList.cards.splice(0, 0, card);
+  }
 }
 
 function toggleCard(state, { listIndex, cardIndex, pageId }) {

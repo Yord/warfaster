@@ -129,9 +129,23 @@ li.ant-menu-submenu {
   padding: 0 !important;
 }
 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover,
+.ant-menu-submenu-active,
+.ant-menu-light .ant-menu-submenu-title:hover {
+  color: white !important;
+}
+
+li.ant-menu-submenu.edit .ant-menu-submenu-title .ant-menu-item-icon {
+  margin-top: 10px !important;
+}
+
 li.ant-menu-submenu::after {
   transition: none !important;
   border-bottom: 0 !important;
+}
+
+.ant-menu-submenu-title, .ant-menu-submenu-title:hover {
+  color: white;
 }
 
 li.ant-menu-item {
@@ -523,7 +537,11 @@ li.Overdrive {
 }
 
 .card .ant-card-body {
-  padding: 12px 16px 8px 16px;
+  padding: 12px 0px 8px 0px;
+}
+
+.card .ant-card-meta-avatar {
+  padding-right: 0;
 }
 
 .card-content {
