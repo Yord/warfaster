@@ -174,10 +174,15 @@ function* fetchWeaponsIfVehicleAdded() {
     if (
       payload &&
       payload.model &&
-      payload.model.types &&
-      payload.model.types.map((type) => type.text).includes("Vehicle")
+      payload.model.coreStats &&
+      payload.model.coreStats.length > 0 &&
+      payload.model.coreStats[0].types &&
+      payload.model.coreStats[0].types
+        .map((type) => type.text)
+        .includes("Vehicle")
     ) {
-      const vehicleWeaponSelection = payload.model.vehicleWeaponSelection;
+      const vehicleWeaponSelection =
+        payload.model.coreStats[0].vehicleWeaponSelection;
       if (vehicleWeaponSelection) {
         for (const { page } of vehicleWeaponSelection) {
           if (page) {
@@ -210,10 +215,14 @@ function* fetchWeaponsIfWarjackAdded() {
     if (
       payload &&
       payload.model &&
-      payload.model.types &&
-      payload.model.types.map((type) => type.text).includes("Warjack")
+      payload.model.coreStats &&
+      payload.model.coreStats.length > 0 &&
+      payload.model.coreStats[0].types &&
+      payload.model.coreStats[0].types
+        .map((type) => type.text)
+        .includes("Warjack")
     ) {
-      const weaponDetails = payload.model.weaponDetails;
+      const weaponDetails = payload.model.coreStats[0].weaponDetails;
       if (weaponDetails) {
         for (const { Weapon } of weaponDetails) {
           const page = Weapon.page;

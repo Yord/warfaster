@@ -15,20 +15,20 @@ function* parseVehicleOrWarjackWeapon({ data, page }) {
   if (vehicleOrWarjackWeapon) {
     const models = Object.values(yield select(Models.select()));
 
-    const vehicles = models.filter(({ types }) =>
-      types.some(({ text }) => text === "Vehicle")
+    const vehicles = models.filter((model) =>
+      model.coreStats[0].types.some(({ text }) => text === "Vehicle")
     );
-    const warjacks = models.filter(({ types }) =>
-      types.some(({ text }) => text === "Warjack")
+    const warjacks = models.filter((model) =>
+      model.coreStats[0].types.some(({ text }) => text === "Warjack")
     );
 
     const vehicleWeapons = vehicles.flatMap((vehicle) =>
-      vehicle.vehicleWeaponSelection.map((weapon) => weapon.page)
+      vehicle.coreStats[0].vehicleWeaponSelection.map((weapon) => weapon.page)
     );
     const warjackWeapons = warjacks.flatMap((warjack) =>
-      !warjack.weaponDetails
+      !warjack.coreStats[0].weaponDetails
         ? []
-        : warjack.weaponDetails.map(({ Weapon }) => Weapon.page)
+        : warjack.coreStats[0].weaponDetails.map(({ Weapon }) => Weapon.page)
     );
 
     if (vehicleWeapons.includes(page) && warjackWeapons.includes(page)) {

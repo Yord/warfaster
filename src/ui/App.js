@@ -342,18 +342,25 @@ const weaponQualities = {
   "System Failure": SystemFailure,
 };
 
-function WeaponQuality({ weaponQuality, style, height = "16px" }) {
+function WeaponQuality({ weaponQuality, text, style, height = "16px" }) {
   const src = weaponQualities[weaponQuality];
 
   if (src) {
     return (
-      <img
-        src={src}
-        className="metallic-img-tiny"
-        alt={weaponQuality}
-        height={height}
-        style={style}
-      />
+      <Tooltip
+        key={`${weaponQuality}_tooltip`}
+        placement="top"
+        title={`${weaponQuality} - ${text}`}
+        trigger="click"
+      >
+        <img
+          src={src}
+          className="metallic-img-tiny"
+          alt={weaponQuality}
+          height={height}
+          style={style}
+        />
+      </Tooltip>
     );
   }
 
@@ -869,7 +876,7 @@ function AppPresentation({
                                                   : details.storeLinks.map(
                                                       (linkText, index) => (
                                                         <React.Fragment
-                                                          key={`store_link_${index}`}
+                                                          key={`store_link_${listIndex}_${cardIndex}_${index}`}
                                                         >
                                                           <span
                                                             dangerouslySetInnerHTML={{
@@ -1312,18 +1319,24 @@ function AppPresentation({
                                                             <div>
                                                               <div>
                                                                 {weapon["Name"]}
-                                                                {Object.keys(
+                                                                {Object.entries(
                                                                   weapon.specialRules ||
                                                                     {}
                                                                 ).map(
                                                                   (
-                                                                    rule,
+                                                                    [
+                                                                      rule,
+                                                                      text,
+                                                                    ],
                                                                     index2
                                                                   ) => (
                                                                     <WeaponQuality
                                                                       key={`weapon_number_${index}_rule_${index2}`}
                                                                       weaponQuality={
                                                                         rule
+                                                                      }
+                                                                      text={
+                                                                        text
                                                                       }
                                                                     />
                                                                   )
@@ -1524,6 +1537,7 @@ function AppPresentation({
                                                           <AdvantageImage
                                                             key={`advantage_${index}`}
                                                             advantage={name}
+                                                            text={text}
                                                           />
                                                         )
                                                       )
@@ -2427,11 +2441,12 @@ function vehicleWeaponName2(
                   <div>
                     <div>
                       {weapon["Name"]}
-                      {Object.keys(weapon.specialRules || {}).map(
-                        (rule, index2) => (
+                      {Object.entries(weapon.specialRules || {}).map(
+                        ([rule, text], index2) => (
                           <WeaponQuality
                             key={`vehicle_weapon_selection_number_${index}_rule_${index2}`}
                             weaponQuality={rule}
+                            text={text}
                           />
                         )
                       )}
@@ -2576,11 +2591,12 @@ function warjackWeaponNames(
                 <div>
                   <div>
                     {weapon["Name"]}
-                    {Object.keys(weapon.specialRules || {}).map(
-                      (rule, index2) => (
+                    {Object.entries(weapon.specialRules || {}).map(
+                      ([rule, text], index2) => (
                         <WeaponQuality
                           key={`weapon_selection_number_${index}_rule_${index2}`}
                           weaponQuality={rule}
+                          text={text}
                         />
                       )
                     )}

@@ -8,56 +8,62 @@ function* parseModel({ data, page }) {
   const model = parseModelText(data.text);
   model.name = { text: data.title, page };
 
-  const cortexSelections = identifyCortexSelections(
-    model.cortexes,
-    data.categories
-  );
+  const coreStats = model.coreStats;
 
-  if (cortexSelections) {
-    model.cortexSelections = cortexSelections;
-  }
+  for (const coreStat of coreStats) {
+    const cortexSelections = identifyCortexSelections(
+      coreStat.cortexes,
+      data.categories
+    );
 
-  const warjackWeaponSelections = buildWarjackWeaponSelections(
-    model.weaponDetails
-  );
+    if (cortexSelections) {
+      coreStat.cortexSelections = cortexSelections;
+    }
 
-  if (warjackWeaponSelections) {
-    model.warjackWeaponSelections = warjackWeaponSelections;
+    const warjackWeaponSelections = buildWarjackWeaponSelections(
+      coreStat.weaponDetails
+    );
+
+    if (warjackWeaponSelections) {
+      coreStat.warjackWeaponSelections = warjackWeaponSelections;
+    }
   }
 
   yield put(Models.setForPage({ page, model }));
 
   let fetchPages = [];
 
-  if (cortexSelections) {
-    const cortexCategories = Object.values(cortexSelections).flatMap(
-      (advantages) =>
-        Object.values(advantages).flatMap(({ category }) => ({
-          text: category.replace(/_/g, " "),
-          page: category,
-        }))
-    );
+  for (const coreStat of coreStats) {
+    if (coreStat.cortexSelections) {
+      const cortexCategories = Object.values(coreStat.cortexSelections).flatMap(
+        (advantages) =>
+          Object.values(advantages).flatMap(({ category }) => ({
+            text: category.replace(/_/g, " "),
+            page: category,
+          }))
+      );
 
-    fetchPages = [...fetchPages, ...cortexCategories];
-  }
+      fetchPages = [...fetchPages, ...cortexCategories];
+    }
 
-  if (warjackWeaponSelections) {
-    const weaponPages = Object.values(warjackWeaponSelections).map(
-      ({ name, page }) => ({ text: name, page })
-    );
+    if (coreStat.warjackWeaponSelections) {
+      const weaponPages = Object.values(coreStat.warjackWeaponSelections).map(
+        ({ name, page }) => ({ text: name, page })
+      );
 
-    fetchPages = [...fetchPages, ...weaponPages];
-  }
+      fetchPages = [...fetchPages, ...weaponPages];
+    }
 
-  if (model.vehicleWeaponSelection) {
-    fetchPages = [...fetchPages, ...model.vehicleWeaponSelection];
-  }
+    if (coreStat.vehicleWeaponSelection) {
+      fetchPages = [...fetchPages, ...coreStat.vehicleWeaponSelection];
+    }
 
-  if (fetchPages.length > 0) {
-    const pageSlices = partitionBy(50, fetchPages);
+    if (fetchPages.length > 0) {
+      const pageSlices = partitionBy(50, fetchPages);
 
-    for (const pages of pageSlices) {
-      yield* Requests.queryPageIds({ pages: pages });
+      for (const pages of pageSlices) {
+        yield* Requests.queryPageIds({ pages: pages });
+      }
     }
   }
 }
