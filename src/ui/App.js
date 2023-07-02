@@ -1673,11 +1673,7 @@ function AppPresentation({
                                                         )}
                                                       >
                                                         <FactionImage
-                                                          faction={
-                                                            factionsPageByText[
-                                                              faction
-                                                            ]
-                                                          }
+                                                          faction={faction}
                                                           height="18px"
                                                         />{" "}
                                                         Attachment
