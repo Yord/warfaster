@@ -701,8 +701,7 @@ function AppPresentation({
                                                 height: "25px",
                                                 width: "35px",
                                                 textAlign: "center",
-                                                marginLeft: "4px",
-                                                marginRight: "16px",
+                                                marginRight: "12px",
                                               }}
                                             >
                                               {!details ||
@@ -725,8 +724,7 @@ function AppPresentation({
                                           ) : (
                                             <div
                                               style={{
-                                                marginLeft: "4px",
-                                                marginRight: "16px",
+                                                marginRight: "12px",
                                               }}
                                             >
                                               <FactionImage faction="Universal" />
