@@ -391,6 +391,7 @@ function AppPresentation({
   setCardWarjackWeapons,
   setCardVehicleWeapon,
   factions,
+  factionsPageByText,
   vehicleWeapons,
   warjackWeapons,
   cadres,
@@ -1662,6 +1663,87 @@ function AppPresentation({
                                                       </dl>
                                                     </>
                                                   )}
+                                                  {!coreStats.factionAttachment ? (
+                                                    <></>
+                                                  ) : (
+                                                    <div className="special-rules">
+                                                      <span
+                                                        onClick={toggleSection(
+                                                          "factionAttachment"
+                                                        )}
+                                                      >
+                                                        <FactionImage
+                                                          faction={
+                                                            factionsPageByText[
+                                                              faction
+                                                            ]
+                                                          }
+                                                          height="18px"
+                                                        />{" "}
+                                                        Attachment
+                                                      </span>
+                                                      <span>
+                                                        {" "}
+                                                        -{" "}
+                                                        {toggledSections[
+                                                          "factionAttachment"
+                                                        ]
+                                                          ? "Click to expand"
+                                                          : coreStats.factionAttachment
+                                                              .map(
+                                                                (attachment) =>
+                                                                  attachment.text
+                                                              )
+                                                              .join(", ")}
+                                                      </span>
+                                                    </div>
+                                                  )}
+                                                  {!coreStats.wildCardAttachment ? (
+                                                    <></>
+                                                  ) : (
+                                                    Object.entries(
+                                                      coreStats.wildCardAttachment
+                                                    ).map(
+                                                      ([
+                                                        faction,
+                                                        attachments,
+                                                      ]) => (
+                                                        <div className="special-rules">
+                                                          <span
+                                                            onClick={toggleSection(
+                                                              `wildCardAttachment ${faction}`
+                                                            )}
+                                                          >
+                                                            <FactionImage
+                                                              faction={
+                                                                factionsPageByText[
+                                                                  faction
+                                                                ]
+                                                              }
+                                                              height="18px"
+                                                            />{" "}
+                                                            Attachment
+                                                          </span>
+                                                          <span>
+                                                            {" "}
+                                                            -{" "}
+                                                            {toggledSections[
+                                                              `wildCardAttachment ${faction}`
+                                                            ]
+                                                              ? "Click to expand"
+                                                              : attachments
+                                                                  .map(
+                                                                    (
+                                                                      attachment
+                                                                    ) =>
+                                                                      attachment.text
+                                                                  )
+                                                                  .join(", ")}
+                                                          </span>
+                                                        </div>
+                                                      )
+                                                    )
+                                                  )}
                                                 </React.Fragment>
                                               )
                                             )
@@ -2251,6 +2333,12 @@ const App = connect(
     })),
     url: Url.select()(state),
     factions: Factions.select()(state),
+    factionsPageByText: Object.fromEntries(
+      Object.values(Factions.select()(state)).map(({ text, page }) => [
+        text,
+        page,
+      ])
+    ),
     vehicleWeapons: VehicleWeapons.select()(state),
     warjackWeapons: WarjackWeapons.select()(state),
     cadres: CadreCategoryMembers.select()(state),

@@ -73,6 +73,9 @@ const parseModelText = (text) => {
       ])
     );
 
+    const factionAttachment = extractFactionAttachment(doc);
+    const wildCardAttachment = extractWildCardAttachment(doc);
+
     let weaponsData = [
       ...doc.querySelectorAll("h3[id^=Weapons] ~ table tr"),
     ].map((tr) => [...tr.querySelectorAll("td")]);
@@ -142,6 +145,8 @@ const parseModelText = (text) => {
       hardpoints,
       weaponPoints,
       modelStats,
+      factionAttachment,
+      wildCardAttachment,
       specialRules,
       weapons,
       advantages,
@@ -279,4 +284,47 @@ function extractDefinitions(doc, id) {
   if (ul) p.append(ul);
 
   return parseDefinitionText(p);
+}
+
+function extractFactionAttachment(doc) {
+  const p = doc.querySelector("h3[id^=Attachment] + p");
+  if (p) {
+    const as = p.querySelectorAll("a");
+    if (as) {
+      return [...as].map(parseAnchor);
+    }
+  }
+
+  return undefined;
+}
+
+function extractWildCardAttachment(doc) {
+  const table = doc.querySelector("h3[id^=Attachment] + table");
+  if (table) {
+    const tables = [...doc.querySelectorAll("h3[id^=Attachment] ~ *")].reduce(
+      ({ tables, stop }, el) =>
+        stop
+          ? { tables, stop }
+          : el.nodeName === "TABLE"
+          ? { tables: [...tables, el], stop }
+          : { tables, stop: true },
+      { tables: [], stop: false }
+    ).tables;
+
+    const attachments = Object.fromEntries(
+      tables.map((table) => {
+        const factionName = table
+          .querySelector("caption")
+          .childNodes[0].nodeValue.replace(/\n/g, "");
+        return [
+          factionName === "Empyreans" ? "Empyrean" : factionName,
+          [...table.querySelectorAll("td > a")].map(parseAnchor),
+        ];
+      })
+    );
+
+    return attachments;
+  }
+
+  return undefined;
 }
