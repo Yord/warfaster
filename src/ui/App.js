@@ -701,7 +701,7 @@ function AppPresentation({
                                                 height: "25px",
                                                 width: "35px",
                                                 textAlign: "center",
-                                                marginLeft: "16px",
+                                                marginLeft: "4px",
                                                 marginRight: "16px",
                                               }}
                                             >
@@ -725,7 +725,7 @@ function AppPresentation({
                                           ) : (
                                             <div
                                               style={{
-                                                marginLeft: "16px",
+                                                marginLeft: "4px",
                                                 marginRight: "16px",
                                               }}
                                             >
