@@ -37,7 +37,8 @@ const parseModelText = (text) => {
       extractList(doc, "Model_Faction_and_Type");
     const faction = factionAndTypes[0];
     const types = factionAndTypes.slice(1);
-    const squadSize = extractText(doc, "Squad_Size");
+    const squadSize =
+      extractText(doc, "Squad_Size") || extractText(doc, "Model_Count");
     const deploymentCost = extractText(doc, "Deployment_Cost");
     const baseSize = extractText(doc, "Base_Size");
     const health = extractText(doc, "Health");
