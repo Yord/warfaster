@@ -1452,7 +1452,7 @@ function AppPresentation({
                                                       <Tooltip
                                                         key="base_size_tooltip"
                                                         placement="top"
-                                                        title="Base size"
+                                                        title={`Base size - ${coreStats.baseSize}`}
                                                         trigger="click"
                                                       >
                                                         <div className="metallic-circle">
@@ -1469,7 +1469,7 @@ function AppPresentation({
                                                       <Tooltip
                                                         key="hp_tooltip"
                                                         placement="top"
-                                                        title="Health"
+                                                        title={`Health - ${coreStats.health}`}
                                                         trigger="click"
                                                       >
                                                         <div className="metallic-circle">
@@ -1488,7 +1488,7 @@ function AppPresentation({
                                                       <Tooltip
                                                         key="squad_size_tooltip"
                                                         placement="top"
-                                                        title="Squad size"
+                                                        title={`Squad size - ${coreStats.squadSize}`}
                                                         trigger="click"
                                                       >
                                                         <div className="metallic-circle">
