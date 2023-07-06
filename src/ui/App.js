@@ -2,6 +2,7 @@ import "./App.css";
 import React from "react";
 import { connect } from "react-redux";
 import {
+  Affix,
   Badge,
   Card,
   Col,
@@ -504,43 +505,45 @@ function AppPresentation({
             </Content>
           ) : (
             <>
-              <Content>
-                <Menu
-                  id="factions"
-                  openKeys={[]}
-                  onOpenChange={onOpenChangeDrawers}
-                  mode="horizontal"
-                  triggerSubMenuAction="click"
-                >
-                  {factionModels.map(([factionName, faction, models]) => (
+              <Affix>
+                <Content>
+                  <Menu
+                    id="factions"
+                    openKeys={[]}
+                    onOpenChange={onOpenChangeDrawers}
+                    mode="horizontal"
+                    triggerSubMenuAction="click"
+                  >
+                    {factionModels.map(([factionName, faction, models]) => (
+                      <SubMenu
+                        key={faction}
+                        icon={<FactionImage faction={faction} />}
+                      ></SubMenu>
+                    ))}
                     <SubMenu
-                      key={faction}
-                      icon={<FactionImage faction={faction} />}
+                      className="edit"
+                      key="edit"
+                      icon={
+                        editMode ? (
+                          <CheckSquareOutlined
+                            onClick={toggleEditMode}
+                            style={{ fontSize: "30px" }}
+                          />
+                        ) : (
+                          <FormOutlined
+                            onClick={toggleEditMode}
+                            style={{ fontSize: "30px" }}
+                          />
+                        )
+                      }
+                      style={{
+                        marginLeft: "20px",
+                        paddingTop: "5px !important",
+                      }}
                     ></SubMenu>
-                  ))}
-                  <SubMenu
-                    className="edit"
-                    key="edit"
-                    icon={
-                      editMode ? (
-                        <CheckSquareOutlined
-                          onClick={toggleEditMode}
-                          style={{ fontSize: "30px" }}
-                        />
-                      ) : (
-                        <FormOutlined
-                          onClick={toggleEditMode}
-                          style={{ fontSize: "30px" }}
-                        />
-                      )
-                    }
-                    style={{
-                      marginLeft: "20px",
-                      paddingTop: "5px !important",
-                    }}
-                  ></SubMenu>
-                </Menu>
-              </Content>
+                  </Menu>
+                </Content>
+              </Affix>
               <Content>
                 <Layout>
                   <Row gutter={16}>
