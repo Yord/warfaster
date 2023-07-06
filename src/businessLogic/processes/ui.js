@@ -13,6 +13,7 @@ import { VehicleWeapons } from "../../state/VehicleWeapons";
 import { WarjackWeapons } from "../../state/WarjackWeapons";
 import { WildCardModels } from "../../state/WildCardModels";
 import { toBase62, fromBase62 } from "./base62";
+import { ListIndex } from "../../state/ListIndex";
 
 function* ui() {
   yield all([
@@ -37,7 +38,8 @@ function* addCard() {
     const cypher = yield select(CypherCodecs.selectByPage(page));
     if (model || wildCard || cypher) {
       const pageId = yield select(PageIds.selectByPage(page));
-      yield put(Lists.addCard({ pageId }));
+      const listIndex = yield select(ListIndex.select());
+      yield put(Lists.addCard({ listIndex, pageId }));
     }
   }
 }

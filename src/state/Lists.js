@@ -49,10 +49,10 @@ function setListTitle(state, { listIndex, title }) {
   lists[listIndex].title = title;
 }
 
-function addCard(state, { pageId }) {
+function addCard(state, { listIndex, pageId }) {
   const lists = select(state);
   const card = { pageId, hidden: true };
-  lists[0].cards.push(card);
+  lists[listIndex].cards.push(card);
 }
 
 function addEmptyList(state, { listIndex }) {

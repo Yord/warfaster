@@ -74,6 +74,7 @@ import { VehicleWeapons } from "../state/VehicleWeapons";
 import { WarjackWeapons } from "../state/WarjackWeapons";
 import { CadreModels } from "../state/CadreModels";
 import { CadreCategoryMembers } from "../state/CadreCategoryMembers";
+import { ListIndex } from "../state/ListIndex";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -400,6 +401,7 @@ function AppPresentation({
   toggleEditMode,
   toggledSections,
   toggleSection,
+  updateTargetList,
 }) {
   const [openDrawer, setOpenDrawer] = React.useState("");
 
@@ -1919,6 +1921,25 @@ function AppPresentation({
               >
                 <Menu.ItemGroup
                   title={
+                    <Select
+                      defaultValue={0}
+                      onChange={(event) => updateTargetList(event)}
+                      options={lists.map(({ title, cards }, index) => ({
+                        value: index,
+                        label: `${index + 1} - ${
+                          title ||
+                          generateListNamePlaceholder(
+                            cards,
+                            factions,
+                            "Name your list"
+                          )
+                        }`,
+                      }))}
+                    />
+                  }
+                />
+                <Menu.ItemGroup
+                  title={
                     <div
                       onClick={allMenuItemsClicked(
                         models.map((model) => model.page)
@@ -2431,6 +2452,7 @@ const App = connect(
           })
         ),
     toggleEditMode: () => dispatch(EditMode.toggle()),
+    updateTargetList: (listIndex) => dispatch(ListIndex.set({ listIndex })),
   })
 )(AppPresentation);
 

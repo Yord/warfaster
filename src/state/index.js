@@ -6,6 +6,7 @@ import { CypherCodecs } from "./CypherCodecs";
 import { EditMode } from "./EditMode";
 import { Factions } from "./Factions";
 import { FactionModels } from "./FactionModels";
+import { ListIndex } from "./ListIndex";
 import { Lists } from "./Lists";
 import { Models } from "./Models";
 import { PageIds } from "./PageIds";
@@ -38,6 +39,7 @@ const objects = [
   WarjackWeapons,
   WildCardModels,
   // UI
+  ListIndex,
   Lists,
   // General
   Version,

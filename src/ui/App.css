@@ -123,6 +123,14 @@ section.ant-layout {
   margin: 0 auto !important;
 }
 
+.ant-menu .ant-select {
+  width: 90%;
+}
+
+.ant-menu .ant-select-arrow {
+  right: 25px !important;
+}
+
 ul.ant-menu-sub {
   padding: 8px 0 !important;
   max-height: 300px !important;
