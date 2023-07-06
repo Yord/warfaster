@@ -560,6 +560,22 @@ function AppPresentation({
                         xxl={8}
                       >
                         <>
+                          {!editMode ? (
+                            <></>
+                          ) : (
+                            <div
+                              key={`add_list_top${listIndex}`}
+                              style={{
+                                color: "white",
+                                cursor: "pointer",
+                                textAlign: "center",
+                              }}
+                            >
+                              <span onClick={addEmptyList(listIndex)}>
+                                <PlusSquareOutlined /> Add list
+                              </span>
+                            </div>
+                          )}
                           <div className="cards" key={`cards${listIndex}`}>
                             <div
                               style={{ cursor: "pointer" }}
@@ -1852,11 +1868,11 @@ function AppPresentation({
                               <></>
                             )}
                           </div>
-                          {!editMode ? (
+                          {!editMode || listIndex !== lists.length - 1 ? (
                             <></>
                           ) : (
                             <div
-                              key={`add_list${listIndex + 1}`}
+                              key={`add_list_bottom${listIndex + 1}`}
                               style={{
                                 color: "white",
                                 cursor: "pointer",
