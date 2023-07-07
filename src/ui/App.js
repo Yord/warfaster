@@ -298,7 +298,6 @@ function WeaponQuality({ title: weaponQuality, text, style, height = "16px" }) {
 
 function AppPresentation({
   initialized,
-  syncReasons,
   factionModels,
   wildCardModels,
   cypherCodecs,
@@ -383,50 +382,40 @@ function AppPresentation({
                       </div>
 
                       <div>
-                        {syncReasons.map(({ reason, description }, index) => (
-                          <div className="body" key={`reason${index}`}>
-                            <Card hoverable className="card">
-                              <Card.Meta
-                                avatar={
-                                  <div
+                        <div className="body">
+                          <Card hoverable className="card">
+                            <Card.Meta
+                              avatar={
+                                <div
+                                  style={{
+                                    height: "25px",
+                                    marginRight: "12px",
+                                    textAlign: "center",
+                                    width: "35px",
+                                  }}
+                                >
+                                  <SyncOutlined
+                                    spin
                                     style={{
-                                      height: "25px",
-                                      width: "35px",
-                                      textAlign: "center",
+                                      color: "#d1c5b1",
+                                      fontSize: "35px",
                                     }}
-                                  >
-                                    <SyncOutlined
-                                      spin
-                                      style={{
-                                        color: "#d1c5b1",
-                                        fontSize: "35px",
-                                      }}
-                                    />
+                                  />
+                                </div>
+                              }
+                              title={
+                                <>
+                                  <div>Fetching data, please wait</div>
+                                  <div className="card-type">
+                                    This may take up to 20 seconds
                                   </div>
-                                }
-                                title={
-                                  <>
-                                    <div>{reason}</div>
-                                    <div className="card-type">
-                                      {description}
-                                    </div>
-                                  </>
-                                }
-                              />
-                            </Card>
-                          </div>
-                        ))}
+                                </>
+                              }
+                            />
+                          </Card>
+                        </div>
                       </div>
-                      <div className="footer">
-                        <Badge
-                          size="small"
-                          key="_badge"
-                          count={syncReasons.length}
-                          offset={[10, 5]}
-                        >
-                          Loading:
-                        </Badge>
-                      </div>
+                      <div className="footer"></div>
                     </div>
                   </Col>
                 </Row>
@@ -2210,7 +2199,6 @@ function AppPresentation({
 const App = connect(
   (state) => ({
     initialized: AppSync.selectDone()(state),
-    syncReasons: AppSync.selectReasons()(state),
     factionModels: Object.entries(FactionModels.select()(state))
       .sort()
       .map(([faction, models]) => [

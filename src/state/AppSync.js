@@ -1,12 +1,6 @@
 import { StateShard } from "./utils";
 
-const AppSync = StateShard(
-  "AppSync",
-  init,
-  { done, addReasons },
-  {},
-  { selectDone, selectReasons }
-);
+const AppSync = StateShard("AppSync", init, { done }, {}, { selectDone });
 
 export { AppSync };
 
@@ -20,7 +14,6 @@ function init(state) {
   }
 
   state.data.sync.done = false;
-  state.data.sync.reasons = [];
 }
 
 // Actions
@@ -28,11 +21,6 @@ function init(state) {
 function done(state) {
   const sync = select(state);
   sync.done = true;
-}
-
-function addReasons(state, { reasons }) {
-  const sync = select(state);
-  sync.reasons = [...sync.reasons, ...reasons];
 }
 
 // Selectors
@@ -44,9 +32,4 @@ function select(state) {
 function selectDone(state) {
   const sync = select(state);
   return sync.done;
-}
-
-function selectReasons(state) {
-  const sync = select(state);
-  return sync.reasons;
 }

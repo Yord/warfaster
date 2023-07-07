@@ -14,25 +14,6 @@ function* fetchPageIds() {
   const cachedPageIds = yield select(PageIds.select());
 
   if (Object.keys(cachedPageIds).length === 0) {
-    yield put(
-      AppSync.addReasons({
-        reasons: [
-          {
-            reason: "Loading factions",
-            description: "Load available Warcaster factions",
-          },
-          {
-            reason: "Loading cyphers",
-            description: "Load available Cypher Codecs",
-          },
-          {
-            reason: "Loading wildcard models",
-            description: "Load available Wild Cards",
-          },
-        ],
-      })
-    );
-
     const [factionsSet] = yield all([
       take(Factions.set().type),
       take(CypherCodecs.set().type),
@@ -40,15 +21,6 @@ function* fetchPageIds() {
     ]);
 
     const factions = Object.keys(factionsSet.payload.factions);
-
-    yield put(
-      AppSync.addReasons({
-        reasons: factions.map((faction) => ({
-          reason: `Loading ${faction.replace(/_/g, " ")}`,
-          description: `Used to build ${faction.replace(/_/g, " ")} menu`,
-        })),
-      })
-    );
 
     yield all(
       factions.map((faction) =>
@@ -84,16 +56,6 @@ function* fetchPageIds() {
       (_) => _.page
     );
     const pageSlices = partitionBy(50, pages);
-
-    yield put(
-      AppSync.addReasons({
-        reasons: pageSlices.map((_, index) => ({
-          reason: `Loading page ids ${index + 1} of ${pageSlices.length}`,
-          description:
-            "Card lists are encoded in the URL using unique wiki page ids",
-        })),
-      })
-    );
 
     for (const pages of pageSlices) {
       yield* Requests.queryPageIds({ pages });
