@@ -250,6 +250,7 @@ function AdvantageImage({ title: advantage, text, style, height = "30px" }) {
           alt={advantage}
           height={height}
           style={style}
+          onClick={(event) => event.stopPropagation()}
         />
       </Tooltip>
     );
@@ -286,6 +287,7 @@ function WeaponQuality({ title: weaponQuality, text, style, height = "16px" }) {
           alt={weaponQuality}
           height={height}
           style={style}
+          onClick={(event) => event.stopPropagation()}
         />
       </Tooltip>
     );
