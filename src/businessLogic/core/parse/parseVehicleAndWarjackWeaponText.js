@@ -1,5 +1,6 @@
 import { parseAnchor } from "./parsers";
 import { prepareDOM } from "./utils";
+import { parseDefinitionText } from "./parseModelText";
 
 const parseVehicleAndWarjackWeaponText = (text) => {
   const doc = prepareDOM(text);
@@ -53,16 +54,7 @@ function parseVehicleOrWarjackWeapon(prefix, doc) {
   // Good special rules example: Metaperceptor
   const specialRulesP = doc.querySelector(`${prefix}[id^=Special_Rules] + p`);
   if (specialRulesP) {
-    const specialRules = specialRulesP
-      ? Object.fromEntries(
-          specialRulesP.innerText
-            .replace(/\n$/g, "")
-            .split("\n")
-            .map((specialRule) => specialRule.split(": "))
-        )
-      : {};
-
-    res.specialRules = specialRules;
+    res.specialRules = parseDefinitionText(specialRulesP);
   }
 
   // Good weapons examples:
@@ -90,43 +82,10 @@ function parseVehicleOrWarjackWeapon(prefix, doc) {
               ),
             ]
           : tr.map((td) => {
-              if (td.innerText === "") return {};
-              const ul = td.querySelector("ul");
+              const specialRules = parseDefinitionText(td);
 
-              if (ul) {
-                const textNode = td.querySelector("ul").previousSibling;
-                textNode.nodeValue.replace(/\n/g, " ");
-
-                td.querySelector("ul").insertAdjacentText(
-                  "beforebegin",
-                  textNode.nodeValue.replace(/\n/g, " ") +
-                    td.querySelector("ul").innerText.replace(/\n/g, " ")
-                );
-                textNode.remove();
-                td.querySelector("ul").remove();
-              }
-
-              const specialRules = Object.fromEntries(
-                [...td.childNodes]
-                  .map((node) =>
-                    node.nodeName === "BR"
-                      ? "\n"
-                      : node.innerText || node.textContent
-                  )
-                  .join("")
-                  .replace(/\n$/, "")
-                  .split("\n")
-                  .filter((text) => text !== "")
-                  .map((entry) => {
-                    let colonIndex = entry.indexOf(": ");
-                    return [
-                      entry.slice(0, colonIndex),
-                      entry.slice(colonIndex + 2),
-                    ];
-                  })
-              );
-
-              if (Object.keys(specialRules).length === 0) return {};
+              if (!specialRules || Object.keys(specialRules).length === 0)
+                return {};
               return { specialRules };
             })
       )

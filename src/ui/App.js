@@ -224,113 +224,38 @@ function Charged({ faction, style: style2, height = "18px" }) {
   }
 }
 
-function AdvantageImage({ advantage, text, style, height = "30px" }) {
-  switch (advantage) {
-    case "Compound Armor":
-      return (
-        <Tooltip
-          key={`${advantage}_tooltip`}
-          placement="top"
-          title={`${advantage} - ${text}`}
-          trigger="click"
-        >
-          <img
-            src={CompoundArmor}
-            className="metallic-img"
-            alt={advantage}
-            height={height}
-            style={style}
-          />
-        </Tooltip>
-      );
-    case "Flight":
-      return (
-        <Tooltip
-          key={`${advantage}_tooltip`}
-          placement="top"
-          title={`${advantage} - ${text}`}
-          trigger="click"
-        >
-          <img
-            src={Flight}
-            className="metallic-img"
-            alt={advantage}
-            height={height}
-            style={style}
-          />
-        </Tooltip>
-      );
-    case "Pathfinder":
-      return (
-        <Tooltip
-          key={`${advantage}_tooltip`}
-          placement="top"
-          title={`${advantage} - ${text}`}
-          trigger="click"
-        >
-          <img
-            src={Pathfinder}
-            className="metallic-img"
-            alt={advantage}
-            height={height}
-            style={style}
-          />
-        </Tooltip>
-      );
-    case "Revelator":
-      return (
-        <Tooltip
-          key={`${advantage}_tooltip`}
-          placement="top"
-          title={`${advantage} - ${text}`}
-          trigger="click"
-        >
-          <img
-            src={Revelator}
-            className="metallic-img"
-            alt={advantage}
-            height={height}
-            style={style}
-          />
-        </Tooltip>
-      );
-    case "Stealth":
-      return (
-        <Tooltip
-          key={`${advantage}_tooltip`}
-          placement="top"
-          title={`${advantage} - ${text}`}
-          trigger="click"
-        >
-          <img
-            src={Stealth}
-            className="metallic-img"
-            alt={advantage}
-            height={height}
-            style={style}
-          />
-        </Tooltip>
-      );
-    case "Weapon Expert":
-      return (
-        <Tooltip
-          key={`${advantage}_tooltip`}
-          placement="top"
-          title={`${advantage} - ${text}`}
-          trigger="click"
-        >
-          <img
-            src={WeaponExpert}
-            className="metallic-img"
-            alt={advantage}
-            height={height}
-            style={style}
-          />
-        </Tooltip>
-      );
-    default:
-      return <div className="metallic-circle"></div>;
+const advantageImages = {
+  "Compound Armor": CompoundArmor,
+  Flight,
+  Pathfinder,
+  Revelator,
+  Stealth,
+  "Weapon Expert": WeaponExpert,
+};
+
+function AdvantageImage({ title: advantage, text, style, height = "30px" }) {
+  const src = advantageImages[advantage];
+
+  if (src) {
+    return (
+      <Tooltip
+        key={`${advantage}_tooltip`}
+        placement="top"
+        title={`${advantage} - ${text}`}
+        trigger="click"
+      >
+        <img
+          src={advantageImages[advantage]}
+          className="metallic-img"
+          alt={advantage}
+          height={height}
+          style={style}
+        />
+      </Tooltip>
+    );
   }
+
+  return <div className="metallic-circle"></div>;
 }
 
 const weaponQualities = {
@@ -344,7 +269,7 @@ const weaponQualities = {
   "System Failure": SystemFailure,
 };
 
-function WeaponQuality({ weaponQuality, text, style, height = "16px" }) {
+function WeaponQuality({ title: weaponQuality, text, style, height = "16px" }) {
   const src = weaponQualities[weaponQuality];
 
   if (src) {
@@ -1036,42 +961,87 @@ function AppPresentation({
                                                               }
                                                             >
                                                               <h3>{cortex}</h3>
+                                                              <div className="card-icons">
+                                                                {!advantages ? (
+                                                                  <></>
+                                                                ) : (
+                                                                  Object.entries(
+                                                                    advantages
+                                                                  )
+                                                                    .filter(
+                                                                      ([
+                                                                        name,
+                                                                      ]) =>
+                                                                        advantageImages[
+                                                                          name
+                                                                        ]
+                                                                    )
+                                                                    .map(
+                                                                      (
+                                                                        [
+                                                                          name,
+                                                                          {
+                                                                            text,
+                                                                          },
+                                                                        ],
+                                                                        index
+                                                                      ) => (
+                                                                        <AdvantageImage
+                                                                          key={`advantage_${index}`}
+                                                                          title={
+                                                                            name
+                                                                          }
+                                                                          text={
+                                                                            text
+                                                                          }
+                                                                        />
+                                                                      )
+                                                                    )
+                                                                )}
+                                                              </div>
                                                               {Object.entries(
                                                                 advantages
-                                                              ).map(
-                                                                (
-                                                                  [
-                                                                    rule,
-                                                                    { text },
-                                                                  ],
-                                                                  advantageIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={`cortex_${index}_advantage_${advantageIndex}`}
-                                                                    className="model-cortex-special-rules"
-                                                                  >
-                                                                    <span
-                                                                      onClick={toggleSection(
-                                                                        rule
-                                                                      )}
-                                                                    >
-                                                                      {markChargedOrSpike(
-                                                                        faction,
-                                                                        text
-                                                                      )}
-                                                                      {rule}
-                                                                    </span>{" "}
-                                                                    <span>
-                                                                      -{" "}
-                                                                      {toggledSections[
-                                                                        rule
-                                                                      ]
-                                                                        ? "Click to expand"
-                                                                        : text}
-                                                                    </span>
-                                                                  </div>
+                                                              )
+                                                                .filter(
+                                                                  ([rule]) =>
+                                                                    !advantageImages[
+                                                                      rule
+                                                                    ]
                                                                 )
-                                                              )}
+                                                                .map(
+                                                                  (
+                                                                    [
+                                                                      rule,
+                                                                      { text },
+                                                                    ],
+                                                                    advantageIndex
+                                                                  ) => (
+                                                                    <div
+                                                                      key={`cortex_${index}_advantage_${advantageIndex}`}
+                                                                      className="model-cortex-special-rules"
+                                                                    >
+                                                                      <span
+                                                                        onClick={toggleSection(
+                                                                          rule
+                                                                        )}
+                                                                      >
+                                                                        {markChargedOrSpike(
+                                                                          faction,
+                                                                          text
+                                                                        )}
+                                                                        {rule}
+                                                                      </span>{" "}
+                                                                      <span>
+                                                                        -{" "}
+                                                                        {toggledSections[
+                                                                          rule
+                                                                        ]
+                                                                          ? "Click to expand"
+                                                                          : text}
+                                                                      </span>
+                                                                    </div>
+                                                                  )
+                                                                )}
                                                             </Select.Option>
                                                           )
                                                         )}
@@ -1354,7 +1324,7 @@ function AppPresentation({
                                                                   ) => (
                                                                     <WeaponQuality
                                                                       key={`weapon_number_${index}_rule_${index2}`}
-                                                                      weaponQuality={
+                                                                      title={
                                                                         rule
                                                                       }
                                                                       text={
@@ -1405,32 +1375,129 @@ function AppPresentation({
                                                                 (
                                                                   [rule, text],
                                                                   ruleIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={`weapon_number_${index}_${ruleIndex}`}
-                                                                    className="model-weapons-special-rules"
-                                                                  >
-                                                                    <span
-                                                                      onClick={toggleSection(
-                                                                        rule
-                                                                      )}
+                                                                ) => {
+                                                                  const textWithIcons =
+                                                                    [
+                                                                      ...Object.keys(
+                                                                        weaponQualities
+                                                                      ).map(
+                                                                        (
+                                                                          title
+                                                                        ) => ({
+                                                                          title,
+                                                                          Tag: WeaponQuality,
+                                                                        })
+                                                                      ),
+                                                                      ...Object.keys(
+                                                                        advantageImages
+                                                                      ).map(
+                                                                        (
+                                                                          title
+                                                                        ) => ({
+                                                                          title,
+                                                                          Tag: AdvantageImage,
+                                                                        })
+                                                                      ),
+                                                                    ].reduce(
+                                                                      (
+                                                                        texts,
+                                                                        {
+                                                                          title,
+                                                                          Tag,
+                                                                        }
+                                                                      ) =>
+                                                                        texts.flatMap(
+                                                                          (
+                                                                            text,
+                                                                            index2
+                                                                          ) => {
+                                                                            if (
+                                                                              typeof text !==
+                                                                              "string"
+                                                                            )
+                                                                              return text;
+
+                                                                            return text
+                                                                              .split(
+                                                                                new RegExp(
+                                                                                  `(\\s.\\s${title}:\\s.+[\\n]*)`,
+                                                                                  "g"
+                                                                                )
+                                                                              )
+                                                                              .flatMap(
+                                                                                (
+                                                                                  string,
+                                                                                  index
+                                                                                ) => {
+                                                                                  if (
+                                                                                    string.match(
+                                                                                      new RegExp(
+                                                                                        `(${title}:\\s.+[\\n]*)`
+                                                                                      )
+                                                                                    )
+                                                                                  ) {
+                                                                                    const [
+                                                                                      ,
+                                                                                      ,
+                                                                                      description,
+                                                                                    ] =
+                                                                                      string.split(
+                                                                                        new RegExp(
+                                                                                          `(${title}:\\s|\\n)`,
+                                                                                          "g"
+                                                                                        )
+                                                                                      );
+                                                                                    return [
+                                                                                      ` • ${title}: `,
+                                                                                      <Tag
+                                                                                        key={`${index}_${index2}`}
+                                                                                        title={
+                                                                                          title
+                                                                                        }
+                                                                                        text={
+                                                                                          description
+                                                                                        }
+                                                                                        height="16px"
+                                                                                      />,
+                                                                                      "\n",
+                                                                                    ];
+                                                                                  }
+
+                                                                                  return string;
+                                                                                }
+                                                                              );
+                                                                          }
+                                                                        ),
+                                                                      [text]
+                                                                    );
+
+                                                                  return (
+                                                                    <div
+                                                                      key={`weapon_number_${index}_${ruleIndex}`}
+                                                                      className="model-weapons-special-rules"
                                                                     >
-                                                                      {markChargedOrSpike(
-                                                                        faction,
-                                                                        text
-                                                                      )}
-                                                                      {rule}
-                                                                    </span>{" "}
-                                                                    <span>
-                                                                      -{" "}
-                                                                      {toggledSections[
-                                                                        rule
-                                                                      ]
-                                                                        ? "Click to expand"
-                                                                        : text}
-                                                                    </span>
-                                                                  </div>
-                                                                )
+                                                                      <span
+                                                                        onClick={toggleSection(
+                                                                          rule
+                                                                        )}
+                                                                      >
+                                                                        {markChargedOrSpike(
+                                                                          faction,
+                                                                          text
+                                                                        )}
+                                                                        {rule}
+                                                                      </span>{" "}
+                                                                      <span>
+                                                                        -{" "}
+                                                                        {toggledSections[
+                                                                          rule
+                                                                        ]
+                                                                          ? "Click to expand"
+                                                                          : textWithIcons}
+                                                                      </span>
+                                                                    </div>
+                                                                  );
+                                                                }
                                                               )
                                                           )}
                                                         </React.Fragment>
@@ -1537,7 +1604,7 @@ function AppPresentation({
                                                         ) => (
                                                           <AdvantageImage
                                                             key={`advantage_${index}`}
-                                                            advantage={name}
+                                                            title={name}
                                                             text={text}
                                                           />
                                                         )
@@ -1558,7 +1625,7 @@ function AppPresentation({
                                                         ) => (
                                                           <AdvantageImage
                                                             key={`advantage_${index}`}
-                                                            advantage={name}
+                                                            title={name}
                                                             text={text}
                                                           />
                                                         )
@@ -2570,7 +2637,7 @@ function vehicleWeaponName2(
                         ([rule, text], index2) => (
                           <WeaponQuality
                             key={`vehicle_weapon_selection_number_${index}_rule_${index2}`}
-                            weaponQuality={rule}
+                            title={rule}
                             text={text}
                           />
                         )
@@ -2720,7 +2787,7 @@ function warjackWeaponNames(
                       ([rule, text], index2) => (
                         <WeaponQuality
                           key={`weapon_selection_number_${index}_rule_${index2}`}
-                          weaponQuality={rule}
+                          title={rule}
                           text={text}
                         />
                       )
@@ -2745,22 +2812,88 @@ function warjackWeaponNames(
               {!weapon.specialRules ? (
                 <></>
               ) : (
-                Object.entries(weapon.specialRules)
-                  .filter(([rule]) => !weaponQualities[rule])
-                  .map(([rule, text], ruleIndex) => (
-                    <div
-                      key={`weapon_selection_number_${index}_${ruleIndex}`}
-                      className="model-weapons-special-rules"
-                    >
-                      <span onClick={toggleSection(rule)}>
-                        {markChargedOrSpike(faction, text)}
-                        {rule}
-                      </span>{" "}
-                      <span>
-                        - {toggledSections[rule] ? "Click to expand" : text}
-                      </span>
-                    </div>
-                  ))
+                <>
+                  <div className="card-icons">
+                    {Object.entries(weapon.specialRules)
+                      .filter(([name]) => advantageImages[name])
+                      .map(([name, text], index) => (
+                        <AdvantageImage
+                          key={`advantage_${index}`}
+                          title={name}
+                          text={text}
+                        />
+                      ))}
+                  </div>
+                  {Object.entries(weapon.specialRules)
+                    .filter(
+                      ([name]) =>
+                        !advantageImages[name] && !weaponQualities[name]
+                    )
+                    .map(([rule, text], index) => {
+                      const textWithIcons = [
+                        ...Object.keys(weaponQualities).map((title) => ({
+                          title,
+                          Tag: WeaponQuality,
+                        })),
+                        ...Object.keys(advantageImages).map((title) => ({
+                          title,
+                          Tag: AdvantageImage,
+                        })),
+                      ].reduce(
+                        (texts, { title, Tag }) =>
+                          texts.flatMap((text, index2) => {
+                            if (typeof text !== "string") return text;
+
+                            return text
+                              .split(
+                                new RegExp(`(\\s.\\s${title}:\\s.+[\\n]*)`, "g")
+                              )
+                              .flatMap((string, index) => {
+                                if (
+                                  string.match(
+                                    new RegExp(`(${title}:\\s.+[\\n]*)`)
+                                  )
+                                ) {
+                                  const [, , description] = string.split(
+                                    new RegExp(`(${title}:\\s|\\n)`, "g")
+                                  );
+                                  return [
+                                    ` • ${title}: `,
+                                    <Tag
+                                      key={`${index}_${index2}`}
+                                      title={title}
+                                      text={description}
+                                      height="16px"
+                                    />,
+                                    "\n",
+                                  ];
+                                }
+
+                                return string;
+                              });
+                          }),
+                        [text]
+                      );
+
+                      return (
+                        <div
+                          key={`weapon_selection_number_${index}_${index}`}
+                          className="model-weapons-special-rules"
+                        >
+                          <span onClick={toggleSection(rule)}>
+                            {markChargedOrSpike(faction, text)}
+                            {rule}
+                          </span>{" "}
+                          <span>
+                            -{" "}
+                            {toggledSections[rule]
+                              ? "Click to expand"
+                              : textWithIcons}
+                          </span>
+                        </div>
+                      );
+                    })}
+                </>
               )}
             </React.Fragment>
           ))
@@ -2778,8 +2911,20 @@ function warjackWeaponNames(
             ) : (
               <></>
             )}
+            <div className="card-icons">
+              {Object.entries(weaponConfig.specialRules)
+                .filter(([name]) => advantageImages[name])
+                .map(([name, text], index) => (
+                  <AdvantageImage
+                    key={`advantage_${index}`}
+                    title={name}
+                    text={text}
+                  />
+                ))}
+            </div>
             {Object.entries(weaponConfig.specialRules)
               .filter(([rule]) => !weaponQualities[rule])
+              .filter(([name]) => !advantageImages[name])
               .map(([rule, text], ruleIndex) => (
                 <div
                   key={`weapon_selection_rules_number_${ruleIndex}`}

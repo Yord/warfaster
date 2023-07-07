@@ -170,7 +170,7 @@ const parseModelText = (text) => {
   return removeUndefinedValues(model);
 };
 
-export { parseModelText };
+export { parseModelText, parseDefinitionText };
 
 function extractStoreLinks(doc) {
   return [...doc.querySelectorAll("p")]
