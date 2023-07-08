@@ -16,7 +16,7 @@ Warfaster makes some design decisions that may appear strange at first.
 These decisions are made on purpose and are not likely to be changed:
 
 <dl>
-<dt>Taking contents from the [Privateer Press Warcaster wiki][warcaster-wiki]</dt>
+<dt>Taking contents from the <a href="https://privateerpress.wiki/index.php?title=Warcaster">Privateer Press Warcaster wiki</a></dt>
 <dd>
 <p>Warfaster takes all its contents from the Warcaster wiki. This includes the available factions and their models, as well as all model rules, store links and lore. This puts the curation of its contents completely into community hands. However, should the wiki be discontinued or outdated, so will the app.</p>
 <p>This is done, so that updating the contents does not depend on a single person, but on a group of contributors, that may even change over time. It also enables content moderation and quality control. This decision may lead to issues, however, should the wiki structure change. In this case, the program logic taking the contents from the wiki would need to be adjusted, which can, again, only be done by a single person. The hope is, that this will not happen often.</p>
@@ -24,7 +24,7 @@ These decisions are made on purpose and are not likely to be changed:
 </dd>
 <dt>Not enforcing any limitations on list composition</dt>
 <dd>
-<p>Other list builders may enforce rules on lists, such as having three hero solos in primary mission lists. Warfaster does not. This is, because such rules cannot be automatically taken and updated from the wiki. Also, support for community formats such as [Arcane Synthesis' Sortie Missions][sortie-missions] would not be guaranteed this way.</p>
+<p>Other list builders may enforce rules on lists, such as having three hero solos in primary mission lists. Warfaster does not. This is, because such rules cannot be automatically taken and updated from the wiki. Also, support for community formats such as <a href="https://www.arcane-synthesis.com/2022/12/31/mid-size-games-an-alternative-to-primary-missions/">Arcane Synthesis' Sortie Missions</a> would not be guaranteed this way.</p>
 <p>Instead, Warfaster gives full freedom to the users in how they build their lists. Rules like having three heroes in primary missions will have to be checked manually.</p>
 </dd>
 </dl>
