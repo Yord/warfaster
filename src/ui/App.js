@@ -103,10 +103,15 @@ const spikes = {
   Wild_Card: WildCardSpike,
 };
 
-function Spike({ faction, style: style2, height = "18px" }) {
-  const style = { ...style2, marginTop: "-4px" };
-  const src = spikes[faction] || WildCardSpike;
-  return <img src={src} height={height} alt={faction} style={style} />;
+function Spike({ faction, style, height = "18px" }) {
+  return (
+    <img
+      src={spikes[faction] || WildCardSpike}
+      height={height}
+      alt={faction}
+      style={{ ...style, marginTop: "-4px" }}
+    />
+  );
 }
 
 const chargedImages = {
@@ -117,10 +122,15 @@ const chargedImages = {
   Wild_Card: WildCardCharged,
 };
 
-function Charged({ faction, style: style2, height = "18px" }) {
-  const style = { ...style2, marginTop: "-4px" };
-  const src = chargedImages[faction] || WildCardCharged;
-  return <img src={src} height={height} alt={faction} style={style} />;
+function Charged({ faction, style, height = "18px" }) {
+  return (
+    <img
+      src={chargedImages[faction] || WildCardCharged}
+      height={height}
+      alt={faction}
+      style={{ ...style, marginTop: "-4px" }}
+    />
+  );
 }
 
 const advantageImages = {
