@@ -35,11 +35,11 @@ These decisions are made on purpose:
 <dl>
 <dt>How can I save my lists?</dt>
 <dd>
-<p>Warfaster has no ability to save lists. Lists need to be bookmarked in the browser.</p>
+<p>Warfaster has no ability to save lists. List URLs need to be stored independently of the app. We suggest to bookmark them in the browser. Most browsers even have the ability to share bookmarks between devices, which makes lists available on all your devices, too!</p>
 </dd>
 <dt>How can I clear all cached data without clearing my browser cache?</dt>
 <dd>
-<p>Open <a href="http://warfaster.com?reset">http://warfaster.com?reset</a> to clear all cached data.</p>
+<p>Opening <a href="http://warfaster.com?reset">http://warfaster.com?reset</a> clears all data from the browser cache.</p>
 </dd>
 <dt>Why can't I reorder cards with drag-and-drop?</dt>
 <dd>
