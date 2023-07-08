@@ -95,109 +95,32 @@ function FactionImage({ faction, style, height = "35px" }) {
   return <img src={src} height={height} alt={faction} style={style} />;
 }
 
+const spikes = {
+  Aeternus_Continuum: AeternusContinuumSpike,
+  Empyrean: EmpyreanSpike,
+  Iron_Star_Alliance: IronStarAllianceSpike,
+  Marcher_Worlds: MarcherWorldsSpike,
+  Wild_Card: WildCardSpike,
+};
+
 function Spike({ faction, style: style2, height = "18px" }) {
   const style = { ...style2, marginTop: "-4px" };
-  switch (faction) {
-    case "Aeternus_Continuum":
-      return (
-        <img
-          src={AeternusContinuumSpike}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Empyrean":
-      return (
-        <img src={EmpyreanSpike} height={height} alt={faction} style={style} />
-      );
-    case "Iron_Star_Alliance":
-      return (
-        <img
-          src={IronStarAllianceSpike}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Marcher_Worlds":
-      return (
-        <img
-          src={MarcherWorldsSpike}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Wild_Card":
-      return (
-        <img src={WildCardSpike} height={height} alt={faction} style={style} />
-      );
-    default:
-      return (
-        <img src={WildCardSpike} height={height} alt={faction} style={style} />
-      );
-  }
+  const src = spikes[faction] || WildCardSpike;
+  return <img src={src} height={height} alt={faction} style={style} />;
 }
+
+const chargedImages = {
+  Aeternus_Continuum: AeternusContinuumCharged,
+  Empyrean: EmpyreanCharged,
+  Iron_Star_Alliance: IronStarAllianceCharged,
+  Marcher_Worlds: MarcherWorldsCharged,
+  Wild_Card: WildCardCharged,
+};
 
 function Charged({ faction, style: style2, height = "18px" }) {
   const style = { ...style2, marginTop: "-4px" };
-  switch (faction) {
-    case "Aeternus_Continuum":
-      return (
-        <img
-          src={AeternusContinuumCharged}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Empyrean":
-      return (
-        <img
-          src={EmpyreanCharged}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Iron_Star_Alliance":
-      return (
-        <img
-          src={IronStarAllianceCharged}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Marcher_Worlds":
-      return (
-        <img
-          src={MarcherWorldsCharged}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Wild_Card":
-      return (
-        <img
-          src={WildCardCharged}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    default:
-      return (
-        <img
-          src={WildCardCharged}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-  }
+  const src = chargedImages[faction] || WildCardCharged;
+  return <img src={src} height={height} alt={faction} style={style} />;
 }
 
 const advantageImages = {
