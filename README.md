@@ -63,6 +63,12 @@ Deploying the page to github:
 npm run deploy
 ```
 
+Obtaining a new version number:
+
+```javascript
+new Date().toJSON();
+```
+
 Install [redux-devtools][redux-devtools] and [React developer tools][react-devtools] for the best development experience. This app was set up with [create-react-app][create-react-app].
 
 [create-react-app]: https://create-react-app.dev/
