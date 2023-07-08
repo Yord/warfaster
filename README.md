@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# Warfaster
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[Warfaster][warfaster] is a list builder for the [Warcaster][warcaster] tabletop game.
 
-## Available Scripts
+![Warfaster user interface](./Warfaster.png)
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Fully automated content updates based on the [Privateer Press wiki][warcaster-wiki].
+- Full card details to properly plan your next session.
+- Completely unrestricted list design to support all formats.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Design Decisions
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Warfaster makes some design decisions that may appear strange first.
+These decisions are made on purpose and are not likely to be changed:
 
-### `npm test`
+<dl>
+<dt>Taking contents from PP's wiki</dt>
+<dd>
+<p>Warfaster takes all its contents from PP's wiki. This includes the available factions and their models, as well as all model rules, store links and lore. This puts the curation of its contents completely into community hands. However, should the wiki be discontinued or outdated, so will the app.</p>
+<p>This is done, so the contents do not depend on a single person,
+but on a group of contributors. It may lead to issues, however, should the wiki structure change. In this case, the program logic taking the contents from the wiki would need to be changed, which can only be done by a single person. The hope is, that this will happen only seldomly.</p>
+<p>For the Warfaster team, giving the community the ability to curate the contents is important enough to take the risk of breaking the app in the process.</p>
+</dd>
+<dt>Not enforcing any limitations on list composition</dt>
+<dd>
+<p>Other list builders may enforce rules on lists, such as having three hero solos in primary missing lists. Warfaster does not. The reason is, because those rules cannot be automatically taken and updated from the wiki. Also, support for community formats such as ... would not be guaranteed this way.</p>
+<p>Instead, Warfaster gives full freedom to the users in how they build their lists. Rules like having three heroes in primary missions will have to be checked manually.</p>
+</dd>
+</dl>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## FAQ
 
-### `npm run build`
+<dl>
+<dt>How can I clear all cached data without clearing my browser cache?</dt>
+<dd>
+<p>Open <a href="http://warfaster.com?reset">http://warfaster.com?reset</a> to clear all cached data.</p>
+</dd>
+<dt>Why can't I reorder cards with drag-and-drop?</dt>
+<dd>
+<p>We tested drag-and-drop while developing the app. Our conclusion was, that the user experience for scrolling, opening cards, and drag-and-drop was very bad, because too many things wanted to "click" on cards at the same time. So we decided to don't support drag-and-drop.</p>
+</dd>
+</dl>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Development
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Installing dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm install
+```
 
-### `npm run eject`
+Starting the development server:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+npm start
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Deploying the page to github:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm run deploy
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Install [redux-devtools][redux-devtools] and [React developer tools][react-devtools] for the best development experience. This app was set up with [create-react-app][create-react-app].
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[create-react-app]: https://create-react-app.dev/
+[react-devtools]: https://react.dev/learn/react-developer-tools
+[redux-devtools]: https://github.com/reduxjs/redux-devtools
+[warcaster]: http://warcaster.com
+[warcaster-wiki]: https://privateerpress.wiki/index.php?title=Warcaster
+[warfaster]: http://warfaster.com
