@@ -142,21 +142,21 @@ const advantageImages = {
   "Weapon Expert": WeaponExpert,
 };
 
-function AdvantageImage({ title: advantage, text, style, height = "30px" }) {
-  const src = advantageImages[advantage];
+function AdvantageImage({ title, text, style, height = "30px" }) {
+  const src = advantageImages[title];
 
   if (src) {
     return (
       <Tooltip
-        key={`${advantage}_tooltip`}
+        key={`${title}_tooltip`}
         placement="top"
-        title={`${advantage} - ${text}`}
+        title={`${title} - ${text}`}
         trigger="click"
       >
         <img
-          src={advantageImages[advantage]}
+          src={advantageImages[title]}
           className="metallic-img"
-          alt={advantage}
+          alt={title}
           height={height}
           style={style}
           onClick={(event) => event.stopPropagation()}
@@ -179,21 +179,21 @@ const weaponQualities = {
   "System Failure": SystemFailure,
 };
 
-function WeaponQuality({ title: weaponQuality, text, style, height = "16px" }) {
-  const src = weaponQualities[weaponQuality];
+function WeaponQuality({ title, text, style, height = "16px" }) {
+  const src = weaponQualities[title];
 
   if (src) {
     return (
       <Tooltip
-        key={`${weaponQuality}_tooltip`}
+        key={`${title}_tooltip`}
         placement="top"
-        title={`${weaponQuality} - ${text}`}
+        title={`${title} - ${text}`}
         trigger="click"
       >
         <img
           src={src}
           className="metallic-img-tiny"
-          alt={weaponQuality}
+          alt={title}
           height={height}
           style={style}
           onClick={(event) => event.stopPropagation()}
