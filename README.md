@@ -13,25 +13,30 @@
 ## Design Decisions
 
 Warfaster makes some design decisions that may appear strange at first.
-These decisions are made on purpose and are not likely to be changed:
+These decisions are made on purpose:
 
 <dl>
 <dt>Taking contents from the <a href="https://privateerpress.wiki/index.php?title=Warcaster">Privateer Press Warcaster wiki</a></dt>
 <dd>
-<p>Warfaster takes all its contents from the Warcaster wiki. This includes the available factions and their models, as well as all model rules, store links and lore. This puts the curation of its contents completely into community hands. However, should the wiki be discontinued or outdated, so will the app.</p>
-<p>This is done, so that updating the contents does not depend on a single person, but on a group of contributors, that may even change over time. It also enables content moderation and quality control. This decision may lead to issues, however, should the wiki structure change. In this case, the program logic taking the contents from the wiki would need to be adjusted, which can, again, only be done by a single person. The hope is, that this will not happen often.</p>
-<p>For the Warfaster team, giving the community the ability to curate the contents is important enough to take the risk of breaking the app in the process.</p>
+<p>In contrast to coming with its own card data, Warfaster takes all its contents from the Warcaster wiki. This includes the available factions and their models, as well as all model rules, store links and lore. All contributions to the wiki will also benefit Warfaster. On the flipside, should the wiki be discontinued or outdated, so will the app.</p>
 </dd>
 <dt>Not enforcing any limitations on list composition</dt>
 <dd>
-<p>Other list builders may enforce rules on lists, such as having three hero solos in primary mission lists. Warfaster does not. This is, because such rules cannot be automatically taken and updated from the wiki. Also, support for community formats such as <a href="https://www.arcane-synthesis.com/2022/12/31/mid-size-games-an-alternative-to-primary-missions/">Arcane Synthesis' Sortie Missions</a> would not be guaranteed this way.</p>
-<p>Instead, Warfaster gives full freedom to the users in how they build their lists. Rules like having three heroes in primary missions will have to be checked manually.</p>
+<p>Other list builders may enforce rules on lists, such as having three hero solos in primary mission lists. Warfaster does not. This is, because such rules cannot be automatically taken and kept up-to-date from the Warcaster wiki. Also, community formats like <a href="https://www.arcane-synthesis.com/2022/12/31/mid-size-games-an-alternative-to-primary-missions/">Arcane Synthesis' Sortie Missions</a> are not in the Warcaster wiki. Instead, Warfaster gives its users full freedom to build their lists. Rules will have to be checked manually.</p>
+</dd>
+<dt>Keeping card data in the browser cache</dt>
+<dd>
+<p>Instead of having a central repository of data in the app, every user keeps their own data in their browsers, individually loaded from the Warcaster wiki. Warfaster does not save lists or other user data. Instead, users will have to save their lists using bookmarks or similar means.</p>
 </dd>
 </dl>
 
 ## FAQ
 
 <dl>
+<dt>How can I save my lists?</dt>
+<dd>
+<p>Warfaster has no ability to save lists. Lists need to be bookmarked in the browser.</p>
+</dd>
 <dt>How can I clear all cached data without clearing my browser cache?</dt>
 <dd>
 <p>Open <a href="http://warfaster.com?reset">http://warfaster.com?reset</a> to clear all cached data.</p>
