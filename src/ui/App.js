@@ -80,43 +80,19 @@ const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
 const { SubMenu } = Menu;
 
+const factionImages = {
+  Aeternus_Continuum: AeternusContinuum,
+  Empyrean,
+  Iron_Star_Alliance: IronStarAlliance,
+  Lost_Legion: LostLegion,
+  Marcher_Worlds: MarcherWorlds,
+  Wild_Card: WildCard,
+  Universal: Fallback,
+};
+
 function FactionImage({ faction, style, height = "35px" }) {
-  switch (faction) {
-    case "Aeternus_Continuum":
-      return (
-        <img
-          src={AeternusContinuum}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Empyrean":
-      return <img src={Empyrean} height={height} alt={faction} style={style} />;
-    case "Iron_Star_Alliance":
-      return (
-        <img
-          src={IronStarAlliance}
-          height={height}
-          alt={faction}
-          style={style}
-        />
-      );
-    case "Lost_Legion":
-      return (
-        <img src={LostLegion} height={height} alt={faction} style={style} />
-      );
-    case "Marcher_Worlds":
-      return (
-        <img src={MarcherWorlds} height={height} alt={faction} style={style} />
-      );
-    case "Wild_Card":
-      return <img src={WildCard} height={height} alt={faction} style={style} />;
-    case "Universal":
-      return <img src={Fallback} height={height} alt={faction} style={style} />;
-    default:
-      return <img src={Fallback} height={height} alt={faction} style={style} />;
-  }
+  const src = factionImages[faction] || Fallback;
+  return <img src={src} height={height} alt={faction} style={style} />;
 }
 
 function Spike({ faction, style: style2, height = "18px" }) {
