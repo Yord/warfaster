@@ -815,9 +815,15 @@ function AppPresentation({
                                                               )
                                                         }
                                                         getPopupContainer={() =>
-                                                          document.querySelectorAll(
-                                                            ".card"
-                                                          )[cardIndex]
+                                                          document
+                                                            .querySelectorAll(
+                                                              ".cards"
+                                                            )
+                                                            [
+                                                              listIndex
+                                                            ].querySelectorAll(
+                                                              ".card"
+                                                            )[cardIndex]
                                                         }
                                                       >
                                                         <Select.Option
@@ -1012,9 +1018,15 @@ function AppPresentation({
                                                                       )
                                                                 }
                                                                 getPopupContainer={() =>
-                                                                  document.querySelectorAll(
-                                                                    ".card"
-                                                                  )[cardIndex]
+                                                                  document
+                                                                    .querySelectorAll(
+                                                                      ".cards"
+                                                                    )
+                                                                    [
+                                                                      listIndex
+                                                                    ].querySelectorAll(
+                                                                      ".card"
+                                                                    )[cardIndex]
                                                                 }
                                                               >
                                                                 <Select.Option
@@ -1127,9 +1139,15 @@ function AppPresentation({
                                                               )
                                                         }
                                                         getPopupContainer={() =>
-                                                          document.querySelectorAll(
-                                                            ".card"
-                                                          )[cardIndex]
+                                                          document
+                                                            .querySelectorAll(
+                                                              ".cards"
+                                                            )
+                                                            [
+                                                              listIndex
+                                                            ].querySelectorAll(
+                                                              ".card"
+                                                            )[cardIndex]
                                                         }
                                                       >
                                                         <Select.Option
