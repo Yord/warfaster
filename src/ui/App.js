@@ -60,21 +60,19 @@ import SystemFailure from "./img/weapon_qualities/System_Failure.png";
 import { MenuItemClicked } from "../messages";
 import { AppSync } from "../state/AppSync";
 import { CypherCodecs } from "../state/CypherCodecs";
-import { Cyphers } from "../state/Cyphers";
 import { EditMode } from "../state/EditMode";
 import { FactionModels } from "../state/FactionModels";
 import { Factions } from "../state/Factions";
 import { Lists } from "../state/Lists";
-import { PageIds } from "../state/PageIds";
 import { ToggleSections } from "../state/ToggleSections";
 import { Url } from "../state/Url";
 import { WildCardModels } from "../state/WildCardModels";
-import { Models } from "../state/Models";
 import { VehicleWeapons } from "../state/VehicleWeapons";
 import { WarjackWeapons } from "../state/WarjackWeapons";
 import { CadreModels } from "../state/CadreModels";
 import { CadreCategoryMembers } from "../state/CadreCategoryMembers";
 import { ListIndex } from "../state/ListIndex";
+import { EnhancedLists } from "../state/selectors/EnhancedLists";
 
 const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
@@ -253,13 +251,359 @@ const Bookmark = connect(
   })
 )(BookmarkPresentation);
 
-function AppPresentation({
-  initialized,
+const FactionsMenuPresentation = ({
   factionModels,
   wildCardModels,
   cypherCodecs,
   menuItemClicked,
   allMenuItemsClicked,
+  cadres,
+  toggleEditMode,
+  updateTargetList,
+  editMode,
+  lists,
+  factions,
+}) => {
+  const [openDrawer, setOpenDrawer] = React.useState("");
+
+  const onOpenChangeDrawers = (keys) => {
+    if (keys.length > 0) {
+      const key = keys[0];
+      if (key === openDrawer) {
+        setOpenDrawer("");
+      } else {
+        setOpenDrawer(keys[0]);
+      }
+    }
+  };
+
+  return (
+    <Content>
+      <Menu
+        id="factions"
+        openKeys={[]}
+        onOpenChange={onOpenChangeDrawers}
+        mode="horizontal"
+        triggerSubMenuAction="click"
+      >
+        {factionModels.map(([factionName, faction, models]) => (
+          <SubMenu
+            key={faction}
+            icon={<FactionImage faction={faction} />}
+          ></SubMenu>
+        ))}
+        <SubMenu
+          className="edit"
+          key="edit"
+          icon={
+            editMode ? (
+              <CheckSquareOutlined
+                onClick={toggleEditMode}
+                style={{ fontSize: "30px" }}
+              />
+            ) : (
+              <FormOutlined
+                onClick={toggleEditMode}
+                style={{ fontSize: "30px" }}
+              />
+            )
+          }
+          style={{
+            marginLeft: "20px",
+            paddingTop: "5px !important",
+          }}
+        ></SubMenu>
+      </Menu>
+      {factionModels.map(([factionName, faction, models, cadreModels]) => (
+        <Drawer
+          key={`drawer_${faction}`}
+          visible={openDrawer === faction}
+          placement="right"
+          onClose={setOpenDrawer}
+          width="80%"
+          mask={false}
+          closeIcon={<MenuUnfoldOutlined />}
+        >
+          <Menu
+            id={`faction_${faction}`}
+            mode="inline"
+            triggerSubMenuAction="click"
+          >
+            <Menu.ItemGroup
+              title={
+                <Select
+                  defaultValue={0}
+                  onChange={(event) => updateTargetList(event)}
+                  options={lists.map(({ title, cards }, index) => ({
+                    value: index,
+                    label: `${index + 1} - ${
+                      title ||
+                      generateListNamePlaceholder(
+                        cards,
+                        factions,
+                        "Name your list"
+                      )
+                    }`,
+                  }))}
+                />
+              }
+            />
+            <Menu.ItemGroup
+              title={
+                <div
+                  onClick={allMenuItemsClicked(
+                    models.map((model) => model.page)
+                  )}
+                >
+                  {factionName}
+                </div>
+              }
+            >
+              {models.map(({ name, page, type, subtype }) => {
+                const shortName = name.slice(0, 40);
+
+                return (
+                  <Menu.Item key={faction + ":" + page} className={faction}>
+                    <span onClick={menuItemClicked(page)}>
+                      <span className="card">
+                        {shortName.length === name.length ? (
+                          shortName
+                        ) : (
+                          <Tooltip placement="top" title={name}>
+                            {shortName}...
+                          </Tooltip>
+                        )}
+                      </span>
+                      <span className="types">
+                        {subtype ? subtype : ""}
+                        {type ? (subtype ? " " : "") + type : ""}
+                      </span>
+                    </span>
+                  </Menu.Item>
+                );
+              })}
+            </Menu.ItemGroup>
+            {!cadreModels ? (
+              <></>
+            ) : (
+              cadreModels.map(({ cadrePageId, cadreModels }) => (
+                <Menu.ItemGroup
+                  key={`Cadre:${cadrePageId}`}
+                  title={
+                    <div
+                      onClick={allMenuItemsClicked(
+                        cadreModels.map((model) => model.page)
+                      )}
+                    >
+                      {cadres[cadrePageId]}
+                    </div>
+                  }
+                >
+                  {cadreModels.map(({ name, page, type, subtype }) => {
+                    const shortName = name.slice(0, 40);
+
+                    return (
+                      <Menu.Item
+                        key={faction + ":" + page + ":cadre:" + cadrePageId}
+                        className={faction}
+                      >
+                        <span onClick={menuItemClicked(page)}>
+                          <span className="card">
+                            {shortName.length === name.length ? (
+                              shortName
+                            ) : (
+                              <Tooltip placement="top" title={name}>
+                                {shortName}...
+                              </Tooltip>
+                            )}
+                          </span>
+                          <span className="types">
+                            {subtype ? subtype : ""}
+                            {type ? (subtype ? " " : "") + type : ""}
+                          </span>
+                        </span>
+                      </Menu.Item>
+                    );
+                  })}
+                </Menu.ItemGroup>
+              ))
+            )}
+            <Menu.ItemGroup
+              title={
+                <div
+                  onClick={allMenuItemsClicked(
+                    (wildCardModels[faction] || []).map((model) => model.page)
+                  )}
+                >
+                  Wild Cards
+                </div>
+              }
+            >
+              {(wildCardModels[faction] || [])
+                .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
+                .map(({ name, page, type, subtype }, j) => {
+                  const shortName = name.slice(0, 40);
+
+                  return (
+                    <Menu.Item key={faction + ":" + page}>
+                      <span onClick={menuItemClicked(page)}>
+                        <span className="card">
+                          {shortName.length === name.length ? (
+                            shortName
+                          ) : (
+                            <Tooltip placement="top" title={name}>
+                              {shortName}...
+                            </Tooltip>
+                          )}
+                        </span>
+                        <span className="types">
+                          {subtype ? subtype : ""}
+                          {type ? (subtype ? " " : "") + type : ""}
+                        </span>
+                      </span>
+                    </Menu.Item>
+                  );
+                })}
+            </Menu.ItemGroup>
+            {Object.entries(
+              cypherCodecs
+                .filter(
+                  (cypher) =>
+                    [factionName, "Universal"].indexOf(cypher.Faction.text) !==
+                    -1
+                )
+                .reduce(
+                  (acc, cypher) => ({
+                    ...acc,
+                    [cypher.Faction.text]: [
+                      ...(acc[cypher.Faction.text] || []),
+                      cypher,
+                    ],
+                  }),
+                  {}
+                )
+            )
+              .sort(([a], [b]) =>
+                a === "Universal" ? 1 : b === "Universal" ? -1 : 1
+              )
+              .map(([faction, cyphers]) => (
+                <Menu.ItemGroup
+                  title={
+                    <div
+                      onClick={allMenuItemsClicked(
+                        cyphers
+                          .sort((c1, c2) =>
+                            c1.Type.text < c2.Type.text ? -1 : 1
+                          )
+                          .map(({ Cypher }) => Cypher.page)
+                      )}
+                    >
+                      {`${faction} Cyphers`}
+                    </div>
+                  }
+                  key={faction}
+                >
+                  {cyphers
+                    .sort((c1, c2) => (c1.Type.text < c2.Type.text ? -1 : 1))
+                    .map(({ Cypher, Type }) => (
+                      <Menu.Item key={":" + Cypher.page} className={Type.text}>
+                        <span onClick={menuItemClicked(Cypher.page)}>
+                          <span className="card">{Cypher.text}</span>
+                          <span className="types">{Type.text}</span>
+                        </span>
+                      </Menu.Item>
+                    ))}
+                </Menu.ItemGroup>
+              ))}
+          </Menu>
+        </Drawer>
+      ))}
+    </Content>
+  );
+};
+
+const FactionsMenu = connect(
+  (state) => ({
+    factionModels: Object.entries(FactionModels.select()(state))
+      .sort()
+      .map(([faction, models]) => [
+        Factions.select()(state)[faction].text,
+        faction,
+        models
+          .map((model) => ({
+            name: model.Name.text,
+            page: model.Name.page,
+            type: model.Type.text,
+            ...(model.Subtype
+              ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+              : {}),
+          }))
+          .filter(
+            (model) =>
+              !Object.values(CadreModels.select()(state))
+                .flatMap((models) =>
+                  models.map((cadreModel) => cadreModel.title)
+                )
+                .includes(model.name)
+          ),
+        Object.entries(CadreModels.select()(state)).flatMap(
+          ([cadrePageId, cadreModels]) => {
+            const cadre = cadreModels.map((model) => model.title);
+            const allCadreModels = models
+              .filter((model) => cadre.includes(model.Name.text))
+              .map((model) => ({
+                name: model.Name.text,
+                page: model.Name.page,
+                type: model.Type.text,
+                ...(model.Subtype
+                  ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+                  : {}),
+              }));
+
+            if (allCadreModels.length === cadreModels.length)
+              return [{ cadrePageId, cadreModels: allCadreModels }];
+
+            return [];
+          }
+        ),
+      ]),
+    wildCardModels: Object.fromEntries(
+      Object.entries(WildCardModels.select()(state))
+        .sort()
+        .map(([faction, models]) => [
+          faction,
+          models.map((model) => ({
+            name: model.Name.text,
+            page: model.Name.page,
+            type: model.Type.text,
+            ...(model.Subtype
+              ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
+              : {}),
+          })),
+        ])
+    ),
+    cypherCodecs: CypherCodecs.select()(state),
+    cadres: CadreCategoryMembers.select()(state),
+    editMode: EditMode.select()(state),
+    lists: EnhancedLists.select()(state),
+    factions: Factions.select()(state),
+  }),
+  (dispatch) => ({
+    menuItemClicked: (page) => (event) => {
+      dispatch(MenuItemClicked({ page }));
+      event.stopPropagation();
+    },
+    allMenuItemsClicked: (pages) => (event) => {
+      pages.forEach((page) => dispatch(MenuItemClicked({ page })));
+      event.stopPropagation();
+    },
+    toggleEditMode: () => dispatch(EditMode.toggle()),
+    updateTargetList: (listIndex) => dispatch(ListIndex.set({ listIndex })),
+  })
+)(FactionsMenuPresentation);
+
+function AppPresentation({
+  initialized,
   lists,
   toggleCard,
   removeList,
@@ -275,26 +619,10 @@ function AppPresentation({
   factionsPageByText,
   vehicleWeapons,
   warjackWeapons,
-  cadres,
   editMode,
-  toggleEditMode,
   toggledSections,
   toggleSection,
-  updateTargetList,
 }) {
-  const [openDrawer, setOpenDrawer] = React.useState("");
-
-  const onOpenChangeDrawers = (keys) => {
-    if (keys.length > 0) {
-      const key = keys[0];
-      if (key === openDrawer) {
-        setOpenDrawer("");
-      } else {
-        setOpenDrawer(keys[0]);
-      }
-    }
-  };
-
   return (
     <div className="App">
       <Layout>
@@ -376,277 +704,7 @@ function AppPresentation({
         ) : (
           <>
             <Affix>
-              <Content>
-                <Menu
-                  id="factions"
-                  openKeys={[]}
-                  onOpenChange={onOpenChangeDrawers}
-                  mode="horizontal"
-                  triggerSubMenuAction="click"
-                >
-                  {factionModels.map(([factionName, faction, models]) => (
-                    <SubMenu
-                      key={faction}
-                      icon={<FactionImage faction={faction} />}
-                    ></SubMenu>
-                  ))}
-                  <SubMenu
-                    className="edit"
-                    key="edit"
-                    icon={
-                      editMode ? (
-                        <CheckSquareOutlined
-                          onClick={toggleEditMode}
-                          style={{ fontSize: "30px" }}
-                        />
-                      ) : (
-                        <FormOutlined
-                          onClick={toggleEditMode}
-                          style={{ fontSize: "30px" }}
-                        />
-                      )
-                    }
-                    style={{
-                      marginLeft: "20px",
-                      paddingTop: "5px !important",
-                    }}
-                  ></SubMenu>
-                </Menu>
-                {factionModels.map(
-                  ([factionName, faction, models, cadreModels]) => (
-                    <Drawer
-                      key={`drawer_${faction}`}
-                      visible={openDrawer === faction}
-                      placement="right"
-                      onClose={setOpenDrawer}
-                      width="80%"
-                      mask={false}
-                      closeIcon={<MenuUnfoldOutlined />}
-                    >
-                      <Menu
-                        id={`faction_${faction}`}
-                        mode="inline"
-                        triggerSubMenuAction="click"
-                      >
-                        <Menu.ItemGroup
-                          title={
-                            <Select
-                              defaultValue={0}
-                              onChange={(event) => updateTargetList(event)}
-                              options={lists.map(({ title, cards }, index) => ({
-                                value: index,
-                                label: `${index + 1} - ${
-                                  title ||
-                                  generateListNamePlaceholder(
-                                    cards,
-                                    factions,
-                                    "Name your list"
-                                  )
-                                }`,
-                              }))}
-                            />
-                          }
-                        />
-                        <Menu.ItemGroup
-                          title={
-                            <div
-                              onClick={allMenuItemsClicked(
-                                models.map((model) => model.page)
-                              )}
-                            >
-                              {factionName}
-                            </div>
-                          }
-                        >
-                          {models.map(({ name, page, type, subtype }) => {
-                            const shortName = name.slice(0, 40);
-
-                            return (
-                              <Menu.Item
-                                key={faction + ":" + page}
-                                className={faction}
-                              >
-                                <span onClick={menuItemClicked(page)}>
-                                  <span className="card">
-                                    {shortName.length === name.length ? (
-                                      shortName
-                                    ) : (
-                                      <Tooltip placement="top" title={name}>
-                                        {shortName}...
-                                      </Tooltip>
-                                    )}
-                                  </span>
-                                  <span className="types">
-                                    {subtype ? subtype : ""}
-                                    {type ? (subtype ? " " : "") + type : ""}
-                                  </span>
-                                </span>
-                              </Menu.Item>
-                            );
-                          })}
-                        </Menu.ItemGroup>
-                        {!cadreModels ? (
-                          <></>
-                        ) : (
-                          cadreModels.map(({ cadrePageId, cadreModels }) => (
-                            <Menu.ItemGroup
-                              key={`Cadre:${cadrePageId}`}
-                              title={
-                                <div
-                                  onClick={allMenuItemsClicked(
-                                    cadreModels.map((model) => model.page)
-                                  )}
-                                >
-                                  {cadres[cadrePageId]}
-                                </div>
-                              }
-                            >
-                              {cadreModels.map(
-                                ({ name, page, type, subtype }) => {
-                                  const shortName = name.slice(0, 40);
-
-                                  return (
-                                    <Menu.Item
-                                      key={
-                                        faction +
-                                        ":" +
-                                        page +
-                                        ":cadre:" +
-                                        cadrePageId
-                                      }
-                                      className={faction}
-                                    >
-                                      <span onClick={menuItemClicked(page)}>
-                                        <span className="card">
-                                          {shortName.length === name.length ? (
-                                            shortName
-                                          ) : (
-                                            <Tooltip
-                                              placement="top"
-                                              title={name}
-                                            >
-                                              {shortName}...
-                                            </Tooltip>
-                                          )}
-                                        </span>
-                                        <span className="types">
-                                          {subtype ? subtype : ""}
-                                          {type
-                                            ? (subtype ? " " : "") + type
-                                            : ""}
-                                        </span>
-                                      </span>
-                                    </Menu.Item>
-                                  );
-                                }
-                              )}
-                            </Menu.ItemGroup>
-                          ))
-                        )}
-                        <Menu.ItemGroup
-                          title={
-                            <div
-                              onClick={allMenuItemsClicked(
-                                (wildCardModels[faction] || []).map(
-                                  (model) => model.page
-                                )
-                              )}
-                            >
-                              Wild Cards
-                            </div>
-                          }
-                        >
-                          {(wildCardModels[faction] || [])
-                            .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
-                            .map(({ name, page, type, subtype }, j) => {
-                              const shortName = name.slice(0, 40);
-
-                              return (
-                                <Menu.Item key={faction + ":" + page}>
-                                  <span onClick={menuItemClicked(page)}>
-                                    <span className="card">
-                                      {shortName.length === name.length ? (
-                                        shortName
-                                      ) : (
-                                        <Tooltip placement="top" title={name}>
-                                          {shortName}...
-                                        </Tooltip>
-                                      )}
-                                    </span>
-                                    <span className="types">
-                                      {subtype ? subtype : ""}
-                                      {type ? (subtype ? " " : "") + type : ""}
-                                    </span>
-                                  </span>
-                                </Menu.Item>
-                              );
-                            })}
-                        </Menu.ItemGroup>
-                        {Object.entries(
-                          cypherCodecs
-                            .filter(
-                              (cypher) =>
-                                [factionName, "Universal"].indexOf(
-                                  cypher.Faction.text
-                                ) !== -1
-                            )
-                            .reduce(
-                              (acc, cypher) => ({
-                                ...acc,
-                                [cypher.Faction.text]: [
-                                  ...(acc[cypher.Faction.text] || []),
-                                  cypher,
-                                ],
-                              }),
-                              {}
-                            )
-                        )
-                          .sort(([a], [b]) =>
-                            a === "Universal" ? 1 : b === "Universal" ? -1 : 1
-                          )
-                          .map(([faction, cyphers]) => (
-                            <Menu.ItemGroup
-                              title={
-                                <div
-                                  onClick={allMenuItemsClicked(
-                                    cyphers
-                                      .sort((c1, c2) =>
-                                        c1.Type.text < c2.Type.text ? -1 : 1
-                                      )
-                                      .map(({ Cypher }) => Cypher.page)
-                                  )}
-                                >
-                                  {`${faction} Cyphers`}
-                                </div>
-                              }
-                              key={faction}
-                            >
-                              {cyphers
-                                .sort((c1, c2) =>
-                                  c1.Type.text < c2.Type.text ? -1 : 1
-                                )
-                                .map(({ Cypher, Type }) => (
-                                  <Menu.Item
-                                    key={":" + Cypher.page}
-                                    className={Type.text}
-                                  >
-                                    <span
-                                      onClick={menuItemClicked(Cypher.page)}
-                                    >
-                                      <span className="card">
-                                        {Cypher.text}
-                                      </span>
-                                      <span className="types">{Type.text}</span>
-                                    </span>
-                                  </Menu.Item>
-                                ))}
-                            </Menu.ItemGroup>
-                          ))}
-                      </Menu>
-                    </Drawer>
-                  )
-                )}
-              </Content>
+              <FactionsMenu />
             </Affix>
             <Content>
               <Layout>
@@ -2127,241 +2185,11 @@ function AppPresentation({
 const App = connect(
   (state) => ({
     initialized: AppSync.selectDone()(state),
-    factionModels: Object.entries(FactionModels.select()(state))
-      .sort()
-      .map(([faction, models]) => [
-        Factions.select()(state)[faction].text,
-        faction,
-        models
-          .map((model) => ({
-            name: model.Name.text,
-            page: model.Name.page,
-            type: model.Type.text,
-            ...(model.Subtype
-              ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
-              : {}),
-          }))
-          .filter(
-            (model) =>
-              !Object.values(CadreModels.select()(state))
-                .flatMap((models) =>
-                  models.map((cadreModel) => cadreModel.title)
-                )
-                .includes(model.name)
-          ),
-        Object.entries(CadreModels.select()(state)).flatMap(
-          ([cadrePageId, cadreModels]) => {
-            const cadre = cadreModels.map((model) => model.title);
-            const allCadreModels = models
-              .filter((model) => cadre.includes(model.Name.text))
-              .map((model) => ({
-                name: model.Name.text,
-                page: model.Name.page,
-                type: model.Type.text,
-                ...(model.Subtype
-                  ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
-                  : {}),
-              }));
-
-            if (allCadreModels.length === cadreModels.length)
-              return [{ cadrePageId, cadreModels: allCadreModels }];
-
-            return [];
-          }
-        ),
-      ]),
-    wildCardModels: Object.fromEntries(
-      Object.entries(WildCardModels.select()(state))
-        .sort()
-        .map(([faction, models]) => [
-          faction,
-          models.map((model) => ({
-            name: model.Name.text,
-            page: model.Name.page,
-            type: model.Type.text,
-            ...(model.Subtype
-              ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
-              : {}),
-          })),
-        ])
-    ),
-    cypherCodecs: CypherCodecs.select()(state),
-    lists: Lists.select()(state).map(({ title, cards }) => ({
-      title,
-      cards: cards.flatMap(
-        ({ pageId, cortexIds, warjackWeaponIds, vehicleWeaponId, hidden }) => {
-          const pageIdByPage = PageIds.select()(state);
-
-          const page =
-            Object.entries(pageIdByPage)
-              .filter(([_, id]) => id === pageId)
-              .map(([page, _]) => page)[0] || "";
-
-          const model = Object.entries(FactionModels.select()(state))
-            .flatMap(([faction, models]) =>
-              models.map((model) => ({ ...model, faction }))
-            )
-            .find(({ Name }) => Name.page === page);
-          const wildCard = Object.entries(WildCardModels.select()(state))
-            .flatMap(([faction, models]) =>
-              models.map((model) => ({ ...model, faction }))
-            )
-            .find(({ Name }) => Name.page === page);
-          const cypher = CypherCodecs.select()(state).find(
-            ({ Cypher }) => Cypher.page === page
-          );
-
-          if (model) {
-            const details = Models.selectByPage(page)(state);
-            return [
-              {
-                card: "model",
-                hidden,
-                type: model.Type.text,
-                title: model.Name.text,
-                page: model.Name.page,
-                pageId,
-                cortexIds,
-                warjackWeaponIds,
-                vehicleWeaponId,
-                faction: model.faction,
-                ...(model.Subtype
-                  ? { subtype: model.Subtype.map((_) => _.text).join(" ") }
-                  : {}),
-                ...(!details
-                  ? {}
-                  : {
-                      details: {
-                        ...details,
-                        ...(!details.coreStats
-                          ? {}
-                          : {
-                              coreStats: details.coreStats.map((coreStats) => ({
-                                ...coreStats,
-                                ...(!coreStats.hardpoints
-                                  ? {}
-                                  : {
-                                      hardpointNames: parseHardpoints(
-                                        coreStats.hardpoints
-                                      ),
-                                    }),
-                                ...(!coreStats.cortexSelections
-                                  ? {}
-                                  : {
-                                      cortexSelections: Object.fromEntries(
-                                        Object.entries(
-                                          coreStats.cortexSelections
-                                        ).map(([cortex, advantages]) => [
-                                          cortex,
-                                          Object.fromEntries(
-                                            Object.entries(advantages).map(
-                                              ([
-                                                advantage,
-                                                { text, category },
-                                              ]) => [
-                                                advantage,
-                                                {
-                                                  text,
-                                                  categoryId:
-                                                    pageIdByPage[category],
-                                                },
-                                              ]
-                                            )
-                                          ),
-                                        ])
-                                      ),
-                                    }),
-                                ...(!coreStats.warjackWeaponSelections
-                                  ? {}
-                                  : {
-                                      warjackWeaponSelections:
-                                        Object.fromEntries(
-                                          Object.entries(
-                                            coreStats.warjackWeaponSelections
-                                          ).map(([page, selection]) => [
-                                            page.split("#")[0],
-                                            {
-                                              ...selection,
-                                              pageId:
-                                                pageIdByPage[
-                                                  page.split("#")[0]
-                                                ],
-                                            },
-                                          ])
-                                        ),
-                                    }),
-                                ...(!coreStats.vehicleWeaponSelection
-                                  ? {}
-                                  : {
-                                      vehicleWeaponSelection:
-                                        coreStats.vehicleWeaponSelection.map(
-                                          ({ text, page }) => ({
-                                            text,
-                                            page: page.split("#")[0],
-                                            pageId:
-                                              pageIdByPage[page.split("#")[0]],
-                                          })
-                                        ),
-                                    }),
-                              })),
-                            }),
-                      },
-                    }),
-              },
-            ];
-          }
-
-          if (wildCard) {
-            const details = Models.selectByPage(page)(state);
-            return [
-              {
-                card: "model",
-                hidden,
-                type: wildCard.Type.text,
-                title: wildCard.Name.text,
-                page: wildCard.Name.page,
-                pageId,
-                faction: "Wild_Card",
-                ...(wildCard.Subtype
-                  ? { subtype: wildCard.Subtype.map((_) => _.text).join(" ") }
-                  : {}),
-                details,
-              },
-            ];
-          }
-
-          if (cypher) {
-            const details = Cyphers.selectByPage(page)(state);
-            return [
-              {
-                card: "cypher",
-                hidden,
-                type: cypher.Type.text,
-                title: cypher.Cypher.text,
-                page: cypher.Cypher.page,
-                pageId,
-                ...(cypher.Faction.text === "Universal"
-                  ? { faction: "Universal" }
-                  : { faction: cypher.Faction.page }),
-                details,
-              },
-            ];
-          }
-
-          return [];
-        }
-      ),
-    })),
+    lists: EnhancedLists.selectDetails()(state),
     factions: Factions.select()(state),
-    factionsPageByText: Object.fromEntries(
-      Object.values(Factions.select()(state)).map(({ text, page }) => [
-        text,
-        page,
-      ])
-    ),
+    factionsPageByText: Factions.selectPageByText()(state),
     vehicleWeapons: VehicleWeapons.select()(state),
     warjackWeapons: WarjackWeapons.select()(state),
-    cadres: CadreCategoryMembers.select()(state),
     editMode: EditMode.select()(state),
     toggledSections: ToggleSections.select()(state),
   }),
@@ -2370,14 +2198,6 @@ const App = connect(
       dispatch(Lists.toggleCard({ listIndex, cardIndex, pageId, card })),
     toggleSection: (section) => () =>
       dispatch(ToggleSections.toggle({ section })),
-    menuItemClicked: (page) => (event) => {
-      dispatch(MenuItemClicked({ page }));
-      event.stopPropagation();
-    },
-    allMenuItemsClicked: (pages) => (event) => {
-      pages.forEach((page) => dispatch(MenuItemClicked({ page })));
-      event.stopPropagation();
-    },
     removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
     removeCard: (listIndex, cardIndex) => () =>
       dispatch(
@@ -2428,8 +2248,6 @@ const App = connect(
             vehicleWeaponId: label,
           })
         ),
-    toggleEditMode: () => dispatch(EditMode.toggle()),
-    updateTargetList: (listIndex) => dispatch(ListIndex.set({ listIndex })),
   })
 )(AppPresentation);
 
@@ -2851,57 +2669,4 @@ function warjackWeaponNamesSubtitle(warjackWeaponSelections, weaponIds) {
     }
     return [];
   });
-}
-
-function parseHardpoints(hardpoints) {
-  // Parses strings of the following type: "3 : 2 Arm, 1 Back"
-
-  const rHardpointCount = "\\s*(\\d+)\\s*";
-  const rHardpointGroup = "\\s*(\\d+)\\s*(\\w+)\\s*";
-
-  let results = null;
-  for (let n = 1; n <= 10; n++) {
-    const regexp = new RegExp(
-      `^${rHardpointCount}:${rHardpointGroup}${repeat(
-        `,${rHardpointGroup}`,
-        n - 1
-      )}$`
-    );
-    results = regexp.exec(hardpoints);
-    if (results !== null) {
-      break;
-    }
-  }
-
-  if (results === null) {
-    return undefined;
-  }
-
-  const hardpointCount = parseInt(results[1], 10);
-
-  const hardpointNames = [];
-  for (let n = 2; n < results.length; n += 2) {
-    const groupCount = parseInt(results[n], 10);
-    const groupName = results[n + 1];
-
-    for (let i = 1; i <= groupCount; i++) {
-      hardpointNames.push(groupName);
-    }
-  }
-
-  if (hardpointCount !== hardpointNames.length) {
-    console.error(
-      "Hardpoints do not add up!",
-      hardpoints,
-      hardpointCount,
-      hardpointNames
-    );
-  }
-
-  return hardpointNames;
-
-  function repeat(s, n) {
-    if (n === 0) return "";
-    return s + repeat(s, n - 1);
-  }
 }
