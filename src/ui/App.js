@@ -205,6 +205,54 @@ function WeaponQuality({ title, text, style, height = "16px" }) {
   return <></>;
 }
 
+const BookmarkPresentation = ({ url, setUrl, open, bookmark }) => (
+  <div className="bookmark">
+    <Layout>
+      <Row>
+        <Col xs={24} sm={24} md={18} lg={18} xl={16} xxl={16}>
+          <input
+            value={url}
+            onChange={setUrl}
+            onKeyDown={open}
+            onClick={bookmark}
+          />
+        </Col>
+      </Row>
+    </Layout>
+  </div>
+);
+
+const Bookmark = connect(
+  (state) => ({
+    url: Url.select()(state),
+  }),
+  (dispatch) => ({
+    setUrl: (event) => dispatch(Url.set({ url: event.target.value })),
+    bookmark: () => {
+      const bookmark = document.querySelector(".bookmark input");
+      if (bookmark) {
+        if (navigator.userAgent.match(/ipad|iphone/i)) {
+          const range = document.createRange();
+          range.selectNodeContents(bookmark);
+
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          bookmark.setSelectionRange(0, 999999);
+        } else {
+          bookmark.select();
+        }
+      }
+    },
+    open: (event) => {
+      if (event.key === "Enter") {
+        const url = document.querySelector(".bookmark input").value;
+        if (url) window.open(url, "_self");
+      }
+    },
+  })
+)(BookmarkPresentation);
+
 function AppPresentation({
   initialized,
   factionModels,
@@ -220,10 +268,6 @@ function AppPresentation({
   moveListBy,
   moveCardByOne,
   setListTitle,
-  setUrl,
-  url,
-  bookmark,
-  open,
   setCardCortex,
   setCardWarjackWeapons,
   setCardVehicleWeapon,
@@ -2064,20 +2108,7 @@ function AppPresentation({
 
         <div>
           <Footer>
-            <div className="bookmark">
-              <Layout>
-                <Row>
-                  <Col xs={24} sm={24} md={18} lg={18} xl={16} xxl={16}>
-                    <input
-                      value={url}
-                      onChange={setUrl}
-                      onKeyDown={open}
-                      onClick={bookmark}
-                    />
-                  </Col>
-                </Row>
-              </Layout>
-            </div>
+            <Bookmark />
             <div className="copyright-notice">
               Images originating from the Privateer Press website are © 2001—
               <>{new Date().getFullYear()}</> Privateer Press, Inc. All Rights
@@ -2321,7 +2352,6 @@ const App = connect(
         }
       ),
     })),
-    url: Url.select()(state),
     factions: Factions.select()(state),
     factionsPageByText: Object.fromEntries(
       Object.values(Factions.select()(state)).map(({ text, page }) => [
@@ -2364,29 +2394,6 @@ const App = connect(
       dispatch(Lists.moveCard({ listIndex, cardIndex, up })),
     setListTitle: (listIndex) => (event) =>
       dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
-    setUrl: (event) => dispatch(Url.set({ url: event.target.value })),
-    bookmark: () => {
-      const bookmark = document.querySelector(".bookmark input");
-      if (bookmark) {
-        if (navigator.userAgent.match(/ipad|iphone/i)) {
-          const range = document.createRange();
-          range.selectNodeContents(bookmark);
-
-          const selection = window.getSelection();
-          selection.removeAllRanges();
-          selection.addRange(range);
-          bookmark.setSelectionRange(0, 999999);
-        } else {
-          bookmark.select();
-        }
-      }
-    },
-    open: (event) => {
-      if (event.key === "Enter") {
-        const url = document.querySelector(".bookmark input").value;
-        if (url) window.open(url, "_self");
-      }
-    },
     setCardCortex:
       (listIndex, cardIndex, pageId) =>
       (_, { label }) =>
