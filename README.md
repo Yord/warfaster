@@ -43,7 +43,7 @@ These decisions are made on purpose:
 </dd>
 <dt>Why can't I reorder cards with drag-and-drop?</dt>
 <dd>
-<p>We tested drag-and-drop while developing the app. Our conclusion was, that the user experience for scrolling, opening cards, and drag-and-drop was very bad, because too many things wanted to "click" on cards at the same time. So we decided to don't support drag-and-drop.</p>
+<p>We tested drag-and-drop while developing the app. Our conclusion was, that the user experience for scrolling, opening cards, and drag-and-drop was very bad, because too many things wanted to "click" on cards at the same time. So we decided not to support drag-and-drop.</p>
 </dd>
 </dl>
 
