@@ -125,70 +125,72 @@ function selectDetails(state) {
 
       if (card.card === "model" && card.faction !== "Wild_Card") {
         details = Models.selectByPage(page)(state);
-        details = {
-          ...details,
-          ...(!details.coreStats
-            ? {}
-            : {
-                coreStats: details.coreStats.map((coreStats) => ({
-                  ...coreStats,
-                  ...(!coreStats.hardpoints
-                    ? {}
-                    : {
-                        hardpointNames: parseHardpoints(coreStats.hardpoints),
-                      }),
-                  ...(!coreStats.cortexSelections
-                    ? {}
-                    : {
-                        cortexSelections: Object.fromEntries(
-                          Object.entries(coreStats.cortexSelections).map(
-                            ([cortex, advantages]) => [
-                              cortex,
-                              Object.fromEntries(
-                                Object.entries(advantages).map(
-                                  ([advantage, { text, category }]) => [
-                                    advantage,
-                                    {
-                                      text,
-                                      categoryId: pageIdByPage[category],
-                                    },
-                                  ]
-                                )
-                              ),
-                            ]
-                          )
-                        ),
-                      }),
-                  ...(!coreStats.warjackWeaponSelections
-                    ? {}
-                    : {
-                        warjackWeaponSelections: Object.fromEntries(
-                          Object.entries(coreStats.warjackWeaponSelections).map(
-                            ([page, selection]) => [
+        if (details) {
+          details = {
+            ...details,
+            ...(!details.coreStats
+              ? {}
+              : {
+                  coreStats: details.coreStats.map((coreStats) => ({
+                    ...coreStats,
+                    ...(!coreStats.hardpoints
+                      ? {}
+                      : {
+                          hardpointNames: parseHardpoints(coreStats.hardpoints),
+                        }),
+                    ...(!coreStats.cortexSelections
+                      ? {}
+                      : {
+                          cortexSelections: Object.fromEntries(
+                            Object.entries(coreStats.cortexSelections).map(
+                              ([cortex, advantages]) => [
+                                cortex,
+                                Object.fromEntries(
+                                  Object.entries(advantages).map(
+                                    ([advantage, { text, category }]) => [
+                                      advantage,
+                                      {
+                                        text,
+                                        categoryId: pageIdByPage[category],
+                                      },
+                                    ]
+                                  )
+                                ),
+                              ]
+                            )
+                          ),
+                        }),
+                    ...(!coreStats.warjackWeaponSelections
+                      ? {}
+                      : {
+                          warjackWeaponSelections: Object.fromEntries(
+                            Object.entries(
+                              coreStats.warjackWeaponSelections
+                            ).map(([page, selection]) => [
                               page.split("#")[0],
                               {
                                 ...selection,
                                 pageId: pageIdByPage[page.split("#")[0]],
                               },
-                            ]
-                          )
-                        ),
-                      }),
-                  ...(!coreStats.vehicleWeaponSelection
-                    ? {}
-                    : {
-                        vehicleWeaponSelection:
-                          coreStats.vehicleWeaponSelection.map(
-                            ({ text, page }) => ({
-                              text,
-                              page: page.split("#")[0],
-                              pageId: pageIdByPage[page.split("#")[0]],
-                            })
+                            ])
                           ),
-                      }),
-                })),
-              }),
-        };
+                        }),
+                    ...(!coreStats.vehicleWeaponSelection
+                      ? {}
+                      : {
+                          vehicleWeaponSelection:
+                            coreStats.vehicleWeaponSelection.map(
+                              ({ text, page }) => ({
+                                text,
+                                page: page.split("#")[0],
+                                pageId: pageIdByPage[page.split("#")[0]],
+                              })
+                            ),
+                        }),
+                  })),
+                }),
+          };
+        }
       }
 
       if (card.card === "model" && card.faction === "Wild_Card") {
