@@ -368,6 +368,240 @@ function AppPresentation({
                     }}
                   ></SubMenu>
                 </Menu>
+                {factionModels.map(
+                  ([factionName, faction, models, cadreModels]) => (
+                    <Drawer
+                      key={`drawer_${faction}`}
+                      visible={openDrawer === faction}
+                      placement="right"
+                      onClose={setOpenDrawer}
+                      width="80%"
+                      mask={false}
+                      closeIcon={<MenuUnfoldOutlined />}
+                    >
+                      <Menu
+                        id={`faction_${faction}`}
+                        mode="inline"
+                        triggerSubMenuAction="click"
+                      >
+                        <Menu.ItemGroup
+                          title={
+                            <Select
+                              defaultValue={0}
+                              onChange={(event) => updateTargetList(event)}
+                              options={lists.map(({ title, cards }, index) => ({
+                                value: index,
+                                label: `${index + 1} - ${
+                                  title ||
+                                  generateListNamePlaceholder(
+                                    cards,
+                                    factions,
+                                    "Name your list"
+                                  )
+                                }`,
+                              }))}
+                            />
+                          }
+                        />
+                        <Menu.ItemGroup
+                          title={
+                            <div
+                              onClick={allMenuItemsClicked(
+                                models.map((model) => model.page)
+                              )}
+                            >
+                              {factionName}
+                            </div>
+                          }
+                        >
+                          {models.map(({ name, page, type, subtype }) => {
+                            const shortName = name.slice(0, 40);
+
+                            return (
+                              <Menu.Item
+                                key={faction + ":" + page}
+                                className={faction}
+                              >
+                                <span onClick={menuItemClicked(page)}>
+                                  <span className="card">
+                                    {shortName.length === name.length ? (
+                                      shortName
+                                    ) : (
+                                      <Tooltip placement="top" title={name}>
+                                        {shortName}...
+                                      </Tooltip>
+                                    )}
+                                  </span>
+                                  <span className="types">
+                                    {subtype ? subtype : ""}
+                                    {type ? (subtype ? " " : "") + type : ""}
+                                  </span>
+                                </span>
+                              </Menu.Item>
+                            );
+                          })}
+                        </Menu.ItemGroup>
+                        {!cadreModels ? (
+                          <></>
+                        ) : (
+                          cadreModels.map(({ cadrePageId, cadreModels }) => (
+                            <Menu.ItemGroup
+                              key={`Cadre:${cadrePageId}`}
+                              title={
+                                <div
+                                  onClick={allMenuItemsClicked(
+                                    cadreModels.map((model) => model.page)
+                                  )}
+                                >
+                                  {cadres[cadrePageId]}
+                                </div>
+                              }
+                            >
+                              {cadreModels.map(
+                                ({ name, page, type, subtype }) => {
+                                  const shortName = name.slice(0, 40);
+
+                                  return (
+                                    <Menu.Item
+                                      key={
+                                        faction +
+                                        ":" +
+                                        page +
+                                        ":cadre:" +
+                                        cadrePageId
+                                      }
+                                      className={faction}
+                                    >
+                                      <span onClick={menuItemClicked(page)}>
+                                        <span className="card">
+                                          {shortName.length === name.length ? (
+                                            shortName
+                                          ) : (
+                                            <Tooltip
+                                              placement="top"
+                                              title={name}
+                                            >
+                                              {shortName}...
+                                            </Tooltip>
+                                          )}
+                                        </span>
+                                        <span className="types">
+                                          {subtype ? subtype : ""}
+                                          {type
+                                            ? (subtype ? " " : "") + type
+                                            : ""}
+                                        </span>
+                                      </span>
+                                    </Menu.Item>
+                                  );
+                                }
+                              )}
+                            </Menu.ItemGroup>
+                          ))
+                        )}
+                        <Menu.ItemGroup
+                          title={
+                            <div
+                              onClick={allMenuItemsClicked(
+                                (wildCardModels[faction] || []).map(
+                                  (model) => model.page
+                                )
+                              )}
+                            >
+                              Wild Cards
+                            </div>
+                          }
+                        >
+                          {(wildCardModels[faction] || [])
+                            .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
+                            .map(({ name, page, type, subtype }, j) => {
+                              const shortName = name.slice(0, 40);
+
+                              return (
+                                <Menu.Item key={faction + ":" + page}>
+                                  <span onClick={menuItemClicked(page)}>
+                                    <span className="card">
+                                      {shortName.length === name.length ? (
+                                        shortName
+                                      ) : (
+                                        <Tooltip placement="top" title={name}>
+                                          {shortName}...
+                                        </Tooltip>
+                                      )}
+                                    </span>
+                                    <span className="types">
+                                      {subtype ? subtype : ""}
+                                      {type ? (subtype ? " " : "") + type : ""}
+                                    </span>
+                                  </span>
+                                </Menu.Item>
+                              );
+                            })}
+                        </Menu.ItemGroup>
+                        {Object.entries(
+                          cypherCodecs
+                            .filter(
+                              (cypher) =>
+                                [factionName, "Universal"].indexOf(
+                                  cypher.Faction.text
+                                ) !== -1
+                            )
+                            .reduce(
+                              (acc, cypher) => ({
+                                ...acc,
+                                [cypher.Faction.text]: [
+                                  ...(acc[cypher.Faction.text] || []),
+                                  cypher,
+                                ],
+                              }),
+                              {}
+                            )
+                        )
+                          .sort(([a], [b]) =>
+                            a === "Universal" ? 1 : b === "Universal" ? -1 : 1
+                          )
+                          .map(([faction, cyphers]) => (
+                            <Menu.ItemGroup
+                              title={
+                                <div
+                                  onClick={allMenuItemsClicked(
+                                    cyphers
+                                      .sort((c1, c2) =>
+                                        c1.Type.text < c2.Type.text ? -1 : 1
+                                      )
+                                      .map(({ Cypher }) => Cypher.page)
+                                  )}
+                                >
+                                  {`${faction} Cyphers`}
+                                </div>
+                              }
+                              key={faction}
+                            >
+                              {cyphers
+                                .sort((c1, c2) =>
+                                  c1.Type.text < c2.Type.text ? -1 : 1
+                                )
+                                .map(({ Cypher, Type }) => (
+                                  <Menu.Item
+                                    key={":" + Cypher.page}
+                                    className={Type.text}
+                                  >
+                                    <span
+                                      onClick={menuItemClicked(Cypher.page)}
+                                    >
+                                      <span className="card">
+                                        {Cypher.text}
+                                      </span>
+                                      <span className="types">{Type.text}</span>
+                                    </span>
+                                  </Menu.Item>
+                                ))}
+                            </Menu.ItemGroup>
+                          ))}
+                      </Menu>
+                    </Drawer>
+                  )
+                )}
               </Content>
             </Affix>
             <Content>
@@ -1854,215 +2088,6 @@ function AppPresentation({
             </div>
           </Footer>
         </div>
-
-        {factionModels.map(([factionName, faction, models, cadreModels]) => (
-          <Drawer
-            key={`drawer_${faction}`}
-            visible={openDrawer === faction}
-            placement="right"
-            onClose={setOpenDrawer}
-            width="80%"
-            mask={false}
-            closeIcon={<MenuUnfoldOutlined />}
-          >
-            <Menu
-              id={`faction_${faction}`}
-              mode="inline"
-              triggerSubMenuAction="click"
-            >
-              <Menu.ItemGroup
-                title={
-                  <Select
-                    defaultValue={0}
-                    onChange={(event) => updateTargetList(event)}
-                    options={lists.map(({ title, cards }, index) => ({
-                      value: index,
-                      label: `${index + 1} - ${
-                        title ||
-                        generateListNamePlaceholder(
-                          cards,
-                          factions,
-                          "Name your list"
-                        )
-                      }`,
-                    }))}
-                  />
-                }
-              />
-              <Menu.ItemGroup
-                title={
-                  <div
-                    onClick={allMenuItemsClicked(
-                      models.map((model) => model.page)
-                    )}
-                  >
-                    {factionName}
-                  </div>
-                }
-              >
-                {models.map(({ name, page, type, subtype }) => {
-                  const shortName = name.slice(0, 40);
-
-                  return (
-                    <Menu.Item key={faction + ":" + page} className={faction}>
-                      <span onClick={menuItemClicked(page)}>
-                        <span className="card">
-                          {shortName.length === name.length ? (
-                            shortName
-                          ) : (
-                            <Tooltip placement="top" title={name}>
-                              {shortName}...
-                            </Tooltip>
-                          )}
-                        </span>
-                        <span className="types">
-                          {subtype ? subtype : ""}
-                          {type ? (subtype ? " " : "") + type : ""}
-                        </span>
-                      </span>
-                    </Menu.Item>
-                  );
-                })}
-              </Menu.ItemGroup>
-              {!cadreModels ? (
-                <></>
-              ) : (
-                cadreModels.map(({ cadrePageId, cadreModels }) => (
-                  <Menu.ItemGroup
-                    key={`Cadre:${cadrePageId}`}
-                    title={
-                      <div
-                        onClick={allMenuItemsClicked(
-                          cadreModels.map((model) => model.page)
-                        )}
-                      >
-                        {cadres[cadrePageId]}
-                      </div>
-                    }
-                  >
-                    {cadreModels.map(({ name, page, type, subtype }) => {
-                      const shortName = name.slice(0, 40);
-
-                      return (
-                        <Menu.Item
-                          key={faction + ":" + page + ":cadre:" + cadrePageId}
-                          className={faction}
-                        >
-                          <span onClick={menuItemClicked(page)}>
-                            <span className="card">
-                              {shortName.length === name.length ? (
-                                shortName
-                              ) : (
-                                <Tooltip placement="top" title={name}>
-                                  {shortName}...
-                                </Tooltip>
-                              )}
-                            </span>
-                            <span className="types">
-                              {subtype ? subtype : ""}
-                              {type ? (subtype ? " " : "") + type : ""}
-                            </span>
-                          </span>
-                        </Menu.Item>
-                      );
-                    })}
-                  </Menu.ItemGroup>
-                ))
-              )}
-              <Menu.ItemGroup
-                title={
-                  <div
-                    onClick={allMenuItemsClicked(
-                      (wildCardModels[faction] || []).map((model) => model.page)
-                    )}
-                  >
-                    Wild Cards
-                  </div>
-                }
-              >
-                {(wildCardModels[faction] || [])
-                  .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
-                  .map(({ name, page, type, subtype }, j) => {
-                    const shortName = name.slice(0, 40);
-
-                    return (
-                      <Menu.Item key={faction + ":" + page}>
-                        <span onClick={menuItemClicked(page)}>
-                          <span className="card">
-                            {shortName.length === name.length ? (
-                              shortName
-                            ) : (
-                              <Tooltip placement="top" title={name}>
-                                {shortName}...
-                              </Tooltip>
-                            )}
-                          </span>
-                          <span className="types">
-                            {subtype ? subtype : ""}
-                            {type ? (subtype ? " " : "") + type : ""}
-                          </span>
-                        </span>
-                      </Menu.Item>
-                    );
-                  })}
-              </Menu.ItemGroup>
-              {Object.entries(
-                cypherCodecs
-                  .filter(
-                    (cypher) =>
-                      [factionName, "Universal"].indexOf(
-                        cypher.Faction.text
-                      ) !== -1
-                  )
-                  .reduce(
-                    (acc, cypher) => ({
-                      ...acc,
-                      [cypher.Faction.text]: [
-                        ...(acc[cypher.Faction.text] || []),
-                        cypher,
-                      ],
-                    }),
-                    {}
-                  )
-              )
-                .sort(([a], [b]) =>
-                  a === "Universal" ? 1 : b === "Universal" ? -1 : 1
-                )
-                .map(([faction, cyphers]) => (
-                  <Menu.ItemGroup
-                    title={
-                      <div
-                        onClick={allMenuItemsClicked(
-                          cyphers
-                            .sort((c1, c2) =>
-                              c1.Type.text < c2.Type.text ? -1 : 1
-                            )
-                            .map(({ Cypher }) => Cypher.page)
-                        )}
-                      >
-                        {`${faction} Cyphers`}
-                      </div>
-                    }
-                    key={faction}
-                  >
-                    {cyphers
-                      .sort((c1, c2) => (c1.Type.text < c2.Type.text ? -1 : 1))
-                      .map(({ Cypher, Type }) => (
-                        <Menu.Item
-                          key={":" + Cypher.page}
-                          className={Type.text}
-                        >
-                          <span onClick={menuItemClicked(Cypher.page)}>
-                            <span className="card">{Cypher.text}</span>
-                            <span className="types">{Type.text}</span>
-                          </span>
-                        </Menu.Item>
-                      ))}
-                  </Menu.ItemGroup>
-                ))}
-            </Menu>
-          </Drawer>
-        ))}
       </Layout>
     </div>
   );
