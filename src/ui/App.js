@@ -286,7 +286,7 @@ const FactionsMenuPresentation = ({
         mode="horizontal"
         triggerSubMenuAction="click"
       >
-        {factionModels.map(([factionName, faction, models]) => (
+        {Object.keys(factions).map((faction) => (
           <SubMenu
             key={faction}
             icon={<FactionImage faction={faction} />}
