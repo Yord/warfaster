@@ -163,7 +163,7 @@ function AdvantageImage({ title, text, style, height = "30px" }) {
     );
   }
 
-  return <div className="metallic-circle"></div>;
+  return <div className="metallic-circle" />;
 }
 
 const weaponQualities = {
@@ -287,10 +287,7 @@ const FactionsMenuPresentation = ({
         triggerSubMenuAction="click"
       >
         {Object.keys(factions).map((faction) => (
-          <SubMenu
-            key={faction}
-            icon={<FactionImage faction={faction} />}
-          ></SubMenu>
+          <SubMenu key={faction} icon={<FactionImage faction={faction} />} />
         ))}
         <SubMenu
           className="edit"
@@ -312,7 +309,7 @@ const FactionsMenuPresentation = ({
             marginLeft: "20px",
             paddingTop: "5px !important",
           }}
-        ></SubMenu>
+        />
       </Menu>
       {factionModels.map(([factionName, faction, models, cadreModels]) => (
         <Drawer
@@ -695,7 +692,7 @@ function AppPresentation({
                         </Card>
                       </div>
                     </div>
-                    <div className="footer"></div>
+                    <div className="footer" />
                   </div>
                 </Col>
               </Row>
@@ -1361,7 +1358,7 @@ function AppPresentation({
                                                                     height:
                                                                       "52px",
                                                                   }}
-                                                                ></div>
+                                                                />
                                                               </Select.Option>
                                                               {Object.values(
                                                                 coreStats.warjackWeaponSelections
@@ -1478,7 +1475,7 @@ function AppPresentation({
                                                           style={{
                                                             height: "52px",
                                                           }}
-                                                        ></div>
+                                                        />
                                                       </Select.Option>
                                                       {coreStats.vehicleWeaponSelection.map(
                                                         (
