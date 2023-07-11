@@ -145,12 +145,7 @@ function AdvantageImage({ title, text, style, height = "30px" }) {
 
   if (src) {
     return (
-      <Tooltip
-        key={`${title}_tooltip`}
-        placement="top"
-        title={`${title} - ${text}`}
-        trigger="click"
-      >
+      <Tooltip placement="top" title={`${title} - ${text}`} trigger="click">
         <img
           src={advantageImages[title]}
           className="metallic-img"
@@ -182,12 +177,7 @@ function WeaponQuality({ title, text, style, height = "16px" }) {
 
   if (src) {
     return (
-      <Tooltip
-        key={`${title}_tooltip`}
-        placement="top"
-        title={`${title} - ${text}`}
-        trigger="click"
-      >
+      <Tooltip placement="top" title={`${title} - ${text}`} trigger="click">
         <img
           src={src}
           className="metallic-img-tiny"
@@ -314,7 +304,7 @@ const FactionsMenuPresentation = ({
       </Menu>
       {factionModels.map(([factionName, faction, models, cadreModels]) => (
         <Drawer
-          key={`drawer_${faction}`}
+          key={faction}
           visible={openDrawer === faction}
           placement="right"
           onClose={setOpenDrawer}
@@ -358,7 +348,7 @@ const FactionsMenuPresentation = ({
               }
             >
               {models.map(({ name, page, type, subtype }) => (
-                <Menu.Item key={faction + ":" + page} className={faction}>
+                <Menu.Item key={page} className={faction}>
                   <span onClick={menuItemClicked(page)}>
                     <span className="card">{name}</span>
                     <span className="types">
@@ -374,7 +364,7 @@ const FactionsMenuPresentation = ({
             ) : (
               cadreModels.map(({ cadrePageId, cadreModels }) => (
                 <Menu.ItemGroup
-                  key={`Cadre:${cadrePageId}`}
+                  key={cadrePageId}
                   title={
                     <div
                       onClick={allMenuItemsClicked(
@@ -386,10 +376,7 @@ const FactionsMenuPresentation = ({
                   }
                 >
                   {cadreModels.map(({ name, page, type, subtype }) => (
-                    <Menu.Item
-                      key={faction + ":" + page + ":cadre:" + cadrePageId}
-                      className={faction}
-                    >
+                    <Menu.Item key={page} className={faction}>
                       <span onClick={menuItemClicked(page)}>
                         <span className="card">{name}</span>
                         <span className="types">
@@ -416,7 +403,7 @@ const FactionsMenuPresentation = ({
               {(wildCardModels[faction] || [])
                 .sort((w1, w2) => (w1.type < w2.type ? -1 : 1))
                 .map(({ name, page, type, subtype }) => (
-                  <Menu.Item key={faction + ":" + page}>
+                  <Menu.Item key={page}>
                     <span onClick={menuItemClicked(page)}>
                       <span className="card">{name}</span>
                       <span className="types">
@@ -450,6 +437,7 @@ const FactionsMenuPresentation = ({
               )
               .map(([faction, cyphers]) => (
                 <Menu.ItemGroup
+                  key={faction}
                   title={
                     <div
                       onClick={allMenuItemsClicked(
@@ -463,12 +451,11 @@ const FactionsMenuPresentation = ({
                       {`${faction} Cyphers`}
                     </div>
                   }
-                  key={faction}
                 >
                   {cyphers
                     .sort((c1, c2) => (c1.Type.text < c2.Type.text ? -1 : 1))
                     .map(({ Cypher, Type }) => (
-                      <Menu.Item key={":" + Cypher.page} className={Type.text}>
+                      <Menu.Item key={Cypher.page} className={Type.text}>
                         <span onClick={menuItemClicked(Cypher.page)}>
                           <span className="card">{Cypher.text}</span>
                           <span className="types">{Type.text}</span>
@@ -674,7 +661,7 @@ function AppPresentation({
                 <Row gutter={16}>
                   {lists.map(({ title, cards }, listIndex) => (
                     <Col
-                      key={`lists_col_${listIndex}`}
+                      key={listIndex}
                       xs={24}
                       sm={12}
                       md={12}
@@ -687,7 +674,6 @@ function AppPresentation({
                           <></>
                         ) : (
                           <div
-                            key={`add_list_top${listIndex}`}
                             style={{
                               color: "white",
                               cursor: "pointer",
@@ -699,7 +685,7 @@ function AppPresentation({
                             </span>
                           </div>
                         )}
-                        <div className="cards" key={`cards${listIndex}`}>
+                        <div className="cards">
                           <div style={{ cursor: "pointer" }} className="header">
                             <Row>
                               <Col span={16} className="army-list-title">
@@ -765,10 +751,10 @@ function AppPresentation({
                                     )
                                   )
                                     .sort()
-                                    .map(([faction, count], i) => (
+                                    .map(([faction, count]) => (
                                       <Badge
                                         size="small"
-                                        key={`badge${i}`}
+                                        key={faction}
                                         count={count}
                                         offset={[0, 10]}
                                       >
@@ -780,7 +766,7 @@ function AppPresentation({
                             </Row>
                           </div>
 
-                          <div key={`cards_${listIndex}`}>
+                          <div>
                             {cards.map(
                               (
                                 {
@@ -788,7 +774,6 @@ function AppPresentation({
                                   hidden,
                                   type,
                                   title,
-                                  page,
                                   pageId,
                                   cortexIds,
                                   vehicleWeaponId,
@@ -799,10 +784,7 @@ function AppPresentation({
                                 },
                                 cardIndex
                               ) => (
-                                <div
-                                  className="body"
-                                  key={`${page}_${listIndex}_${cardIndex}`}
-                                >
+                                <div className="body" key={cardIndex}>
                                   <Card
                                     hoverable
                                     className={["card", faction, type]}
@@ -1015,7 +997,7 @@ function AppPresentation({
                                                 : details.storeLinks.map(
                                                     (linkText, index) => (
                                                       <React.Fragment
-                                                        key={`store_link_${listIndex}_${cardIndex}_${index}`}
+                                                        key={index}
                                                       >
                                                         <span
                                                           dangerouslySetInnerHTML={{
@@ -1044,7 +1026,7 @@ function AppPresentation({
                                           details.coreStats.map(
                                             (coreStats, coreStatsIndex) => (
                                               <React.Fragment
-                                                key={`core_stats_${coreStatsIndex}`}
+                                                key={coreStatsIndex}
                                               >
                                                 {!coreStats.cardName ? (
                                                   <></>
@@ -1060,16 +1042,12 @@ function AppPresentation({
                                                   <div className="model-stats">
                                                     {Object.entries(
                                                       coreStats.modelStats
-                                                    ).map(
-                                                      ([name, stat], index) => (
-                                                        <div
-                                                          key={`${name}_stat`}
-                                                        >
-                                                          <div>{name}</div>
-                                                          <div>{stat}</div>
-                                                        </div>
-                                                      )
-                                                    )}
+                                                    ).map(([name, stat]) => (
+                                                      <div key={name}>
+                                                        <div>{name}</div>
+                                                        <div>{stat}</div>
+                                                      </div>
+                                                    ))}
                                                   </div>
                                                 )}
                                                 {!coreStats.cortexSelections ||
@@ -1114,7 +1092,7 @@ function AppPresentation({
                                                       }
                                                     >
                                                       <Select.Option
-                                                        key={"cortex_-1"}
+                                                        key="empty-default"
                                                         label={undefined}
                                                         value="none"
                                                         onClick={(event) =>
@@ -1128,12 +1106,12 @@ function AppPresentation({
                                                       {Object.entries(
                                                         coreStats.cortexSelections
                                                       ).map(
-                                                        (
-                                                          [cortex, advantages],
-                                                          index
-                                                        ) => (
+                                                        ([
+                                                          cortex,
+                                                          advantages,
+                                                        ]) => (
                                                           <Select.Option
-                                                            key={`cortex_${index}`}
+                                                            key={cortex}
                                                             label={Object.values(
                                                               advantages
                                                             ).map(
@@ -1161,17 +1139,14 @@ function AppPresentation({
                                                                       ]
                                                                   )
                                                                   .map(
-                                                                    (
-                                                                      [
-                                                                        name,
-                                                                        {
-                                                                          text,
-                                                                        },
-                                                                      ],
-                                                                      index
-                                                                    ) => (
+                                                                    ([
+                                                                      name,
+                                                                      { text },
+                                                                    ]) => (
                                                                       <AdvantageImage
-                                                                        key={`advantage_${index}`}
+                                                                        key={
+                                                                          name
+                                                                        }
                                                                         title={
                                                                           name
                                                                         }
@@ -1193,15 +1168,12 @@ function AppPresentation({
                                                                   ]
                                                               )
                                                               .map(
-                                                                (
-                                                                  [
-                                                                    rule,
-                                                                    { text },
-                                                                  ],
-                                                                  advantageIndex
-                                                                ) => (
+                                                                ([
+                                                                  rule,
+                                                                  { text },
+                                                                ]) => (
                                                                   <div
-                                                                    key={`cortex_${index}_advantage_${advantageIndex}`}
+                                                                    key={rule}
                                                                     className="model-cortex-special-rules"
                                                                   >
                                                                     <span
@@ -1258,7 +1230,9 @@ function AppPresentation({
                                                           <></>
                                                         ) : (
                                                           <div
-                                                            key={`warjack_weapon_${hardpointNameIndex}`}
+                                                            key={
+                                                              hardpointNameIndex
+                                                            }
                                                           >
                                                             <Select
                                                               suffixIcon={
@@ -1307,7 +1281,6 @@ function AppPresentation({
                                                               }
                                                             >
                                                               <Select.Option
-                                                                key={`warjack_weapon_${hardpointNameIndex}_-1`}
                                                                 label={
                                                                   undefined
                                                                 }
@@ -1348,7 +1321,9 @@ function AppPresentation({
                                                                     index
                                                                   ) => (
                                                                     <Select.Option
-                                                                      key={`warjack_weapon_${hardpointNameIndex}_${index}`}
+                                                                      key={
+                                                                        pageId
+                                                                      }
                                                                       label={
                                                                         pageId
                                                                       }
@@ -1385,7 +1360,7 @@ function AppPresentation({
                                                   .length === 0 ? (
                                                   <></>
                                                 ) : (
-                                                  <div key="vehicle_weapon_selection">
+                                                  <div>
                                                     <Select
                                                       suffixIcon={
                                                         <CaretDownOutlined />
@@ -1427,9 +1402,6 @@ function AppPresentation({
                                                       }
                                                     >
                                                       <Select.Option
-                                                        key={
-                                                          "vehicle_weapon_selection_-1"
-                                                        }
                                                         label={undefined}
                                                         value="none"
                                                         onClick={(event) =>
@@ -1453,7 +1425,7 @@ function AppPresentation({
                                                           index
                                                         ) => (
                                                           <Select.Option
-                                                            key={`vehicle_weapon_selection_${index}`}
+                                                            key={pageId}
                                                             label={pageId}
                                                             value={text}
                                                             onClick={(event) =>
@@ -1480,9 +1452,9 @@ function AppPresentation({
                                                   <></>
                                                 ) : (
                                                   coreStats.weapons.map(
-                                                    (weapon, index) => (
+                                                    (weapon) => (
                                                       <React.Fragment
-                                                        key={`weapon_number_${index}`}
+                                                        key={weapon["Name"]}
                                                       >
                                                         <div className="model-weapons">
                                                           <div>
@@ -1507,12 +1479,12 @@ function AppPresentation({
                                                                 weapon.specialRules ||
                                                                   {}
                                                               ).map(
-                                                                (
-                                                                  [rule, text],
-                                                                  index2
-                                                                ) => (
+                                                                ([
+                                                                  rule,
+                                                                  text,
+                                                                ]) => (
                                                                   <WeaponQuality
-                                                                    key={`weapon_number_${index}_rule_${index2}`}
+                                                                    key={rule}
                                                                     title={rule}
                                                                     text={text}
                                                                   />
@@ -1553,10 +1525,10 @@ function AppPresentation({
                                                                 ]
                                                             )
                                                             .map(
-                                                              (
-                                                                [rule, text],
-                                                                ruleIndex
-                                                              ) => {
+                                                              ([
+                                                                rule,
+                                                                text,
+                                                              ]) => {
                                                                 const textWithIcons =
                                                                   [
                                                                     ...Object.keys(
@@ -1589,8 +1561,7 @@ function AppPresentation({
                                                                     ) =>
                                                                       texts.flatMap(
                                                                         (
-                                                                          text,
-                                                                          index2
+                                                                          text
                                                                         ) => {
                                                                           if (
                                                                             typeof text !==
@@ -1607,8 +1578,7 @@ function AppPresentation({
                                                                             )
                                                                             .flatMap(
                                                                               (
-                                                                                string,
-                                                                                index
+                                                                                string
                                                                               ) => {
                                                                                 if (
                                                                                   string.match(
@@ -1631,7 +1601,9 @@ function AppPresentation({
                                                                                   return [
                                                                                     ` • ${title}: `,
                                                                                     <Tag
-                                                                                      key={`${index}_${index2}`}
+                                                                                      key={
+                                                                                        title
+                                                                                      }
                                                                                       title={
                                                                                         title
                                                                                       }
@@ -1654,7 +1626,7 @@ function AppPresentation({
 
                                                                 return (
                                                                   <div
-                                                                    key={`weapon_number_${index}_${ruleIndex}`}
+                                                                    key={rule}
                                                                     className="model-weapons-special-rules"
                                                                   >
                                                                     <span
@@ -1694,15 +1666,14 @@ function AppPresentation({
                                                   ) : (
                                                     Object.values(
                                                       coreStats.wildCardFactions
-                                                    ).map(({ page }, index) => (
+                                                    ).map(({ page }) => (
                                                       <Tooltip
-                                                        key={`wild_card_faction_${index}_tooltip`}
+                                                        key={page}
                                                         placement="top"
                                                         title="Wild card faction"
                                                         trigger="click"
                                                       >
                                                         <FactionImage
-                                                          key={`wild_card_faction_${index}`}
                                                           faction={page}
                                                           height="30px"
                                                           style={{
@@ -1717,7 +1688,6 @@ function AppPresentation({
                                                     <></>
                                                   ) : (
                                                     <Tooltip
-                                                      key="base_size_tooltip"
                                                       placement="top"
                                                       title={`Base size - ${coreStats.baseSize}`}
                                                       trigger="click"
@@ -1734,7 +1704,6 @@ function AppPresentation({
                                                     <></>
                                                   ) : (
                                                     <Tooltip
-                                                      key="hp_tooltip"
                                                       placement="top"
                                                       title={`Health - ${coreStats.health}`}
                                                       trigger="click"
@@ -1753,7 +1722,6 @@ function AppPresentation({
                                                     <></>
                                                   ) : (
                                                     <Tooltip
-                                                      key="squad_size_tooltip"
                                                       placement="top"
                                                       title={`Squad size - ${coreStats.squadSize}`}
                                                       trigger="click"
@@ -1776,15 +1744,13 @@ function AppPresentation({
                                                   ) : (
                                                     Object.entries(
                                                       coreStats.advantages
-                                                    ).map(
-                                                      ([name, text], index) => (
-                                                        <AdvantageImage
-                                                          key={`advantage_${index}`}
-                                                          title={name}
-                                                          text={text}
-                                                        />
-                                                      )
-                                                    )
+                                                    ).map(([name, text]) => (
+                                                      <AdvantageImage
+                                                        key={name}
+                                                        title={name}
+                                                        text={text}
+                                                      />
+                                                    ))
                                                   )}
                                                   {!coreStats.chassisAdvantages ||
                                                   Object.entries(
@@ -1794,15 +1760,13 @@ function AppPresentation({
                                                   ) : (
                                                     Object.entries(
                                                       coreStats.chassisAdvantages
-                                                    ).map(
-                                                      ([name, text], index) => (
-                                                        <AdvantageImage
-                                                          key={`advantage_${index}`}
-                                                          title={name}
-                                                          text={text}
-                                                        />
-                                                      )
-                                                    )
+                                                    ).map(([name, text]) => (
+                                                      <AdvantageImage
+                                                        key={name}
+                                                        title={name}
+                                                        text={text}
+                                                      />
+                                                    ))
                                                   )}
                                                 </div>
                                                 {!coreStats.specialRules ||
@@ -1813,32 +1777,30 @@ function AppPresentation({
                                                 ) : (
                                                   Object.entries(
                                                     coreStats.specialRules
-                                                  ).map(
-                                                    ([rule, text], index) => (
-                                                      <div
-                                                        key={`special_rules_${index}`}
-                                                        className="special-rules"
+                                                  ).map(([rule, text]) => (
+                                                    <div
+                                                      key={rule}
+                                                      className="special-rules"
+                                                    >
+                                                      <span
+                                                        onClick={toggleSection(
+                                                          rule
+                                                        )}
                                                       >
-                                                        <span
-                                                          onClick={toggleSection(
-                                                            rule
-                                                          )}
-                                                        >
-                                                          {markChargedOrSpike(
-                                                            faction,
-                                                            text
-                                                          )}
-                                                          {rule}
-                                                        </span>{" "}
-                                                        <span>
-                                                          -{" "}
-                                                          {toggledSections[rule]
-                                                            ? "Click to expand"
-                                                            : text}
-                                                        </span>
-                                                      </div>
-                                                    )
-                                                  )
+                                                        {markChargedOrSpike(
+                                                          faction,
+                                                          text
+                                                        )}
+                                                        {rule}
+                                                      </span>{" "}
+                                                      <span>
+                                                        -{" "}
+                                                        {toggledSections[rule]
+                                                          ? "Click to expand"
+                                                          : text}
+                                                      </span>
+                                                    </div>
+                                                  ))
                                                 )}
                                                 {!coreStats.chassisSpecialRules ||
                                                 Object.entries(
@@ -1848,32 +1810,30 @@ function AppPresentation({
                                                 ) : (
                                                   Object.entries(
                                                     coreStats.chassisSpecialRules
-                                                  ).map(
-                                                    ([rule, text], index) => (
-                                                      <div
-                                                        key={`chassis_special_rules_${index}`}
-                                                        className="special-rules"
+                                                  ).map(([rule, text]) => (
+                                                    <div
+                                                      key={rule}
+                                                      className="special-rules"
+                                                    >
+                                                      <span
+                                                        onClick={toggleSection(
+                                                          rule
+                                                        )}
                                                       >
-                                                        <span
-                                                          onClick={toggleSection(
-                                                            rule
-                                                          )}
-                                                        >
-                                                          {markChargedOrSpike(
-                                                            faction,
-                                                            text
-                                                          )}
-                                                          {rule}
-                                                        </span>{" "}
-                                                        <span>
-                                                          -{" "}
-                                                          {toggledSections[rule]
-                                                            ? "Click to expand"
-                                                            : text}
-                                                        </span>
-                                                      </div>
-                                                    )
-                                                  )
+                                                        {markChargedOrSpike(
+                                                          faction,
+                                                          text
+                                                        )}
+                                                        {rule}
+                                                      </span>{" "}
+                                                      <span>
+                                                        -{" "}
+                                                        {toggledSections[rule]
+                                                          ? "Click to expand"
+                                                          : text}
+                                                      </span>
+                                                    </div>
+                                                  ))
                                                 )}
                                                 {!coreStats.maneuvers ||
                                                 Object.values(
@@ -1886,37 +1846,32 @@ function AppPresentation({
                                                     <dl>
                                                       {Object.entries(
                                                         coreStats.maneuvers
-                                                      ).map(
-                                                        (
-                                                          [rule, text],
-                                                          index
-                                                        ) => (
-                                                          <div
-                                                            key={`maneuvers_advantage_${index}`}
-                                                            className="special-rules"
+                                                      ).map(([rule, text]) => (
+                                                        <div
+                                                          key={rule}
+                                                          className="special-rules"
+                                                        >
+                                                          <span
+                                                            onClick={toggleSection(
+                                                              rule
+                                                            )}
                                                           >
-                                                            <span
-                                                              onClick={toggleSection(
-                                                                rule
-                                                              )}
-                                                            >
-                                                              {markChargedOrSpike(
-                                                                faction,
-                                                                text
-                                                              )}
-                                                              {rule}
-                                                            </span>{" "}
-                                                            <span>
-                                                              -{" "}
-                                                              {toggledSections[
-                                                                rule
-                                                              ]
-                                                                ? "Click to expand"
-                                                                : text}
-                                                            </span>
-                                                          </div>
-                                                        )
-                                                      )}
+                                                            {markChargedOrSpike(
+                                                              faction,
+                                                              text
+                                                            )}
+                                                            {rule}
+                                                          </span>{" "}
+                                                          <span>
+                                                            -{" "}
+                                                            {toggledSections[
+                                                              rule
+                                                            ]
+                                                              ? "Click to expand"
+                                                              : text}
+                                                          </span>
+                                                        </div>
+                                                      ))}
                                                     </dl>
                                                   </>
                                                 )}
@@ -2052,7 +2007,7 @@ function AppPresentation({
                                             (effect, index) => (
                                               <p
                                                 className="cypher-effect"
-                                                key={`cypher_effect_${listIndex}_${cardIndex}_${index}`}
+                                                key={index}
                                               >
                                                 {effect}
                                               </p>
@@ -2071,7 +2026,6 @@ function AppPresentation({
                             <div className="footer">
                               <Badge
                                 size="small"
-                                key="_badge"
                                 count={cards.length}
                                 offset={[10, 5]}
                               >
@@ -2087,10 +2041,10 @@ function AppPresentation({
                                 )
                               )
                                 .sort()
-                                .map(([type, count], i) => (
+                                .map(([type, count]) => (
                                   <Badge
                                     size="small"
-                                    key={`badge${i}`}
+                                    key={type}
                                     count={count}
                                     offset={[10, 5]}
                                   >
@@ -2106,7 +2060,6 @@ function AppPresentation({
                           <></>
                         ) : (
                           <div
-                            key={`add_list_bottom${listIndex + 1}`}
                             style={{
                               color: "white",
                               cursor: "pointer",
@@ -2295,8 +2248,8 @@ function vehicleWeaponName2(
           weaponConfig.weapons.length === 0 ? (
             <></>
           ) : (
-            weaponConfig.weapons.map((weapon, index) => (
-              <React.Fragment key={`vehicle_weapon_selection_number_${index}`}>
+            weaponConfig.weapons.map((weapon) => (
+              <React.Fragment key={weapon["Name"]}>
                 <div className="model-weapons">
                   <div>
                     {weapon["Attack Type"] === "Melee" ? (
@@ -2309,12 +2262,8 @@ function vehicleWeaponName2(
                     <div>
                       {weapon["Name"]}
                       {Object.entries(weapon.specialRules || {}).map(
-                        ([rule, text], index2) => (
-                          <WeaponQuality
-                            key={`vehicle_weapon_selection_number_${index}_rule_${index2}`}
-                            title={rule}
-                            text={text}
-                          />
+                        ([rule, text]) => (
+                          <WeaponQuality key={rule} title={rule} text={text} />
                         )
                       )}
                     </div>
@@ -2339,11 +2288,8 @@ function vehicleWeaponName2(
                 ) : (
                   Object.entries(weapon.specialRules)
                     .filter(([rule]) => !weaponQualities[rule])
-                    .map(([rule, text], ruleIndex) => (
-                      <div
-                        key={`vehicle_weapon_selection_number_${index}_${ruleIndex}`}
-                        className="model-weapons-special-rules"
-                      >
+                    .map(([rule, text]) => (
+                      <div key={rule} className="model-weapons-special-rules">
                         <span onClick={toggleSection(rule)}>
                           {markChargedOrSpike(faction, text)}
                           {rule}
@@ -2372,11 +2318,8 @@ function vehicleWeaponName2(
               )}
               {Object.entries(weaponConfig.specialRules)
                 .filter(([rule]) => !weaponQualities[rule])
-                .map(([rule, text], ruleIndex) => (
-                  <div
-                    key={`vehicle_weapon_selection_rules_number_${ruleIndex}`}
-                    className="model-weapons-special-rules"
-                  >
+                .map(([rule, text]) => (
+                  <div key={rule} className="model-weapons-special-rules">
                     <span>
                       {markChargedOrSpike(faction, text)}
                       {rule}
@@ -2445,8 +2388,8 @@ function warjackWeaponNames(
         weaponConfig.weapons.length === 0 ? (
           <></>
         ) : (
-          weaponConfig.weapons.map((weapon, index) => (
-            <React.Fragment key={`weapon_selection_number_${index}`}>
+          weaponConfig.weapons.map((weapon) => (
+            <React.Fragment key={weapon["Name"]}>
               <div className="model-weapons">
                 <div>
                   {weapon["Attack Type"] === "Melee" ? (
@@ -2459,12 +2402,8 @@ function warjackWeaponNames(
                   <div>
                     {weapon["Name"]}
                     {Object.entries(weapon.specialRules || {}).map(
-                      ([rule, text], index2) => (
-                        <WeaponQuality
-                          key={`weapon_selection_number_${index}_rule_${index2}`}
-                          title={rule}
-                          text={text}
-                        />
+                      ([rule, text]) => (
+                        <WeaponQuality key={rule} title={rule} text={text} />
                       )
                     )}
                   </div>
@@ -2491,12 +2430,8 @@ function warjackWeaponNames(
                   <div className="card-icons">
                     {Object.entries(weapon.specialRules)
                       .filter(([name]) => advantageImages[name])
-                      .map(([name, text], index) => (
-                        <AdvantageImage
-                          key={`advantage_${index}`}
-                          title={name}
-                          text={text}
-                        />
+                      .map(([name, text]) => (
+                        <AdvantageImage key={name} title={name} text={text} />
                       ))}
                   </div>
                   {Object.entries(weapon.specialRules)
@@ -2504,7 +2439,7 @@ function warjackWeaponNames(
                       ([name]) =>
                         !advantageImages[name] && !weaponQualities[name]
                     )
-                    .map(([rule, text], index) => {
+                    .map(([rule, text]) => {
                       const textWithIcons = [
                         ...Object.keys(weaponQualities).map((title) => ({
                           title,
@@ -2516,14 +2451,14 @@ function warjackWeaponNames(
                         })),
                       ].reduce(
                         (texts, { title, Tag }) =>
-                          texts.flatMap((text, index2) => {
+                          texts.flatMap((text) => {
                             if (typeof text !== "string") return text;
 
                             return text
                               .split(
                                 new RegExp(`(\\s.\\s${title}:\\s.+[\\n]*)`, "g")
                               )
-                              .flatMap((string, index) => {
+                              .flatMap((string) => {
                                 if (
                                   string.match(
                                     new RegExp(`(${title}:\\s.+[\\n]*)`)
@@ -2535,7 +2470,7 @@ function warjackWeaponNames(
                                   return [
                                     ` • ${title}: `,
                                     <Tag
-                                      key={`${index}_${index2}`}
+                                      key={title}
                                       title={title}
                                       text={description}
                                       height="16px"
@@ -2551,10 +2486,7 @@ function warjackWeaponNames(
                       );
 
                       return (
-                        <div
-                          key={`weapon_selection_number_${index}_${index}`}
-                          className="model-weapons-special-rules"
-                        >
+                        <div key={rule} className="model-weapons-special-rules">
                           <span onClick={toggleSection(rule)}>
                             {markChargedOrSpike(faction, text)}
                             {rule}
@@ -2589,22 +2521,15 @@ function warjackWeaponNames(
             <div className="card-icons">
               {Object.entries(weaponConfig.specialRules)
                 .filter(([name]) => advantageImages[name])
-                .map(([name, text], index) => (
-                  <AdvantageImage
-                    key={`advantage_${index}`}
-                    title={name}
-                    text={text}
-                  />
+                .map(([name, text]) => (
+                  <AdvantageImage key={name} title={name} text={text} />
                 ))}
             </div>
             {Object.entries(weaponConfig.specialRules)
               .filter(([rule]) => !weaponQualities[rule])
               .filter(([name]) => !advantageImages[name])
-              .map(([rule, text], ruleIndex) => (
-                <div
-                  key={`weapon_selection_rules_number_${ruleIndex}`}
-                  className="model-weapons-special-rules"
-                >
+              .map(([rule, text]) => (
+                <div key={rule} className="model-weapons-special-rules">
                   <span onClick={toggleSection(rule)}>
                     {markChargedOrSpike(faction, text)}
                     {rule}
