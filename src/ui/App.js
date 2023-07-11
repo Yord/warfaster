@@ -263,6 +263,7 @@ const FactionsMenuPresentation = ({
   editMode,
   lists,
   factions,
+  targetList,
 }) => {
   const [openDrawer, setOpenDrawer] = React.useState("");
 
@@ -329,7 +330,7 @@ const FactionsMenuPresentation = ({
             <Menu.ItemGroup
               title={
                 <Select
-                  defaultValue={0}
+                  defaultValue={targetList}
                   onChange={(event) => updateTargetList(event)}
                   options={lists.map(({ title, cards }, index) => ({
                     value: index,
@@ -548,6 +549,7 @@ const FactionsMenu = connect(
     editMode: EditMode.select()(state),
     lists: EnhancedLists.select()(state),
     factions: Factions.select()(state),
+    targetList: ListIndex.select()(state),
   }),
   (dispatch) => ({
     menuItemClicked: (page) => (event) => {
