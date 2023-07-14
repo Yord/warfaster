@@ -41,7 +41,7 @@ These decisions are made on purpose:
 <dd>
 <p>Opening <a href="http://warfaster.com?reset">http://warfaster.com?reset</a> clears all data from the browser cache.</p>
 </dd>
-<dt>Why doesn't Warcaster have link previews?</dt>
+<dt>Why doesn't Warfaster have link previews?</dt>
 <dd>
 <p>Cards are stored in the URL using IDs. Their names are only loaded once the page is opened. Thus, previews based just on the URL are impossible.</p>
 </dd>
