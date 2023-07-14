@@ -41,6 +41,10 @@ These decisions are made on purpose:
 <dd>
 <p>Opening <a href="http://warfaster.com?reset">http://warfaster.com?reset</a> clears all data from the browser cache.</p>
 </dd>
+<dt>Why doesn't Warcaster have link previews?</dt>
+<dd>
+<p>Cards are stored in the URL using IDs. Their names are only loaded once the page is opened. Thus, previews based just on the URL are impossible.</p>
+</dd>
 <dt>Why can't I reorder cards with drag-and-drop?</dt>
 <dd>
 <p>We tested drag-and-drop while developing the app. Our conclusion was, that the user experience for scrolling, opening cards, and drag-and-drop was very bad, because too many things wanted to "click" on cards at the same time. So we decided not to support drag-and-drop.</p>
