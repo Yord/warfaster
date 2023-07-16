@@ -574,105 +574,123 @@ const AddEmptyList = connect(
   })
 )(AddEmptyListPresentation);
 
+const ListHeaderPresentation = ({
+  title,
+  cards,
+  index: listIndex,
+  factions,
+  editMode,
+  removeList,
+  moveListBy,
+  setListTitle,
+}) => (
+  <div style={{ cursor: "pointer" }} className="header">
+    <Row>
+      <Col span={16} className="army-list-title">
+        <TextArea
+          placeholder={generateListNamePlaceholder(
+            cards,
+            factions,
+            "Name your list"
+          )}
+          value={title}
+          maxLength={30}
+          autoSize
+          onChange={setListTitle(listIndex)}
+        />
+      </Col>
+      <Col span={8} className="faction-icons">
+        {editMode ? (
+          <>
+            <CaretUpOutlined
+              style={{
+                fontSize: "18px",
+                color: "white",
+                marginRight: "16px",
+                marginTop: "6px",
+              }}
+              onClick={moveListBy(listIndex, -1)}
+            />
+            <CaretDownOutlined
+              style={{
+                fontSize: "18px",
+                color: "white",
+                marginRight: "16px",
+                marginTop: "6px",
+              }}
+              onClick={moveListBy(listIndex, 1)}
+            />
+            <DeleteOutlined
+              style={{
+                fontSize: "18px",
+                color: "white",
+                marginRight: "16px",
+                marginTop: "6px",
+              }}
+              onClick={removeList(listIndex)}
+            />
+          </>
+        ) : (
+          Object.entries(
+            cards.reduce(
+              (acc, card) => ({
+                ...acc,
+                ...(card.faction
+                  ? {
+                      [card.faction]: (acc[card.faction] || 0) + 1,
+                    }
+                  : {
+                      Universal: (acc.Universal || 0) + 1,
+                    }),
+              }),
+              {}
+            )
+          )
+            .sort()
+            .map(([faction, count]) => (
+              <Badge size="small" key={faction} count={count} offset={[0, 10]}>
+                <FactionIcon faction={faction} />
+              </Badge>
+            ))
+        )}
+      </Col>
+    </Row>
+  </div>
+);
+
+const ListHeader = connect(
+  (state) => ({
+    editMode: EditMode.select()(state),
+    factions: Factions.select()(state),
+  }),
+  (dispatch) => ({
+    removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
+    moveListBy: (listIndex, by) => () =>
+      dispatch(Lists.moveListBy({ listIndex, by })),
+    setListTitle: (listIndex) => (event) =>
+      dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
+  })
+)(ListHeaderPresentation);
+
 const ListPresentation = ({
   title,
   cards,
   index: listIndex,
   toggleCard,
-  removeList,
   removeCard,
-  moveListBy,
   moveCardByOne,
-  setListTitle,
   setCardCortex,
   setCardWarjackWeapons,
   setCardVehicleWeapon,
   toggleSection,
   editMode,
-  factions,
   factionsPageByText,
   toggledSections,
   vehicleWeapons,
   warjackWeapons,
 }) => (
   <div className="cards">
-    <div style={{ cursor: "pointer" }} className="header">
-      <Row>
-        <Col span={16} className="army-list-title">
-          <TextArea
-            placeholder={generateListNamePlaceholder(
-              cards,
-              factions,
-              "Name your list"
-            )}
-            value={title}
-            maxLength={30}
-            autoSize
-            onChange={setListTitle(listIndex)}
-          />
-        </Col>
-        <Col span={8} className="faction-icons">
-          {editMode ? (
-            <>
-              <CaretUpOutlined
-                style={{
-                  fontSize: "18px",
-                  color: "white",
-                  marginRight: "16px",
-                  marginTop: "6px",
-                }}
-                onClick={moveListBy(listIndex, -1)}
-              />
-              <CaretDownOutlined
-                style={{
-                  fontSize: "18px",
-                  color: "white",
-                  marginRight: "16px",
-                  marginTop: "6px",
-                }}
-                onClick={moveListBy(listIndex, 1)}
-              />
-              <DeleteOutlined
-                style={{
-                  fontSize: "18px",
-                  color: "white",
-                  marginRight: "16px",
-                  marginTop: "6px",
-                }}
-                onClick={removeList(listIndex)}
-              />
-            </>
-          ) : (
-            Object.entries(
-              cards.reduce(
-                (acc, card) => ({
-                  ...acc,
-                  ...(card.faction
-                    ? {
-                        [card.faction]: (acc[card.faction] || 0) + 1,
-                      }
-                    : {
-                        Universal: (acc.Universal || 0) + 1,
-                      }),
-                }),
-                {}
-              )
-            )
-              .sort()
-              .map(([faction, count]) => (
-                <Badge
-                  size="small"
-                  key={faction}
-                  count={count}
-                  offset={[0, 10]}
-                >
-                  <FactionIcon faction={faction} />
-                </Badge>
-              ))
-          )}
-        </Col>
-      </Row>
-    </div>
+    <ListHeader title={title} cards={cards} index={listIndex} />
 
     <div>
       {cards.map(
@@ -1609,7 +1627,6 @@ const ListPresentation = ({
 const List = connect(
   (state) => ({
     editMode: EditMode.select()(state),
-    factions: Factions.select()(state),
     factionsPageByText: Factions.selectPageByText()(state),
     toggledSections: ToggleSections.select()(state),
     vehicleWeapons: VehicleWeapons.select()(state),
@@ -1618,7 +1635,6 @@ const List = connect(
   (dispatch) => ({
     toggleCard: (listIndex, cardIndex, pageId, card) => () =>
       dispatch(Lists.toggleCard({ listIndex, cardIndex, pageId, card })),
-    removeList: (listIndex) => () => dispatch(Lists.removeList({ listIndex })),
     removeCard: (listIndex, cardIndex) => () =>
       dispatch(
         Lists.removeCard({
@@ -1626,12 +1642,8 @@ const List = connect(
           cardIndex,
         })
       ),
-    moveListBy: (listIndex, by) => () =>
-      dispatch(Lists.moveListBy({ listIndex, by })),
     moveCardByOne: (listIndex, cardIndex, up) => () =>
       dispatch(Lists.moveCard({ listIndex, cardIndex, up })),
-    setListTitle: (listIndex) => (event) =>
-      dispatch(Lists.setListTitle({ listIndex, title: event.target.value })),
     setCardCortex:
       (listIndex, cardIndex, pageId) =>
       (_, { label }) =>
