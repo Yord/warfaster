@@ -552,13 +552,34 @@ const FactionsMenu = connect(
   })
 )(FactionsMenuPresentation);
 
+const AddEmptyListPresentation = ({ addEmptyList, listIndex }) => (
+  <div
+    style={{
+      color: "white",
+      cursor: "pointer",
+      textAlign: "center",
+    }}
+  >
+    <span onClick={addEmptyList(listIndex)}>
+      <PlusSquareOutlined /> Add list
+    </span>
+  </div>
+);
+
+const AddEmptyList = connect(
+  () => ({}),
+  (dispatch) => ({
+    addEmptyList: (listIndex) => () =>
+      dispatch(Lists.addEmptyList({ listIndex })),
+  })
+)(AddEmptyListPresentation);
+
 function AppPresentation({
   initialized,
   lists,
   toggleCard,
   removeList,
   removeCard,
-  addEmptyList,
   moveListBy,
   moveCardByOne,
   setListTitle,
@@ -673,17 +694,7 @@ function AppPresentation({
                         {!editMode ? (
                           <></>
                         ) : (
-                          <div
-                            style={{
-                              color: "white",
-                              cursor: "pointer",
-                              textAlign: "center",
-                            }}
-                          >
-                            <span onClick={addEmptyList(listIndex)}>
-                              <PlusSquareOutlined /> Add list
-                            </span>
-                          </div>
+                          <AddEmptyList listIndex={listIndex} />
                         )}
                         <div className="cards">
                           <div style={{ cursor: "pointer" }} className="header">
@@ -2059,17 +2070,7 @@ function AppPresentation({
                         {!editMode || listIndex !== lists.length - 1 ? (
                           <></>
                         ) : (
-                          <div
-                            style={{
-                              color: "white",
-                              cursor: "pointer",
-                              textAlign: "center",
-                            }}
-                          >
-                            <span onClick={addEmptyList(listIndex + 1)}>
-                              <PlusSquareOutlined /> Add list
-                            </span>
-                          </div>
+                          <AddEmptyList listIndex={listIndex + 1} />
                         )}
                       </>
                     </Col>
@@ -2122,8 +2123,6 @@ const App = connect(
           cardIndex,
         })
       ),
-    addEmptyList: (listIndex) => () =>
-      dispatch(Lists.addEmptyList({ listIndex })),
     moveListBy: (listIndex, by) => () =>
       dispatch(Lists.moveListBy({ listIndex, by })),
     moveCardByOne: (listIndex, cardIndex, up) => () =>
