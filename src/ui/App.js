@@ -78,7 +78,7 @@ const { Header, Footer, Content } = Layout;
 const { TextArea } = Input;
 const { SubMenu } = Menu;
 
-const factionImages = {
+const factionIcons = {
   Aeternus_Continuum: AeternusContinuum,
   Empyrean,
   Iron_Star_Alliance: IronStarAlliance,
@@ -88,12 +88,12 @@ const factionImages = {
   Universal: Fallback,
 };
 
-function FactionImage({ faction, style, height = "35px" }) {
-  const src = factionImages[faction] || Fallback;
+function FactionIcon({ faction, style, height = "35px" }) {
+  const src = factionIcons[faction] || Fallback;
   return <img src={src} height={height} alt={faction} style={style} />;
 }
 
-const spikes = {
+const spikeIcons = {
   Aeternus_Continuum: AeternusContinuumSpike,
   Empyrean: EmpyreanSpike,
   Iron_Star_Alliance: IronStarAllianceSpike,
@@ -101,10 +101,10 @@ const spikes = {
   Wild_Card: WildCardSpike,
 };
 
-function Spike({ faction, style, height = "18px" }) {
+function SpikeIcon({ faction, style, height = "18px" }) {
   return (
     <img
-      src={spikes[faction] || WildCardSpike}
+      src={spikeIcons[faction] || WildCardSpike}
       height={height}
       alt={faction}
       style={{ ...style, marginTop: "-4px" }}
@@ -112,7 +112,7 @@ function Spike({ faction, style, height = "18px" }) {
   );
 }
 
-const chargedImages = {
+const chargedIcons = {
   Aeternus_Continuum: AeternusContinuumCharged,
   Empyrean: EmpyreanCharged,
   Iron_Star_Alliance: IronStarAllianceCharged,
@@ -120,10 +120,10 @@ const chargedImages = {
   Wild_Card: WildCardCharged,
 };
 
-function Charged({ faction, style, height = "18px" }) {
+function ChargedIcon({ faction, style, height = "18px" }) {
   return (
     <img
-      src={chargedImages[faction] || WildCardCharged}
+      src={chargedIcons[faction] || WildCardCharged}
       height={height}
       alt={faction}
       style={{ ...style, marginTop: "-4px" }}
@@ -131,7 +131,7 @@ function Charged({ faction, style, height = "18px" }) {
   );
 }
 
-const advantageImages = {
+const advantageIcons = {
   "Compound Armor": CompoundArmor,
   Flight,
   Pathfinder,
@@ -140,14 +140,14 @@ const advantageImages = {
   "Weapon Expert": WeaponExpert,
 };
 
-function AdvantageImage({ title, text, style, height = "30px" }) {
-  const src = advantageImages[title];
+function AdvantageIcon({ title, text, style, height = "30px" }) {
+  const src = advantageIcons[title];
 
   if (src) {
     return (
       <Tooltip placement="top" title={`${title} - ${text}`} trigger="click">
         <img
-          src={advantageImages[title]}
+          src={advantageIcons[title]}
           className="metallic-img"
           alt={title}
           height={height}
@@ -161,7 +161,7 @@ function AdvantageImage({ title, text, style, height = "30px" }) {
   return <div className="metallic-circle" />;
 }
 
-const weaponQualities = {
+const weaponQualityIcons = {
   "Blast Weapon": BlastWeapon,
   Corrosion,
   Fire,
@@ -172,8 +172,8 @@ const weaponQualities = {
   "System Failure": SystemFailure,
 };
 
-function WeaponQuality({ title, text, style, height = "16px" }) {
-  const src = weaponQualities[title];
+function WeaponQualityIcon({ title, text, style, height = "16px" }) {
+  const src = weaponQualityIcons[title];
 
   if (src) {
     return (
@@ -278,7 +278,7 @@ const FactionsMenuPresentation = ({
         triggerSubMenuAction="click"
       >
         {Object.keys(factions).map((faction) => (
-          <SubMenu key={faction} icon={<FactionImage faction={faction} />} />
+          <SubMenu key={faction} icon={<FactionIcon faction={faction} />} />
         ))}
         <SubMenu
           className="edit"
@@ -758,7 +758,7 @@ function AppPresentation({
                                         count={count}
                                         offset={[0, 10]}
                                       >
-                                        <FactionImage faction={faction} />
+                                        <FactionIcon faction={faction} />
                                       </Badge>
                                     ))
                                 )}
@@ -840,10 +840,10 @@ function AppPresentation({
                                             details.coreStats.length === 0 ||
                                             !details.coreStats[0]
                                               .deploymentCost ? (
-                                              <FactionImage faction={faction} />
+                                              <FactionIcon faction={faction} />
                                             ) : (
                                               <>
-                                                <FactionImage
+                                                <FactionIcon
                                                   faction={faction}
                                                   height="23px"
                                                 />
@@ -863,7 +863,7 @@ function AppPresentation({
                                               marginRight: "12px",
                                             }}
                                           >
-                                            <FactionImage faction="Universal" />
+                                            <FactionIcon faction="Universal" />
                                           </div>
                                         )
                                       }
@@ -1134,7 +1134,7 @@ function AppPresentation({
                                                                 )
                                                                   .filter(
                                                                     ([name]) =>
-                                                                      advantageImages[
+                                                                      advantageIcons[
                                                                         name
                                                                       ]
                                                                   )
@@ -1143,7 +1143,7 @@ function AppPresentation({
                                                                       name,
                                                                       { text },
                                                                     ]) => (
-                                                                      <AdvantageImage
+                                                                      <AdvantageIcon
                                                                         key={
                                                                           name
                                                                         }
@@ -1163,7 +1163,7 @@ function AppPresentation({
                                                             )
                                                               .filter(
                                                                 ([rule]) =>
-                                                                  !advantageImages[
+                                                                  !advantageIcons[
                                                                     rule
                                                                   ]
                                                               )
@@ -1483,7 +1483,7 @@ function AppPresentation({
                                                                   rule,
                                                                   text,
                                                                 ]) => (
-                                                                  <WeaponQuality
+                                                                  <WeaponQualityIcon
                                                                     key={rule}
                                                                     title={rule}
                                                                     text={text}
@@ -1520,7 +1520,7 @@ function AppPresentation({
                                                           )
                                                             .filter(
                                                               ([rule]) =>
-                                                                !weaponQualities[
+                                                                !weaponQualityIcons[
                                                                   rule
                                                                 ]
                                                             )
@@ -1532,23 +1532,23 @@ function AppPresentation({
                                                                 const textWithIcons =
                                                                   [
                                                                     ...Object.keys(
-                                                                      weaponQualities
+                                                                      weaponQualityIcons
                                                                     ).map(
                                                                       (
                                                                         title
                                                                       ) => ({
                                                                         title,
-                                                                        Tag: WeaponQuality,
+                                                                        Tag: WeaponQualityIcon,
                                                                       })
                                                                     ),
                                                                     ...Object.keys(
-                                                                      advantageImages
+                                                                      advantageIcons
                                                                     ).map(
                                                                       (
                                                                         title
                                                                       ) => ({
                                                                         title,
-                                                                        Tag: AdvantageImage,
+                                                                        Tag: AdvantageIcon,
                                                                       })
                                                                     ),
                                                                   ].reduce(
@@ -1673,7 +1673,7 @@ function AppPresentation({
                                                         title="Wild card faction"
                                                         trigger="click"
                                                       >
-                                                        <FactionImage
+                                                        <FactionIcon
                                                           faction={page}
                                                           height="30px"
                                                           style={{
@@ -1745,7 +1745,7 @@ function AppPresentation({
                                                     Object.entries(
                                                       coreStats.advantages
                                                     ).map(([name, text]) => (
-                                                      <AdvantageImage
+                                                      <AdvantageIcon
                                                         key={name}
                                                         title={name}
                                                         text={text}
@@ -1761,7 +1761,7 @@ function AppPresentation({
                                                     Object.entries(
                                                       coreStats.chassisAdvantages
                                                     ).map(([name, text]) => (
-                                                      <AdvantageImage
+                                                      <AdvantageIcon
                                                         key={name}
                                                         title={name}
                                                         text={text}
@@ -1884,7 +1884,7 @@ function AppPresentation({
                                                         "factionAttachment"
                                                       )}
                                                     >
-                                                      <FactionImage
+                                                      <FactionIcon
                                                         faction={faction}
                                                         height="18px"
                                                       />{" "}
@@ -1922,7 +1922,7 @@ function AppPresentation({
                                                             `wildCardAttachment ${faction}`
                                                           )}
                                                         >
-                                                          <FactionImage
+                                                          <FactionIcon
                                                             faction={
                                                               factionsPageByText[
                                                                 faction
@@ -2263,7 +2263,11 @@ function vehicleWeaponName2(
                       {weapon["Name"]}
                       {Object.entries(weapon.specialRules || {}).map(
                         ([rule, text]) => (
-                          <WeaponQuality key={rule} title={rule} text={text} />
+                          <WeaponQualityIcon
+                            key={rule}
+                            title={rule}
+                            text={text}
+                          />
                         )
                       )}
                     </div>
@@ -2287,7 +2291,7 @@ function vehicleWeaponName2(
                   <></>
                 ) : (
                   Object.entries(weapon.specialRules)
-                    .filter(([rule]) => !weaponQualities[rule])
+                    .filter(([rule]) => !weaponQualityIcons[rule])
                     .map(([rule, text]) => (
                       <div key={rule} className="model-weapons-special-rules">
                         <span onClick={toggleSection(rule)}>
@@ -2317,7 +2321,7 @@ function vehicleWeaponName2(
                 <></>
               )}
               {Object.entries(weaponConfig.specialRules)
-                .filter(([rule]) => !weaponQualities[rule])
+                .filter(([rule]) => !weaponQualityIcons[rule])
                 .map(([rule, text]) => (
                   <div key={rule} className="model-weapons-special-rules">
                     <span>
@@ -2340,7 +2344,7 @@ function vehicleWeaponName2(
 function markCharged(faction, text) {
   return text.includes("charged") ? (
     <>
-      <Charged faction={faction} />{" "}
+      <ChargedIcon faction={faction} />{" "}
     </>
   ) : (
     <></>
@@ -2350,7 +2354,7 @@ function markCharged(faction, text) {
 function markSpike(faction, text) {
   return text.includes("spike") ? (
     <>
-      <Spike faction={faction} />{" "}
+      <SpikeIcon faction={faction} />{" "}
     </>
   ) : (
     <></>
@@ -2403,7 +2407,11 @@ function warjackWeaponNames(
                     {weapon["Name"]}
                     {Object.entries(weapon.specialRules || {}).map(
                       ([rule, text]) => (
-                        <WeaponQuality key={rule} title={rule} text={text} />
+                        <WeaponQualityIcon
+                          key={rule}
+                          title={rule}
+                          text={text}
+                        />
                       )
                     )}
                   </div>
@@ -2429,25 +2437,25 @@ function warjackWeaponNames(
                 <>
                   <div className="card-icons">
                     {Object.entries(weapon.specialRules)
-                      .filter(([name]) => advantageImages[name])
+                      .filter(([name]) => advantageIcons[name])
                       .map(([name, text]) => (
-                        <AdvantageImage key={name} title={name} text={text} />
+                        <AdvantageIcon key={name} title={name} text={text} />
                       ))}
                   </div>
                   {Object.entries(weapon.specialRules)
                     .filter(
                       ([name]) =>
-                        !advantageImages[name] && !weaponQualities[name]
+                        !advantageIcons[name] && !weaponQualityIcons[name]
                     )
                     .map(([rule, text]) => {
                       const textWithIcons = [
-                        ...Object.keys(weaponQualities).map((title) => ({
+                        ...Object.keys(weaponQualityIcons).map((title) => ({
                           title,
-                          Tag: WeaponQuality,
+                          Tag: WeaponQualityIcon,
                         })),
-                        ...Object.keys(advantageImages).map((title) => ({
+                        ...Object.keys(advantageIcons).map((title) => ({
                           title,
-                          Tag: AdvantageImage,
+                          Tag: AdvantageIcon,
                         })),
                       ].reduce(
                         (texts, { title, Tag }) =>
@@ -2520,14 +2528,14 @@ function warjackWeaponNames(
             )}
             <div className="card-icons">
               {Object.entries(weaponConfig.specialRules)
-                .filter(([name]) => advantageImages[name])
+                .filter(([name]) => advantageIcons[name])
                 .map(([name, text]) => (
-                  <AdvantageImage key={name} title={name} text={text} />
+                  <AdvantageIcon key={name} title={name} text={text} />
                 ))}
             </div>
             {Object.entries(weaponConfig.specialRules)
-              .filter(([rule]) => !weaponQualities[rule])
-              .filter(([name]) => !advantageImages[name])
+              .filter(([rule]) => !weaponQualityIcons[rule])
+              .filter(([name]) => !advantageIcons[name])
               .map(([rule, text]) => (
                 <div key={rule} className="model-weapons-special-rules">
                   <span onClick={toggleSection(rule)}>
