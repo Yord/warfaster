@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   Affix,
   Badge,
-  Card,
+  Card as AntCard,
   Col,
   Drawer,
   Input,
@@ -695,10 +695,25 @@ const ListFooter = ({ cards }) => (
   </div>
 );
 
-const ListPresentation = ({
+const CardPresentation = ({
+  card,
+  hidden,
+  type,
   title,
-  cards,
-  index: listIndex,
+  pageId,
+  cortexIds,
+  vehicleWeaponId,
+  warjackWeaponIds,
+  subtype,
+  faction,
+  details,
+  listIndex,
+  cardIndex,
+  editMode,
+  factionsPageByText,
+  toggledSections,
+  vehicleWeapons,
+  warjackWeapons,
   toggleCard,
   removeCard,
   moveCardByOne,
@@ -706,470 +721,326 @@ const ListPresentation = ({
   setCardWarjackWeapons,
   setCardVehicleWeapon,
   toggleSection,
-  editMode,
-  factionsPageByText,
-  toggledSections,
-  vehicleWeapons,
-  warjackWeapons,
 }) => (
-  <div className="cards">
-    <ListHeader title={title} cards={cards} index={listIndex} />
-
-    <div>
-      {cards.map(
-        (
-          {
-            card,
-            hidden,
-            type,
-            title,
-            pageId,
-            cortexIds,
-            vehicleWeaponId,
-            warjackWeaponIds,
-            subtype,
-            faction,
-            details,
-          },
-          cardIndex
-        ) => (
-          <div className="body" key={cardIndex}>
-            <Card hoverable className={["card", faction, type]}>
-              <Card.Meta
-                onClick={
-                  editMode
-                    ? null
-                    : toggleCard(listIndex, cardIndex, pageId, card)
-                }
-                avatar={
-                  editMode ? (
-                    <div
-                      style={{
-                        height: "25px",
-                        width: "35px",
-                        textAlign: "center",
-                      }}
-                    >
-                      <CaretUpOutlined
-                        onClick={moveCardByOne(listIndex, cardIndex, true)}
-                        style={{ fontSize: "18px" }}
-                      />
-                      <CaretDownOutlined
-                        onClick={moveCardByOne(listIndex, cardIndex, false)}
-                        style={{ fontSize: "18px" }}
-                      />
-                    </div>
-                  ) : faction ? (
-                    <div
-                      style={{
-                        height: "25px",
-                        width: "35px",
-                        textAlign: "center",
-                        marginRight: "12px",
-                      }}
-                    >
-                      {!details ||
-                      !details.coreStats ||
-                      details.coreStats.length === 0 ||
-                      !details.coreStats[0].deploymentCost ? (
-                        <FactionIcon faction={faction} />
-                      ) : (
-                        <>
-                          <FactionIcon faction={faction} height="23px" />
-                          <div className="deployment-cost">
-                            DC {details.coreStats[0].deploymentCost}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  ) : (
-                    <div
-                      style={{
-                        marginRight: "12px",
-                      }}
-                    >
-                      <FactionIcon faction="Universal" />
-                    </div>
-                  )
-                }
-                title={
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginRight: "8px",
-                    }}
-                  >
-                    <div style={{ flex: 100 }}>
-                      <div>{title}</div>
-                      <div className="card-type">
-                        {(faction || "").replace(/_/g, " ")}
-                        {subtype ? " " + subtype : ""}
-                        {type ? " " + type : ""}
-                      </div>
-                      <div>
-                        <span className="subtitle">
-                          {[
-                            ...(!details ||
-                            !details.coreStats ||
-                            !details.coreStats[0].vehicleWeaponSelection ||
-                            !vehicleWeaponName(
-                              details.coreStats[0].vehicleWeaponSelection,
-                              vehicleWeaponId
-                            )
-                              ? []
-                              : [
-                                  vehicleWeaponName(
-                                    details.coreStats[0].vehicleWeaponSelection,
-                                    vehicleWeaponId
-                                  ),
-                                ]),
-                            ...(!details ||
-                            !details.coreStats ||
-                            details.coreStats.length === 0 ||
-                            !details.coreStats[0].cortexSelections ||
-                            !cortexName(
-                              details.coreStats[0].cortexSelections,
-                              cortexIds
-                            )
-                              ? []
-                              : [
-                                  cortexName(
-                                    details.coreStats[0].cortexSelections,
-                                    cortexIds
-                                  ),
-                                ]),
-                            ...(!details ||
-                            !details.coreStats ||
-                            details.coreStats.length === 0 ||
-                            !details.coreStats[0].warjackWeaponSelections ||
-                            !warjackWeaponIds ||
-                            warjackWeaponIds.length === 0
-                              ? []
-                              : warjackWeaponNamesSubtitle(
-                                  details.coreStats[0].warjackWeaponSelections,
-                                  warjackWeaponIds
-                                )),
-                          ].join(", ")}
-                        </span>
-                      </div>
-                    </div>
-                    {!editMode ? (
-                      <></>
-                    ) : (
-                      <div style={{ flex: 1 }}>
-                        <DeleteOutlined
-                          style={{
-                            fontSize: "18px",
+  <div className="body">
+    <AntCard hoverable className={["card", faction, type]}>
+      <AntCard.Meta
+        onClick={
+          editMode ? null : toggleCard(listIndex, cardIndex, pageId, card)
+        }
+        avatar={
+          editMode ? (
+            <div
+              style={{
+                height: "25px",
+                width: "35px",
+                textAlign: "center",
+              }}
+            >
+              <CaretUpOutlined
+                onClick={moveCardByOne(listIndex, cardIndex, true)}
+                style={{ fontSize: "18px" }}
+              />
+              <CaretDownOutlined
+                onClick={moveCardByOne(listIndex, cardIndex, false)}
+                style={{ fontSize: "18px" }}
+              />
+            </div>
+          ) : faction ? (
+            <div
+              style={{
+                height: "25px",
+                width: "35px",
+                textAlign: "center",
+                marginRight: "12px",
+              }}
+            >
+              {!details ||
+              !details.coreStats ||
+              details.coreStats.length === 0 ||
+              !details.coreStats[0].deploymentCost ? (
+                <FactionIcon faction={faction} />
+              ) : (
+                <>
+                  <FactionIcon faction={faction} height="23px" />
+                  <div className="deployment-cost">
+                    DC {details.coreStats[0].deploymentCost}
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div
+              style={{
+                marginRight: "12px",
+              }}
+            >
+              <FactionIcon faction="Universal" />
+            </div>
+          )
+        }
+        title={
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginRight: "8px",
+            }}
+          >
+            <div style={{ flex: 100 }}>
+              <div>{title}</div>
+              <div className="card-type">
+                {(faction || "").replace(/_/g, " ")}
+                {subtype ? " " + subtype : ""}
+                {type ? " " + type : ""}
+              </div>
+              <div>
+                <span className="subtitle">
+                  {[
+                    ...(!details ||
+                    !details.coreStats ||
+                    !details.coreStats[0].vehicleWeaponSelection ||
+                    !vehicleWeaponName(
+                      details.coreStats[0].vehicleWeaponSelection,
+                      vehicleWeaponId
+                    )
+                      ? []
+                      : [
+                          vehicleWeaponName(
+                            details.coreStats[0].vehicleWeaponSelection,
+                            vehicleWeaponId
+                          ),
+                        ]),
+                    ...(!details ||
+                    !details.coreStats ||
+                    details.coreStats.length === 0 ||
+                    !details.coreStats[0].cortexSelections ||
+                    !cortexName(
+                      details.coreStats[0].cortexSelections,
+                      cortexIds
+                    )
+                      ? []
+                      : [
+                          cortexName(
+                            details.coreStats[0].cortexSelections,
+                            cortexIds
+                          ),
+                        ]),
+                    ...(!details ||
+                    !details.coreStats ||
+                    details.coreStats.length === 0 ||
+                    !details.coreStats[0].warjackWeaponSelections ||
+                    !warjackWeaponIds ||
+                    warjackWeaponIds.length === 0
+                      ? []
+                      : warjackWeaponNamesSubtitle(
+                          details.coreStats[0].warjackWeaponSelections,
+                          warjackWeaponIds
+                        )),
+                  ].join(", ")}
+                </span>
+              </div>
+            </div>
+            {!editMode ? (
+              <></>
+            ) : (
+              <div style={{ flex: 1 }}>
+                <DeleteOutlined
+                  style={{
+                    fontSize: "18px",
+                  }}
+                  onClick={removeCard(listIndex, cardIndex)}
+                />
+              </div>
+            )}
+          </div>
+        }
+      />
+      {hidden || editMode ? (
+        <></>
+      ) : !details ? (
+        <div
+          style={{
+            margin: "10px 0",
+            textAlign: "center",
+          }}
+        >
+          <SyncOutlined spin style={{ fontSize: "23px" }} />
+        </div>
+      ) : (
+        <div className="card-content">
+          {!details.storeLinks || details.storeLinks.length === 0 ? (
+            <></>
+          ) : (
+            <div className="special-rules">
+              <span onClick={toggleSection("privateer press store")}>
+                Privateer Press Store
+              </span>{" "}
+              <span>
+                -{" "}
+                {toggledSections["privateer press store"]
+                  ? "Click to expand"
+                  : details.storeLinks.map((linkText, storeIndex) => (
+                      <React.Fragment key={storeIndex}>
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: linkText,
                           }}
-                          onClick={removeCard(listIndex, cardIndex)}
                         />
-                      </div>
+                        {storeIndex === details.storeLinks.length - 1 ? (
+                          <></>
+                        ) : (
+                          <> </>
+                        )}
+                      </React.Fragment>
+                    ))}
+              </span>
+            </div>
+          )}
+          {!details || !details.coreStats || details.coreStats.length === 0 ? (
+            <></>
+          ) : (
+            details.coreStats.map((coreStats, coreStatsIndex) => (
+              <React.Fragment key={coreStatsIndex}>
+                {!coreStats.cardName ? <></> : <h3>{coreStats.cardName}</h3>}
+                {!coreStats.modelStats ||
+                Object.keys(coreStats.modelStats).length === 0 ? (
+                  <></>
+                ) : (
+                  <div className="model-stats">
+                    {Object.entries(coreStats.modelStats).map(
+                      ([name, stat]) => (
+                        <div key={name}>
+                          <div>{name}</div>
+                          <div>{stat}</div>
+                        </div>
+                      )
                     )}
                   </div>
-                }
-              />
-              {hidden || editMode ? (
-                <></>
-              ) : !details ? (
-                <div
-                  style={{
-                    margin: "10px 0",
-                    textAlign: "center",
-                  }}
-                >
-                  <SyncOutlined spin style={{ fontSize: "23px" }} />
-                </div>
-              ) : (
-                <div className="card-content">
-                  {!details.storeLinks || details.storeLinks.length === 0 ? (
-                    <></>
-                  ) : (
-                    <div className="special-rules">
-                      <span onClick={toggleSection("privateer press store")}>
-                        Privateer Press Store
-                      </span>{" "}
-                      <span>
-                        -{" "}
-                        {toggledSections["privateer press store"]
-                          ? "Click to expand"
-                          : details.storeLinks.map((linkText, storeIndex) => (
-                              <React.Fragment key={storeIndex}>
-                                <span
-                                  dangerouslySetInnerHTML={{
-                                    __html: linkText,
-                                  }}
-                                />
-                                {storeIndex ===
-                                details.storeLinks.length - 1 ? (
-                                  <></>
-                                ) : (
-                                  <> </>
-                                )}
-                              </React.Fragment>
-                            ))}
-                      </span>
-                    </div>
-                  )}
-                  {!details ||
-                  !details.coreStats ||
-                  details.coreStats.length === 0 ? (
-                    <></>
-                  ) : (
-                    details.coreStats.map((coreStats, coreStatsIndex) => (
-                      <React.Fragment key={coreStatsIndex}>
-                        {!coreStats.cardName ? (
-                          <></>
-                        ) : (
-                          <h3>{coreStats.cardName}</h3>
-                        )}
-                        {!coreStats.modelStats ||
-                        Object.keys(coreStats.modelStats).length === 0 ? (
-                          <></>
-                        ) : (
-                          <div className="model-stats">
-                            {Object.entries(coreStats.modelStats).map(
-                              ([name, stat]) => (
-                                <div key={name}>
-                                  <div>{name}</div>
-                                  <div>{stat}</div>
-                                </div>
-                              )
+                )}
+                {!coreStats.cortexSelections ||
+                Object.entries(coreStats.cortexSelections).length === 0 ? (
+                  <></>
+                ) : (
+                  <>
+                    <Select
+                      suffixIcon={<CaretDownOutlined />}
+                      className="select-warjack-cortex"
+                      defaultValue="none"
+                      onClick={(event) => event.stopPropagation()}
+                      onSelect={setCardCortex(listIndex, cardIndex, pageId)}
+                      value={
+                        !cortexIds
+                          ? "none"
+                          : cortexName(coreStats.cortexSelections, cortexIds)
+                      }
+                      getPopupContainer={() =>
+                        document
+                          .querySelectorAll(".cards")
+                          [listIndex].querySelectorAll(".card")[cardIndex]
+                      }
+                    >
+                      <Select.Option
+                        key="empty-default"
+                        label={undefined}
+                        value="none"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        <div>
+                          <h3>Select Cortex</h3>
+                        </div>
+                      </Select.Option>
+                      {Object.entries(coreStats.cortexSelections).map(
+                        ([cortex, advantages]) => (
+                          <Select.Option
+                            key={cortex}
+                            label={Object.values(advantages).map(
+                              ({ categoryId }) => categoryId
                             )}
-                          </div>
-                        )}
-                        {!coreStats.cortexSelections ||
-                        Object.entries(coreStats.cortexSelections).length ===
-                          0 ? (
-                          <></>
-                        ) : (
-                          <>
-                            <Select
-                              suffixIcon={<CaretDownOutlined />}
-                              className="select-warjack-cortex"
-                              defaultValue="none"
-                              onClick={(event) => event.stopPropagation()}
-                              onSelect={setCardCortex(
-                                listIndex,
-                                cardIndex,
-                                pageId
+                            value={cortex}
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            <h3>{cortex}</h3>
+                            <div className="card-icons">
+                              {!advantages ? (
+                                <></>
+                              ) : (
+                                Object.entries(advantages)
+                                  .filter(([name]) => advantageIcons[name])
+                                  .map(([name, { text }]) => (
+                                    <AdvantageIcon
+                                      key={name}
+                                      title={name}
+                                      text={text}
+                                    />
+                                  ))
                               )}
-                              value={
-                                !cortexIds
-                                  ? "none"
-                                  : cortexName(
-                                      coreStats.cortexSelections,
-                                      cortexIds
-                                    )
-                              }
-                              getPopupContainer={() =>
-                                document
-                                  .querySelectorAll(".cards")
-                                  [listIndex].querySelectorAll(".card")[
-                                  cardIndex
-                                ]
-                              }
-                            >
-                              <Select.Option
-                                key="empty-default"
-                                label={undefined}
-                                value="none"
-                                onClick={(event) => event.stopPropagation()}
-                              >
-                                <div>
-                                  <h3>Select Cortex</h3>
+                            </div>
+                            {Object.entries(advantages)
+                              .filter(([rule]) => !advantageIcons[rule])
+                              .map(([rule, { text }]) => (
+                                <div
+                                  key={rule}
+                                  className="model-cortex-special-rules"
+                                >
+                                  <span onClick={toggleSection(rule)}>
+                                    {markChargedOrSpike(faction, text)}
+                                    {rule}
+                                  </span>{" "}
+                                  <span>
+                                    -{" "}
+                                    {toggledSections[rule]
+                                      ? "Click to expand"
+                                      : text}
+                                  </span>
                                 </div>
-                              </Select.Option>
-                              {Object.entries(coreStats.cortexSelections).map(
-                                ([cortex, advantages]) => (
-                                  <Select.Option
-                                    key={cortex}
-                                    label={Object.values(advantages).map(
-                                      ({ categoryId }) => categoryId
-                                    )}
-                                    value={cortex}
-                                    onClick={(event) => event.stopPropagation()}
-                                  >
-                                    <h3>{cortex}</h3>
-                                    <div className="card-icons">
-                                      {!advantages ? (
-                                        <></>
-                                      ) : (
-                                        Object.entries(advantages)
-                                          .filter(
-                                            ([name]) => advantageIcons[name]
-                                          )
-                                          .map(([name, { text }]) => (
-                                            <AdvantageIcon
-                                              key={name}
-                                              title={name}
-                                              text={text}
-                                            />
-                                          ))
-                                      )}
-                                    </div>
-                                    {Object.entries(advantages)
-                                      .filter(([rule]) => !advantageIcons[rule])
-                                      .map(([rule, { text }]) => (
-                                        <div
-                                          key={rule}
-                                          className="model-cortex-special-rules"
-                                        >
-                                          <span onClick={toggleSection(rule)}>
-                                            {markChargedOrSpike(faction, text)}
-                                            {rule}
-                                          </span>{" "}
-                                          <span>
-                                            -{" "}
-                                            {toggledSections[rule]
-                                              ? "Click to expand"
-                                              : text}
-                                          </span>
-                                        </div>
-                                      ))}
-                                  </Select.Option>
-                                )
-                              )}
-                            </Select>
-                          </>
-                        )}
-                        {!coreStats.weaponPoints ? (
+                              ))}
+                          </Select.Option>
+                        )
+                      )}
+                    </Select>
+                  </>
+                )}
+                {!coreStats.weaponPoints ? (
+                  <></>
+                ) : (
+                  <div className="special-rules">
+                    <span>Weapon Points</span>{" "}
+                    <span>- {coreStats.weaponPoints}</span>
+                  </div>
+                )}
+                {!coreStats.hardpointNames ? (
+                  <></>
+                ) : (
+                  <>
+                    {coreStats.hardpointNames.map(
+                      (hardpointName, hardpointNameIndex) =>
+                        !coreStats.warjackWeaponSelections ||
+                        Object.keys(coreStats.warjackWeaponSelections)
+                          .length === 0 ? (
                           <></>
                         ) : (
-                          <div className="special-rules">
-                            <span>Weapon Points</span>{" "}
-                            <span>- {coreStats.weaponPoints}</span>
-                          </div>
-                        )}
-                        {!coreStats.hardpointNames ? (
-                          <></>
-                        ) : (
-                          <>
-                            {coreStats.hardpointNames.map(
-                              (hardpointName, hardpointNameIndex) =>
-                                !coreStats.warjackWeaponSelections ||
-                                Object.keys(coreStats.warjackWeaponSelections)
-                                  .length === 0 ? (
-                                  <></>
-                                ) : (
-                                  <div key={hardpointNameIndex}>
-                                    <Select
-                                      suffixIcon={<CaretDownOutlined />}
-                                      className="select-warjack-weapon"
-                                      defaultValue="none"
-                                      onClick={(event) =>
-                                        event.stopPropagation()
-                                      }
-                                      onSelect={setCardWarjackWeapons(
-                                        listIndex,
-                                        cardIndex,
-                                        hardpointNameIndex,
-                                        pageId
-                                      )}
-                                      value={
-                                        !warjackWeaponIds ||
-                                        !warjackWeaponIds[hardpointNameIndex]
-                                          ? "none"
-                                          : warjackWeaponNames(
-                                              faction,
-                                              warjackWeapons,
-                                              coreStats.warjackWeaponSelections,
-                                              warjackWeaponIds[
-                                                hardpointNameIndex
-                                              ],
-                                              toggleSection,
-                                              toggledSections
-                                            )
-                                      }
-                                      getPopupContainer={() =>
-                                        document
-                                          .querySelectorAll(".cards")
-                                          [listIndex].querySelectorAll(".card")[
-                                          cardIndex
-                                        ]
-                                      }
-                                    >
-                                      <Select.Option
-                                        label={undefined}
-                                        value="none"
-                                        onClick={(event) =>
-                                          event.stopPropagation()
-                                        }
-                                      >
-                                        <div
-                                          className="model-weapons"
-                                          style={{
-                                            height: "52px",
-                                          }}
-                                        />
-                                      </Select.Option>
-                                      {Object.values(
-                                        coreStats.warjackWeaponSelections
-                                      )
-                                        .filter(
-                                          ({ location }) =>
-                                            location === hardpointName
-                                        )
-                                        .map(
-                                          ({
-                                            name,
-                                            page,
-                                            pageId,
-                                            cost,
-                                            location,
-                                          }) => (
-                                            <Select.Option
-                                              key={pageId}
-                                              label={pageId}
-                                              value={name}
-                                              onClick={(event) =>
-                                                event.stopPropagation()
-                                              }
-                                            >
-                                              <>
-                                                {warjackWeaponNames(
-                                                  faction,
-                                                  warjackWeapons,
-                                                  coreStats.warjackWeaponSelections,
-                                                  pageId,
-                                                  toggleSection,
-                                                  toggledSections
-                                                )}
-                                              </>
-                                            </Select.Option>
-                                          )
-                                        )}
-                                    </Select>
-                                  </div>
-                                )
-                            )}
-                          </>
-                        )}
-                        {!coreStats.vehicleWeaponSelection ||
-                        coreStats.vehicleWeaponSelection.length === 0 ? (
-                          <></>
-                        ) : (
-                          <div>
+                          <div key={hardpointNameIndex}>
                             <Select
                               suffixIcon={<CaretDownOutlined />}
                               className="select-warjack-weapon"
                               defaultValue="none"
                               onClick={(event) => event.stopPropagation()}
-                              onSelect={setCardVehicleWeapon(
+                              onSelect={setCardWarjackWeapons(
                                 listIndex,
                                 cardIndex,
+                                hardpointNameIndex,
                                 pageId
                               )}
                               value={
-                                !vehicleWeaponId ||
-                                !coreStats ||
-                                !coreStats.vehicleWeaponSelection
+                                !warjackWeaponIds ||
+                                !warjackWeaponIds[hardpointNameIndex]
                                   ? "none"
-                                  : vehicleWeaponName2(
+                                  : warjackWeaponNames(
                                       faction,
-                                      vehicleWeapons,
-                                      coreStats.vehicleWeaponSelection,
-                                      vehicleWeaponId,
+                                      warjackWeapons,
+                                      coreStats.warjackWeaponSelections,
+                                      warjackWeaponIds[hardpointNameIndex],
                                       toggleSection,
                                       toggledSections
                                     )
@@ -1194,437 +1065,472 @@ const ListPresentation = ({
                                   }}
                                 />
                               </Select.Option>
-                              {coreStats.vehicleWeaponSelection.map(
-                                ({ text, page, pageId }) => (
-                                  <Select.Option
-                                    key={pageId}
-                                    label={pageId}
-                                    value={text}
-                                    onClick={(event) => event.stopPropagation()}
-                                  >
-                                    {vehicleWeaponName2(
-                                      faction,
-                                      vehicleWeapons,
-                                      coreStats.vehicleWeaponSelection,
-                                      pageId,
-                                      toggleSection,
-                                      toggledSections
-                                    )}
-                                  </Select.Option>
+                              {Object.values(coreStats.warjackWeaponSelections)
+                                .filter(
+                                  ({ location }) => location === hardpointName
                                 )
-                              )}
+                                .map(
+                                  ({ name, page, pageId, cost, location }) => (
+                                    <Select.Option
+                                      key={pageId}
+                                      label={pageId}
+                                      value={name}
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
+                                    >
+                                      <>
+                                        {warjackWeaponNames(
+                                          faction,
+                                          warjackWeapons,
+                                          coreStats.warjackWeaponSelections,
+                                          pageId,
+                                          toggleSection,
+                                          toggledSections
+                                        )}
+                                      </>
+                                    </Select.Option>
+                                  )
+                                )}
                             </Select>
                           </div>
-                        )}
-                        {!coreStats.weapons ||
-                        coreStats.weapons.length === 0 ? (
-                          <></>
-                        ) : (
-                          coreStats.weapons.map((weapon) => (
-                            <React.Fragment key={weapon["Name"]}>
-                              <div className="model-weapons">
-                                <div>
-                                  {weapon["Attack Type"] === "Melee" ? (
-                                    <img className="faction-melee" alt=" " />
-                                  ) : (
-                                    <img className="faction-ranged" alt=" " />
-                                  )}
-                                </div>
-                                <div>
-                                  <div>
-                                    {weapon["Name"]}
-                                    {Object.entries(
-                                      weapon.specialRules || {}
-                                    ).map(([rule, text]) => (
-                                      <WeaponQualityIcon
-                                        key={rule}
-                                        title={rule}
-                                        text={text}
-                                      />
-                                    ))}
-                                  </div>
-                                  <div>{weapon["Damage Type"]}</div>
-                                </div>
-                                <div>
-                                  <div>RNG</div>
-                                  <div>{weapon["Range"]}</div>
-                                </div>
-                                <div>
-                                  <div>POW</div>
-                                  <div>{weapon["POW"]}</div>
-                                </div>
-                              </div>
-                              {!weapon.specialRules ? (
-                                <></>
-                              ) : (
-                                Object.entries(weapon.specialRules)
-                                  .filter(([rule]) => !weaponQualityIcons[rule])
-                                  .map(([rule, text]) => {
-                                    const textWithIcons = [
-                                      ...Object.keys(weaponQualityIcons).map(
-                                        (title) => ({
-                                          title,
-                                          Tag: WeaponQualityIcon,
-                                        })
-                                      ),
-                                      ...Object.keys(advantageIcons).map(
-                                        (title) => ({
-                                          title,
-                                          Tag: AdvantageIcon,
-                                        })
-                                      ),
-                                    ].reduce(
-                                      (texts, { title, Tag }) =>
-                                        texts.flatMap((text) => {
-                                          if (typeof text !== "string")
-                                            return text;
-
-                                          return text
-                                            .split(
-                                              new RegExp(
-                                                `(\\s.\\s${title}:\\s.+[\\n]*)`,
-                                                "g"
-                                              )
-                                            )
-                                            .flatMap((string) => {
-                                              if (
-                                                string.match(
-                                                  new RegExp(
-                                                    `(${title}:\\s.+[\\n]*)`
-                                                  )
-                                                )
-                                              ) {
-                                                const [, , description] =
-                                                  string.split(
-                                                    new RegExp(
-                                                      `(${title}:\\s|\\n)`,
-                                                      "g"
-                                                    )
-                                                  );
-                                                return [
-                                                  ` • ${title}: `,
-                                                  <Tag
-                                                    key={title}
-                                                    title={title}
-                                                    text={description}
-                                                    height="16px"
-                                                  />,
-                                                  "\n",
-                                                ];
-                                              }
-
-                                              return string;
-                                            });
-                                        }),
-                                      [text]
-                                    );
-
-                                    return (
-                                      <div
-                                        key={rule}
-                                        className="model-weapons-special-rules"
-                                      >
-                                        <span onClick={toggleSection(rule)}>
-                                          {markChargedOrSpike(faction, text)}
-                                          {rule}
-                                        </span>{" "}
-                                        <span>
-                                          -{" "}
-                                          {toggledSections[rule]
-                                            ? "Click to expand"
-                                            : textWithIcons}
-                                        </span>
-                                      </div>
-                                    );
-                                  })
-                              )}
-                            </React.Fragment>
-                          ))
-                        )}
-                        <div className="card-icons">
-                          {!coreStats.wildCardFactions ||
-                          Object.values(coreStats.wildCardFactions).length ===
-                            0 ? (
-                            <></>
-                          ) : (
-                            Object.values(coreStats.wildCardFactions).map(
-                              ({ page }) => (
-                                <Tooltip
-                                  key={page}
-                                  placement="top"
-                                  title="Wild card faction"
-                                  trigger="click"
-                                >
-                                  <FactionIcon
-                                    faction={page}
-                                    height="30px"
-                                    style={{
-                                      filter:
-                                        "drop-shadow(0px 3px 6px hsl(200,100%,25%))",
-                                    }}
-                                  />
-                                </Tooltip>
-                              )
+                        )
+                    )}
+                  </>
+                )}
+                {!coreStats.vehicleWeaponSelection ||
+                coreStats.vehicleWeaponSelection.length === 0 ? (
+                  <></>
+                ) : (
+                  <div>
+                    <Select
+                      suffixIcon={<CaretDownOutlined />}
+                      className="select-warjack-weapon"
+                      defaultValue="none"
+                      onClick={(event) => event.stopPropagation()}
+                      onSelect={setCardVehicleWeapon(
+                        listIndex,
+                        cardIndex,
+                        pageId
+                      )}
+                      value={
+                        !vehicleWeaponId ||
+                        !coreStats ||
+                        !coreStats.vehicleWeaponSelection
+                          ? "none"
+                          : vehicleWeaponName2(
+                              faction,
+                              vehicleWeapons,
+                              coreStats.vehicleWeaponSelection,
+                              vehicleWeaponId,
+                              toggleSection,
+                              toggledSections
                             )
-                          )}
-                          {!coreStats.baseSize ? (
-                            <></>
+                      }
+                      getPopupContainer={() =>
+                        document
+                          .querySelectorAll(".cards")
+                          [listIndex].querySelectorAll(".card")[cardIndex]
+                      }
+                    >
+                      <Select.Option
+                        label={undefined}
+                        value="none"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        <div
+                          className="model-weapons"
+                          style={{
+                            height: "52px",
+                          }}
+                        />
+                      </Select.Option>
+                      {coreStats.vehicleWeaponSelection.map(
+                        ({ text, page, pageId }) => (
+                          <Select.Option
+                            key={pageId}
+                            label={pageId}
+                            value={text}
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            {vehicleWeaponName2(
+                              faction,
+                              vehicleWeapons,
+                              coreStats.vehicleWeaponSelection,
+                              pageId,
+                              toggleSection,
+                              toggledSections
+                            )}
+                          </Select.Option>
+                        )
+                      )}
+                    </Select>
+                  </div>
+                )}
+                {!coreStats.weapons || coreStats.weapons.length === 0 ? (
+                  <></>
+                ) : (
+                  coreStats.weapons.map((weapon) => (
+                    <React.Fragment key={weapon["Name"]}>
+                      <div className="model-weapons">
+                        <div>
+                          {weapon["Attack Type"] === "Melee" ? (
+                            <img className="faction-melee" alt=" " />
                           ) : (
-                            <Tooltip
-                              placement="top"
-                              title={`Base size - ${coreStats.baseSize}`}
-                              trigger="click"
-                            >
-                              <div className="metallic-circle">
-                                {coreStats.baseSize.replace(" mm", "")}
-                              </div>
-                            </Tooltip>
-                          )}
-                          {!coreStats.health ? (
-                            <></>
-                          ) : (
-                            <Tooltip
-                              placement="top"
-                              title={`Health - ${coreStats.health}`}
-                              trigger="click"
-                            >
-                              <div className="metallic-circle">
-                                <HeartFilled
-                                  style={{
-                                    fontSize: "0.8em",
-                                  }}
-                                />
-                                {coreStats.health}
-                              </div>
-                            </Tooltip>
-                          )}
-                          {!coreStats.squadSize ? (
-                            <></>
-                          ) : (
-                            <Tooltip
-                              placement="top"
-                              title={`Squad size - ${coreStats.squadSize}`}
-                              trigger="click"
-                            >
-                              <div className="metallic-circle">
-                                <TeamOutlined
-                                  style={{
-                                    fontSize: "0.8em",
-                                  }}
-                                />
-                                {coreStats.squadSize}
-                              </div>
-                            </Tooltip>
-                          )}
-                          {!coreStats.advantages ||
-                          Object.entries(coreStats.advantages).length === 0 ? (
-                            <></>
-                          ) : (
-                            Object.entries(coreStats.advantages).map(
-                              ([name, text]) => (
-                                <AdvantageIcon
-                                  key={name}
-                                  title={name}
-                                  text={text}
-                                />
-                              )
-                            )
-                          )}
-                          {!coreStats.chassisAdvantages ||
-                          Object.entries(coreStats.chassisAdvantages).length ===
-                            0 ? (
-                            <></>
-                          ) : (
-                            Object.entries(coreStats.chassisAdvantages).map(
-                              ([name, text]) => (
-                                <AdvantageIcon
-                                  key={name}
-                                  title={name}
-                                  text={text}
-                                />
-                              )
-                            )
+                            <img className="faction-ranged" alt=" " />
                           )}
                         </div>
-                        {!coreStats.specialRules ||
-                        Object.entries(coreStats.specialRules).length === 0 ? (
-                          <></>
-                        ) : (
-                          Object.entries(coreStats.specialRules).map(
-                            ([rule, text]) => (
-                              <div key={rule} className="special-rules">
-                                <span onClick={toggleSection(rule)}>
-                                  {markChargedOrSpike(faction, text)}
-                                  {rule}
-                                </span>{" "}
-                                <span>
-                                  -{" "}
-                                  {toggledSections[rule]
-                                    ? "Click to expand"
-                                    : text}
-                                </span>
-                              </div>
-                            )
-                          )
-                        )}
-                        {!coreStats.chassisSpecialRules ||
-                        Object.entries(coreStats.chassisSpecialRules).length ===
-                          0 ? (
-                          <></>
-                        ) : (
-                          Object.entries(coreStats.chassisSpecialRules).map(
-                            ([rule, text]) => (
-                              <div key={rule} className="special-rules">
-                                <span onClick={toggleSection(rule)}>
-                                  {markChargedOrSpike(faction, text)}
-                                  {rule}
-                                </span>{" "}
-                                <span>
-                                  -{" "}
-                                  {toggledSections[rule]
-                                    ? "Click to expand"
-                                    : text}
-                                </span>
-                              </div>
-                            )
-                          )
-                        )}
-                        {!coreStats.maneuvers ||
-                        Object.values(coreStats.maneuvers).length === 0 ? (
-                          <></>
-                        ) : (
-                          <>
-                            <h3>Maneuvers</h3>
-                            <dl>
-                              {Object.entries(coreStats.maneuvers).map(
-                                ([rule, text]) => (
-                                  <div key={rule} className="special-rules">
-                                    <span onClick={toggleSection(rule)}>
-                                      {markChargedOrSpike(faction, text)}
-                                      {rule}
-                                    </span>{" "}
-                                    <span>
-                                      -{" "}
-                                      {toggledSections[rule]
-                                        ? "Click to expand"
-                                        : text}
-                                    </span>
-                                  </div>
-                                )
-                              )}
-                            </dl>
-                          </>
-                        )}
-                        {!coreStats.factionAttachment ? (
-                          <></>
-                        ) : (
-                          <div className="special-rules">
-                            <span onClick={toggleSection("factionAttachment")}>
-                              <FactionIcon faction={faction} height="18px" />{" "}
-                              Attachment
-                            </span>
-                            <span>
-                              {" "}
-                              -{" "}
-                              {toggledSections["factionAttachment"]
-                                ? "Click to expand"
-                                : coreStats.factionAttachment
-                                    .map((attachment) => attachment.text)
-                                    .join(", ")}
-                            </span>
+                        <div>
+                          <div>
+                            {weapon["Name"]}
+                            {Object.entries(weapon.specialRules || {}).map(
+                              ([rule, text]) => (
+                                <WeaponQualityIcon
+                                  key={rule}
+                                  title={rule}
+                                  text={text}
+                                />
+                              )
+                            )}
                           </div>
-                        )}
-                        {!coreStats.wildCardAttachment ? (
-                          <></>
-                        ) : (
-                          Object.entries(coreStats.wildCardAttachment).map(
-                            ([faction, attachments]) => (
-                              <div className="special-rules">
-                                <span
-                                  onClick={toggleSection(
-                                    `wildCardAttachment ${faction}`
-                                  )}
-                                >
-                                  <FactionIcon
-                                    faction={factionsPageByText[faction]}
-                                    height="18px"
-                                  />{" "}
-                                  Attachment
-                                </span>
+                          <div>{weapon["Damage Type"]}</div>
+                        </div>
+                        <div>
+                          <div>RNG</div>
+                          <div>{weapon["Range"]}</div>
+                        </div>
+                        <div>
+                          <div>POW</div>
+                          <div>{weapon["POW"]}</div>
+                        </div>
+                      </div>
+                      {!weapon.specialRules ? (
+                        <></>
+                      ) : (
+                        Object.entries(weapon.specialRules)
+                          .filter(([rule]) => !weaponQualityIcons[rule])
+                          .map(([rule, text]) => {
+                            const textWithIcons = [
+                              ...Object.keys(weaponQualityIcons).map(
+                                (title) => ({
+                                  title,
+                                  Tag: WeaponQualityIcon,
+                                })
+                              ),
+                              ...Object.keys(advantageIcons).map((title) => ({
+                                title,
+                                Tag: AdvantageIcon,
+                              })),
+                            ].reduce(
+                              (texts, { title, Tag }) =>
+                                texts.flatMap((text) => {
+                                  if (typeof text !== "string") return text;
+
+                                  return text
+                                    .split(
+                                      new RegExp(
+                                        `(\\s.\\s${title}:\\s.+[\\n]*)`,
+                                        "g"
+                                      )
+                                    )
+                                    .flatMap((string) => {
+                                      if (
+                                        string.match(
+                                          new RegExp(`(${title}:\\s.+[\\n]*)`)
+                                        )
+                                      ) {
+                                        const [, , description] = string.split(
+                                          new RegExp(`(${title}:\\s|\\n)`, "g")
+                                        );
+                                        return [
+                                          ` • ${title}: `,
+                                          <Tag
+                                            key={title}
+                                            title={title}
+                                            text={description}
+                                            height="16px"
+                                          />,
+                                          "\n",
+                                        ];
+                                      }
+
+                                      return string;
+                                    });
+                                }),
+                              [text]
+                            );
+
+                            return (
+                              <div
+                                key={rule}
+                                className="model-weapons-special-rules"
+                              >
+                                <span onClick={toggleSection(rule)}>
+                                  {markChargedOrSpike(faction, text)}
+                                  {rule}
+                                </span>{" "}
                                 <span>
-                                  {" "}
                                   -{" "}
-                                  {toggledSections[
-                                    `wildCardAttachment ${faction}`
-                                  ]
+                                  {toggledSections[rule]
                                     ? "Click to expand"
-                                    : attachments
-                                        .map((attachment) => attachment.text)
-                                        .join(", ")}
+                                    : textWithIcons}
                                 </span>
                               </div>
-                            )
-                          )
-                        )}
-                      </React.Fragment>
+                            );
+                          })
+                      )}
+                    </React.Fragment>
+                  ))
+                )}
+                <div className="card-icons">
+                  {!coreStats.wildCardFactions ||
+                  Object.values(coreStats.wildCardFactions).length === 0 ? (
+                    <></>
+                  ) : (
+                    Object.values(coreStats.wildCardFactions).map(
+                      ({ page }) => (
+                        <Tooltip
+                          key={page}
+                          placement="top"
+                          title="Wild card faction"
+                          trigger="click"
+                        >
+                          <FactionIcon
+                            faction={page}
+                            height="30px"
+                            style={{
+                              filter:
+                                "drop-shadow(0px 3px 6px hsl(200,100%,25%))",
+                            }}
+                          />
+                        </Tooltip>
+                      )
+                    )
+                  )}
+                  {!coreStats.baseSize ? (
+                    <></>
+                  ) : (
+                    <Tooltip
+                      placement="top"
+                      title={`Base size - ${coreStats.baseSize}`}
+                      trigger="click"
+                    >
+                      <div className="metallic-circle">
+                        {coreStats.baseSize.replace(" mm", "")}
+                      </div>
+                    </Tooltip>
+                  )}
+                  {!coreStats.health ? (
+                    <></>
+                  ) : (
+                    <Tooltip
+                      placement="top"
+                      title={`Health - ${coreStats.health}`}
+                      trigger="click"
+                    >
+                      <div className="metallic-circle">
+                        <HeartFilled
+                          style={{
+                            fontSize: "0.8em",
+                          }}
+                        />
+                        {coreStats.health}
+                      </div>
+                    </Tooltip>
+                  )}
+                  {!coreStats.squadSize ? (
+                    <></>
+                  ) : (
+                    <Tooltip
+                      placement="top"
+                      title={`Squad size - ${coreStats.squadSize}`}
+                      trigger="click"
+                    >
+                      <div className="metallic-circle">
+                        <TeamOutlined
+                          style={{
+                            fontSize: "0.8em",
+                          }}
+                        />
+                        {coreStats.squadSize}
+                      </div>
+                    </Tooltip>
+                  )}
+                  {!coreStats.advantages ||
+                  Object.entries(coreStats.advantages).length === 0 ? (
+                    <></>
+                  ) : (
+                    Object.entries(coreStats.advantages).map(([name, text]) => (
+                      <AdvantageIcon key={name} title={name} text={text} />
                     ))
                   )}
-
-                  {!details.release ? (
+                  {!coreStats.chassisAdvantages ||
+                  Object.entries(coreStats.chassisAdvantages).length === 0 ? (
                     <></>
                   ) : (
-                    <div className="special-rules">
-                      <span onClick={toggleSection("release")}>Release</span>{" "}
-                      <span>
-                        -{" "}
-                        {toggledSections["release"]
-                          ? "Click to expand"
-                          : details.release}
-                      </span>
-                    </div>
-                  )}
-                  {!details.lore ? (
-                    <></>
-                  ) : (
-                    <div className="special-rules">
-                      <span onClick={toggleSection("lore")}>Lore</span>{" "}
-                      <span>
-                        -{" "}
-                        {toggledSections["lore"]
-                          ? "Click to expand"
-                          : details.lore}
-                      </span>
-                    </div>
-                  )}
-                  {!details.pow ? (
-                    <></>
-                  ) : (
-                    <div className="special-rules">
-                      <span>Pow</span> <span>- {details.pow.text}</span>
-                    </div>
-                  )}
-                  {!details.effect || details.effect.length === 0 ? (
-                    <></>
-                  ) : (
-                    details.effect.map((effect, effectIndex) => (
-                      <p className="cypher-effect" key={effectIndex}>
-                        {effect}
-                      </p>
-                    ))
+                    Object.entries(coreStats.chassisAdvantages).map(
+                      ([name, text]) => (
+                        <AdvantageIcon key={name} title={name} text={text} />
+                      )
+                    )
                   )}
                 </div>
-              )}
-            </Card>
-          </div>
-        )
-      )}
-    </div>
+                {!coreStats.specialRules ||
+                Object.entries(coreStats.specialRules).length === 0 ? (
+                  <></>
+                ) : (
+                  Object.entries(coreStats.specialRules).map(([rule, text]) => (
+                    <div key={rule} className="special-rules">
+                      <span onClick={toggleSection(rule)}>
+                        {markChargedOrSpike(faction, text)}
+                        {rule}
+                      </span>{" "}
+                      <span>
+                        - {toggledSections[rule] ? "Click to expand" : text}
+                      </span>
+                    </div>
+                  ))
+                )}
+                {!coreStats.chassisSpecialRules ||
+                Object.entries(coreStats.chassisSpecialRules).length === 0 ? (
+                  <></>
+                ) : (
+                  Object.entries(coreStats.chassisSpecialRules).map(
+                    ([rule, text]) => (
+                      <div key={rule} className="special-rules">
+                        <span onClick={toggleSection(rule)}>
+                          {markChargedOrSpike(faction, text)}
+                          {rule}
+                        </span>{" "}
+                        <span>
+                          - {toggledSections[rule] ? "Click to expand" : text}
+                        </span>
+                      </div>
+                    )
+                  )
+                )}
+                {!coreStats.maneuvers ||
+                Object.values(coreStats.maneuvers).length === 0 ? (
+                  <></>
+                ) : (
+                  <>
+                    <h3>Maneuvers</h3>
+                    <dl>
+                      {Object.entries(coreStats.maneuvers).map(
+                        ([rule, text]) => (
+                          <div key={rule} className="special-rules">
+                            <span onClick={toggleSection(rule)}>
+                              {markChargedOrSpike(faction, text)}
+                              {rule}
+                            </span>{" "}
+                            <span>
+                              -{" "}
+                              {toggledSections[rule] ? "Click to expand" : text}
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </dl>
+                  </>
+                )}
+                {!coreStats.factionAttachment ? (
+                  <></>
+                ) : (
+                  <div className="special-rules">
+                    <span onClick={toggleSection("factionAttachment")}>
+                      <FactionIcon faction={faction} height="18px" /> Attachment
+                    </span>
+                    <span>
+                      {" "}
+                      -{" "}
+                      {toggledSections["factionAttachment"]
+                        ? "Click to expand"
+                        : coreStats.factionAttachment
+                            .map((attachment) => attachment.text)
+                            .join(", ")}
+                    </span>
+                  </div>
+                )}
+                {!coreStats.wildCardAttachment ? (
+                  <></>
+                ) : (
+                  Object.entries(coreStats.wildCardAttachment).map(
+                    ([faction, attachments]) => (
+                      <div className="special-rules">
+                        <span
+                          onClick={toggleSection(
+                            `wildCardAttachment ${faction}`
+                          )}
+                        >
+                          <FactionIcon
+                            faction={factionsPageByText[faction]}
+                            height="18px"
+                          />{" "}
+                          Attachment
+                        </span>
+                        <span>
+                          {" "}
+                          -{" "}
+                          {toggledSections[`wildCardAttachment ${faction}`]
+                            ? "Click to expand"
+                            : attachments
+                                .map((attachment) => attachment.text)
+                                .join(", ")}
+                        </span>
+                      </div>
+                    )
+                  )
+                )}
+              </React.Fragment>
+            ))
+          )}
 
-    {cards.length > 0 ? <ListFooter cards={cards} /> : <></>}
+          {!details.release ? (
+            <></>
+          ) : (
+            <div className="special-rules">
+              <span onClick={toggleSection("release")}>Release</span>{" "}
+              <span>
+                -{" "}
+                {toggledSections["release"]
+                  ? "Click to expand"
+                  : details.release}
+              </span>
+            </div>
+          )}
+          {!details.lore ? (
+            <></>
+          ) : (
+            <div className="special-rules">
+              <span onClick={toggleSection("lore")}>Lore</span>{" "}
+              <span>
+                - {toggledSections["lore"] ? "Click to expand" : details.lore}
+              </span>
+            </div>
+          )}
+          {!details.pow ? (
+            <></>
+          ) : (
+            <div className="special-rules">
+              <span>Pow</span> <span>- {details.pow.text}</span>
+            </div>
+          )}
+          {!details.effect || details.effect.length === 0 ? (
+            <></>
+          ) : (
+            details.effect.map((effect, effectIndex) => (
+              <p className="cypher-effect" key={effectIndex}>
+                {effect}
+              </p>
+            ))
+          )}
+        </div>
+      )}
+    </AntCard>
   </div>
 );
 
-const List = connect(
+const Card = connect(
   (state) => ({
     editMode: EditMode.select()(state),
     factionsPageByText: Factions.selectPageByText()(state),
@@ -1681,7 +1587,53 @@ const List = connect(
     toggleSection: (section) => () =>
       dispatch(ToggleSections.toggle({ section })),
   })
-)(ListPresentation);
+)(CardPresentation);
+
+const List = ({ title, cards, index: listIndex }) => (
+  <div className="cards">
+    <ListHeader title={title} cards={cards} index={listIndex} />
+
+    <div>
+      {cards.map(
+        (
+          {
+            card,
+            hidden,
+            type,
+            title,
+            pageId,
+            cortexIds,
+            vehicleWeaponId,
+            warjackWeaponIds,
+            subtype,
+            faction,
+            details,
+          },
+          cardIndex
+        ) => (
+          <Card
+            key={cardIndex}
+            card={card}
+            hidden={hidden}
+            type={type}
+            title={title}
+            pageId={pageId}
+            cortexIds={cortexIds}
+            vehicleWeaponId={vehicleWeaponId}
+            warjackWeaponIds={warjackWeaponIds}
+            subtype={subtype}
+            faction={faction}
+            details={details}
+            listIndex={listIndex}
+            cardIndex={cardIndex}
+          />
+        )
+      )}
+    </div>
+
+    {cards.length > 0 ? <ListFooter cards={cards} /> : <></>}
+  </div>
+);
 
 const AppPresentation = ({ initialized, lists, editMode }) => (
   <div className="App">
@@ -1723,8 +1675,8 @@ const AppPresentation = ({ initialized, lists, editMode }) => (
 
                   <div>
                     <div className="body">
-                      <Card hoverable className="card">
-                        <Card.Meta
+                      <AntCard hoverable className="card">
+                        <AntCard.Meta
                           avatar={
                             <div
                               style={{
@@ -1752,7 +1704,7 @@ const AppPresentation = ({ initialized, lists, editMode }) => (
                             </>
                           }
                         />
-                      </Card>
+                      </AntCard>
                     </div>
                   </div>
                   <div className="footer" />
