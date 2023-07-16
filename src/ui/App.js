@@ -672,6 +672,29 @@ const ListHeader = connect(
   })
 )(ListHeaderPresentation);
 
+const ListFooter = ({ cards }) => (
+  <div className="footer">
+    <Badge size="small" count={cards.length} offset={[10, 5]}>
+      Card:
+    </Badge>
+    {Object.entries(
+      cards.reduce(
+        (acc, card) => ({
+          ...acc,
+          [card.type]: (acc[card.type] || 0) + 1,
+        }),
+        {}
+      )
+    )
+      .sort()
+      .map(([type, count]) => (
+        <Badge size="small" key={type} count={count} offset={[10, 5]}>
+          {type}:
+        </Badge>
+      ))}
+  </div>
+);
+
 const ListPresentation = ({
   title,
   cards,
@@ -1597,30 +1620,7 @@ const ListPresentation = ({
       )}
     </div>
 
-    {cards.length > 0 ? (
-      <div className="footer">
-        <Badge size="small" count={cards.length} offset={[10, 5]}>
-          Card:
-        </Badge>
-        {Object.entries(
-          cards.reduce(
-            (acc, card) => ({
-              ...acc,
-              [card.type]: (acc[card.type] || 0) + 1,
-            }),
-            {}
-          )
-        )
-          .sort()
-          .map(([type, count]) => (
-            <Badge size="small" key={type} count={count} offset={[10, 5]}>
-              {type}:
-            </Badge>
-          ))}
-      </div>
-    ) : (
-      <></>
-    )}
+    {cards.length > 0 ? <ListFooter cards={cards} /> : <></>}
   </div>
 );
 
