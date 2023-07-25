@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/warfaster/static/css/main.3f5ceac7.chunk.css",
-    "main.js": "/warfaster/static/js/main.4c7150a3.chunk.js",
-    "main.js.map": "/warfaster/static/js/main.4c7150a3.chunk.js.map",
+    "main.js": "/warfaster/static/js/main.cca2c9e1.chunk.js",
+    "main.js.map": "/warfaster/static/js/main.cca2c9e1.chunk.js.map",
     "runtime-main.js": "/warfaster/static/js/runtime-main.6088c3a8.js",
     "runtime-main.js.map": "/warfaster/static/js/runtime-main.6088c3a8.js.map",
     "static/css/2.cf9b0d5d.chunk.css": "/warfaster/static/css/2.cf9b0d5d.chunk.css",
-    "static/js/2.d906754a.chunk.js": "/warfaster/static/js/2.d906754a.chunk.js",
-    "static/js/2.d906754a.chunk.js.map": "/warfaster/static/js/2.d906754a.chunk.js.map",
+    "static/js/2.78363b56.chunk.js": "/warfaster/static/js/2.78363b56.chunk.js",
+    "static/js/2.78363b56.chunk.js.map": "/warfaster/static/js/2.78363b56.chunk.js.map",
     "index.html": "/warfaster/index.html",
     "static/css/2.cf9b0d5d.chunk.css.map": "/warfaster/static/css/2.cf9b0d5d.chunk.css.map",
     "static/css/main.3f5ceac7.chunk.css.map": "/warfaster/static/css/main.3f5ceac7.chunk.css.map",
-    "static/js/2.d906754a.chunk.js.LICENSE.txt": "/warfaster/static/js/2.d906754a.chunk.js.LICENSE.txt",
+    "static/js/2.78363b56.chunk.js.LICENSE.txt": "/warfaster/static/js/2.78363b56.chunk.js.LICENSE.txt",
     "static/media/Aeternus_Continuum.d1b19d0e.png": "/warfaster/static/media/Aeternus_Continuum.d1b19d0e.png",
     "static/media/Blast_Weapon.91876b57.png": "/warfaster/static/media/Blast_Weapon.91876b57.png",
     "static/media/Compound_Armor.159c8ed1.png": "/warfaster/static/media/Compound_Armor.159c8ed1.png",
@@ -37,8 +37,8 @@
   "entrypoints": [
     "static/js/runtime-main.6088c3a8.js",
     "static/css/2.cf9b0d5d.chunk.css",
-    "static/js/2.d906754a.chunk.js",
+    "static/js/2.78363b56.chunk.js",
     "static/css/main.3f5ceac7.chunk.css",
-    "static/js/main.4c7150a3.chunk.js"
+    "static/js/main.cca2c9e1.chunk.js"
   ]
 }
