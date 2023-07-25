@@ -255,7 +255,9 @@ function* fetchWeaponsIfWarjackAdded() {
 function* fetchCardOnShow() {
   while (true) {
     const { payload } = yield take(Lists.toggleCard().type);
-    if (payload && payload.pageId) {
+    const { listIndex, cardIndex } = payload;
+    const card = yield select(Lists.selectCard(listIndex, cardIndex));
+    if (payload && payload.pageId && !card.hidden) {
       const page = yield select(PageIds.selectPageByPageId(payload.pageId));
       if (page) {
         const cypher = yield select(CypherCodecs.selectByPage(page));
